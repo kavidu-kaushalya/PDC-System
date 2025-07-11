@@ -1,0 +1,541 @@
+﻿<UserControl x:Class="PDC_System.QuotationWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PDC_System"
+             mc:Ignorable="d"
+             
+             FontFamily="{StaticResource CustomFont}"  
+             
+             >
+
+
+
+    <UserControl.Resources>
+        <Style x:Key="DatePickerStyle" TargetType="DatePicker">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Height" Value="30"/>
+        </Style>
+    </UserControl.Resources>
+
+
+    <Grid >
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0">
+            <Border Background="#FF1D1A27" CornerRadius="30"
+     
+     >
+
+                <StackPanel Height="100" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock Text="Quotation" VerticalAlignment="Center" FontSize="40" FontWeight="Bold" Foreground="White" />
+                </StackPanel>
+
+
+
+            </Border>
+        </StackPanel>
+
+        <StackPanel Grid.Row="3" HorizontalAlignment="Center" Orientation="Horizontal" Margin="20" >
+            <!-- Customer Name Search -->
+
+
+            <Border Height="50" Margin="10,0,100,0" Width="300" Background="#FF13111A" CornerRadius="25" BorderThickness="0.5" BorderBrush="#FF8C8C8C">
+                <StackPanel Height="35" Margin="8" VerticalAlignment="Center">
+
+
+
+
+
+                    <TextBox Name="CustomerSearchTextBox"
+                         TextChanged="SearchTextChanged"
+         
+         HorizontalAlignment="Center"
+         TextAlignment="Left"
+         VerticalAlignment="Center"
+         FontSize="15"
+         Foreground="#FF949494"
+         Background="Transparent"
+         BorderBrush="Transparent"
+         SelectionBrush="#FF1D1A27" CaretBrush="White">
+
+                        <TextBox.Template>
+                            <ControlTemplate TargetType="TextBox">
+
+                                <Border VerticalAlignment="Center" HorizontalAlignment="Center" Background="Transparent" BorderBrush="Transparent" BorderThickness="0">
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="8">
+                                        <TextBlock Text="C.Name / Quote No:   " Foreground="White" HorizontalAlignment="Left"/>
+                                        <ScrollViewer x:Name="PART_ContentHost" Width="152"  />
+                                    </StackPanel>
+
+                                </Border>
+                            </ControlTemplate>
+                        </TextBox.Template>
+                    </TextBox>
+
+                </StackPanel>
+
+            </Border>
+
+            <Border Height="50" Margin="10,0,100,0" Width="300" Background="#FF13111A" CornerRadius="25" BorderThickness="0.5" BorderBrush="#FF8C8C8C">
+                <StackPanel Height="35" Margin="8" VerticalAlignment="Center">
+
+
+
+
+
+                    <TextBox Name="CustomerSearchTextBox2"
+                TextChanged="SearchBox_TextChanged2"
+
+HorizontalAlignment="Center"
+TextAlignment="Left"
+VerticalAlignment="Center"
+FontSize="15"
+Foreground="#FF949494"
+Background="Transparent"
+BorderBrush="Transparent"
+SelectionBrush="#FF1D1A27" CaretBrush="White">
+
+                        <TextBox.Template>
+                            <ControlTemplate TargetType="TextBox">
+
+                                <Border VerticalAlignment="Center" HorizontalAlignment="Center" Background="Transparent" BorderBrush="Transparent" BorderThickness="0">
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="8">
+                                        <TextBlock Text="Quote Name:   " Foreground="White" HorizontalAlignment="Left"/>
+                                        <ScrollViewer x:Name="PART_ContentHost" Width="152"  />
+                                    </StackPanel>
+
+                                </Border>
+                            </ControlTemplate>
+                        </TextBox.Template>
+                    </TextBox>
+
+                </StackPanel>
+
+            </Border>
+
+            <!-- Date Range Search -->
+            <Border Margin="10" BorderThickness="1" Height="50" Background="White"
+                CornerRadius="20" BorderBrush="#FF1D1A27">
+                <DatePicker Name="StartDatePicker" Style="{StaticResource DatePickerStyle}" Width="120" Margin="5" Foreground="Black" />
+            </Border>
+
+
+            <Border Margin="10" BorderBrush="#FF1D1A27" Height="50" BorderThickness="1" Background="White"
+CornerRadius="20">
+                <DatePicker Name="EndDatePicker" Width="120" Margin="5" Style="{StaticResource DatePickerStyle}" Foreground="Black" />
+                
+                
+            </Border>
+
+            <Button Content="Search" Click="SearchButton_Click" Margin="5" Width="150"  Style="{StaticResource UiWinodwButton}" />
+            <Button Content="Reset" Click="ResetButton_Click" Margin="5" Width="150"  Style="{StaticResource UiWinodwButton}" />
+
+        </StackPanel>
+
+
+
+
+
+        <StackPanel HorizontalAlignment="Center" Grid.Row="4" Margin="20">
+
+
+
+            <Border Background="#FF1D1A27" CornerRadius="30" Width="auto">
+
+
+
+
+
+
+
+
+
+                <DataGrid x:Name="PDFSaveDataGrid"
+                          Margin="20"
+         
+          Background="Transparent"
+          AutoGenerateColumns="False"
+          CanUserAddRows="False"
+          CanUserReorderColumns="False"
+          CanUserResizeRows="False"
+          CanUserResizeColumns="False"
+          CanUserDeleteRows="True"
+          IsTabStop="True"
+          GridLinesVisibility="None"
+          RowHeaderWidth="0"
+          Height="300"
+                            
+          CellStyle="{StaticResource Customers_grid}"
+          ColumnHeaderStyle="{StaticResource RoundedHeaderStyle}"
+          RowBackground="Transparent"
+          BorderBrush="Transparent" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Hidden" >
+
+
+
+
+                    <DataGrid.Columns>
+
+
+
+
+                        <DataGridTemplateColumn IsReadOnly="True" CanUserResize="False" >
+
+
+                            <DataGridTemplateColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <StackPanel Grid.Column="0">
+
+                                        <TextBlock Margin="20,0,20,0" Text="Date"/>
+
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.HeaderTemplate>
+
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate >
+                                    <TextBlock Text="{Binding Date}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+
+
+                        </DataGridTemplateColumn>
+
+
+                        <DataGridTemplateColumn  IsReadOnly="True" CanUserResize="False" CanUserSort="False" >
+                            <DataGridTemplateColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <TextBlock Margin="20,0,20,0" Text="Quote Number"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.HeaderTemplate>
+
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate >
+                                    <TextBlock Text="{Binding QuoteNo}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+
+                        </DataGridTemplateColumn>
+
+
+                        <DataGridTemplateColumn  IsReadOnly="True" CanUserResize="False" CanUserSort="False" >
+                            <DataGridTemplateColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <TextBlock Margin="20,0,20,0" Text="Customer Name"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.HeaderTemplate>
+
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate >
+                                    <TextBlock TextTrimming="CharacterEllipsis" Width="150" TextAlignment="Center" Text="{Binding CustomerName}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+
+                        </DataGridTemplateColumn>
+
+
+
+
+                        <DataGridTemplateColumn IsReadOnly="True" CanUserResize="False" CanUserSort="False">
+                            <DataGridTemplateColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <TextBlock Margin="20,0,20,0" Text="FilePath"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.HeaderTemplate>
+
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding qname}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+
+
+
+                        <DataGridTemplateColumn  IsReadOnly="True" CanUserResize="False" CanUserSort="False" >
+                            <DataGridTemplateColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <StackPanel >
+                                        <TextBlock Margin="20,0,20,0" Text="Total"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.HeaderTemplate>
+
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate >
+                                    <TextBlock Text="{Binding Gtotal}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+
+                        </DataGridTemplateColumn>
+
+
+
+                        <DataGridTemplateColumn  IsReadOnly="True" CanUserResize="False" CanUserSort="False" >
+                            <DataGridTemplateColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <StackPanel >
+                                        <TextBlock Margin="20,0,20,0" Text="View"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.HeaderTemplate>
+
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel >
+                                        <Button   Content="View"  
+    Click="OpenFileButton_Click" 
+              HorizontalAlignment="Center"
+    Height="30" 
+    Width="60" 
+    FontSize="10" 
+    Style="{StaticResource UiWinodwButton}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+
+                        </DataGridTemplateColumn>
+
+
+
+                        <DataGridTemplateColumn  IsReadOnly="True" CanUserResize="False" CanUserSort="False" >
+                            <DataGridTemplateColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <StackPanel >
+                                        <TextBlock Margin="20,0,20,0" Text="Delete"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.HeaderTemplate>
+
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel >
+                                        <Button   Content="Delete" 
+                                                      Background="DarkRed"
+Click="DeleteSavedpdfs_Click" 
+          HorizontalAlignment="Center"
+Height="30" 
+Width="60" 
+FontSize="10" 
+Style="{StaticResource UiWinodwButton}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+
+                        </DataGridTemplateColumn>
+
+
+
+
+
+
+
+                    </DataGrid.Columns>
+
+                </DataGrid>
+
+
+            </Border>
+
+        </StackPanel>
+
+
+
+        <StackPanel Grid.Row="1" Margin="20" HorizontalAlignment="Center">
+            <Border Height="50"  Width="300" Background="#FF13111A" CornerRadius="25" BorderThickness="0.5" BorderBrush="#FF8C8C8C">
+                <StackPanel Height="35" Margin="8" VerticalAlignment="Center">
+
+
+
+
+
+                    <TextBox Name="CustomerSearchNameTextBox"
+                TextChanged="CustomerSearchTextChanged"
+
+HorizontalAlignment="Center"
+TextAlignment="Left"
+VerticalAlignment="Center"
+FontSize="15"
+Foreground="#FF949494"
+Background="Transparent"
+BorderBrush="Transparent"
+SelectionBrush="#FF1D1A27" CaretBrush="White">
+
+                        <TextBox.Template>
+                            <ControlTemplate TargetType="TextBox">
+
+                                <Border VerticalAlignment="Center" HorizontalAlignment="Center" Background="Transparent" BorderBrush="Transparent" BorderThickness="0">
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="8">
+                                        <TextBlock Text="Customer Name:   " Foreground="White" HorizontalAlignment="Left"/>
+                                        <ScrollViewer x:Name="PART_ContentHost" Width="152"  />
+                                    </StackPanel>
+
+                                </Border>
+                            </ControlTemplate>
+                        </TextBox.Template>
+                    </TextBox>
+
+                </StackPanel>
+
+            </Border>
+
+        </StackPanel>
+
+        <StackPanel HorizontalAlignment="Center" Grid.Row="2" Margin="20">
+
+
+
+
+
+
+            <Border Background="#FF1D1A27" Height="auto" CornerRadius="30">
+
+
+
+
+                <DataGrid x:Name="CustomerDataGrid" 
+    Background="Transparent" 
+    AutoGenerateColumns="False" 
+    CanUserAddRows="False" 
+    CanUserReorderColumns="False"
+    CanUserResizeRows="False"
+    CanUserResizeColumns="False"
+    IsTabStop="True"
+    GridLinesVisibility="None"
+    RowHeaderWidth="0" 
+    Height="190"
+    CellStyle="{StaticResource Customers_grid}"
+    ColumnHeaderStyle="{StaticResource RoundedHeaderStyle}"
+    
+           
+            
+    RowBackground="Transparent" 
+            BorderBrush="Transparent" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Hidden" >
+
+
+
+                    <DataGrid.Columns>
+
+
+                        <DataGridTemplateColumn IsReadOnly="True" CanUserResize="False" CanUserSort="False" >
+
+
+                            <DataGridTemplateColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <StackPanel Grid.Column="0">
+
+                                        <TextBlock Margin="20,0,20,0" Text="Customer Name"/>
+
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.HeaderTemplate>
+
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate >
+                                    <TextBlock TextAlignment="Center" TextTrimming="CharacterEllipsis" Width="150" Text="{Binding Name}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+
+
+                        </DataGridTemplateColumn>
+
+                        <DataGridTemplateColumn  IsReadOnly="True" CanUserResize="False" CanUserSort="False" >
+                            <DataGridTemplateColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <TextBlock Margin="20,0,20,0" Text="Contact No"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.HeaderTemplate>
+
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate >
+                                    <TextBlock Text="{Binding ContactNo}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+
+                        </DataGridTemplateColumn>
+
+
+
+
+                        <DataGridTemplateColumn  IsReadOnly="True" CanUserResize="False" CanUserSort="False" >
+                            <DataGridTemplateColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <StackPanel >
+                                        <TextBlock Margin="20,0,20,0" Text="Address"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.HeaderTemplate>
+
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate >
+                                    <TextBlock TextTrimming="CharacterEllipsis" TextAlignment="Center" Width="200" Text="{Binding Address}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+
+                        </DataGridTemplateColumn>
+
+
+
+                        <!-- Delete Button Column -->
+                        <DataGridTemplateColumn IsReadOnly="True" CanUserResize="False" CanUserSort="False"  >
+                            <DataGridTemplateColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <StackPanel >
+                                        <TextBlock Margin="20,0,20,0" Text="Delete"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.HeaderTemplate>
+
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel >
+                                        <Button   Content="Quote"  
+                                    Click="CreateQuotation_Click" 
+                                              HorizontalAlignment="Center"
+                                    Height="30" 
+                                    Width="60" 
+                                    FontSize="10" 
+                                    Style="{StaticResource UiWinodwButton}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+
+
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+
+                </DataGrid>
+            </Border>
+
+        </StackPanel>
+
+
+    </Grid>
+
+</UserControl>

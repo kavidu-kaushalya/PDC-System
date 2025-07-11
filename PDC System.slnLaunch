@@ -1,0 +1,17 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "PDC System\\PDC System.csproj",
+        "Action": "Start",
+        "DebugTarget": "PDC System"
+      },
+      {
+        "Path": "PDC_System_Backups\\PDC_System_Backups\\PDC_System_Backups.csproj",
+        "Action": "Start",
+        "DebugTarget": "PDC_System_Backups"
+      }
+    ]
+  }
+]

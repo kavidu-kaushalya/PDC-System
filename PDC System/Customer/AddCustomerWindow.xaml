@@ -1,0 +1,26 @@
+﻿<Window x:Class="PDC_System.AddCustomerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        FontFamily="{StaticResource CustomFont}"
+        Title="Add Customer" Height="356" Width="400">
+    
+    
+    
+    <StackPanel VerticalAlignment="Center" Margin="10">
+        <Label Content="Company or Person:" FontSize="14"/>
+        <ComboBox x:Name="CP" IsEditable="True" Height="25" FontSize="16">
+            <ComboBoxItem Content="Company"/>
+            <ComboBoxItem Content="Person"/>
+        </ComboBox>
+
+        <Label Content="Name:" FontSize="14"/>
+        <TextBox x:Name="NameTextBox" Height="25" FontSize="16" />
+        <Label Content="Address:" FontSize="14"/>
+        <TextBox x:Name="AddressTextBox" Height="25" FontSize="16"/>
+        <Label Content="Contact No:" FontSize="14"/>
+        <TextBox x:Name="ContactNoTextBox" Height="25" FontSize="16" PreviewTextInput="ContactNoTextBox_PreviewTextInput" TextChanged="ContactNoTextBox_TextChanged"/>
+        <Label Content="Email:" FontSize="14"/>
+        <TextBox x:Name="EmailTextBox" Height="25" FontSize="16"/>
+        <Button Content="Save" Click="Save_Click" Margin="10" Height="34" Width="272" Background="Black" Foreground="White"/>
+    </StackPanel>
+</Window>

@@ -1,0 +1,108 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+
+
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<RootNamespace>PDC_System</RootNamespace>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<UseWPF>true</UseWPF>
+		<NeutralLanguage>en</NeutralLanguage>
+		<PackAsTool>False</PackAsTool>
+		<UseWindowsForms>False</UseWindowsForms>
+		<ApplicationIcon>Assets\Main.ico</ApplicationIcon>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Compile Remove="Attendance And Paysheets\Details.cs" />
+		<Compile Remove="Attendance And Paysheets\PaySheet.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="Assets\HomeHeading.png" />
+	  <None Remove="Assets\LogoB.png" />
+	  <None Remove="Assets\LogoW.png" />
+	  <None Remove="Assets\Mail.png" />
+	  <None Remove="Assets\PriyanthaDieCuttingMail.png" />
+	  <None Remove="Assets\PriyanthaDieCuttingWhatsapp.png" />
+	  <None Remove="Assets\Warning.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="Assets\3626507.png">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Assets\LogoB.png">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Assets\LogoW.png">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Assets\Mail.png">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Assets\Main.ico" />
+	  <Content Include="Assets\PriyanthaDieCuttingMail.png">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Assets\PriyanthaDieCuttingWhatsapp.png">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Assets\Warning.png">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Assets\WhatsApp.png">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="itext7" Version="9.1.0" />
+		<PackageReference Include="LiveCharts.Wpf.NetCore3" Version="0.9.8" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="PDFsharp" Version="6.1.1" />
+		<PackageReference Include="SharpVectors" Version="1.8.4.2" />
+		<PackageReference Include="SkiaSharp" Version="3.116.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="Assets\HomeHeading.png">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Update="Attendance And Paysheets\ConfirmationDialogAttendance.xaml.cs">
+		  <SubType>Code</SubType>
+		</Compile>
+		<Compile Update="Customer\ConfirmationDialogCustomer.xaml.cs">
+		  <SubType>Code</SubType>
+		</Compile>
+		<Compile Update="Employee\ConfirmationDialogEmployee.xaml.cs">
+		  <SubType>Code</SubType>
+		</Compile>
+		<Compile Update="HomeUi\EmailDetails.xaml.cs">
+			<SubType>Code</SubType>
+		</Compile>
+		<Compile Update="Orders\ConfirmationDialogOders.xaml.cs">
+		  <SubType>Code</SubType>
+		</Compile>
+		<Compile Update="Quotation\ConfirmationDialogQuotation.xaml.cs">
+		  <SubType>Code</SubType>
+		</Compile>
+		<Compile Update="Salary\ConfirmationDialogSalary.xaml.cs">
+		  <SubType>Code</SubType>
+		</Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Page Update="HomeUi\EmailDetails.xaml">
+			<SubType>Designer</SubType>
+		</Page>
+	</ItemGroup>
+
+	
+
+</Project>

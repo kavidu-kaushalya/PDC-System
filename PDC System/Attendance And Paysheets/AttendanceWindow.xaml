@@ -1,0 +1,515 @@
+﻿<UserControl x:Class="PDC_System.AttendanceWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PDC_System"
+             mc:Ignorable="d" 
+             >
+    <Grid>
+
+        <ScrollViewer VerticalScrollBarVisibility="Hidden">
+
+            <StackPanel>
+
+                <Grid HorizontalAlignment="Center">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="150"/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+
+                    <StackPanel Grid.Row="0" Grid.ColumnSpan="2">
+                        <Border Background="#FF1D1A27" CornerRadius="30"
+     
+     >
+
+                            <StackPanel Height="100" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <TextBlock Text="Attendant" VerticalAlignment="Center" FontSize="40" FontWeight="Bold" Foreground="White" />
+                            </StackPanel>
+
+
+
+                        </Border>
+                    </StackPanel>
+
+
+                    <StackPanel HorizontalAlignment="Center" Grid.Row="1" Grid.ColumnSpan="2">
+
+                        <Button HorizontalAlignment="Center" Height="60" Width="400"  Content="Add Attendant" Click="AddAttendance_Click" Style="{StaticResource UiWinodwButton}" Margin="20"/>
+                    </StackPanel>
+
+
+
+                    <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Margin="20" HorizontalAlignment="Right" >
+
+
+                        <ComboBox x:Name="MonthComboBox" Width="100" Margin="10" MouseLeftButtonDown="ComboBoxGrid_MouseLeftButtonDown">
+                            <ComboBox.Style>
+                                <Style TargetType="ComboBox">
+                                    <Setter Property="BorderBrush" Value="#FF585858"/>
+                                    <Setter Property="BorderThickness" Value="0.4"/>
+                                    <Setter Property="Background" Value="#FF1D1A27"/>
+                                    <Setter Property="Padding" Value="5"/>
+                                    <Setter Property="Foreground" Value="White"/>
+                                    <Setter Property="Height" Value="30"/>
+                                    <Setter Property="Margin" Value="10"/>
+                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="ComboBox">
+                                                <Grid>
+                                                    <!-- ComboBox Border with rounded corners -->
+                                                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" CornerRadius="10">
+                                                        <Grid>
+                                                            <!-- The entire ComboBox is clickable to open the dropdown -->
+                                                            <Grid x:Name="ComboBoxGrid" MouseLeftButtonDown="ComboBoxGrid_MouseLeftButtonDown">
+                                                                <!-- ContentPresenter to display the selected item -->
+                                                                <ContentPresenter x:Name="ContentPresenter" VerticalAlignment="Center" HorizontalAlignment="Center" Content="{Binding SelectedItem, RelativeSource={RelativeSource TemplatedParent}}"/>
+                                                            </Grid>
+
+
+                                                            <!-- ToggleButton for the dropdown arrow -->
+                                                            <ToggleButton x:Name="ToggleButton" Focusable="False" IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" ClickMode="Press" Visibility="Visible">
+                                                                <ToggleButton.Template>
+                                                                    <ControlTemplate TargetType="ToggleButton">
+                                                                        <Grid Margin="10">
+                                                                            <Path x:Name="Arrow" HorizontalAlignment="Right" VerticalAlignment="Center" Data="M 0 0 L 4 4 L 8 0 Z" Stroke="White" StrokeThickness="1"/>
+                                                                        </Grid>
+                                                                    </ControlTemplate>
+                                                                </ToggleButton.Template>
+                                                            </ToggleButton>
+                                                        </Grid>
+
+
+                                                    </Border>
+                                                    <!-- Dropdown list -->
+                                                    <Popup x:Name="PART_Popup" IsOpen="{TemplateBinding IsDropDownOpen}" Placement="Bottom" AllowsTransparency="True" PopupAnimation="Slide" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                                                        <Border Background="#FF1D1A27" BorderBrush="Gray" BorderThickness="1" CornerRadius="10" ScrollViewer.VerticalScrollBarVisibility="Hidden">
+                                                            <ScrollViewer MaxHeight="200" VerticalScrollBarVisibility="Hidden">
+                                                                <ItemsPresenter />
+                                                            </ScrollViewer>
+                                                        </Border>
+                                                    </Popup>
+                                                </Grid>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </ComboBox.Style>
+                        </ComboBox>
+
+                        <ComboBox x:Name="YearComboBox" Width="100" Margin="10" >
+                            <ComboBox.Style>
+                                <Style TargetType="ComboBox">
+                                    <Setter Property="BorderBrush" Value="#FF585858"/>
+                                    <Setter Property="BorderThickness" Value="0.4"/>
+                                    <Setter Property="Background" Value="#FF1D1A27"/>
+                                    <Setter Property="Padding" Value="5"/>
+                                    <Setter Property="Foreground" Value="White"/>
+                                    <Setter Property="Height" Value="30"/>
+                                    <Setter Property="Margin" Value="10"/>
+                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="ComboBox">
+                                                <Grid>
+                                                    <!-- ComboBox Border with rounded corners -->
+                                                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" CornerRadius="10">
+                                                        <Grid Margin="0,0,-1,0">
+                                                            <!-- The entire ComboBox is clickable to open the dropdown -->
+                                                            <Grid x:Name="ComboBoxGrid" MouseLeftButtonDown="ComboBoxGrid_MouseLeftButtonDown1">
+                                                                <!-- ContentPresenter to display the selected item -->
+                                                                <ContentPresenter x:Name="ContentPresenter" VerticalAlignment="Center" HorizontalAlignment="Center" Content="{Binding SelectedItem, RelativeSource={RelativeSource TemplatedParent}}"/>
+                                                            </Grid>
+                                                            <!-- ToggleButton for the dropdown arrow -->
+                                                            <ToggleButton x:Name="ToggleButton" Focusable="False" IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" ClickMode="Press" Visibility="Visible">
+                                                                <ToggleButton.Template>
+                                                                    <ControlTemplate TargetType="ToggleButton">
+                                                                        <Grid Margin="10">
+                                                                            <Path x:Name="Arrow" HorizontalAlignment="Right"  VerticalAlignment="Center" Data="M 0 0 L 4 4 L 8 0 Z" Stroke="White" StrokeThickness="1" ClipToBounds="False" />
+                                                                        </Grid>
+                                                                    </ControlTemplate>
+                                                                </ToggleButton.Template>
+                                                            </ToggleButton>
+                                                        </Grid>
+                                                    </Border>
+                                                    <!-- Dropdown list -->
+                                                    <Popup x:Name="PART_Popup" IsOpen="{TemplateBinding IsDropDownOpen}" Placement="Bottom" AllowsTransparency="True" PopupAnimation="Slide" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                                                        <Border Background="#FF1D1A27" BorderBrush="Gray" BorderThickness="1" CornerRadius="10" ScrollViewer.VerticalScrollBarVisibility="Hidden">
+                                                            <ScrollViewer MaxHeight="200" VerticalScrollBarVisibility="Hidden">
+                                                                <ItemsPresenter />
+                                                            </ScrollViewer>
+                                                        </Border>
+                                                    </Popup>
+                                                </Grid>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </ComboBox.Style>
+                        </ComboBox>
+
+
+
+
+                        <Button Style="{StaticResource UiWinodwButton}" Width="150" Content="Search" Click="Search_Click" Margin="10"/>
+                        <Button Style="{StaticResource UiWinodwButton}" Content="Reset" Click="Reset_Click" Width="158" Margin="10"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="2"  Grid.Column="0" Orientation="Horizontal" Margin="20">
+
+
+                        <Border Height="50" Margin="10,0,100,0" Width="300" Background="#FF13111A" CornerRadius="25" BorderThickness="0.5" BorderBrush="#FF8C8C8C">
+                            <StackPanel Height="35" Margin="8" VerticalAlignment="Center">
+
+                                <TextBox Name="NameAutoCompleteBox"
+                               TextChanged="NameAutoCompleteBox_TextChanged"
+                               HorizontalAlignment="Center"
+                               TextAlignment="Left"
+                               VerticalAlignment="Center"
+                               FontSize="15"
+                               Foreground="#FF949494"
+                               Background="Transparent"
+                               BorderBrush="Transparent"
+                               SelectionBrush="#FF1D1A27" CaretBrush="White">
+
+                                    <TextBox.Template>
+                                        <ControlTemplate TargetType="TextBox">
+
+                                            <Border VerticalAlignment="Center" HorizontalAlignment="Center" Background="Transparent" BorderBrush="Transparent" BorderThickness="0">
+                                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="8">
+                                                    <TextBlock Text="Employee Name:   " Foreground="White" HorizontalAlignment="Left"/>
+                                                    <ScrollViewer x:Name="PART_ContentHost" Width="152"  />
+                                                </StackPanel>
+
+                                            </Border>
+                                        </ControlTemplate>
+                                    </TextBox.Template>
+                                </TextBox>
+
+                            </StackPanel>
+
+                        </Border>
+
+
+
+                    </StackPanel>
+
+                </Grid>
+
+
+
+                <Border Background="#FF1D1A27" CornerRadius="30" ScrollViewer.VerticalScrollBarVisibility="Hidden"  >
+
+
+                    <StackPanel HorizontalAlignment="Center" Margin="10" VerticalAlignment="Top">
+
+                        <TextBlock Text="Attendant" 
+                               FontSize="25" 
+                               FontWeight="Black" 
+                               Foreground="White"
+                               Margin="20"
+                               TextAlignment="Center"/>
+
+
+
+
+
+
+
+                        <DataGrid x:Name="AttendanceDataGrid" 
+                          
+                      Background="Transparent" 
+                      AutoGenerateColumns="False" 
+                      CanUserAddRows="False" 
+                      CanUserReorderColumns="False"
+                      CanUserResizeRows="False"
+                      CanUserResizeColumns="False"
+                      IsTabStop="True"
+                      GridLinesVisibility="None"
+                      RowHeaderWidth="0" 
+                      Height="351"
+                              CellStyle="{StaticResource Customers_grid}"
+                      
+                      ColumnHeaderStyle="{StaticResource RoundedHeaderStyle}"
+                      
+                             
+                              
+                      RowBackground="Transparent" 
+                              BorderBrush="Transparent" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Hidden" >
+
+
+
+                            <DataGrid.Columns>
+
+
+                                <DataGridTemplateColumn IsReadOnly="True" CanUserResize="False" CanUserSort="False" >
+
+
+                                    <DataGridTemplateColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Grid.Column="0">
+
+                                                <TextBlock Margin="20,0,20,0" Text="Month And Year"/>
+
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.HeaderTemplate>
+
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate >
+                                            <TextBlock Text="{Binding Month}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+
+
+                                </DataGridTemplateColumn>
+
+                                <DataGridTemplateColumn  IsReadOnly="True" CanUserResize="False" CanUserSort="False" >
+                                    <DataGridTemplateColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <StackPanel>
+                                                <TextBlock Margin="20,0,20,0" Text="Employee Name"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.HeaderTemplate>
+
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate >
+                                            <TextBlock TextTrimming="CharacterEllipsis" Width="150" TextAlignment="Center" Text="{Binding Employee_Name}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+
+                                </DataGridTemplateColumn>
+
+
+
+
+                                <DataGridTemplateColumn  IsReadOnly="True" CanUserResize="False" CanUserSort="False" >
+                                    <DataGridTemplateColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <StackPanel >
+                                                <TextBlock Margin="20,0,20,0" Text="WorkingDays"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.HeaderTemplate>
+
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate >
+                                            <TextBlock Text="{Binding WorkingDays}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+
+                                </DataGridTemplateColumn>
+
+                                <DataGridTemplateColumn  IsReadOnly="True" CanUserResize="False" CanUserSort="False" >
+                                    <DataGridTemplateColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <StackPanel >
+                                                <TextBlock Margin="20,0,20,0" Text="Nopay Days"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.HeaderTemplate>
+
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate >
+                                            <TextBlock Text="{Binding No_PAY}"/>
+
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+
+                                </DataGridTemplateColumn>
+
+
+                                <DataGridTemplateColumn  IsReadOnly="True" CanUserResize="False" CanUserSort="False" >
+                                    <DataGridTemplateColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <StackPanel >
+                                                <TextBlock Margin="20,0,20,0" Text="AbsentDays"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.HeaderTemplate>
+
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate >
+                                            <TextBlock Text="{Binding AbsentDays}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+
+                                </DataGridTemplateColumn>
+
+
+                                <DataGridTemplateColumn  IsReadOnly="True" CanUserResize="False" CanUserSort="False" >
+                                    <DataGridTemplateColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <StackPanel >
+                                                <TextBlock Margin="20,0,20,0" Text="Early"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.HeaderTemplate>
+
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate >
+                                            <TextBlock Text="{Binding Early, StringFormat={}{0} min}"/>
+
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+
+                                </DataGridTemplateColumn>
+
+                                <DataGridTemplateColumn  IsReadOnly="True" CanUserResize="False" CanUserSort="False" >
+                                    <DataGridTemplateColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <StackPanel >
+                                                <TextBlock Margin="20,0,20,0" Text="Late"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.HeaderTemplate>
+
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate >
+                                            <TextBlock Text="{Binding Late, StringFormat={}{0} min}"/>
+
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+
+                                </DataGridTemplateColumn>
+
+
+
+                                <DataGridTemplateColumn  IsReadOnly="True" CanUserResize="False" CanUserSort="False" >
+                                    <DataGridTemplateColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <StackPanel >
+                                                <TextBlock Margin="20,0,20,0" Text="OT"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.HeaderTemplate>
+
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate >
+                                            <TextBlock Text="{Binding AOT, StringFormat={}{0} h}"/>
+
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+
+                                </DataGridTemplateColumn>
+
+
+                                <DataGridTemplateColumn  IsReadOnly="True" CanUserResize="False" CanUserSort="False" >
+                                    <DataGridTemplateColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <StackPanel>
+                                                <TextBlock Margin="20,0,20,0" Text="DOT"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.HeaderTemplate>
+
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate >
+                                            <TextBlock TextAlignment="Center" Text="{Binding edot, StringFormat={}{0} h}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+
+                                </DataGridTemplateColumn>
+
+
+
+                                <!-- Delete Button Column -->
+                                <DataGridTemplateColumn IsReadOnly="True" CanUserResize="False" CanUserSort="False"  >
+                                    <DataGridTemplateColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <StackPanel >
+                                                <TextBlock Margin="20,0,20,0" Text="Paysheet"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.HeaderTemplate>
+
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel >
+                                                <Button   Content="PaySheet" 
+                                                          
+                                                      Click="OpenPaySheetButton_Click" 
+                                                      Height="30" 
+                                                      Width="100" 
+                                                      FontSize="10" 
+                                                      Style="{StaticResource UiWinodwButton}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+
+
+                                </DataGridTemplateColumn>
+
+
+
+
+
+                                <!-- Delete Button Column -->
+                                <DataGridTemplateColumn IsReadOnly="True" CanUserResize="False" CanUserSort="False"  >
+                                    <DataGridTemplateColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <StackPanel >
+                                                <TextBlock Margin="20,0,20,0" Text="Delete"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.HeaderTemplate>
+
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel >
+                                                <Button   Content="Delete" 
+                                                          Background="DarkRed"
+                                                      Click="DeleteAttendance_Click" 
+                                                      Height="30" 
+                                                      Width="60" 
+                                                      FontSize="10" 
+                                                      Style="{StaticResource UiWinodwButton}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+
+
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+
+                        </DataGrid>
+
+
+
+                    </StackPanel>
+
+                </Border>
+                
+                
+                
+              
+
+
+
+
+
+
+
+
+
+
+
+            </StackPanel>
+        </ScrollViewer>
+
+    </Grid>
+
+
+</UserControl>

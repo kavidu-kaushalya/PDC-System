@@ -1,0 +1,164 @@
+﻿<Window x:Class="PDC_System.EmployeeDetailsEdit"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PDC_System"
+        mc:Ignorable="d"
+         FontFamily="{StaticResource CustomFont}"
+        Title="Edit Employee Details" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="10" HorizontalAlignment="Left" >
+            <Button Content="Save" Click="SaveButton_Click" Width="100" Height="25" Margin="10"/>
+            <Button Content="Reset" Click="ResetButton_Click" Width="100" Height="25" Margin="10" />
+        </StackPanel>
+        
+        <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="10" HorizontalAlignment="Right">
+            <TextBox x:Name="NIDSearchBox" Width="217" Height="25" Margin="10" />
+            <Button Content="Search" Click="SearchButton_Click" Width="150" Height="25" Margin="10"/>
+            
+        </StackPanel>
+        
+        <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Margin="20">
+            <DataGrid x:Name="EmployeeDataGrid" FontSize="15" AutoGenerateColumns="False" VerticalAlignment="Top" CellEditEnding="EmployeeDataGrid_CellEditEnding">
+                <DataGrid.Columns>
+                    <!-- NID Column (Only Numbers Allowed) -->
+                    <DataGridTextColumn Header="NID" Binding="{Binding NID}">
+                        <DataGridTextColumn.EditingElementStyle>
+                            <Style TargetType="TextBox">
+                                <EventSetter Event="PreviewTextInput" Handler="NatId_PreviewTextInput"/>
+                            </Style>
+                        </DataGridTextColumn.EditingElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
+
+                    <!-- Salary Column (Only Digits and Two Decimal Places Allowed) -->
+                    <DataGridTextColumn Header="BSalary (lkr)" Binding="{Binding BSalary}">
+                        <DataGridTextColumn.EditingElementStyle>
+                            <Style TargetType="TextBox">
+                                <EventSetter Event="PreviewTextInput" Handler="FloatOnly_PreviewTextInput"/>
+                            </Style>
+                        </DataGridTextColumn.EditingElementStyle>
+                    </DataGridTextColumn>
+
+                    <!-- Salary Column (Only Digits and Two Decimal Places Allowed) -->
+                    <DataGridTextColumn Header="Salary" Binding="{Binding Salary}">
+                        <DataGridTextColumn.EditingElementStyle>
+                            <Style TargetType="TextBox">
+                                <EventSetter Event="PreviewTextInput" Handler="FloatOnly_PreviewTextInput"/>
+                            </Style>
+                        </DataGridTextColumn.EditingElementStyle>
+                    </DataGridTextColumn>
+
+                    <!-- Salary Column (Only Digits and Two Decimal Places Allowed) -->
+                    <DataGridTextColumn Header="O.T (lkr)" Binding="{Binding OT}">
+                        <DataGridTextColumn.EditingElementStyle>
+                            <Style TargetType="TextBox">
+                                <EventSetter Event="PreviewTextInput" Handler="FloatOnly_PreviewTextInput"/>
+                            </Style>
+                        </DataGridTextColumn.EditingElementStyle>
+                    </DataGridTextColumn>
+
+                    <!-- Salary Column (Only Digits and Two Decimal Places Allowed) -->
+                    <DataGridTextColumn Header="D.OT (lkr)" Binding="{Binding DOT}">
+                        <DataGridTextColumn.EditingElementStyle>
+                            <Style TargetType="TextBox">
+                                <EventSetter Event="PreviewTextInput" Handler="FloatOnly_PreviewTextInput"/>
+                            </Style>
+                        </DataGridTextColumn.EditingElementStyle>
+                    </DataGridTextColumn>
+
+                    <!-- Salary Column (Only Digits and Two Decimal Places Allowed) -->
+                    <DataGridTextColumn Header="AB" Binding="{Binding ABSENT}">
+                        <DataGridTextColumn.EditingElementStyle>
+                            <Style TargetType="TextBox">
+                                <EventSetter Event="PreviewTextInput" Handler="PreviewTextInput"/>
+                            </Style>
+                        </DataGridTextColumn.EditingElementStyle>
+                    </DataGridTextColumn>
+
+
+                    <!-- Salary Column (Only Digits and Two Decimal Places Allowed) -->
+                    <DataGridTextColumn Header="Address 1" Binding="{Binding Address1}">
+                        <DataGridTextColumn.EditingElementStyle>
+                            <Style TargetType="TextBox">
+                               
+                            </Style>
+                        </DataGridTextColumn.EditingElementStyle>
+                    </DataGridTextColumn>
+
+                    <!-- Salary Column (Only Digits and Two Decimal Places Allowed) -->
+                    <DataGridTextColumn Header="Address 1" Binding="{Binding Address2}">
+                        <DataGridTextColumn.EditingElementStyle>
+                            <Style TargetType="TextBox">
+                               
+                            </Style>
+                        </DataGridTextColumn.EditingElementStyle>
+                    </DataGridTextColumn>
+
+                    <!-- Salary Column (Only Digits and Two Decimal Places Allowed) -->
+                    <DataGridTextColumn Header="City" Binding="{Binding City}">
+                        <DataGridTextColumn.EditingElementStyle>
+                            <Style TargetType="TextBox">
+                               
+                            </Style>
+                        </DataGridTextColumn.EditingElementStyle>
+                    </DataGridTextColumn>
+
+                    <!-- Salary Column (Only Digits and Two Decimal Places Allowed) -->
+                    <DataGridTextColumn Header="Province" Binding="{Binding Province}">
+                        <DataGridTextColumn.EditingElementStyle>
+                            <Style TargetType="TextBox">
+                               
+                            </Style>
+                        </DataGridTextColumn.EditingElementStyle>
+                    </DataGridTextColumn>
+
+                    <!-- Salary Column (Only Digits and Two Decimal Places Allowed) -->
+                    <DataGridTextColumn Header="Contactn1" Binding="{Binding Contactn1}">
+                        <DataGridTextColumn.EditingElementStyle>
+                            <Style TargetType="TextBox">
+                                <EventSetter Event="PreviewTextInput" Handler="PreviewTextInput"/>
+                            </Style>
+                        </DataGridTextColumn.EditingElementStyle>
+                    </DataGridTextColumn>
+
+                    <!-- Salary Column (Only Digits and Two Decimal Places Allowed) -->
+                    <DataGridTextColumn Header="Contactn2" Binding="{Binding Contactn2}">
+                        <DataGridTextColumn.EditingElementStyle>
+                            <Style TargetType="TextBox">
+                                <EventSetter Event="PreviewTextInput" Handler="PreviewTextInput"/>
+                            </Style>
+                        </DataGridTextColumn.EditingElementStyle>
+                    </DataGridTextColumn>
+
+
+
+
+
+
+
+
+
+
+
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+        
+        
+        
+        
+        
+    </Grid>
+</Window>

@@ -1,0 +1,30 @@
+﻿<Window x:Class="PDC_System.AddOrderWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Add Order" Height="463" Width="400">
+    <Grid>
+        <StackPanel Margin="10">
+            <Label Content="Due Date:" FontSize="14"/>
+            <DatePicker x:Name="DueDatePicker" FontSize="16"/>
+            <Label Content="Due Time (HH:mm):" FontSize="14"/>
+            <TextBox x:Name="DueTimeTextBox" FontSize="16" 
+         PreviewTextInput="DueTimeTextBox_PreviewTextInput" 
+         PreviewKeyDown="DueTimeTextBox_PreviewKeyDown" 
+         LostFocus="DueTimeTextBox_LostFocus"/>
+
+            <!-- Default time -->
+            <Label Content="Customer Name:" FontSize="14"/>
+            <TextBox x:Name="CustomerNameTextBox" FontSize="16"/>
+            <Label Content="Description:" FontSize="14"/>
+            <TextBox x:Name="DescriptionTextBox" FontSize="16"/>
+
+            <Label Content="Notes:" FontSize="14"/>
+            <TextBox TextWrapping="Wrap" x:Name="NotesTextBox" FontSize="16" Height="108" AcceptsReturn="True"/>
+
+
+            <Button Content="Save" HorizontalAlignment="Right" Margin="0,10,0,0" Click="SaveButton_Click" Width="125" Background="Black" Foreground="White" Height="30"/>
+
+
+        </StackPanel>
+    </Grid>
+</Window>

@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net5.0-windows</TargetFramework>
+		<UseWPF>true</UseWPF>
+		<UseWindowsForms>true</UseWindowsForms>
+		<!-- Enable Windows Forms -->
+	</PropertyGroup>
+	
+	<PropertyGroup>
+		<LangVersion>10.0</LangVersion>
+		<ApplicationIcon>data-recovery.ico</ApplicationIcon>
+	</PropertyGroup>
+	
+	<ItemGroup>
+	  <None Remove="BackupBackgroud.png" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <Content Include="data-recovery.ico">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <Resource Include="BackupBackgroud.png" />
+	</ItemGroup>
+
+
+</Project>
