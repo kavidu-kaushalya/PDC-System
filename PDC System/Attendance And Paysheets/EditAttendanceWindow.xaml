@@ -1,0 +1,74 @@
+﻿<Window x:Class="PDC_System.EditAttendanceWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Edit Attendance" MinHeight="400" MinWidth="400"
+        WindowStartupLocation="CenterScreen"
+        FontSize="13"
+        FontFamily="Poppins"
+        Background="Transparent"
+        SnapsToDevicePixels="True"
+        Foreground="{DynamicResource Forground}"
+        WindowStyle="None" AllowsTransparency="True">
+
+    <StackPanel Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Border Background="{DynamicResource Background}" CornerRadius="15">
+            <Border.Effect>
+                <DropShadowEffect ShadowDepth="0" Opacity="0.505" BlurRadius="8"/>
+            </Border.Effect>
+            <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+
+
+
+                <!-- Read-only Employee Info -->
+                <StackPanel Orientation="Horizontal" Margin="0,5">
+                    <Label Content="Employee ID:"  Width="100" Foreground="{DynamicResource Forground}"/>
+                    <TextBlock x:Name="TxtEmployeeId" Width="200" VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="0,5" Grid.Row="1">
+                    <Label Content="Name:" Width="100" Foreground="{DynamicResource Forground}"/>
+                    <TextBlock x:Name="TxtName" Width="200" VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="0,5" Grid.Row="2">
+                    <Label Content="Date:" Width="100" Foreground="{DynamicResource Forground}"/>
+                    <TextBlock x:Name="TxtDate" Width="200" VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <!-- Editable Times -->
+                <StackPanel Orientation="Horizontal" Margin="0,5" Grid.Row="3">
+                    <Label Content="Check In:" Width="100" Foreground="{DynamicResource Forground}"/>
+                    <TextBox x:Name="TxtCheckIn_Hour" KeyDown="TxtHour_KeyDown" MaxLength="2" Width="40" PreviewTextInput="TimeBox_PreviewTextInput"
+             LostFocus="TxtHour_LostFocus"  Style="{DynamicResource TextBoxStyle}"/>
+                    <TextBlock Text=":" FontSize="15" FontWeight="Bold" VerticalAlignment="Center" Margin="6,0,6,0"/>
+                    <TextBox x:Name="TxtCheckIn_Minute" MaxLength="2" Width="40" PreviewTextInput="TimeBox_PreviewTextInput"
+             LostFocus="TxtMinute_LostFocus" Style="{DynamicResource TextBoxStyle}"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="0,5" Grid.Row="4">
+                    <Label Content="Check Out:" Width="100" Foreground="{DynamicResource Forground}"/>
+                    <TextBox x:Name="TxtCheckOut_Hour" KeyDown="TxtHour_KeyDown" MaxLength="2" Width="40"  PreviewTextInput="TimeBox_PreviewTextInput"
+             LostFocus="TxtHour_LostFocus" Style="{DynamicResource TextBoxStyle}"/>
+                    <TextBlock Text=":" FontSize="15" FontWeight="Bold" VerticalAlignment="Center" Margin="6,0,6,0"/>
+                    <TextBox x:Name="TxtCheckOut_Minute" MaxLength="2" Width="40"  PreviewTextInput="TimeBox_PreviewTextInput"
+             LostFocus="TxtMinute_LostFocus" Style="{DynamicResource TextBoxStyle}"/>
+                </StackPanel>
+
+                <!-- Buttons -->
+                <StackPanel Orientation="Horizontal" Grid.Row="5" Margin="0,20,0,0" HorizontalAlignment="Right">
+                    <Button Content="Save" Width="80" Click="BtnSave_Click" Margin="5" Style="{DynamicResource ActionButton}"/>
+                    <Button Content="Cancel" Width="80" Click="BtnCancel_Click" Margin="5" Style="{DynamicResource NavigationButtonStyle}"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </StackPanel>
+
+</Window>

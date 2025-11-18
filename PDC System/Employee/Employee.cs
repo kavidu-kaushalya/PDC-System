@@ -67,6 +67,38 @@
 
 
 
+        public string   EmployeeCheckin { get; set; }
+
+        public string   EmployeeCheckout { get; set; }
+
+
+
+
+        public string EmployeeId { get; set; }
+        public string EmployeeEmail { get; set; }
+        
+        public decimal OvertimeAmount { get; set; }
+        public decimal DoubleOvertimeAmount { get; set; }
+       
+        public decimal Nopay { get; set; }
+        public decimal AbesentAmount { get; set; }
+
+
+        public TimeSpan CheckIn { get; set; }
+        public TimeSpan CheckOut { get; set; }
+        public TimeSpan SaturdayCheckIn { get; set; }
+        public TimeSpan SaturdayCheckOut { get; set; }
+        public bool Monday { get; set; }
+        public bool Tuesday { get; set; }
+        public bool Wednesday { get; set; }
+        public bool Thursday { get; set; }
+        public bool Friday { get; set; }
+        public bool Saturday { get; set; }
+        public bool Sunday { get; set; }
+
+
+        public DateTime ValidFrom { get; set; }
+        public DateTime ValidTo { get; set; }
 
     }
 }

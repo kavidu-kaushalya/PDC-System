@@ -108,6 +108,11 @@ namespace PDC_System
             textBox.Text = $"{hour}:{minute}";
         }
 
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
 
     }
 

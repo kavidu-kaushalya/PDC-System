@@ -4,15 +4,17 @@
 
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
-		<TargetFramework>net8.0-windows</TargetFramework>
+		<TargetFramework>net8.0-windows10.0.17763.0</TargetFramework>
 		<RootNamespace>PDC_System</RootNamespace>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<UseWPF>true</UseWPF>
+		<EnableWindowsTargeting>true</EnableWindowsTargeting>
 		<NeutralLanguage>en</NeutralLanguage>
 		<PackAsTool>False</PackAsTool>
-		<UseWindowsForms>False</UseWindowsForms>
 		<ApplicationIcon>Assets\Main.ico</ApplicationIcon>
+		<dpiAware>true</dpiAware>
+		<SupportedOSPlatformVersion>10.0.17763.0</SupportedOSPlatformVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -21,79 +23,268 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Remove="Assets\HomeHeading.png" />
-	  <None Remove="Assets\LogoB.png" />
-	  <None Remove="Assets\LogoW.png" />
-	  <None Remove="Assets\Mail.png" />
-	  <None Remove="Assets\PriyanthaDieCuttingMail.png" />
-	  <None Remove="Assets\PriyanthaDieCuttingWhatsapp.png" />
-	  <None Remove="Assets\Warning.png" />
+		<None Remove="Assets\3626507.png" />
+		<None Remove="Assets\About.png" />
+		<None Remove="Assets\Asset 1.svg" />
+		<None Remove="Assets\Asset_10.png" />
+		<None Remove="Assets\Asset_11.png" />
+		<None Remove="Assets\Asset_12.png" />
+		<None Remove="Assets\Asset_13.png" />
+		<None Remove="Assets\Asset_23.png" />
+		<None Remove="Assets\Asset_24.png" />
+		<None Remove="Assets\Asset_25.png" />
+		<None Remove="Assets\Asset_27.png" />
+		<None Remove="Assets\Asset_29.png" />
+		<None Remove="Assets\Asset_32.png" />
+		<None Remove="Assets\Asset_33.png" />
+		<None Remove="Assets\Asset_34.png" />
+		<None Remove="Assets\Asset_35.png" />
+		<None Remove="Assets\Asset_36.png" />
+		<None Remove="Assets\Asset_37.png" />
+		<None Remove="Assets\Asset_38.png" />
+		<None Remove="Assets\Asset_40.png" />
+		<None Remove="Assets\Asset_41.png" />
+		<None Remove="Assets\Asset_43.png" />
+		<None Remove="Assets\Asse_9.png" />
+		<None Remove="Assets\Business_deal.gif" />
+		<None Remove="Assets\Company.png" />
+		<None Remove="Assets\crop.gif" />
+		<None Remove="Assets\data-recovery.ico" />
+		<None Remove="Assets\default_profile.png" />
+		<None Remove="Assets\Def_D.png" />
+		<None Remove="Assets\Def_w.png" />
+		<None Remove="Assets\Delete.png" />
+		<None Remove="Assets\Edit.png" />
+		<None Remove="Assets\EditB.png" />
+		<None Remove="Assets\EditW.png" />
+		<None Remove="Assets\HomeHeading.png" />
+		<None Remove="Assets\Login.gif" />
+		<None Remove="Assets\LogoB.png" />
+		<None Remove="Assets\LogoW.png" />
+		<None Remove="Assets\L_D.png" />
+		<None Remove="Assets\L_w.png" />
+		<None Remove="Assets\Mail.png" />
+		<None Remove="Assets\Main.ico" />
+		<None Remove="Assets\MainLogo.png" />
+		<None Remove="Assets\N_D.png" />
+		<None Remove="Assets\N_w.png" />
+		<None Remove="Assets\Payroll.png" />
+		<None Remove="Assets\Person.png" />
+		<None Remove="Assets\PriyanthaDieCuttingMail.png" />
+		<None Remove="Assets\PriyanthaDieCuttingWhatsapp.png" />
+		<None Remove="Assets\search.png" />
+		<None Remove="Assets\searcht.png" />
+		<None Remove="Assets\Settings_W.png" />
+		<None Remove="Assets\Setting_G.png" />
+		<None Remove="Assets\Warning.png" />
+		<None Remove="Assets\WhatsApp.png" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Content Include="Assets\3626507.png">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="Assets\LogoB.png">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="Assets\LogoW.png">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="Assets\Mail.png">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="Assets\Main.ico" />
-	  <Content Include="Assets\PriyanthaDieCuttingMail.png">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="Assets\PriyanthaDieCuttingWhatsapp.png">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="Assets\Warning.png">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="Assets\WhatsApp.png">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
+		<Content Include="Assets\3626507.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\About.png">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\Asset 1.svg">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\Asset_46.png">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\Asset_10.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\Asset_11.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\Asset_12.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\Asset_13.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\Asset_23.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\Asset_24.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\Asset_25.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\Asset_27.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\Asset_29.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\Asset_32.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\Asset_33.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\Asset_34.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\Asset_35.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\Asset_36.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\Asset_37.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\Asset_38.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\Asset_40.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\Asset_41.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\Asset_43.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\Asse_9.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\Business_deal.gif">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\Company.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\crop.gif">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\data-recovery.ico">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\default_profile.png">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\Def_D.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\Def_w.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\Delete.png">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\Edit.png">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\EditB.png">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\EditW.png">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\HomeHeading.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\Login.gif">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\LogoB.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\LogoW.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\L_D.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\L_w.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\Mail.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\Main.ico">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\MainLogo.png">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\N_D.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\N_w.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\Payroll.png">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\Person.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\PriyanthaDieCuttingMail.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\PriyanthaDieCuttingWhatsapp.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\search.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\searcht.png">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\Settings_W.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\Setting_G.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\Warning.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\WhatsApp.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="itext7" Version="9.1.0" />
+		<PackageReference Include="Google.Apis.Auth" Version="1.72.0" />
+		<PackageReference Include="Google.Apis.Drive.v3" Version="1.71.0.3905" />
+		<PackageReference Include="Google.Apis.Oauth2.v2" Version="1.68.0.1869" />
+		<PackageReference Include="Google.Apis.PeopleService.v1" Version="1.69.0.3785" />
+		<PackageReference Include="Hardcodet.Wpf.TaskbarNotification" Version="1.0.5" />
+		<PackageReference Include="itext7" Version="9.3.0" />
+		<PackageReference Include="iTextSharp" Version="5.5.13.4" />
 		<PackageReference Include="LiveCharts.Wpf.NetCore3" Version="0.9.8" />
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-		<PackageReference Include="PDFsharp" Version="6.1.1" />
-		<PackageReference Include="SharpVectors" Version="1.8.4.2" />
-		<PackageReference Include="SkiaSharp" Version="3.116.1" />
+		<PackageReference Include="MailKit" Version="4.13.0" />
+		<PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.1" />
+		<PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.1.3" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+		<PackageReference Include="PDFsharp" Version="6.2.1" />
+		<PackageReference Include="QuestPDF" Version="2025.7.2" />
+		<PackageReference Include="SkiaSharp" Version="3.119.0" />
+		<PackageReference Include="System.Drawing.Common" Version="9.0.9" />
+		<PackageReference Include="XamlAnimatedGif" Version="2.3.1" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Content Include="Assets\HomeHeading.png">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
-	</ItemGroup>
-
-	<ItemGroup>
-		<Compile Update="Attendance And Paysheets\ConfirmationDialogAttendance.xaml.cs">
-		  <SubType>Code</SubType>
-		</Compile>
-		<Compile Update="Customer\ConfirmationDialogCustomer.xaml.cs">
-		  <SubType>Code</SubType>
-		</Compile>
 		<Compile Update="Employee\ConfirmationDialogEmployee.xaml.cs">
-		  <SubType>Code</SubType>
+			<SubType>Code</SubType>
 		</Compile>
 		<Compile Update="HomeUi\EmailDetails.xaml.cs">
 			<SubType>Code</SubType>
 		</Compile>
 		<Compile Update="Orders\ConfirmationDialogOders.xaml.cs">
-		  <SubType>Code</SubType>
+			<SubType>Code</SubType>
 		</Compile>
-		<Compile Update="Quotation\ConfirmationDialogQuotation.xaml.cs">
-		  <SubType>Code</SubType>
-		</Compile>
-		<Compile Update="Salary\ConfirmationDialogSalary.xaml.cs">
-		  <SubType>Code</SubType>
+		<Compile Update="Properties\Settings.Designer.cs">
+			<DesignTimeSharedInput>True</DesignTimeSharedInput>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>Settings.settings</DependentUpon>
 		</Compile>
 	</ItemGroup>
 
@@ -103,6 +294,36 @@
 		</Page>
 	</ItemGroup>
 
-	
+	<ItemGroup>
+		<None Update="Properties\Settings.settings">
+			<Generator>SettingsSingleFileGenerator</Generator>
+			<LastGenOutput>Settings.Designer.cs</LastGenOutput>
+		</None>
+	</ItemGroup>
+
+
+
+	<ItemGroup>
+	  <Folder Include="Salary\" />
+	</ItemGroup>
+
+
+
+	<ItemGroup>
+	  <Reference Include="ModernCalendarLib">
+	    <HintPath>..\..\Wpf.Custom.UI.Calendar-master\ModernCalendarLib\bin\Debug\net8.0-windows\ModernCalendarLib.dll</HintPath>
+	  </Reference>
+	  <Reference Include="YourNamespace">
+	    <HintPath>..\..\..\source\repos\YourNamespace\YourNamespace\bin\Debug\net8.0-windows\YourNamespace.dll</HintPath>
+	  </Reference>
+	</ItemGroup>
+
+
+
+
+
+
+
+
 
 </Project>

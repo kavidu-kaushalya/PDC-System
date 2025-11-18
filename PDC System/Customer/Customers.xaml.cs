@@ -1,28 +1,45 @@
-﻿
+﻿using Newtonsoft.Json;
+using PDC_System.Customer;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using Newtonsoft.Json;
-
 
 namespace PDC_System
 {
     /// <summary>
     /// Interaction logic for Contact.xaml
     /// </summary>
-    public partial class Customers : System.Windows.Controls.UserControl
+    public partial class Customers : UserControl
     {
-        private List<Customer> customers = new List<Customer>();
+        private List<Customerinfo> customers = new List<Customerinfo>();
+        
+        private readonly string saversFolder;
+        private readonly string jsonFilePath;
+        private readonly string jsonFilePath2;
+
         public Customers()
         {
             InitializeComponent();
+
+            // Set current working directory to a 'Savers' folder
+            saversFolder = Path.Combine(Directory.GetCurrentDirectory(), "Savers");
+            if (!Directory.Exists(saversFolder))
+            {
+                Directory.CreateDirectory(saversFolder);
+            }
+
+            jsonFilePath = Path.Combine(saversFolder, "customers.json");
+            jsonFilePath2 = Path.Combine(saversFolder, "Outsource.json");
+
             LoadData();
         }
+
         private void LoadData()
         {
-            if (File.Exists("customers.json"))
+            if (File.Exists(jsonFilePath))
             {
-                customers = JsonConvert.DeserializeObject<List<Customer>>(File.ReadAllText("customers.json"));
+                customers = JsonConvert.DeserializeObject<List<Customerinfo>>(File.ReadAllText(jsonFilePath));
                 CustomerDataGrid.ItemsSource = customers;
             }
         }
@@ -34,29 +51,28 @@ namespace PDC_System
             {
                 customers.Add(addCustomerWindow.Customer);
                 CustomerDataGrid.Items.Refresh();
-                File.WriteAllText("customers.json", JsonConvert.SerializeObject(customers));
+                File.WriteAllText(jsonFilePath, JsonConvert.SerializeObject(customers, Formatting.Indented));
             }
         }
 
+       
+
         private void DeleteCustomer_Click(object sender, RoutedEventArgs e)
         {
-            var selectedCustomer = CustomerDataGrid.SelectedItem as Customer;
+            var selectedCustomer = CustomerDataGrid.SelectedItem as Customerinfo;
             if (selectedCustomer != null)
             {
-                // Show a confirmation dialog
-                var confirmationDialog = new ConfirmationDialogCustomer(); // Assuming you have created this dialog class
-                confirmationDialog.Owner = Application.Current.MainWindow; // Set the main window as the owner
+                var confirmationDialog = new ConfirmationDialogCustomer(); // Assuming you have this dialog class
+                confirmationDialog.Owner = Application.Current.MainWindow;
                 confirmationDialog.ShowDialog();
 
-                // If user confirms deletion
                 if (confirmationDialog.IsConfirmed)
                 {
                     customers.Remove(selectedCustomer);
                     CustomerDataGrid.Items.Refresh();
-                    File.WriteAllText("customers.json", JsonConvert.SerializeObject(customers));
+                    File.WriteAllText(jsonFilePath, JsonConvert.SerializeObject(customers, Formatting.Indented));
                 }
             }
         }
-
     }
 }

@@ -25,19 +25,29 @@ namespace PDC_System
     public partial class Oders : UserControl
     {
         private List<Order> orders;
+        private readonly string saveFolder = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Savers");
+        private readonly string saveFile;
+
         public Oders()
         {
             InitializeComponent();
+            saveFile = System.IO.Path.Combine(saveFolder, "orders.json");
+
+            // Ensure the Savers folder exists
+            if (!Directory.Exists(saveFolder))
+            {
+                Directory.CreateDirectory(saveFolder);
+            }
+
             LoadOrders();
             OrdersDataGrid.ItemsSource = orders;
         }
-    
 
-            private void LoadOrders()
+        private void LoadOrders()
         {
-            if (File.Exists("orders.json"))
+            if (File.Exists(saveFile))
             {
-                string json = File.ReadAllText("orders.json");
+                string json = File.ReadAllText(saveFile);
                 orders = JsonConvert.DeserializeObject<List<Order>>(json);
             }
             else
@@ -48,8 +58,8 @@ namespace PDC_System
 
         private void SaveOrders()
         {
-            string json = JsonConvert.SerializeObject(orders);
-            File.WriteAllText("orders.json", json);
+            string json = JsonConvert.SerializeObject(orders, Formatting.Indented);
+            File.WriteAllText(saveFile, json);
         }
 
         private void AddOrderButton_Click(object sender, RoutedEventArgs e)
@@ -112,11 +122,9 @@ namespace PDC_System
                 {
                     orders.Remove(selectedOrder);
                     OrdersDataGrid.Items.Refresh();
-                    File.WriteAllText("orders.json", JsonConvert.SerializeObject(orders)); // Save to correct file
+                    SaveOrders(); // Save to correct file in Savers folder
                 }
             }
         }
-
-
     }
 }

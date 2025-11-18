@@ -1,0 +1,43 @@
+﻿<Window x:Class="PDC_System.Outsourcing.OutsourcingEditWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PDC_System.Outsourcing"
+        mc:Ignorable="d"
+        Title="OutsourcingEditWindow" Height="450" Width="800">
+    <Grid>
+        <StackPanel Margin="10" Width="300">
+            <TextBlock Text="Type" FontWeight="Bold"/>
+            <TextBox x:Name="TypeTextBox"  Margin="0,0,0,10" TextChanged="TypeTextBox_TextChanged"/>
+
+            <!-- Plate Info -->
+            <StackPanel x:Name="PlatePanel" Margin="0,0,0,10">
+                <TextBlock Text="Plate Info" FontWeight="Bold"/>
+                <TextBox x:Name="PlateNameTextBox"  Margin="0,0,0,5"/>
+                <TextBox x:Name="PlateEmailTextBox" Margin="0,0,0,5"/>
+                <TextBox x:Name="PlateContactTextBox"  Margin="0,0,0,5"/>
+            </StackPanel>
+
+            <!-- Digital Info -->
+            <StackPanel x:Name="DigitalPanel" Margin="0,0,0,10">
+                <TextBlock Text="Digital Info" FontWeight="Bold"/>
+                <TextBox x:Name="DigitalNameTextBox"  Margin="0,0,0,5"/>
+                <TextBox x:Name="DigitalEmailTextBox" Margin="0,0,0,5"/>
+                <TextBox x:Name="DigitalContactTextBox"  Margin="0,0,0,5"/>
+            </StackPanel>
+
+            <!-- Any Info -->
+            <StackPanel x:Name="AnyPanel" Margin="0,0,0,10">
+                <TextBlock Text="Any Info" FontWeight="Bold"/>
+                <TextBox x:Name="AnyNameTextBox"  Margin="0,0,0,5"/>
+                <TextBox x:Name="AnyEmailTextBox" Margin="0,0,0,5"/>
+                <TextBox x:Name="AnyContactTextBox"  Margin="0,0,0,5"/>
+            </StackPanel>
+
+            <Button Content="Save" Click="SaveButton_Click" Width="80" HorizontalAlignment="Right"/>
+        </StackPanel>
+
+
+    </Grid>
+</Window>

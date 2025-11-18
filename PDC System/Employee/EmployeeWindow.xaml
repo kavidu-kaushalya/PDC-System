@@ -5,35 +5,33 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PDC_System"
              mc:Ignorable="d" 
+             MinWidth="1004" MinHeight="660"
               FontFamily="{StaticResource CustomFont}"
              >
 
-    <StackPanel HorizontalAlignment="Center" >
-        <Grid>
-
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-            </Grid.ColumnDefinitions>
-
-            <Grid.RowDefinitions>
-                <RowDefinition Height="150"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-
-            <StackPanel Grid.Row="0">
-                <Border Background="#FF1D1A27" CornerRadius="30"
-     
-     >
-
-                    <StackPanel Height="100" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <TextBlock Text="Employee" VerticalAlignment="Center" FontSize="40" FontWeight="Bold" Foreground="White" />
-                    </StackPanel>
+    <StackPanel >
+       
+            <StackPanel>
 
 
 
-                </Border>
-            </StackPanel>
+
+            <TextBlock Text="Employee" 
+       FontSize="20" 
+       FontWeight="SemiBold" 
+       Foreground="{DynamicResource Forground}"                        
+       TextAlignment="Left" />
+
+            <TextBlock Text="Show all Plate,Digital and Any" 
+       FontSize="12" 
+       FontWeight="Normal" 
+       Foreground="#FF7D7D7D"
+       TextAlignment="Left" Padding="0,0,0,18"/>
+
+
+
+
+        </StackPanel>
             
 
             <StackPanel Grid.Column="1" Grid.RowSpan="2" Margin="30,0,0,0">
@@ -46,59 +44,25 @@
 
 
 
-            <StackPanel Grid.Row="2" HorizontalAlignment="Center">
+            <StackPanel >
                 
                 
-                <StackPanel HorizontalAlignment="Center">
-                    <Button Content="Add Employee" Click="AddEmployee_Click" Width="200" Style="{StaticResource UiWinodwButton}" Margin="10"/>
-                   
+                <StackPanel >
+                    <Button Content="Add Employee" Click="AddEmployee_Click" Width="200" Style="{StaticResource ActionButton}" Margin="10"/>
                 </StackPanel>
 
-              <StackPanel Margin="10" Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Border HorizontalAlignment="Center" Height="50" Width="300" Background="#FF13111A" CornerRadius="25" BorderThickness="0.5" BorderBrush="#FF8C8C8C">
-                        <StackPanel Height="35" Margin="8" VerticalAlignment="Center">
+              <StackPanel Margin="10" Orientation="Horizontal" >
 
 
 
-
-
-                            <TextBox Name="SearchBox"
-                                TextChanged="SearchBox_TextChanged"
-                                HorizontalAlignment="Center"
-                                TextAlignment="Left"
-                                VerticalAlignment="Center"
-                                FontSize="15"
-                                Foreground="#FF949494"
-                                Background="Transparent"
-                                BorderBrush="Transparent"
-                                SelectionBrush="#FF1D1A27" CaretBrush="White">
-
-                                <TextBox.Template>
-                                    <ControlTemplate TargetType="TextBox">
-
-                                        <Border VerticalAlignment="Center" HorizontalAlignment="Center" Background="Transparent" BorderBrush="Transparent" BorderThickness="0">
-                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="8">
-                                                <TextBlock Text="Employee Name:   " Foreground="White" HorizontalAlignment="Left"/>
-                                                <ScrollViewer x:Name="PART_ContentHost" Width="152"  />
-                                            </StackPanel>
-
-                                        </Border>
-                                    </ControlTemplate>
-                                </TextBox.Template>
-                            </TextBox>
-
-                        </StackPanel>
-
-                    </Border>
-                <Button Margin="20"
-Content="Edit"  
-Click="OpenDuplicateWindow_Click" 
-          HorizontalAlignment="Center"
- 
-Width="200" 
- 
-Style="{StaticResource UiWinodwButton}"/>
-                    </StackPanel>
+                    <TextBox  x:Name="SearchBox" Height="35" Style="{DynamicResource OutsourceSerchBar}" Width="300" TextChanged="SearchBox_TextChanged"  />
+                    <Button HorizontalAlignment="Right" Margin="20"
+                    Content="Edit"  
+                    Click="OpenDuplicateWindow_Click" 
+                   
+                   
+                    Style="{StaticResource ActionButton}"/>
+                </StackPanel>
 
 
 
@@ -109,150 +73,48 @@ Style="{StaticResource UiWinodwButton}"/>
 
 
 
-                    <Border Background="#FF1D1A27" CornerRadius="30">
-                    <DataGrid x:Name="EmployeeDataGrid"
-                          Margin="20"
-      MouseDoubleClick="DataGrid_MouseDoubleClick"
-          Background="Transparent"
-          AutoGenerateColumns="False"
-          CanUserAddRows="False"
-          CanUserReorderColumns="False"
-          CanUserResizeRows="False"
-          CanUserResizeColumns="False"
-          CanUserDeleteRows="True"
-          IsTabStop="True"
-          GridLinesVisibility="None"
-          RowHeaderWidth="0"
-          Height="300"
-          CellStyle="{StaticResource Customers_grid}"
-          ColumnHeaderStyle="{StaticResource RoundedHeaderStyle}"
-          RowBackground="Transparent"
-          BorderBrush="Transparent" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Hidden" >
+                    
+              
+                    <DataGrid x:Name="EmployeeDataGrid" AutoGenerateColumns="False" Height="300"
+AlternatingRowBackground="#f0f0f0"
+SnapsToDevicePixels="True"
 
 
-
-
+CanUserResizeColumns="False"
+CellStyle="{StaticResource DataGridCellStyle}"
+Style="{StaticResource DataGridStyle}"
+ColumnHeaderStyle="{StaticResource DataGridHeaderStyle}"
+RowStyle="{StaticResource DataGridRowStyle}">
                         <DataGrid.Columns>
-
-
-
-
-                            <DataGridTemplateColumn IsReadOnly="True" CanUserResize="False" CanUserSort="False" >
-
-
-                                <DataGridTemplateColumn.HeaderTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Grid.Column="0">
-
-                                            <TextBlock Margin="20,0,20,0" Text="A ID"/>
-
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.HeaderTemplate>
-
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate >
-                                        <TextBlock Text="{Binding ID}"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-
-
-                            </DataGridTemplateColumn>
-
-                            <DataGridTemplateColumn  IsReadOnly="True" CanUserResize="False" CanUserSort="False" >
-                                <DataGridTemplateColumn.HeaderTemplate>
-                                    <DataTemplate>
-                                        <StackPanel>
-                                            <TextBlock Margin="20,0,20,0" Text="Employee Name"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.HeaderTemplate>
-
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate >
-                                        <TextBlock TextTrimming="CharacterEllipsis" Width="150" TextAlignment="Center" Text="{Binding Name}"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-
-                            </DataGridTemplateColumn>
-
-
-
-
-                            <DataGridTemplateColumn  IsReadOnly="True" CanUserResize="False" CanUserSort="False" >
-                                <DataGridTemplateColumn.HeaderTemplate>
-                                    <DataTemplate>
-                                        <StackPanel >
-                                            <TextBlock Margin="20,0,20,0" Text="Job Role"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.HeaderTemplate>
-
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate >
-                                        <TextBlock Text="{Binding jobrole}"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-
-                            </DataGridTemplateColumn>
-
-
-
-                            <DataGridTemplateColumn  IsReadOnly="True" CanUserResize="False" CanUserSort="False" >
-                                <DataGridTemplateColumn.HeaderTemplate>
-                                    <DataTemplate>
-                                        <StackPanel >
-                                            <TextBlock Margin="20,0,20,0" Text="National ID"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.HeaderTemplate>
-
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate >
-                                        <TextBlock Text="{Binding NID}"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-
-                            </DataGridTemplateColumn>
-
-
-                            <DataGridTemplateColumn  IsReadOnly="True" CanUserResize="False" CanUserSort="False" >
-                                <DataGridTemplateColumn.HeaderTemplate>
-                                    <DataTemplate>
-                                        <StackPanel >
-                                            <TextBlock Margin="20,0,20,0" Text="Delete"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.HeaderTemplate>
-
+                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" ElementStyle="{StaticResource NameColumnStyle}"/>
+                    <DataGridTextColumn Header="Employee ID" Binding="{Binding EmployeeId}" Width="*" ElementStyle="{StaticResource NameColumnStyle}"/>
+                    <DataGridTextColumn Header="Employee ValidFrom" Binding="{Binding ValidFrom}" Width="*" ElementStyle="{StaticResource NameColumnStyle}"/>
+                    <DataGridTextColumn Header="Employee ValidTo" Binding="{Binding ValidTo}" Width="*" ElementStyle="{StaticResource NameColumnStyle}"/>
+                            <DataGridTemplateColumn Header="Action" Width="*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate >
                                         <Button
-                                    Content="Delete"  
-                                    Click="DeleteEmployee_Click" 
-                                              HorizontalAlignment="Center"
-                                    Height="30" 
-                                    Width="60" 
-                                    FontSize="10" 
-                                    Style="{StaticResource UiWinodwButton}" Background="#FF8C0000"/>
+     Content="Delete"  
+     Click="DeleteEmployee_Click" 
+     HorizontalAlignment="Center"
+     Height="30" 
+     Width="60" 
+     Style="{StaticResource NavigationButtonStyle}"/>
 
 
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
-
                             </DataGridTemplateColumn>
 
-
                         </DataGrid.Columns>
-
                     </DataGrid>
 
-                </Border>
+            
             </StackPanel>
 
 
 
-        </Grid>
+
         
     </StackPanel>
 </UserControl>

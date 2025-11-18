@@ -9,273 +9,186 @@ using Newtonsoft.Json;
 
 namespace PDC_System
 {
-    public partial class QuotationWindow : System.Windows.Controls.UserControl
+    public partial class QuotationWindow : UserControl
     {
-        private List<Customer> customers = new List<Customer>();
-        private List<Save_pdf> savedPdfs = new List<Save_pdf>();
-        public ObservableCollection<Save_pdf> Files { get; set; }
+        public event Action InvoicesUpdated;
+        public ObservableCollection<Quotation> SavedQuotations { get; set; } = new();
+        public ObservableCollection<InvoiceRecord> SavedInvoices { get; set; } = new();
 
         public QuotationWindow()
         {
             InitializeComponent();
-            LoadData();
+            UserControl_Loaded();
+            LoadInvoices();
 
-            // Sort the savedPdfs by Date in descending order
-            savedPdfs = savedPdfs.OrderByDescending(pdf => pdf.Date).ToList();
-
-            // Initialize ObservableCollection directly with savedPdfs
-            Files = new ObservableCollection<Save_pdf>(savedPdfs);
-
-            // Set Files as the DataGrid's ItemSource
-            PDFSaveDataGrid.ItemsSource = Files;
-        }
-
-        private void LoadData()
-        {
-            if (File.Exists("customers.json"))
-            {
-                customers = JsonConvert.DeserializeObject<List<Customer>>(File.ReadAllText("customers.json"));
-                CustomerDataGrid.ItemsSource = customers;
-            }
-
-            if (File.Exists("savedpdfs.json"))
-            {
-                savedPdfs = JsonConvert.DeserializeObject<List<Save_pdf>>(File.ReadAllText("savedpdfs.json"));
-            }
-        }
-
-        private void CustomerSearchTextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (customers == null) return;
-
-            string searchText = CustomerSearchNameTextBox.Text.ToLower();
-
-            var filteredCustomers = customers.Where(c =>
-                (c.Name != null && c.Name.ToLower().Contains(searchText)) ||
-                (c.Address != null && c.Address.ToLower().Contains(searchText))
-            ).ToList();
-
-            CustomerDataGrid.ItemsSource = filteredCustomers;
         }
 
 
-        private void CreateQuotation_Click(object sender, RoutedEventArgs e)
+
+        private void AddQuotation_Click(object sender, RoutedEventArgs e)
         {
-            var selectedCustomer = CustomerDataGrid.SelectedItem as Customer;
-            if (selectedCustomer != null)
+            // Create AddQuotationWindow and subscribe to its event
+            var window = new AddQuotationWindow();
+            window.QuotationSaved += UserControl_Loaded;  // ✅ Refresh quotation list after saving
+            window.ShowDialog(); // Modal window (use Show() if you prefer non-blocking)
+        }
+
+        public void UserControl_Loaded()
+        {
+            try
             {
-                var quotationCreateWindow = new QuotationCreateWindow(selectedCustomer);
-                if (quotationCreateWindow.ShowDialog() == true)
+                string file = Path.Combine(Directory.GetCurrentDirectory(), "Savers", "SavedQuotations.json");
+
+                if (File.Exists(file))
                 {
-                    // Create a new Save_pdf object with the quotation details
-                    var newPdf = new Save_pdf
+                    string json = File.ReadAllText(file);
+                    var quotations = JsonConvert.DeserializeObject<List<Quotation>>(json);
+
+                    if (quotations != null)
                     {
-                        CustomerName = selectedCustomer.Name,
-                        Date = DateTime.Now,
-                        FilePath = quotationCreateWindow.FilePath,
-                        gg = selectedCustomer.Address,
-                        Gtotal = quotationCreateWindow.gtotal,
-                        QuoteNo = quotationCreateWindow.QuoteNumber,
-                        qname = quotationCreateWindow.Qname
-                    };
-
-                    // Add the new PDF to the list and update savedpdfs.json
-                    savedPdfs.Add(newPdf);
-                    File.WriteAllText("savedpdfs.json", JsonConvert.SerializeObject(savedPdfs));
-
-                    // Sort the savedPdfs list in descending order by Date
-                    savedPdfs = savedPdfs.OrderByDescending(pdf => pdf.Date).ToList();
-
-                    // Clear and add sorted items back to the ObservableCollection
-                    Files.Clear();
-                    foreach (var pdf in savedPdfs)
-                    {
-                        Files.Add(pdf);
+                        SavedQuotations = new ObservableCollection<Quotation>(quotations);
+                        QuotationGrid.ItemsSource = SavedQuotations;
                     }
-
-                    // Refresh the DataGrid
-                    PDFSaveDataGrid.Items.Refresh();
+                }
+                else
+                {
+                    // If file doesn't exist yet, clear grid
+                    SavedQuotations.Clear();
+                    QuotationGrid.ItemsSource = SavedQuotations;
                 }
             }
-            else
+            catch (Exception ex)
             {
-                System.Windows.MessageBox.Show("Please select a customer.");
+                MessageBox.Show($"Error loading quotations: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
-        private void OpenFileButton_Click(object sender, RoutedEventArgs e)
+
+        private void EditQuotation_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is System.Windows.Controls.Button button && button.DataContext is Save_pdf selectedItem)
+            if (sender is Button btn && btn.DataContext is Quotation selectedQuotation)
             {
-                OpenFile(selectedItem.FilePath);
+                var window = new AddQuotationWindow(selectedQuotation);
+                window.QuotationSaved += UserControl_Loaded; // refresh after save
+                window.ShowDialog();
             }
         }
-
-        private void DeleteSavedpdfs_Click(object sender, RoutedEventArgs e)
+        private void DeleteQuotation_Click(object sender, RoutedEventArgs e)
         {
-            var selectedSave_pdf = PDFSaveDataGrid.SelectedItem as Save_pdf;
-            if (selectedSave_pdf != null)
+            if (sender is Button btn && btn.DataContext is Quotation selectedQuotation)
             {
-                // Show a confirmation dialog
-                var confirmationDialog = new ConfirmationDialogQuotation(); // Assuming you've created this dialog class
-                confirmationDialog.Owner = Application.Current.MainWindow; // Set the main window as the owner
-                confirmationDialog.ShowDialog();
-
-                // If user confirms deletion
-                if (confirmationDialog.IsConfirmed)
+                var result = MessageBox.Show($"Are you sure you want to delete quotation {selectedQuotation.QuotationNumber}?",
+                                             "Confirm Delete", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (result == MessageBoxResult.Yes)
                 {
-                    Files.Remove(selectedSave_pdf);
-                    PDFSaveDataGrid.Items.Refresh();
-                    File.WriteAllText("savedpdfs.json", JsonConvert.SerializeObject(Files));
-                }
-            }
-        }
+                    // Remove from ObservableCollection
+                    SavedQuotations.Remove(selectedQuotation);
 
-        private void OpenFile(string filePath)
-        {
-            if (File.Exists(filePath))
-            {
-                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
-                {
-                    FileName = filePath,
-                    UseShellExecute = true
-                });
-            }
-            else
-            {
-                System.Windows.MessageBox.Show("File not found!");
-            }
-        }
+                    // Remove from JSON file
+                    string file = Path.Combine(Directory.GetCurrentDirectory(), "Savers", "SavedQuotations.json");
+                    if (File.Exists(file))
+                    {
+                        string json = File.ReadAllText(file);
+                        var quotations = JsonConvert.DeserializeObject<List<Quotation>>(json) ?? new List<Quotation>();
 
-        // Save_pdf class definition
-        public class Save_pdf
-        {
-            public DateTime Date { get; set; }
-            public string CustomerName { get; set; }
-            public decimal Gtotal { get; set; }
-            public string FilePath { get; set; }
-            public string gg { get; set; }
-            public string QuoteNo { get; set; }
-            public string qname { get; set; }
-        }
+                        // Remove the selected quotation from the list
+                        quotations.RemoveAll(q => q.QuotationNumber == selectedQuotation.QuotationNumber);
 
-        // Search for customer name or date range
-        private void SearchButton_Click(object sender, RoutedEventArgs e)
-        {
-            FilterFiles();
-        }
-
-        private void FilterFiles()
-        {
-            if (savedPdfs == null) return;
-
-            string searchText = CustomerSearchTextBox.Text.Trim().ToLower();
-            DateTime? startDate = StartDatePicker.SelectedDate;
-            DateTime? endDate = EndDatePicker.SelectedDate;
-
-            var filteredFiles = savedPdfs.AsQueryable();
-
-            // Filter by search text (Customer Name or Quote No)
-            if (!string.IsNullOrEmpty(searchText))
-            {
-                filteredFiles = filteredFiles.Where(pdf =>
-                    (pdf.CustomerName != null && pdf.CustomerName.ToLower().Contains(searchText)) ||
-                    (pdf.QuoteNo != null && pdf.QuoteNo.ToLower().Contains(searchText))
-                );
-            }
-
-            // Ensure correct date filtering
-            if (startDate.HasValue)
-            {
-                DateTime start = startDate.Value.Date; // Start of the day (00:00:00)
-                filteredFiles = filteredFiles.Where(pdf => pdf.Date >= start);
-            }
-
-            if (endDate.HasValue)
-            {
-                DateTime end = endDate.Value.Date.AddDays(1).AddTicks(-1); // End of the day (23:59:59)
-                filteredFiles = filteredFiles.Where(pdf => pdf.Date <= end);
-            }
-
-            filteredFiles = filteredFiles.OrderByDescending(pdf => pdf.Date);
-
-            // Update ObservableCollection instead of directly modifying ItemsSource
-            Files.Clear();
-            foreach (var file in filteredFiles)
-            {
-                Files.Add(file);
-            }
-        }
-
-
-        private void SearchTextChanged(object sender, TextChangedEventArgs e)
-        {
-
-            // Apply filter based on search text
-            FilterFiles();
-        }
-
-        private void SearchBox_TextChanged2(object sender, TextChangedEventArgs e)
-        {
-            // Clear first search box and date filters
-
-
-            // Apply filter based on `qname`
-            ApplyFilter();
-        }
-
-
-        private void ApplyFilter()
-        {
-            string query = CustomerSearchTextBox2.Text.Trim().ToLower();
-
-            var filteredFiles = savedPdfs
-                .Where(pdf => pdf.qname != null && pdf.qname.ToLower().Contains(query))
-                .OrderByDescending(pdf => pdf.Date)
-                .ToList();
-
-            Files.Clear();
-            foreach (var file in filteredFiles)
-            {
-                Files.Add(file);
-            }
-        }
-
-
-
-
-        private void CalendarButton_Click(object sender, RoutedEventArgs e)
-        {
-            // Trigger the calendar to show when the button is clicked
-            if (EndDatePicker.IsDropDownOpen)
-            {
-                EndDatePicker.IsDropDownOpen = false; // Close if already open
-            }
-            else
-            {
-                EndDatePicker.IsDropDownOpen = true; // Open calendar
-            }
-        }
-
-        private void ResetButton_Click(object sender, RoutedEventArgs e)
-        {
-            // Clear search fields
-            CustomerSearchTextBox.Text = string.Empty;
-            CustomerSearchTextBox2.Text = string.Empty;
-            StartDatePicker.SelectedDate = null;
-            EndDatePicker.SelectedDate = null;
-
-            // Reload the original file list
-            if (savedPdfs != null)
-            {
-                Files.Clear();
-                foreach (var file in savedPdfs.OrderByDescending(pdf => pdf.Date))
-                {
-                    Files.Add(file);
+                        File.WriteAllText(file, JsonConvert.SerializeObject(quotations, Formatting.Indented));
+                    }
                 }
             }
         }
 
+
+        private void Invoice_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.DataContext is Quotation selectedQuotation)
+            {
+                InvoiceWindow invoiceWindow = new InvoiceWindow(selectedQuotation);
+                invoiceWindow.ShowDialog();
+            }
+        }
+
+
+
+
+        #region Billing Invoice Print 
+
+        private void OpenManualInvoice_Click(object sender, RoutedEventArgs e)
+        {
+            string customerFile = Path.Combine(Directory.GetCurrentDirectory(), "Savers", "customers.json");
+            List<Customerinfo> customers = new List<Customerinfo>();
+
+            if (File.Exists(customerFile))
+            {
+                string json = File.ReadAllText(customerFile);
+                customers = JsonConvert.DeserializeObject<List<Customerinfo>>(json) ?? new List<Customerinfo>();
+            }
+
+            // Open the manual invoice window
+            InvoiceWindow manualInvoiceWindow = new InvoiceWindow(customers);
+            manualInvoiceWindow.ShowDialog();
+        }
+
+
+
+
+        private void LoadInvoices()
+        {
+            try
+            {
+                string file = Path.Combine(Directory.GetCurrentDirectory(), "Savers", "Invoices.json");
+
+                if (File.Exists(file))
+                {
+                    string json = File.ReadAllText(file);
+                    var invoices = JsonConvert.DeserializeObject<List<InvoiceRecord>>(json);
+
+                    if (invoices != null)
+                    {
+                        SavedInvoices = new ObservableCollection<InvoiceRecord>(invoices);
+                        InvoiceGrid.ItemsSource = SavedInvoices;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading invoices: " + ex.Message);
+            }
+        }
+
+        private void EditInvoice_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.DataContext is InvoiceRecord record)
+            {
+                InvoiceWindow win = new InvoiceWindow(record);   // NEED constructor
+                win.ShowDialog();
+                LoadInvoices();
+            }
+        }
+
+        private void DeleteInvoice_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.DataContext is InvoiceRecord record)
+            {
+                if (MessageBox.Show("Delete invoice?", "Confirm", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                {
+                    SavedInvoices.Remove(record);
+
+                    string file = Path.Combine(Directory.GetCurrentDirectory(), "Savers", "Invoices.json");
+
+                    File.WriteAllText(file, JsonConvert.SerializeObject(SavedInvoices.ToList(), Formatting.Indented));
+                }
+            }
+        }
+
+
+
+
+
+
+        #endregion
 
     }
 }

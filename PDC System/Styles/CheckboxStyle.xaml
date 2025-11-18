@@ -3,45 +3,62 @@
 
 
     <Style TargetType="CheckBox">
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Foreground" Value="Gray"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="CheckBox">
-                    <StackPanel Orientation="Horizontal">
-                        <!-- CheckBox Box -->
+                    <Grid Width="30" Height="30">
+                        <!-- Outer box -->
                         <Border x:Name="Border"
-                            Width="20" Height="20"
-                            BorderBrush="Gray"
+                            CornerRadius="6"
+                                Width="25"
+                                Height="25"
                             BorderThickness="2"
-                            Background="White">
-                            <Grid>
-                                <Rectangle x:Name="CheckMark"
-                                       Fill="Transparent"
-                                       Width="14" Height="14"/>
-                            </Grid>
-                        </Border>
-                        <!-- Text -->
-                        <ContentPresenter Margin="5,0,0,0" VerticalAlignment="Center"/>
-                    </StackPanel>
+                            BorderBrush="#BDBDBD"
+                            Background="White"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"/>
+
+                        <!-- Check mark inside the border -->
+                        <Path x:Name="CheckMark"
+                          Data="M 7 15 L 13 21 L 23 9"
+                          Stroke="White"
+                          StrokeThickness="3"
+                          StrokeEndLineCap="Round"
+                          StrokeStartLineCap="Round"
+                          Stretch="Uniform"
+                          Visibility="Collapsed"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Center"
+                          Width="16" Height="16"/>
+                    </Grid>
+
                     <ControlTemplate.Triggers>
+                        <!-- Hover -->
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="#999999"/>
+                            <Setter TargetName="CheckMark" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+
                         <!-- Checked -->
                         <Trigger Property="IsChecked" Value="True">
-                            <Setter TargetName="CheckMark" Property="Fill" Value="Green"/>
-                            <Setter TargetName="Border" Property="BorderBrush" Value="Green"/>
+                            <Setter TargetName="Border" Property="Background" Value="#2196F3"/>
+                            <Setter TargetName="Border" Property="BorderBrush" Value="#2196F3"/>
+                            <Setter TargetName="CheckMark" Property="Visibility" Value="Visible"/>
                         </Trigger>
-                        <!-- Mouse Hover -->
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Border" Property="BorderBrush" Value="white"/>
-                        </Trigger>
+
                         <!-- Disabled -->
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="Border" Property="BorderBrush" Value="Gray"/>
-                            <Setter TargetName="CheckMark" Property="Fill" Value="Gray"/>
+                            <Setter TargetName="Border" Property="Opacity" Value="0.5"/>
+                            <Setter TargetName="CheckMark" Property="Opacity" Value="0.5"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
+
 
 
 </ResourceDictionary>

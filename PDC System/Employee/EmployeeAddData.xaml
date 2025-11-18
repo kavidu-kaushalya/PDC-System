@@ -1,482 +1,315 @@
 ﻿<Window x:Class="PDC_System.EmployeeAddData"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-         FontFamily="{StaticResource CustomFont}"
-        Title="Add Customer" Height="850" Width="auto">
-
-
+         xmlns:cal="clr-namespace:ModernCalendarLib;assembly=ModernCalendarLib"
+         FontFamily="Poppins" WindowStartupLocation="CenterScreen" MinHeight="600" Width="1200" WindowStyle="None" AllowsTransparency="True" MinWidth="900" SnapsToDevicePixels="True"
+        Foreground="{DynamicResource Forground}" Background="Transparent" >
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
+        <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1.5" Background="{DynamicResource Background}" CornerRadius="10" Margin="10">
+            <Border.Effect>
+                <DropShadowEffect ShadowDepth="0" Opacity="0.505" BlurRadius="8"/>
+            </Border.Effect>
 
-        </Grid.ColumnDefinitions>
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <Grid Margin="20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-        </Grid.RowDefinitions>
+                    <!-- LEFT COLUMN: Personal Details & Job Information -->
+                    <StackPanel Grid.Column="0" Margin="0,0,10,0">
 
-        <StackPanel Margin="10" Grid.Row="0" Grid.Column="0">
-            <TextBlock Text="Personal Details:" Margin="10" FontSize="20" FontWeight="Bold"/>
-            <TextBlock Text="Name:" Margin="10" FontSize="14"/>
-            <TextBox x:Name="EmployeeNameTextBox" Margin="10" FontSize="16"/>
+                        <!-- Personal Details -->
+                        <TextBlock Text="Personal Details:" Margin="10" FontSize="20" FontWeight="Bold"/>
+                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <Image Name="ImageDisplay" Width="150" Height="150" Margin="10" VerticalAlignment="Top" OpacityMask="Black" />
+                            <Button Content="Employee Image" HorizontalAlignment="Center"  Style="{DynamicResource ActionButton}" Width="133" Margin="10" Click="ImportImageButton_Click" Height="27"/>
+                        </StackPanel>
 
-            <TextBlock Text="Attendance ID:" Margin="10" FontSize="14"/>
-            <TextBox x:Name="EmployeeIDTextBox" Margin="10" SelectionTextBrush="White" PreviewTextInput="NumberOnly_PreviewTextInput" FontSize="16"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
 
-            <Label Content="Job Role:" Margin="10" TextBlock.FontSize="14"/>
-            <ComboBox x:Name="jrole" IsEditable="True" DisplayMemberPath="Content" Margin="10" FontSize="16">
-                <ComboBoxItem Content="Graphic Designer" />
-                <ComboBoxItem Content="Pre-Press Technician" />
-                <ComboBoxItem Content="Typesetter" />
-                <ComboBoxItem Content="Plate Maker" />
-                <ComboBoxItem Content="Proofreader" />
-                <ComboBoxItem Content="Press Operator" />
-                <ComboBoxItem Content="Machine Assistant" />
-                <ComboBoxItem Content="Print Technician" />
-                <ComboBoxItem Content="Flexographic Printer" />
-                <ComboBoxItem Content="Bindery Operator" />
-                <ComboBoxItem Content="Laminator" />
-                <ComboBoxItem Content="Die-Cutting Operator" />
-                <ComboBoxItem Content="Embossing/Foiling Specialist" />
-                <ComboBoxItem Content="Quality Control Inspector" />
-                <ComboBoxItem Content="Production Manager" />
-                <ComboBoxItem Content="Customer Service Representative" />
-                <ComboBoxItem Content="Sales And Marketing Executive" />
-                <ComboBoxItem Content="Estimator" />
-                <ComboBoxItem Content="Logistics And Delivery Staff"/>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
 
-            </ComboBox>
+                            <StackPanel Grid.Column="0" Width="auto">
+                                <TextBlock Text="Name:" Margin="10" FontSize="14"/>
+                                <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="EmployeeNameTextBox" Margin="10" FontSize="16"/>
+                            </StackPanel>
 
-            <Label Content="Depratment:" Margin="10" TextBlock.FontSize="14"/>
-            <ComboBox x:Name="Department" IsEditable="True" DisplayMemberPath="Content" Margin="10" FontSize="16">
-                <ComboBoxItem Content="Offset Printing" />
-                <ComboBoxItem Content="Digital Printing" />
-            </ComboBox>
+                            <StackPanel Grid.Column="1" Width="auto">
+                                <TextBlock Text="Email:" Margin="10" FontSize="14"/>
+                                <TextBox x:Name="EmployeeEmailTextBox" Style="{DynamicResource TextBoxStyle}" Width="auto" Margin="10" FontSize="16"/>
+                            </StackPanel>
 
-            <TextBlock Text="Birthday:" Margin="10" FontSize="14"/>
-            <DatePicker x:Name="birthday" Margin="10" FontSize="16"/>
+                            <StackPanel Grid.Row="1" Grid.Column="0" Width="auto">
+                                <TextBlock Text="Birthday:" Margin="10" FontSize="14"/>
+                                <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="2"  Margin="10" CornerRadius="5">
+                                    <cal:CustomDatePicker x:Name="birthday"  Width="auto"  Height="auto" />
+                                </Border>
+                            </StackPanel>
 
+                            <StackPanel Grid.Row="1" Grid.Column="1" Width="auto">
+                                <TextBlock Text="National ID:" Margin="10" FontSize="14"/>
+                                <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="NatId" Margin="10" PreviewTextInput="NatId_PreviewTextInput" FontSize="16"/>
+                            </StackPanel>
 
+                            <StackPanel Grid.Row="2" Grid.Column="0">
+                                <TextBlock Text="Primenry Phone Number:" Margin="10" FontSize="14"/>
+                                <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="contact1" Margin="10" PreviewTextInput="PreviewTextInput" MaxLength="10" FontSize="16" />
+                            </StackPanel>
 
-            <TextBlock Text="Primenry Phone Number:" Margin="10" FontSize="14"/>
-            <TextBox x:Name="contact1" Margin="10" PreviewTextInput="PreviewTextInput" MaxLength="10" FontSize="16" />
+                            <StackPanel Grid.Row="2" Grid.Column="1">
+                                <TextBlock Text="Secondary Phone Number:" Margin="10" FontSize="14"/>
+                                <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="contact2" Margin="10" PreviewTextInput="PreviewTextInput" MaxLength="10" FontSize="16"/>
+                            </StackPanel>
 
-            <TextBlock Text="Secondary Phone Number:" Margin="10" FontSize="14"/>
-            <TextBox x:Name="contact2" Margin="10" PreviewTextInput="PreviewTextInput" MaxLength="10" FontSize="16"/>
+                            <StackPanel Grid.Row="3" Grid.Column="0" Width="auto">
+                                <TextBlock Text="Address Line 1:" Margin="10" FontSize="14"/>
+                                <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="Address1" Margin="10" FontSize="16"/>
+                            </StackPanel>
 
-            <TextBlock Text="National ID:" Margin="10" FontSize="14"/>
-            <TextBox x:Name="NatId" Margin="10" PreviewTextInput="NatId_PreviewTextInput" FontSize="16"/>
+                            <StackPanel Grid.Row="3" Grid.Column="1" Width="auto">
+                                <TextBlock Text="Address Line 2:" Margin="10" FontSize="14"/>
+                                <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="Address2" Margin="10" FontSize="16"/>
+                            </StackPanel>
 
-        </StackPanel>
+                            <StackPanel Grid.Row="4" Grid.Column="0">
+                                <TextBlock Text="City:" Margin="10" FontSize="14"/>
+                                <ComboBox Style="{DynamicResource ComboBoxFlatStyle}" x:Name="city" IsEditable="True" DisplayMemberPath="Content" Margin="10" FontSize="16"/>
+                            </StackPanel>
 
-        <StackPanel Grid.Column="2" Margin="10" Grid.Row="0">
-            <TextBlock Text="Salary Details:" Margin="10" FontSize="20" FontWeight="Bold"/>
+                            <StackPanel Grid.Row="4" Grid.Column="1">
+                                <TextBlock Text="Province:" Margin="10" FontSize="14"/>
+                                <ComboBox Style="{DynamicResource ComboBoxFlatStyle}" x:Name="province" IsEditable="True" DisplayMemberPath="Content" Margin="10" FontSize="16">
+                                    <ComboBoxItem Content="Western Province"/>
+                                    <ComboBoxItem Content="Central Province"/>
+                                    <ComboBoxItem Content="Southern Province"/>
+                                    <ComboBoxItem Content="Northern Province"/>
+                                    <ComboBoxItem Content="Eastern Province"/>
+                                    <ComboBoxItem Content="North Western Province"/>
+                                    <ComboBoxItem Content="North Central Province"/>
+                                    <ComboBoxItem Content="Uva Province"/>
+                                    <ComboBoxItem Content="Sabaragamuwa Province"/>
+                                </ComboBox>
+                            </StackPanel>
+                        </Grid>
 
-            <TextBlock Text="Basic Salary:" Margin="10" FontSize="14"/>
-            <TextBox x:Name="EmployeeBasicSalaryTextBox" Margin="10" Background="White" PreviewTextInput="PreviewfloteTextInput" LostFocus="TextBox_LostFocus" FontSize="16"/>
+                        <!-- Job Information -->
+                        <TextBlock Text="Job Infomation" Margin="10,20,10,10" FontSize="20" FontWeight="Bold"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
 
-            <TextBlock Text="Net Salary:" Margin="10" FontSize="14"/>
-            <TextBox x:Name="EmployeeSalaryTextBox" Margin="10" Background="White" PreviewTextInput="PreviewfloteTextInput" LostFocus="TextBox_LostFocus" FontSize="16"/>
+                            <StackPanel Grid.Row="0" Grid.Column="0">
+                                <Label Content="Job Role:" Margin="10" TextBlock.FontSize="14"/>
+                                <ComboBox Style="{DynamicResource ComboBoxFlatStyle}" x:Name="jrole" IsEditable="True" DisplayMemberPath="Content" Margin="10" FontSize="16">
+                                    <ComboBoxItem Content="Graphic Designer" />
+                                    <ComboBoxItem Content="Pre-Press Technician" />
+                                    <ComboBoxItem Content="Typesetter" />
+                                    <ComboBoxItem Content="Plate Maker" />
+                                    <ComboBoxItem Content="Proofreader" />
+                                    <ComboBoxItem Content="Press Operator" />
+                                    <ComboBoxItem Content="Machine Assistant" />
+                                    <ComboBoxItem Content="Print Technician" />
+                                    <ComboBoxItem Content="Flexographic Printer" />
+                                    <ComboBoxItem Content="Bindery Operator" />
+                                    <ComboBoxItem Content="Laminator" />
+                                    <ComboBoxItem Content="Die-Cutting Operator" />
+                                    <ComboBoxItem Content="Embossing/Foiling Specialist" />
+                                    <ComboBoxItem Content="Quality Control Inspector" />
+                                    <ComboBoxItem Content="Production Manager" />
+                                    <ComboBoxItem Content="Customer Service Representative" />
+                                    <ComboBoxItem Content="Sales And Marketing Executive" />
+                                    <ComboBoxItem Content="Estimator" />
+                                    <ComboBoxItem Content="Logistics And Delivery Staff"/>
+                                </ComboBox>
+                            </StackPanel>
 
-            <TextBlock Text="OT (LKR):" Margin="10" FontSize="14"/>
-            <TextBox x:Name="EmployeeOTTextBox" Margin="10" PreviewTextInput="PreviewfloteTextInput" LostFocus="TextBox_LostFocus" FontSize="16" />
+                            <StackPanel Grid.Row="0" Grid.Column="1">
+                                <Label Content="Depratment:" Margin="10" TextBlock.FontSize="14"/>
+                                <ComboBox Style="{DynamicResource ComboBoxFlatStyle}" x:Name="Department" IsEditable="True" DisplayMemberPath="Content" Margin="10" FontSize="16">
+                                    <ComboBoxItem Content="Offset Printing" />
+                                    <ComboBoxItem Content="Digital Printing" />
+                                </ComboBox>
+                            </StackPanel>
+                        </Grid>
 
-            <TextBlock Text="DOT (LKR):" Margin="10" FontSize="14"/>
-            <TextBox x:Name="EmployeeDOTTextBox" Margin="10" PreviewTextInput="PreviewfloteTextInput" LostFocus="TextBox_LostFocus" FontSize="16"/>
+                    </StackPanel>
 
-            <TextBlock Text="Absent(LKR):" Margin="10" FontSize="14"/>
-            <TextBox x:Name="EmployeeAbsentTextBox" Margin="10" PreviewTextInput="PreviewfloteTextInput" LostFocus="TextBox_LostFocus" FontSize="16"/>
-            <Button Content="Employee Image" HorizontalAlignment="Left"  Width="133" Margin="10" Click="ImportImageButton_Click" Height="27"/>
-            <Image Name="ImageDisplay" Width="150" Height="150" Margin="10" VerticalAlignment="Top" OpacityMask="Black" />
+                    <!-- RIGHT COLUMN: Attendance Information & Salary Information -->
+                    <StackPanel Grid.Column="1" Margin="10,0,0,0">
 
-        </StackPanel>
+                        <!-- Attendance Information -->
+                        <TextBlock Text="Attendance Infomation" Margin="10" FontSize="20" FontWeight="Bold"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
 
-        <StackPanel Margin="10" Grid.Row="0" Grid.Column="1">
-            <TextBlock Text="Address Details" Margin="10" FontSize="20" FontWeight="Bold"/>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
 
-            <TextBlock Text="Address Line 1:" Margin="10" FontSize="14"/>
-            <TextBox x:Name="Address1" Margin="10" FontSize="16"/>
+                            <StackPanel Grid.Row="0" Grid.Column="0">
+                                <TextBlock Text="EmployeeID:" Margin="10" FontSize="14"/>
+                                <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="EmployeeIDTextBox" Margin="10" SelectionTextBrush="White" PreviewTextInput="NumberOnly_PreviewTextInput" FontSize="16"/>
+                            </StackPanel>
 
-            <TextBlock Text="Address Line 2:" Margin="10" FontSize="14"/>
-            <TextBox x:Name="Address2" Margin="10" FontSize="16"/>
+                            <StackPanel  Margin="5" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1">
+                                <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1.5" CornerRadius="10">
+                                    <StackPanel Margin="5">
+                                        <TextBlock Text="Attendance ValidFrom:" Margin="10" FontSize="14"/>
+                                        <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="2"  Margin="10" CornerRadius="5" >
+                                            <cal:CustomDatePicker x:Name="ValidFrom"  Width="auto"  Height="auto" />
+                                        </Border>
+                                        <TextBlock Text="Attendance ValidTo:" Margin="10" FontSize="14"/>
+                                        <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="2"  Margin="10" CornerRadius="5" >
+                                            <cal:CustomDatePicker x:Name="ValidTo"  Width="auto" Height="auto" />
+                                        </Border>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
 
-            <Label Content="City:" Margin="10" TextBlock.FontSize="14"/>
-            <ComboBox x:Name="city" IsEditable="True" DisplayMemberPath="Content" Margin="10" FontSize="16">
-                <ComboBoxItem Content="Agalawatta"/>
-                <ComboBoxItem Content="Agrapathana"/>
-                <ComboBoxItem Content="Akuressa"/>
-                <ComboBoxItem Content="Akurana"/>
-                <ComboBoxItem Content="Akkaraipattu"/>
-                <ComboBoxItem Content="Alawatuwala"/>
-                <ComboBoxItem Content="Alawwa"/>
-                <ComboBoxItem Content="Aluthgama"/>
-                <ComboBoxItem Content="Ambalangoda"/>
-                <ComboBoxItem Content="Ambalantota"/>
-                <ComboBoxItem Content="Ampara"/>
-                <ComboBoxItem Content="Ampara City"/>
-                <ComboBoxItem Content="Anamaduwa"/>
-                <ComboBoxItem Content="Angoda"/>
-                <ComboBoxItem Content="Anuradhapura"/>
-                <ComboBoxItem Content="Anuradhapura City"/>
-                <ComboBoxItem Content="Aranayaka"/>
-                <ComboBoxItem Content="Attanagalla"/>
-                <ComboBoxItem Content="Athurugiriya"/>
-                <ComboBoxItem Content="Avissawella"/>
-                <ComboBoxItem Content="Baddegama"/>
-                <ComboBoxItem Content="Badulla"/>
-                <ComboBoxItem Content="Badulla City"/>
-                <ComboBoxItem Content="Balangoda"/>
-                <ComboBoxItem Content="Bandaragama"/>
-                <ComboBoxItem Content="Bandarawela"/>
-                <ComboBoxItem Content="Battaramulla"/>
-                <ComboBoxItem Content="Batticaloa"/>
-                <ComboBoxItem Content="Batticaloa City"/>
-                <ComboBoxItem Content="Beliatta"/>
-                <ComboBoxItem Content="Belihuloya"/>
-                <ComboBoxItem Content="Bentota"/>
-                <ComboBoxItem Content="Beruwala"/>
-                <ComboBoxItem Content="Bibile"/>
-                <ComboBoxItem Content="Bingiriya"/>
-                <ComboBoxItem Content="Biyagama"/>
-                <ComboBoxItem Content="Bokkawala"/>
-                <ComboBoxItem Content="Borella"/>
-                <ComboBoxItem Content="Boralesgamuwa"/>
-                <ComboBoxItem Content="Bulathkohupitiya"/>
-                <ComboBoxItem Content="Buttala"/>
-                <ComboBoxItem Content="Chavakacheri"/>
-                <ComboBoxItem Content="Chilaw"/>
-                <ComboBoxItem Content="Colombo"/>
-                <ComboBoxItem Content="Colombo 1"/>
-                <ComboBoxItem Content="Colombo 2"/>
-                <ComboBoxItem Content="Colombo 3"/>
-                <ComboBoxItem Content="Colombo 4"/>
-                <ComboBoxItem Content="Colombo 5"/>
-                <ComboBoxItem Content="Colombo 6"/>
-                <ComboBoxItem Content="Colombo 7"/>
-                <ComboBoxItem Content="Colombo 8"/>
-                <ComboBoxItem Content="Colombo 9"/>
-                <ComboBoxItem Content="Colombo 10"/>
-                <ComboBoxItem Content="Colombo 11"/>
-                <ComboBoxItem Content="Colombo 12"/>
-                <ComboBoxItem Content="Colombo 13"/>
-                <ComboBoxItem Content="Colombo 14"/>
-                <ComboBoxItem Content="Colombo 15"/>
-                <ComboBoxItem Content="Damana"/>
-                <ComboBoxItem Content="Dambulla"/>
-                <ComboBoxItem Content="Dehiattakandiya"/>
-                <ComboBoxItem Content="Dehiwala"/>
-                <ComboBoxItem Content="Delgoda"/>
-                <ComboBoxItem Content="Deniyaya"/>
-                <ComboBoxItem Content="Deraniyagala"/>
-                <ComboBoxItem Content="Dikoya"/>
-                <ComboBoxItem Content="Dikwella"/>
-                <ComboBoxItem Content="Dimbulagala"/>
-                <ComboBoxItem Content="Divulapitiya"/>
-                <ComboBoxItem Content="Dodanduwa"/>
-                <ComboBoxItem Content="Dompe"/>
-                <ComboBoxItem Content="Eheliyagoda"/>
-                <ComboBoxItem Content="Ella"/>
-                <ComboBoxItem Content="Embilipitiya"/>
-                <ComboBoxItem Content="Eravur"/>
-                <ComboBoxItem Content="Eratne"/>
-                <ComboBoxItem Content="Galagedara"/>
-                <ComboBoxItem Content="Galaha"/>
-                <ComboBoxItem Content="Galenbindunuwewa"/>
-                <ComboBoxItem Content="Galle"/>
-                <ComboBoxItem Content="Galle City"/>
-                <ComboBoxItem Content="Galnewa"/>
-                <ComboBoxItem Content="Gampaha"/>
-                <ComboBoxItem Content="Gampola"/>
-                <ComboBoxItem Content="Gampolawela"/>
-                <ComboBoxItem Content="Ganemulla"/>
-                <ComboBoxItem Content="Gelioya"/>
-                <ComboBoxItem Content="Giribawa"/>
-                <ComboBoxItem Content="Giritale"/>
-                <ComboBoxItem Content="Godakawela"/>
-                <ComboBoxItem Content="Gonapola Junction"/>
-                <ComboBoxItem Content="Habaraduwa"/>
-                <ComboBoxItem Content="Habarana"/>
-                <ComboBoxItem Content="Haggala"/>
-                <ComboBoxItem Content="Haldummulla"/>
-                <ComboBoxItem Content="Hali Ela"/>
-                <ComboBoxItem Content="Haliela"/>
-                <ComboBoxItem Content="Hambantota"/>
-                <ComboBoxItem Content="Hambantota City"/>
-                <ComboBoxItem Content="Hanwella"/>
-                <ComboBoxItem Content="Haputale"/>
-                <ComboBoxItem Content="Harispattuwa"/>
-                <ComboBoxItem Content="Hatton"/>
-                <ComboBoxItem Content="Hettipola"/>
-                <ComboBoxItem Content="Hikkaduwa"/>
-                <ComboBoxItem Content="Hingurakgoda"/>
-                <ComboBoxItem Content="Hiriyala"/>
-                <ComboBoxItem Content="Horana"/>
-                <ComboBoxItem Content="Horowpathana"/>
-                <ComboBoxItem Content="Horton Plains"/>
-                <ComboBoxItem Content="Hulftsdorp"/>
-                <ComboBoxItem Content="Ibbagamuwa"/>
-                <ComboBoxItem Content="Imbulgoda"/>
-                <ComboBoxItem Content="Ingiriya"/>
-                <ComboBoxItem Content="Ja-Ela"/>
-                <ComboBoxItem Content="Jaffna"/>
-                <ComboBoxItem Content="Jaffna City"/>
-                <ComboBoxItem Content="Kadawatha"/>
-                <ComboBoxItem Content="Kaduruwela"/>
-                <ComboBoxItem Content="Kaduwela"/>
-                <ComboBoxItem Content="Kahatagasdigiliya"/>
-                <ComboBoxItem Content="Kahawatta"/>
-                <ComboBoxItem Content="Kalawana"/>
-                <ComboBoxItem Content="Kalmunai"/>
-                <ComboBoxItem Content="Kalutara"/>
-                <ComboBoxItem Content="Kalutara City"/>
-                <ComboBoxItem Content="Kamburupitiya"/>
-                <ComboBoxItem Content="Kandana"/>
-                <ComboBoxItem Content="Kandavalai"/>
-                <ComboBoxItem Content="Kandy"/>
-                <ComboBoxItem Content="Kandy City"/>
-                <ComboBoxItem Content="Kantalai"/>
-                <ComboBoxItem Content="Karagoda Uyangoda"/>
-                <ComboBoxItem Content="Karapitiya"/>
-                <ComboBoxItem Content="Kataragama"/>
-                <ComboBoxItem Content="Katugastota"/>
-                <ComboBoxItem Content="Katunayake"/>
-                <ComboBoxItem Content="Kattankudy"/>
-                <ComboBoxItem Content="Kayts"/>
-                <ComboBoxItem Content="Kegalle"/>
-                <ComboBoxItem Content="Kegalle City"/>
-                <ComboBoxItem Content="Kekirawa"/>
-                <ComboBoxItem Content="Kelaniya"/>
-                <ComboBoxItem Content="Kesbewa"/>
-                <ComboBoxItem Content="Kilinochchi"/>
-                <ComboBoxItem Content="Kilinochchi City"/>
-                <ComboBoxItem Content="Kinniya"/>
-                <ComboBoxItem Content="Kiribathkumbura"/>
-                <ComboBoxItem Content="Kirindiwela"/>
-                <ComboBoxItem Content="Kirulapana"/>
-                <ComboBoxItem Content="Kochchikade"/>
-                <ComboBoxItem Content="Kolonnawa"/>
-                <ComboBoxItem Content="Kosgama"/>
-                <ComboBoxItem Content="Koslanda"/>
-                <ComboBoxItem Content="Kotadeniyawa"/>
-                <ComboBoxItem Content="Kotagala"/>
-                <ComboBoxItem Content="Kotmale"/>
-                <ComboBoxItem Content="Kottawa"/>
-                <ComboBoxItem Content="Kuchchaveli"/>
-                <ComboBoxItem Content="Kuliyapitiya"/>
-                <ComboBoxItem Content="Kundasale"/>
-                <ComboBoxItem Content="Kuragala"/>
-                <ComboBoxItem Content="Kurunegala"/>
-                <ComboBoxItem Content="Kurunegala City"/>
-                <ComboBoxItem Content="Laggala-Pallegama"/>
-                <ComboBoxItem Content="Lahugala"/>
-                <ComboBoxItem Content="Laksapana"/>
-                <ComboBoxItem Content="Lellopitiya"/>
-                <ComboBoxItem Content="Lindula"/>
-                <ComboBoxItem Content="Liyanagemulla"/>
-                <ComboBoxItem Content="Lunugala"/>
-                <ComboBoxItem Content="Lunugamvehera"/>
-                <ComboBoxItem Content="Madakalapuwa"/>
-                <ComboBoxItem Content="Madampe"/>
-                <ComboBoxItem Content="Madhu"/>
-                <ComboBoxItem Content="Madurankuliya"/>
-                <ComboBoxItem Content="Mahagalgamuwa"/>
-                <ComboBoxItem Content="Maharagama"/>
-                <ComboBoxItem Content="Mahawa"/>
-                <ComboBoxItem Content="Mahiyanganaya"/>
-                <ComboBoxItem Content="Mailapitiya"/>
-                <ComboBoxItem Content="Maho"/>
-                <ComboBoxItem Content="Makandura"/>
-                <ComboBoxItem Content="Makumbura"/>
-                <ComboBoxItem Content="Malabe"/>
-                <ComboBoxItem Content="Maligawila"/>
-                <ComboBoxItem Content="Mallakam"/>
-                <ComboBoxItem Content="Manampitiya"/>
-                <ComboBoxItem Content="Mandaitivu"/>
-                <ComboBoxItem Content="Mannar"/>
-                <ComboBoxItem Content="Manthai East"/>
-                <ComboBoxItem Content="Maradana"/>
-                <ComboBoxItem Content="Marawila"/>
-                <ComboBoxItem Content="Maskeliya"/>
-                <ComboBoxItem Content="Matale"/>
-                <ComboBoxItem Content="Matara"/>
-                <ComboBoxItem Content="Matara City"/>
-                <ComboBoxItem Content="Mathugama"/>
-                <ComboBoxItem Content="Mawanella"/>
-                <ComboBoxItem Content="Mawathagama"/>
-                <ComboBoxItem Content="Medagama"/>
-                <ComboBoxItem Content="Medawachchiya"/>
-                <ComboBoxItem Content="Medirigiriya"/>
-                <ComboBoxItem Content="Meegoda"/>
-                <ComboBoxItem Content="Meegollewa"/>
-                <ComboBoxItem Content="Meepilimana"/>
-                <ComboBoxItem Content="Melsiripura"/>
-                <ComboBoxItem Content="Mihintale"/>
-                <ComboBoxItem Content="Minneriya"/>
-                <ComboBoxItem Content="Mirigama"/>
-                <ComboBoxItem Content="Mirissa"/>
-                <ComboBoxItem Content="Mitiswala"/>
-                <ComboBoxItem Content="Miyana Eliya"/>
-                <ComboBoxItem Content="Monaragala"/>
-                <ComboBoxItem Content="Monaragala City"/>
-                <ComboBoxItem Content="Moratuwa"/>
-                <ComboBoxItem Content="Moronthuduwa"/>
-                <ComboBoxItem Content="Mount Lavinia"/>
-                <ComboBoxItem Content="Mullaitivu"/>
-                <ComboBoxItem Content="Mullaitivu City"/>
-                <ComboBoxItem Content="Mundel"/>
-                <ComboBoxItem Content="Murunkan"/>
-                <ComboBoxItem Content="Mutur"/>
-                <ComboBoxItem Content="Nagalagam Street"/>
-                <ComboBoxItem Content="Nallur"/>
-                <ComboBoxItem Content="Narahenpita"/>
-                <ComboBoxItem Content="Naula"/>
-                <ComboBoxItem Content="Navatkuli"/>
-                <ComboBoxItem Content="Nawalapitiya"/>
-                <ComboBoxItem Content="Nawinna"/>
-                <ComboBoxItem Content="Negombo"/>
-                <ComboBoxItem Content="Negombo City"/>
-                <ComboBoxItem Content="Nikaweratiya"/>
-                <ComboBoxItem Content="Nilaveli"/>
-                <ComboBoxItem Content="Nittambuwa"/>
-                <ComboBoxItem Content="Norocholai"/>
-                <ComboBoxItem Content="Nugegoda"/>
-                <ComboBoxItem Content="Oddamavadi"/>
-                <ComboBoxItem Content="Ohiya"/>
-                <ComboBoxItem Content="Padukka"/>
-                <ComboBoxItem Content="Padiyathalawa"/>
-                <ComboBoxItem Content="Pahala Madampella"/>
-                <ComboBoxItem Content="Pallekele"/>
-                <ComboBoxItem Content="Panadura"/>
-                <ComboBoxItem Content="Pannala"/>
-                <ComboBoxItem Content="Pannipitiya"/>
-                <ComboBoxItem Content="Parakaduwa"/>
-                <ComboBoxItem Content="Passara"/>
-                <ComboBoxItem Content="Pattiyapola"/>
-                <ComboBoxItem Content="Pellessa"/>
-                <ComboBoxItem Content="Pelmadulla"/>
-                <ComboBoxItem Content="Peradeniya"/>
-                <ComboBoxItem Content="Piliyandala"/>
-                <ComboBoxItem Content="Pitabeddara"/>
-                <ComboBoxItem Content="Pitakotte"/>
-                <ComboBoxItem Content="Point Pedro"/>
-                <ComboBoxItem Content="Polgahawela"/>
-                <ComboBoxItem Content="Polonnaruwa"/>
-                <ComboBoxItem Content="Polonnaruwa City"/>
-                <ComboBoxItem Content="Poonakary"/>
-                <ComboBoxItem Content="Poruwadanda"/>
-                <ComboBoxItem Content="Pothuhera"/>
-                <ComboBoxItem Content="Pottuvil"/>
-                <ComboBoxItem Content="Puliyankulam"/>
-                <ComboBoxItem Content="Punanai"/>
-                <ComboBoxItem Content="Puttalam"/>
-                <ComboBoxItem Content="Puthukkudiyiruppu"/>
-                <ComboBoxItem Content="Ragama"/>
-                <ComboBoxItem Content="Rajagiriya"/>
-                <ComboBoxItem Content="Rajanganaya"/>
-                <ComboBoxItem Content="Rambaikulam"/>
-                <ComboBoxItem Content="Rambukkana"/>
-                <ComboBoxItem Content="Ranna"/>
-                <ComboBoxItem Content="Ranala"/>
-                <ComboBoxItem Content="Ratmalana"/>
-                <ComboBoxItem Content="Ratnapura"/>
-                <ComboBoxItem Content="Ratnapura City"/>
-                <ComboBoxItem Content="Rideegama"/>
-                <ComboBoxItem Content="Ruwanwella"/>
-                <ComboBoxItem Content="Sabaragamuwa"/>
-                <ComboBoxItem Content="Sagama"/>
-                <ComboBoxItem Content="Saliyapura"/>
-                <ComboBoxItem Content="Sammanthurai"/>
-                <ComboBoxItem Content="Seeduwa"/>
-                <ComboBoxItem Content="Seenigama"/>
-                <ComboBoxItem Content="Seethawakapura"/>
-                <ComboBoxItem Content="Serunuwara"/>
-                <ComboBoxItem Content="Seruvila"/>
-                <ComboBoxItem Content="Sigiriya"/>
-                <ComboBoxItem Content="Siyambalanduwa"/>
-                <ComboBoxItem Content="Sooriyawewa"/>
-                <ComboBoxItem Content="Talawakele"/>
-                <ComboBoxItem Content="Tambuttegama"/>
-                <ComboBoxItem Content="Tangalle"/>
-                <ComboBoxItem Content="Tawalama"/>
-                <ComboBoxItem Content="Teldeniya"/>
-                <ComboBoxItem Content="Tissamaharama"/>
-                <ComboBoxItem Content="Trincomalee"/>
-                <ComboBoxItem Content="Trincomalee City"/>
-                <ComboBoxItem Content="Tulhiriya"/>
-                <ComboBoxItem Content="Udadumbara"/>
-                <ComboBoxItem Content="Udappuwa"/>
-                <ComboBoxItem Content="Ukuwela"/>
-                <ComboBoxItem Content="Ulpotha"/>
-                <ComboBoxItem Content="Unawatuna"/>
-                <ComboBoxItem Content="Uragasmanhandiya"/>
-                <ComboBoxItem Content="Vaddukoddai"/>
-                <ComboBoxItem Content="Vakarai"/>
-                <ComboBoxItem Content="Valachchenai"/>
-                <ComboBoxItem Content="Vandaramulla"/>
-                <ComboBoxItem Content="Vavuniya"/>
-                <ComboBoxItem Content="Vavuniya City"/>
-                <ComboBoxItem Content="Veyangoda"/>
-                <ComboBoxItem Content="Wadduwa"/>
-                <ComboBoxItem Content="Waga"/>
-                <ComboBoxItem Content="Waikkala"/>
-                <ComboBoxItem Content="Warakapola"/>
-                <ComboBoxItem Content="Wariyapola"/>
-                <ComboBoxItem Content="Waskaduwa"/>
-                <ComboBoxItem Content="Watapuluwa"/>
-                <ComboBoxItem Content="Wattegama"/>
-                <ComboBoxItem Content="Wattegoda"/>
-                <ComboBoxItem Content="Wavulagala"/>
-                <ComboBoxItem Content="Weligama"/>
-                <ComboBoxItem Content="Welimada"/>
-                <ComboBoxItem Content="Welimessa"/>
-                <ComboBoxItem Content="Wellampitiya"/>
-                <ComboBoxItem Content="Wellawatte"/>
-                <ComboBoxItem Content="Wellawaya"/>
-                <ComboBoxItem Content="Wennappuwa"/>
-                <ComboBoxItem Content="Weragala"/>
-                <ComboBoxItem Content="Wewalwatta"/>
-                <ComboBoxItem Content="Wilgamuwa"/>
-                <ComboBoxItem Content="Wilpattu"/>
-                <ComboBoxItem Content="Wiralur"/>
-                <ComboBoxItem Content="Wiyaluwa"/>
-                <ComboBoxItem Content="Yakkala"/>
-                <ComboBoxItem Content="Yala"/>
-                <ComboBoxItem Content="Yatiyantota"/>
-                <ComboBoxItem Content="Yodakandiya"/>
-                <ComboBoxItem Content="Yogarathnapura"/>
-            </ComboBox>
+                            <StackPanel Grid.Row="1">
+                                <TextBlock Text="NoPay" Margin="10" FontSize="14"/>
+                                <TextBox  x:Name="NoPayTextBox" Style="{DynamicResource TextBoxStyle}" Margin="10" SelectionTextBrush="White" PreviewTextInput="NumberOnly_PreviewTextInput" FontSize="16"/>
+                            </StackPanel>
 
+                            <StackPanel Margin="5" Grid.Row="2" Grid.ColumnSpan="2" VerticalAlignment="Center">
+                                <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1.5" CornerRadius="10">
+                                    <StackPanel Margin="5">
+                                        <TextBlock Text="Week Days" Margin="10" FontSize="14"/>
+                                        <StackPanel  Margin="10" Orientation="Horizontal">
+                                            <TextBlock Text="Check  In:" Margin="10" FontSize="14"/>
+                                            <TextBox x:Name="TxtCheckIn_Hour" PreviewTextInput="TimeBox_PreviewTextInput" KeyDown="TxtHour_KeyDown" MaxLength="2" LostFocus="TxtHour_LostFocus"  Height="40" Width="40" Style="{DynamicResource TextBoxStyle}"/>
+                                            <TextBlock Text=":" FontSize="15" FontWeight="Bold" VerticalAlignment="Center" Margin="6,0,6,0"/>
+                                            <TextBox x:Name="TxtCheckIn_Minute" PreviewTextInput="TimeBox_PreviewTextInput" LostFocus="TxtMinute_LostFocus" MaxLength="2"  Height="40" Width="40" Style="{DynamicResource TextBoxStyle}"/>
 
-            <Label Content="Province:" Margin="10" TextBlock.FontSize="14"/>
-            <ComboBox x:Name="province" IsEditable="True" DisplayMemberPath="Content" Margin="10" FontSize="16">
-                <ComboBoxItem Content="Western Province"/>
-                <ComboBoxItem Content="Central Province"/>
-                <ComboBoxItem Content="Southern Province"/>
-                <ComboBoxItem Content="Northern Province"/>
-                <ComboBoxItem Content="Eastern Province"/>
-                <ComboBoxItem Content="North Western Province"/>
-                <ComboBoxItem Content="North Central Province"/>
-                <ComboBoxItem Content="Uva Province"/>
-                <ComboBoxItem Content="Sabaragamuwa Province"/>
-            </ComboBox>
+                                            <TextBlock Text="Check  Out:" Margin="10" FontSize="14"/>
+                                            <TextBox x:Name="TxtCheckOut_Hour" PreviewTextInput="TimeBox_PreviewTextInput" KeyDown="TxtHour_KeyDown" MaxLength="2" LostFocus="TxtHour_LostFocus" Height="40" Width="40" Style="{DynamicResource TextBoxStyle}"/>
+                                            <TextBlock Text=":" FontSize="15" FontWeight="Bold" VerticalAlignment="Center" Margin="6,0,6,0"/>
+                                            <TextBox x:Name="TxtCheckOut_Minute" PreviewTextInput="TimeBox_PreviewTextInput" LostFocus="TxtMinute_LostFocus" MaxLength="2"  Height="40" Width="40" Style="{DynamicResource TextBoxStyle}"/>
+                                        </StackPanel>
 
-        </StackPanel>
+                                        <TextBlock Text="Satarday" Margin="10" FontSize="14"/>
+                                        <StackPanel  Margin="10" Orientation="Horizontal">
+                                            <TextBlock Text="Check  In:" Margin="10" FontSize="14"/>
+                                            <TextBox x:Name="TxtSatCheckIn_Hour" PreviewTextInput="TimeBox_PreviewTextInput" KeyDown="TxtHour_KeyDown" MaxLength="2" LostFocus="TxtHour_LostFocus"  Height="40" Width="40"  Style="{DynamicResource TextBoxStyle}"/>
+                                            <TextBlock Text=":" FontSize="15" FontWeight="Bold" VerticalAlignment="Center" Margin="6,0,6,0"/>
+                                            <TextBox x:Name="TxtSatCheckIn_Minute" MaxLength="2"  PreviewTextInput="TimeBox_PreviewTextInput" LostFocus="TxtMinute_LostFocus" Height="40" Width="40" Style="{DynamicResource TextBoxStyle}"/>
 
+                                            <TextBlock Text="Check  Out:" Margin="10" FontSize="14"/>
+                                            <TextBox x:Name="TxtSatCheckOut_Hour" Height="40" Width="40" PreviewTextInput="TimeBox_PreviewTextInput" KeyDown="TxtHour_KeyDown" MaxLength="2" LostFocus="TxtHour_LostFocus" Style="{DynamicResource TextBoxStyle}"/>
+                                            <TextBlock Text=":" FontSize="15" FontWeight="Bold" VerticalAlignment="Center" Margin="6,0,6,0"/>
+                                            <TextBox x:Name="TxtSatCheckOut_Minute" MaxLength="2" PreviewTextInput="TimeBox_PreviewTextInput" LostFocus="TxtMinute_LostFocus"  Height="40" Width="40" Style="{DynamicResource TextBoxStyle}"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
 
-        <StackPanel Grid.ColumnSpan="3" Grid.Row="1"  Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Button Content="Save" Width="100" Height="30" Click="SaveButton_Click" >
-                <Button.Template>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Border Background="#FF3D98D3" BorderBrush="Black" BorderThickness="1" CornerRadius="5">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-                        </Border>
-                    </ControlTemplate>
-                </Button.Template>
-            </Button>
-        </StackPanel>
+                            <StackPanel Grid.Row="3" Grid.ColumnSpan="2"  HorizontalAlignment="Center" >
+                                <TextBlock Text="Select Working Days:" Margin="10" FontSize="14"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <StackPanel HorizontalAlignment="Center">
+                                        <TextBlock Text="MON" Margin="10" FontSize="14"/>
+                                        <CheckBox x:Name="Mon"/>
+                                    </StackPanel>
+                                    <StackPanel HorizontalAlignment="Center">
+                                        <TextBlock Text="THU" Margin="10" FontSize="14"/>
+                                        <CheckBox x:Name="Tue"/>
+                                    </StackPanel>
+                                    <StackPanel HorizontalAlignment="Center">
+                                        <TextBlock Text="WEN" Margin="10" FontSize="14"/>
+                                        <CheckBox x:Name="Wen"/>
+                                    </StackPanel>
+                                    <StackPanel HorizontalAlignment="Center">
+                                        <TextBlock Text="THE" Margin="10" FontSize="14"/>
+                                        <CheckBox x:Name="The"/>
+                                    </StackPanel>
+                                    <StackPanel HorizontalAlignment="Center">
+                                        <TextBlock Text="FRI" Margin="10" FontSize="14"/>
+                                        <CheckBox x:Name="Fri"/>
+                                    </StackPanel>
+                                    <StackPanel HorizontalAlignment="Center">
+                                        <TextBlock Text="SAT" Margin="10" FontSize="14"/>
+                                        <CheckBox x:Name="Sat"/>
+                                    </StackPanel>
+                                    <StackPanel HorizontalAlignment="Center">
+                                        <TextBlock Text="SUN" Margin="10" FontSize="14"/>
+                                        <CheckBox x:Name="Sun"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </StackPanel>
+                        </Grid>
 
+                        <!-- Salary Information -->
+                        <TextBlock Text="Salary Infomation" Margin="10,20,10,10" FontSize="20" FontWeight="Bold"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <StackPanel Grid.Row="0" Grid.Column="0">
+                                <TextBlock Text="Net Salary:" Margin="10" FontSize="14"/>
+                                <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="EmployeeSalaryTextBox" Margin="10" PreviewTextInput="PreviewfloteTextInput" LostFocus="TextBox_LostFocus" FontSize="16"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="0" Grid.Column="1">
+                                <TextBlock Text="Basic Salary:" Margin="10" FontSize="14"/>
+                                <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="EmployeeBasicSalaryTextBox" Margin="10" PreviewTextInput="PreviewfloteTextInput" LostFocus="TextBox_LostFocus" FontSize="16"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="1" Grid.Column="0">
+                                <TextBlock Text="OT (LKR):" Margin="10" FontSize="14"/>
+                                <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="EmployeeOTTextBox" Margin="10" PreviewTextInput="PreviewfloteTextInput" LostFocus="TextBox_LostFocus" FontSize="16" />
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="1" Grid.Column="1">
+                                <TextBlock Text="DOT (LKR):" Margin="10" FontSize="14"/>
+                                <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="EmployeeDOTTextBox" Margin="10" PreviewTextInput="PreviewfloteTextInput" LostFocus="TextBox_LostFocus" FontSize="16"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="2" Grid.Column="0">
+                                <TextBlock Text="Absent(LKR):" Margin="10" FontSize="14"/>
+                                <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="EmployeeAbsentTextBox" Margin="10" PreviewTextInput="PreviewfloteTextInput" LostFocus="TextBox_LostFocus" FontSize="16"/>
+                            </StackPanel>
+
+                            <!-- Buttons at Bottom -->
+                            <StackPanel Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2" Margin="20" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <Button Content="Save" Width="100" Height="30" Click="SaveButton_Click" Style="{DynamicResource ActionButton}" />
+                                <Button Content="Cancel" Width="100" Height="30" Margin="10,0,0,0" Click="CancelButton_Click" Style="{DynamicResource NavigationButtonStyle}" />
+                            </StackPanel>
+                        </Grid>
+
+                    </StackPanel>
+
+                  
+                </Grid>
+            </ScrollViewer>
+        </Border>
     </Grid>
 </Window>

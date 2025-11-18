@@ -4,8 +4,6 @@ VisualStudioVersion = 17.13.35731.43
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDC System", "PDC System\PDC System.csproj", "{DC5DC801-57C0-47DF-9009-87307B2308B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDC_System_Backups", "PDC_System_Backups\PDC_System_Backups\PDC_System_Backups.csproj", "{5848AE0F-F1E6-BD46-3EE2-51421E5E0873}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -16,10 +14,6 @@ Global
 		{DC5DC801-57C0-47DF-9009-87307B2308B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DC5DC801-57C0-47DF-9009-87307B2308B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DC5DC801-57C0-47DF-9009-87307B2308B4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5848AE0F-F1E6-BD46-3EE2-51421E5E0873}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5848AE0F-F1E6-BD46-3EE2-51421E5E0873}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5848AE0F-F1E6-BD46-3EE2-51421E5E0873}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5848AE0F-F1E6-BD46-3EE2-51421E5E0873}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

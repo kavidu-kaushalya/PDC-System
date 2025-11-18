@@ -1,0 +1,65 @@
+﻿<Window x:Class="PDC_System.AboutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="About PDC System"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Height="700" Width="600"
+       Background="{x:Null}"
+        >
+
+    <Grid  >
+        <Border CornerRadius="15" Margin="15" Background="{DynamicResource Background}" Padding="25">
+            <Border.Effect>
+                <DropShadowEffect ShadowDepth="0" Opacity="0.505" BlurRadius="8"/>
+            </Border.Effect>
+            <ScrollViewer VerticalScrollBarVisibility="Hidden">
+                <StackPanel>
+                    <TextBlock Text="About PDC System" 
+                               FontSize="20" 
+                               FontWeight="Bold"
+                               Foreground="{DynamicResource Forground}"
+                               Margin="0,0,0,20"/>
+
+                    <TextBlock TextWrapping="Wrap" 
+                               Foreground="{DynamicResource Forground}"
+                               FontSize="13" 
+                               LineHeight="26">
+                        <Run Text="PDC System is a complete management software solution designed to streamline and automate daily administrative and workforce operations. It was carefully developed to meet the needs of modern organizations by providing an intelligent, easy-to-use, and efficient environment for handling employee attendance, paysheets, outsourcing records, and general data management."/>
+                        <LineBreak/><LineBreak/>
+                        <Run Text="The system integrates multiple management functions into one unified platform, allowing users to monitor, record, and analyze operational data in real time. With a clear and modern interface, it helps improve productivity, maintain data accuracy, and minimize manual errors that often occur in traditional record-keeping processes."/>
+                        <LineBreak/><LineBreak/>
+                        <Run Text="By combining performance with simplicity, PDC System aims to make management faster, smarter, and more reliable. The application also includes smart automation and data protection mechanisms to ensure that all information remains secure and up to date."/>
+                        <LineBreak/><LineBreak/>
+                        <Run Text="This software was developed and offered completely free of charge by the developer as a contribution to improve organizational efficiency. It is built with passion, precision, and a strong focus on delivering a professional-grade solution that can perform at enterprise level without unnecessary complexity."/>
+                        <LineBreak/><LineBreak/>
+                        <Run Text="License Agreement:" FontWeight="Bold"/>
+                        <LineBreak/>
+                        <Run Text="This software, PDC System, is licensed exclusively to [Company Name]. The license grants the company full permission to use the software for internal purposes only. Redistribution, resale, modification, or sublicensing of this software is strictly prohibited without the prior written consent of the developer."/>
+                        <LineBreak/><LineBreak/>
+                        <Run Text="Developer retains all ownership and intellectual property rights to the PDC System software and its source code. This system is classified as Freeware — developed and distributed freely without financial charge to the licensed company. However, this freeware status does not remove or alter the licensing restrictions or intellectual property protections held by the developer."/>
+                        <LineBreak/><LineBreak/>
+                        <Run Text="License Type: Freeware (Exclusive Use)"/>
+                        <LineBreak/>
+                        <Run Text="Developer: Kavindu Kaushalya"/>
+                        <LineBreak/>
+                        <Run Text="License Holder: PRIYANTHA DIE CUTTING"/>
+                        <LineBreak/>
+                        <Run Text="Usage Rights: Internal use only (Non-transferable, Non-distributable)"/>
+                        <LineBreak/>
+                        <Run Text="© 2025 All Rights Reserved"/>
+                    </TextBlock>
+
+                    <Button Content="Close" 
+                            Width="100" Height="35"
+                            Margin="0,25,0,0"
+                            HorizontalAlignment="Center"
+                            Style="{StaticResource ActionButton}"
+                            Click="Close_Click"/>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+    </Grid>
+</Window>

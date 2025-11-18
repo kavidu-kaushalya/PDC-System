@@ -1,0 +1,53 @@
+﻿<Window x:Class="PDC_System.PrintPreviewWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Print Preview" Height="650" Width="950" Foreground="{DynamicResource Forground}" Background="{DynamicResource Background}"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="360"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- LEFT PANEL -->
+        <StackPanel Grid.Column="0" Margin="10">
+            <TextBlock Text="Select Printer:" FontWeight="Bold"/>
+            <ComboBox x:Name="PrinterCombo" Style="{DynamicResource ComboBoxFlatStyle}" Margin="0,5,0,15"/>
+            <Button Style="{StaticResource ActionButton}" x:Name="SettingsBtn"
+        Content="Printer Settings"
+        Width="120"
+        Margin="5"
+        Click="SettingsBtn_Click"/>
+
+
+            <StackPanel Orientation="Horizontal" Margin="10">
+                <TextBlock Text="Width:" VerticalAlignment="Center"/>
+                <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="PaperWidthBox" Width="60" Margin="5,0"/>
+
+                <TextBlock Text="Height:" VerticalAlignment="Center"/>
+                <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="PaperHeightBox" Width="60" Margin="5,0"/>
+
+                <ComboBox x:Name="UnitCombo" Style="{DynamicResource ComboBoxFlatStyle}" Width="70" Margin="5,0">
+                    <ComboBoxItem Content="mm" />
+                    <ComboBoxItem Content="cm"/>
+                    <ComboBoxItem Content="inch" IsSelected="True"/>
+                </ComboBox>
+            </StackPanel>
+            
+            
+            
+
+
+            <Button Style="{DynamicResource ActionButton}" Content="Print"  Margin="0,20,0,0" Click="Print_Click"/>
+        </StackPanel>
+
+        <!-- PREVIEW -->
+        <Border Grid.Column="1" BorderBrush="Gray" CornerRadius="10" Background="White" BorderThickness="1" Padding="10">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                <Image x:Name="PreviewImage"/>
+            </ScrollViewer>
+        </Border>
+
+    </Grid>
+</Window>

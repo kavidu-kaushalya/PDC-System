@@ -2,20 +2,18 @@
 
 namespace PDC_System
 {
-    public class Customer
+    public class Customerinfo
     {
-        public string? cp { get; set; } = string.Empty;
         public string? Name { get; set; } = string.Empty;
 
         public string? Address { get; set; } = string.Empty;
 
         public string? ContactNo { get; set; } = string.Empty;
 
+        public string? companyname { get; set; } = string.Empty;
 
         public string? Email { get; set; } = string.Empty;
 
-
-
-        public decimal gtotal { get; set; }
+        public string? Type { get; set; }
     }
 }

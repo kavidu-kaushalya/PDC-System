@@ -1,12 +1,24 @@
 ﻿<Application x:Class="PDC_System.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             
-             StartupUri="Home.xaml">
+            
+             StartupUri="Loading.xaml">
+    
     <Application.Resources>
+        
+        
+        
+        
         <ResourceDictionary>
             
+            
+            
             <FontFamily x:Key="CustomFont">avares://JobCardSystem/Poppins#Poppins</FontFamily>
+            <FontFamily x:Key="Manrope">avares://JobCardSystem/Manrope#Manrope</FontFamily>
+            <FontFamily x:Key="DMSans">avares://JobCardSystem/DMSans#DMSans</FontFamily>
+            
+            
+            
 
             <ResourceDictionary.MergedDictionaries>
 
@@ -15,12 +27,23 @@
                 <ResourceDictionary Source="/Styles/HomeUiWinodwButtonStyle.xaml" />
                 <ResourceDictionary Source="/Styles/CheckboxStyle.xaml" />
                 <ResourceDictionary Source="/Styles/DialogButton.xaml" />
+                <ResourceDictionary Source="/Styles/ProgressBar.xaml" />
+                <ResourceDictionary Source="/Styles/SettinngStyles.xaml"/>
+                <ResourceDictionary Source="/Styles/DataGridStyles.xaml" />
+                <ResourceDictionary Source="/Styles/BackupWindowStyles.xaml" />
+          
+                <ResourceDictionary Source="/Styles/TextboxStyle.xaml" />
+                
+                <ResourceDictionary Source="/Styles/PasswordBoxStyle.xaml" />
+                <ResourceDictionary Source="/Styles/MainStyle.xaml" />
                 
                 
+
+
 
 
             </ResourceDictionary.MergedDictionaries>
-
+           
         </ResourceDictionary>
 
     </Application.Resources>

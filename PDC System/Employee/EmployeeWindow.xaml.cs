@@ -13,17 +13,29 @@ namespace PDC_System
         private List<Employee> employees = new List<Employee>();
         private List<Employee> filteredEmployees = new List<Employee>();
 
+        // Set the path to the Savers folder in the current directory
+        private string saversFolder = Path.Combine(Directory.GetCurrentDirectory(), "Savers");
+        private string employeeFile;
+
         public EmployeeWindow()
         {
             InitializeComponent();
+
+            // Ensure Savers folder exists
+            if (!Directory.Exists(saversFolder))
+                Directory.CreateDirectory(saversFolder);
+
+            // Full path to JSON file
+            employeeFile = Path.Combine(saversFolder, "employee.json");
+
             LoadData();
         }
 
         private void LoadData()
         {
-            if (File.Exists("employee.json"))
+            if (File.Exists(employeeFile))
             {
-                employees = JsonConvert.DeserializeObject<List<Employee>>(File.ReadAllText("employee.json"));
+                employees = JsonConvert.DeserializeObject<List<Employee>>(File.ReadAllText(employeeFile));
                 filteredEmployees = new List<Employee>(employees); // Initialize filtered list
                 EmployeeDataGrid.ItemsSource = filteredEmployees;
             }
@@ -36,7 +48,8 @@ namespace PDC_System
             {
                 employees.Add(addEmployeeWindow.Employee);
                 ApplyFilter(); // Refresh DataGrid with filter applied
-                File.WriteAllText("employee.json", JsonConvert.SerializeObject(employees));
+                File.WriteAllText(employeeFile,JsonConvert.SerializeObject(employees, Formatting.Indented));
+
             }
         }
 
@@ -45,35 +58,31 @@ namespace PDC_System
             var selectedEmployee = EmployeeDataGrid.SelectedItem as Employee;
             if (selectedEmployee != null)
             {
-                // Show a confirmation dialog
-                var confirmationDialog = new ConfirmationDialogEmployee(); // Assuming you've created this dialog class
-                confirmationDialog.Owner = Application.Current.MainWindow; // Set the main window as the owner
+                var confirmationDialog = new ConfirmationDialogEmployee();
+                confirmationDialog.Owner = Application.Current.MainWindow;
                 confirmationDialog.ShowDialog();
 
-                // If user confirms deletion
                 if (confirmationDialog.IsConfirmed)
                 {
                     employees.Remove(selectedEmployee);
-                    ApplyFilter(); // Refresh DataGrid with filter applied
-                    File.WriteAllText("employee.json", JsonConvert.SerializeObject(employees));
+                    ApplyFilter();
+                    File.WriteAllText(employeeFile, JsonConvert.SerializeObject(employees));
                 }
             }
         }
-
 
         private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             var selectedRow = EmployeeDataGrid.SelectedItem as Employee;
             if (selectedRow != null)
             {
-                MainContent.Content = new EDetailsWindow(selectedRow); // Pass selected employee
+                MainContent.Content = new EDetailsWindow(selectedRow);
             }
             else
             {
                 System.Windows.MessageBox.Show("Please select an employee.");
             }
         }
-
 
         private void OpenDuplicateWindow_Click(object sender, RoutedEventArgs e)
         {
@@ -101,7 +110,7 @@ namespace PDC_System
                 .Where(emp => emp.Name.ToLower().Contains(query) || emp.NID.ToLower().Contains(query))
                 .ToList();
 
-            EmployeeDataGrid.ItemsSource = null;  // Reset DataGrid source
+            EmployeeDataGrid.ItemsSource = null;
             EmployeeDataGrid.ItemsSource = filteredEmployees;
         }
     }

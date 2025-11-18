@@ -1,0 +1,169 @@
+﻿<UserControl x:Class="PDC_System.Payroll_Details.PayrollDetailsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PDC_System.Payroll_Details"
+        mc:Ignorable="d"
+        MinWidth="1004" MinHeight="660">
+    <Grid>
+        <TabControl Style="{StaticResource TabControl}">
+
+            <TabItem Header="Loans" IsSelected="True" Style="{StaticResource TabItem}">
+                <StackPanel Margin="10">
+                    <Button Content="Add Loan" Width="120" Style="{DynamicResource ActionButton}" Height="30" Margin="0,0,0,10" Click="AddLoan_Click"/>
+                    <DataGrid x:Name="LoanGrid" BorderBrush="{x:Null}" HeadersVisibility="Column" IsReadOnly="False"
+                           Background="Transparent"
+                           RowBackground="White"
+                           AlternatingRowBackground="#f0f0f0"
+                           SnapsToDevicePixels="True"
+                           Height="500"
+                           AutoGenerateColumns="False"
+                           CanUserResizeColumns="False"
+                           CellStyle="{StaticResource DataGridCellStyle}"
+                           Style="{StaticResource DataGridStyle}"
+                           ColumnHeaderStyle="{StaticResource DataGridHeaderStyle}"
+                           RowStyle="{StaticResource DataGridRowStyle}">
+                        
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Employee ID" Binding="{Binding EmployeeId}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+                            <DataGridTextColumn Header="Employee Name" Binding="{Binding Name}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+                            <DataGridTextColumn Header="Loan Amount" 
+                    Binding="{Binding LoanAmount, StringFormat={}{0:N2} LKR}" 
+                    Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+
+                            <DataGridTextColumn Header="Monthly Pay" 
+                    Binding="{Binding MonthlyPay, StringFormat={}{0:N2} LKR}" 
+                    Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </TabItem>
+
+            <TabItem Header="Loan Payments" Style="{StaticResource TabItem}" Width="150">
+                <StackPanel Margin="10">
+
+                    <DataGrid x:Name="PaymentGrid"  BorderBrush="{x:Null}" HeadersVisibility="Column" IsReadOnly="False"
+                           Background="Transparent"
+                           RowBackground="White"
+                           AlternatingRowBackground="#f0f0f0"
+                           SnapsToDevicePixels="True"
+                           Height="500"
+                           AutoGenerateColumns="False"
+                           CanUserResizeColumns="False"
+                           CellStyle="{StaticResource DataGridCellStyle}"
+                           Style="{StaticResource DataGridStyle}"
+                           ColumnHeaderStyle="{StaticResource DataGridHeaderStyle}"
+                           RowStyle="{StaticResource DataGridRowStyle}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Employee ID" Binding="{Binding EmployeeID}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+                            <DataGridTextColumn Header="Payment Date" Binding="{Binding PaymentDate}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+                            <DataGridTextColumn Header="Amount Paid" Binding="{Binding AmountPaid, StringFormat={}{0:N2} LKR}" 
+                    Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </TabItem>
+
+            <TabItem Style="{StaticResource TabItem}" Header="Deductions" Width="120">
+                <StackPanel Margin="10">
+                    <Button Click="AddDeducation" Content="Add Deducation" />
+
+                    <DataGrid x:Name="EDeductionGrid"  BorderBrush="{x:Null}" HeadersVisibility="Column" IsReadOnly="False"
+                           Background="Transparent"
+                           RowBackground="White"
+                           AlternatingRowBackground="#f0f0f0"
+                           SnapsToDevicePixels="True"
+                           Height="500"
+                           AutoGenerateColumns="False"
+                           CanUserResizeColumns="False"
+                           CellStyle="{StaticResource DataGridCellStyle}"
+                           Style="{StaticResource DataGridStyle}"
+                           ColumnHeaderStyle="{StaticResource DataGridHeaderStyle}"
+                           RowStyle="{StaticResource DataGridRowStyle}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Employee ID" Binding="{Binding EmployeeId}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+                            <DataGridTextColumn Header="Date" Binding="{Binding DeducationDate}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+                            <DataGridTextColumn Header="Employee Name" Binding="{Binding EmployeeName}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+                            <DataGridTextColumn Header="Deduction Description" Binding="{Binding DeducationDescription}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+                            <DataGridTextColumn Header="Deduction Amount" Binding="{Binding DeducationAmount, StringFormat={}{0:N2} LKR}" 
+                    Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </TabItem>
+
+            <TabItem Header="Eraning" Style="{StaticResource TabItem}">
+
+                <StackPanel Margin="10">
+
+                    <Button Click="AddErning" Content="Add Earning" Style="{DynamicResource ActionButton}" Width="100" Height="30" Margin="0,0,0,10"/>
+
+                    <DataGrid x:Name="EEarningGrid"  BorderBrush="{x:Null}" HeadersVisibility="Column" IsReadOnly="False"
+                           Background="Transparent"
+                           RowBackground="White"
+                           AlternatingRowBackground="#f0f0f0"
+                           SnapsToDevicePixels="True"
+                           Height="500"
+                           AutoGenerateColumns="False"
+                           CanUserResizeColumns="False"
+                           CellStyle="{StaticResource DataGridCellStyle}"
+                           Style="{StaticResource DataGridStyle}"
+                           ColumnHeaderStyle="{StaticResource DataGridHeaderStyle}"
+                           RowStyle="{StaticResource DataGridRowStyle}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Employee ID" Binding="{Binding EmployeeId}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+                            <DataGridTextColumn Header="Employee Name" Binding="{Binding EmployeeName}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+                            <DataGridTextColumn Header="Date" Binding="{Binding EarningDate}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+                            <DataGridTextColumn Header="Earning Description" Binding="{Binding EarningDescription}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+                            <DataGridTextColumn Header="Amount" Binding="{Binding EarningAmount, StringFormat={}{0:N2} LKR}" 
+                    Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </TabItem>
+
+            <TabItem Header="ETF" Style="{StaticResource TabItem}" >
+                <StackPanel>
+                    <Button Click="AddETF" Content="Add ETF" Margin="10,10,0,10"/>
+                    <DataGrid x:Name="ETFGrid"  BorderBrush="{x:Null}" HeadersVisibility="Column" IsReadOnly="False"
+                           Background="Transparent"
+                           RowBackground="White"
+                           AlternatingRowBackground="#f0f0f0"
+                           SnapsToDevicePixels="True"
+                           Height="500"
+                           AutoGenerateColumns="False"
+                           CanUserResizeColumns="False"
+                           CellStyle="{StaticResource DataGridCellStyle}"
+                           Style="{StaticResource DataGridStyle}"
+                           ColumnHeaderStyle="{StaticResource DataGridHeaderStyle}"
+                           RowStyle="{StaticResource DataGridRowStyle}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Employee ID" Binding="{Binding EmployeeId}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+                            <DataGridTextColumn Header="Employee Name" Binding="{Binding EmployeeName}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+                            <DataGridTextColumn Header="Date" Binding="{Binding BasicSalary, StringFormat={}{0:N2} LKR}" 
+                    Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+                            <DataGridTextColumn Header=" MonthlyAmount" Binding="{Binding EmployeeAmount, StringFormat={}{0:N2} LKR}" 
+                    Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+                            <DataGridTextColumn Header=" MonthlyAmount" Binding="{Binding EmployerAmount, StringFormat={}{0:N2} LKR}" 
+                    Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+                            <DataGridTextColumn Header=" MonthlyAmount" Binding="{Binding Total, StringFormat={}{0:N2} LKR}" 
+                    Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                </StackPanel>
+                
+
+              
+
+            </TabItem>
+           
+                
+        </TabControl>
+        
+    </Grid>
+</UserControl>

@@ -5,7 +5,7 @@ namespace PDC_System
 {
     public partial class AddCustomerWindow : Window
     {
-        public Customer Customer { get; private set; }
+        public Customerinfo Customer { get; private set; }
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
         public AddCustomerWindow()
@@ -13,19 +13,39 @@ namespace PDC_System
         {
             InitializeComponent();
         }
-
         private void Save_Click(object sender, RoutedEventArgs e)
         {
-            Customer = new Customer
+            Customer = new Customerinfo
             {
                 Name = NameTextBox.Text,
                 Address = AddressTextBox.Text,
                 ContactNo = ContactNoTextBox.Text,
-                Email= EmailTextBox.Text,
-                cp = CP.Text,
+                Email = EmailTextBox.Text,
+                Type = CP.IsChecked == true ? "Company" : PersonRB.IsChecked == true ? "Person" : "",
+                companyname = CP.IsChecked == true ? CompanyTextBox.Text : null // Save only if Company selected
             };
             DialogResult = true;
         }
+
+        private void RadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+            if (CP.IsChecked == true)
+            {
+                CompanyLabel.Visibility = Visibility.Visible;
+                CompanyTextBox.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void RadioButton_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (CP.IsChecked != true)
+            {
+                CompanyLabel.Visibility = Visibility.Collapsed;
+                CompanyTextBox.Visibility = Visibility.Collapsed;
+                CompanyTextBox.Text = string.Empty; // Clear the text
+            }
+        }
+
 
         private void ContactNoTextBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {

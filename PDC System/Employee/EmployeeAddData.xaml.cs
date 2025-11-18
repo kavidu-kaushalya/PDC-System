@@ -1,5 +1,7 @@
 ﻿using Microsoft.Win32;
+using Org.BouncyCastle.Asn1.Cms;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -17,6 +19,13 @@ namespace PDC_System
         public EmployeeAddData()
         {
             InitializeComponent();
+            LoadCities();
+            string defaultImagePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets/default_profile.png");
+
+            if (File.Exists(defaultImagePath))
+            {
+                ImageDisplay.Source = new BitmapImage(new Uri(defaultImagePath));
+            }
         }
 
         private void adress_TextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
@@ -123,12 +132,59 @@ namespace PDC_System
                 MessageBox.Show("Please enter a valid positive number for Absent.", "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
+            // Validate Absent Days
+            if (!decimal.TryParse(NoPayTextBox.Text, out decimal NoPay) || NoPay < 0)
+            {
+                MessageBox.Show("Please enter a valid positive number for NoPay.", "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            TimeSpan WeekDaysCheckin;
+            if (!TimeSpan.TryParse($"{TxtCheckIn_Hour.Text}:{TxtCheckIn_Minute.Text}", out WeekDaysCheckin))
+            {
+                MessageBox.Show("Please enter a valid check-in time (HH:mm).", "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            TimeSpan WeekDaysCheckout;
+            if (!TimeSpan.TryParse($"{TxtCheckOut_Hour.Text}:{TxtCheckOut_Minute.Text}", out WeekDaysCheckout))
+            {
+                MessageBox.Show("Please enter a valid check-in time (HH:mm).", "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            TimeSpan SatCheckin;
+            if (!TimeSpan.TryParse($"{TxtSatCheckIn_Hour.Text}:{TxtSatCheckIn_Minute.Text}", out SatCheckin))
+            {
+                MessageBox.Show("Please enter a valid check-in time (HH:mm).", "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            TimeSpan SatCheckOut;
+            if (!TimeSpan.TryParse($"{TxtSatCheckOut_Hour.Text}:{TxtSatCheckOut_Minute.Text}", out SatCheckOut))
+            {
+                MessageBox.Show("Please enter a valid check-in time (HH:mm).", "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            // ✅ Validate Email
+            string email = EmployeeEmailTextBox.Text.Trim();
+            if (string.IsNullOrEmpty(email) || !Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+            {
+                MessageBox.Show("Please enter a valid email address.", "Invalid Email", MessageBoxButton.OK, MessageBoxImage.Warning);
+                EmployeeEmailTextBox.Focus();
+                return; // Stop saving
+            }
+
+
+            DateTime ValidFromDate = ValidFrom.SelectedDate ?? DateTime.Now;
+            DateTime ValidToDate = ValidTo.SelectedDate ?? DateTime.Now;
 
             // Create Employee Object
             Employee = new Employee
             {
+               
+                EmployeeId = EmployeeIDTextBox.Text.Trim(),
                 Name = EmployeeNameTextBox.Text.Trim(),
-                ID = EmployeeIDTextBox.Text.Trim(),
+                EmployeeEmail = EmployeeEmailTextBox.Text.Trim(),
                 jobrole = jrole.Text.Trim(),
                 Address1 = Address1.Text.Trim(),
                 Address2 = Address2.Text.Trim(),
@@ -140,11 +196,28 @@ namespace PDC_System
                 Birthday = birthday.SelectedDate,
                 Department = Department.Text.Trim(),
 
+                ValidFrom = ValidFromDate,
+                ValidTo = ValidToDate,
+
+                Monday = (Mon.IsChecked == true),
+                Tuesday = (Tue.IsChecked == true),
+                Wednesday = (Wen.IsChecked == true),
+                Thursday = (The.IsChecked == true),
+                Friday = (Fri.IsChecked == true),
+                Saturday = (Sat.IsChecked == true),
+                Sunday = (Sun.IsChecked == true),
+
+                Nopay = NoPay,
+                CheckIn = WeekDaysCheckin,
+                CheckOut = WeekDaysCheckout,
+                SaturdayCheckIn = SatCheckin,
+                SaturdayCheckOut = SatCheckOut,
+
                 BSalary = employeeBS,
                 Salary = employeeS,
-                OT = employeeOT,
-                DOT = employeeDOT,
-                ABSENT = employeeAbsent,
+                OvertimeAmount = employeeOT,
+                DoubleOvertimeAmount = employeeDOT,
+                AbesentAmount = employeeAbsent,
             };
 
             // Check if imageInfo is null before using it
@@ -222,6 +295,74 @@ namespace PDC_System
             }
         }
 
+
+
+        private void TimeBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            // Allow only numbers (0-9)
+            e.Handled = !Regex.IsMatch(e.Text, "^[0-9]+$");
+        }
+
+        // Validate hour range (0–23)
+        private void TxtHour_LostFocus(object sender, RoutedEventArgs e)
+        {
+            var box = sender as TextBox;
+            if (box == null) return;
+
+            if (int.TryParse(box.Text, out int value))
+            {
+                if (value < 0) value = 0;
+                else if (value > 23) value = 23;
+
+                box.Text = value.ToString("00");
+            }
+            else
+            {
+                box.Text = "00";
+            }
+        }
+
+        // Validate minute range (0–59)
+        private void TxtMinute_LostFocus(object sender, RoutedEventArgs e)
+        {
+            var box = sender as TextBox;
+            if (box == null) return;
+
+            if (int.TryParse(box.Text, out int value))
+            {
+                if (value < 0) value = 0;
+                else if (value > 59) value = 59;
+
+                box.Text = value.ToString("00");
+            }
+            else
+            {
+                box.Text = "00";
+            }
+        }
+
+        private void TxtHour_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                TextBox targetBox = null;
+
+                if (sender == TxtCheckIn_Hour)
+                    targetBox = TxtCheckIn_Minute;
+                else if (sender == TxtCheckOut_Hour)
+                    targetBox = TxtCheckOut_Minute;
+
+                if (targetBox != null)
+                {
+                    targetBox.Focus();
+                    targetBox.SelectAll(); // ✅ highlight the minute text
+                }
+
+                e.Handled = true; // prevent the default "ding" sound
+            }
+        }
+
+
         private void TextBox_LostFocus(object sender, RoutedEventArgs e)
         {
             var textBox = sender as TextBox;
@@ -236,6 +377,82 @@ namespace PDC_System
                     textBox.Text = result.ToString("F2");
                 }
             }
+        }
+
+        private void LoadCities()
+        {
+            string[] cities = new string[]
+            {
+        "Agalawatta", "Agrapathana", "Akuressa", "Akurana", "Akkaraipattu", "Alawatuwala",
+        "Alawwa", "Aluthgama", "Ambalangoda", "Ambalantota", "Ampara", "Ampara City",
+        "Anamaduwa", "Angoda", "Anuradhapura", "Anuradhapura City", "Aranayaka",
+        "Attanagalla", "Athurugiriya", "Avissawella", "Baddegama", "Badulla", "Badulla City",
+        "Balangoda", "Bandaragama", "Bandarawela", "Battaramulla", "Batticaloa", "Batticaloa City",
+        "Beliatta", "Belihuloya", "Bentota", "Beruwala", "Bibile", "Bingiriya", "Biyagama",
+        "Bokkawala", "Borella", "Boralesgamuwa", "Bulathkohupitiya", "Buttala", "Chavakacheri",
+        "Chilaw", "Colombo", "Colombo 1", "Colombo 2", "Colombo 3", "Colombo 4", "Colombo 5",
+        "Colombo 6", "Colombo 7", "Colombo 8", "Colombo 9", "Colombo 10", "Colombo 11",
+        "Colombo 12", "Colombo 13", "Colombo 14", "Colombo 15", "Damana", "Dambulla",
+        "Dehiattakandiya", "Dehiwala", "Delgoda", "Deniyaya", "Deraniyagala", "Dikoya", "Dikwella",
+        "Dimbulagala", "Divulapitiya", "Dodanduwa", "Dompe", "Eheliyagoda", "Ella", "Embilipitiya",
+        "Eravur", "Eratne", "Galagedara", "Galaha", "Galenbindunuwewa", "Galle", "Galle City",
+        "Galnewa", "Gampaha", "Gampola", "Gampolawela", "Ganemulla", "Gelioya", "Giribawa",
+        "Giritale", "Godakawela", "Gonapola Junction", "Habaraduwa", "Habarana", "Haggala",
+        "Haldummulla", "Hali Ela", "Haliela", "Hambantota", "Hambantota City", "Hanwella",
+        "Haputale", "Harispattuwa", "Hatton", "Hettipola", "Hikkaduwa", "Hingurakgoda", "Hiriyala",
+        "Horana", "Horowpathana", "Horton Plains", "Hulftsdorp", "Ibbagamuwa", "Imbulgoda",
+        "Ingiriya", "Ja-Ela", "Jaffna", "Jaffna City", "Kadawatha", "Kaduruwela", "Kaduwela",
+        "Kahatagasdigiliya", "Kahawatta", "Kalawana", "Kalmunai", "Kalutara", "Kalutara City",
+        "Kamburupitiya", "Kandana", "Kandavalai", "Kandy", "Kandy City", "Kantalai",
+        "Karagoda Uyangoda", "Karapitiya", "Kataragama", "Katugastota", "Katunayake",
+        "Kattankudy", "Kayts", "Kegalle", "Kegalle City", "Kekirawa", "Kelaniya", "Kesbewa",
+        "Kilinochchi", "Kilinochchi City", "Kinniya", "Kiribathkumbura", "Kirindiwela",
+        "Kirulapana", "Kochchikade", "Kolonnawa", "Kosgama", "Koslanda", "Kotadeniyawa",
+        "Kotagala", "Kotmale", "Kottawa", "Kuchchaveli", "Kuliyapitiya", "Kundasale", "Kuragala",
+        "Kurunegala", "Kurunegala City", "Laggala-Pallegama", "Lahugala", "Laksapana",
+        "Lellopitiya", "Lindula", "Liyanagemulla", "Lunugala", "Lunugamvehera", "Madakalapuwa",
+        "Madampe", "Madhu", "Madurankuliya", "Mahagalgamuwa", "Maharagama", "Mahawa",
+        "Mahiyanganaya", "Mailapitiya", "Maho", "Makandura", "Makumbura", "Malabe", "Maligawila",
+        "Mallakam", "Manampitiya", "Mandaitivu", "Mannar", "Manthai East", "Maradana", "Marawila",
+        "Maskeliya", "Matale", "Matara", "Matara City", "Mathugama", "Mawanella", "Mawathagama",
+        "Medagama", "Medawachchiya", "Medirigiriya", "Meegoda", "Meegollewa", "Meepilimana",
+        "Melsiripura", "Mihintale", "Minneriya", "Mirigama", "Mirissa", "Mitiswala",
+        "Miyana Eliya", "Monaragala", "Monaragala City", "Moratuwa", "Moronthuduwa",
+        "Mount Lavinia", "Mullaitivu", "Mullaitivu City", "Mundel", "Murunkan", "Mutur",
+        "Nagalagam Street", "Nallur", "Narahenpita", "Naula", "Navatkuli", "Nawalapitiya", "Nawinna",
+        "Negombo", "Negombo City", "Nikaweratiya", "Nilaveli", "Nittambuwa", "Norocholai",
+        "Nugegoda", "Oddamavadi", "Ohiya", "Padukka", "Padiyathalawa", "Pahala Madampella",
+        "Pallekele", "Panadura", "Pannala", "Pannipitiya", "Parakaduwa", "Passara", "Pattiyapola",
+        "Pellessa", "Pelmadulla", "Peradeniya", "Piliyandala", "Pitabeddara", "Pitakotte",
+        "Point Pedro", "Polgahawela", "Polonnaruwa", "Polonnaruwa City", "Poonakary",
+        "Poruwadanda", "Pothuhera", "Pottuvil", "Puliyankulam", "Punanai", "Puttalam",
+        "Puthukkudiyiruppu", "Ragama", "Rajagiriya", "Rajanganaya", "Rambaikulam", "Rambukkana",
+        "Ranna", "Ranala", "Ratmalana", "Ratnapura", "Ratnapura City", "Rideegama", "Ruwanwella",
+        "Sabaragamuwa", "Sagama", "Saliyapura", "Sammanthurai", "Seeduwa", "Seenigama",
+        "Seethawakapura", "Serunuwara", "Seruvila", "Sigiriya", "Siyambalanduwa", "Sooriyawewa",
+        "Talawakele", "Tambuttegama", "Tangalle", "Tawalama", "Teldeniya", "Tissamaharama",
+        "Trincomalee", "Trincomalee City", "Tulhiriya", "Udadumbara", "Udappuwa", "Ukuwela",
+        "Ulpotha", "Unawatuna", "Uragasmanhandiya", "Vaddukoddai", "Vakarai", "Valachchenai",
+        "Vandaramulla", "Vavuniya", "Vavuniya City", "Veyangoda", "Wadduwa", "Waga", "Waikkala",
+        "Warakapola", "Wariyapola", "Waskaduwa", "Watapuluwa", "Wattegama", "Wattegoda",
+        "Wavulagala", "Weligama", "Welimada", "Welimessa", "Wellampitiya", "Wellawatte",
+        "Wellawaya", "Wennappuwa", "Weragala", "Wewalwatta", "Wilgamuwa", "Wilpattu", "Wiralur",
+        "Wiyaluwa", "Yakkala", "Yala", "Yatiyantota", "Yodakandiya", "Yogarathnapura"
+            };
+
+            foreach (string cityName in cities)
+            {
+                ComboBoxItem item = new ComboBoxItem();
+                item.Content = cityName;
+                city.Items.Add(item);
+            }
+        }
+
+
+
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

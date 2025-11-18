@@ -12,23 +12,35 @@ namespace PDC_System
     /// <summary>
     /// Interaction logic for Jobs.xaml
     /// </summary>
-    public partial class Jobs : System.Windows.Controls.UserControl
+    public partial class Jobs : UserControl
     {
         private List<JobCard> jobCards = new List<JobCard>();
-        private List<Customer> customers = new List<Customer>();
+        private List<Customerinfo> customers = new List<Customerinfo>();
+
+        private readonly string saversFolder = Path.Combine(Directory.GetCurrentDirectory(), "Savers");
+        private readonly string jobCardsFile;
+        private readonly string customersFile;
 
         public Jobs()
         {
             InitializeComponent();
+
+            // Ensure Savers folder exists
+            if (!Directory.Exists(saversFolder))
+                Directory.CreateDirectory(saversFolder);
+
+            jobCardsFile = Path.Combine(saversFolder, "jobcards.json");
+            customersFile = Path.Combine(saversFolder, "customers.json");
+
             LoadData();
             JobCardDataGrid.Items.Refresh();
         }
 
         private void LoadData()
         {
-            if (File.Exists("jobcards.json"))
+            if (File.Exists(jobCardsFile))
             {
-                jobCards = JsonConvert.DeserializeObject<List<JobCard>>(File.ReadAllText("jobcards.json"));
+                jobCards = JsonConvert.DeserializeObject<List<JobCard>>(File.ReadAllText(jobCardsFile));
 
                 // Sort by date descending (latest first)
                 jobCards = jobCards.OrderByDescending(j => j.JobCardDate).ToList();
@@ -36,12 +48,11 @@ namespace PDC_System
                 JobCardDataGrid.ItemsSource = jobCards;
             }
 
-            if (File.Exists("customers.json"))
+            if (File.Exists(customersFile))
             {
-                customers = JsonConvert.DeserializeObject<List<Customer>>(File.ReadAllText("customers.json"));
+                customers = JsonConvert.DeserializeObject<List<Customerinfo>>(File.ReadAllText(customersFile));
             }
         }
-
 
         private void AddJobCard_Click(object sender, RoutedEventArgs e)
         {
@@ -49,10 +60,9 @@ namespace PDC_System
             if (addJobCardWindow.ShowDialog() == true)
             {
                 jobCards.Add(addJobCardWindow.JobCard);
-                // Reverse the list to show the latest job card first
                 jobCards.Reverse();
                 JobCardDataGrid.Items.Refresh();
-                File.WriteAllText("jobcards.json", JsonConvert.SerializeObject(jobCards));
+                File.WriteAllText(jobCardsFile, JsonConvert.SerializeObject(jobCards));
             }
         }
 
@@ -61,17 +71,15 @@ namespace PDC_System
             var selectedJob = JobCardDataGrid.SelectedItem as JobCard;
             if (selectedJob != null)
             {
-                // Create and show the custom dialog
                 var confirmationDialog = new ConfirmationDialogJobs();
-                confirmationDialog.Owner = Application.Current.MainWindow; // Set the main window as owner
+                confirmationDialog.Owner = Application.Current.MainWindow;
                 confirmationDialog.ShowDialog();
 
-                // Check if the user clicked Yes
                 if (confirmationDialog.IsConfirmed)
                 {
                     jobCards.Remove(selectedJob);
                     JobCardDataGrid.Items.Refresh();
-                    File.WriteAllText("jobcards.json", JsonConvert.SerializeObject(jobCards));
+                    File.WriteAllText(jobCardsFile, JsonConvert.SerializeObject(jobCards));
                 }
             }
         }
@@ -84,41 +92,30 @@ namespace PDC_System
                 return;
             }
 
-            // Ensure full day inclusion
-            DateTime startDate = StartDatePicker.SelectedDate.Value.Date;
-            DateTime endDate = EndDatePicker.SelectedDate.Value.Date.AddDays(1).AddTicks(-1);
-
-            // Keep the existing customer name search filter
             ApplyFilter();
         }
 
         private void Reset_Click(object sender, RoutedEventArgs e)
         {
-            // Clear customer name search box
             NameAutoCompleteBox1.Text = "";
-
-            // Clear date selection
             StartDatePicker.SelectedDate = null;
             EndDatePicker.SelectedDate = null;
 
-            // Restore the original job card list
-            JobCardDataGrid.ItemsSource = null; // Ensure UI refresh
+            JobCardDataGrid.ItemsSource = null;
             JobCardDataGrid.ItemsSource = jobCards;
         }
 
-
-        // Define the Button Click event handler
         private void OpenJobCardButton_Click(object sender, RoutedEventArgs e)
         {
             var selectedRow = JobCardDataGrid.SelectedItem as JobCard;
             if (selectedRow != null)
             {
-                JobCardView detailsWindow = new JobCardView(selectedRow); // Pass selected job card
-                detailsWindow.Show(); // Show the window modally
+                JobCardView detailsWindow = new JobCardView(selectedRow);
+                detailsWindow.Show();
             }
             else
             {
-                System.Windows.MessageBox.Show("Please select a job card.");
+                MessageBox.Show("Please select a job card.");
             }
         }
 
@@ -131,16 +128,13 @@ namespace PDC_System
         {
             try
             {
-                // Debug: Print the current state of jobCards
                 foreach (var job in jobCards)
                 {
                     Console.WriteLine($"Job: {job.Customer_Name}, Seen: {job.IsSeen}");
                 }
 
-                // Save the updated jobCards list to the JSON file
-                File.WriteAllText("jobcards.json", JsonConvert.SerializeObject(jobCards));
+                File.WriteAllText(jobCardsFile, JsonConvert.SerializeObject(jobCards));
 
-                // Refresh the DataGrid
                 JobCardDataGrid.ItemsSource = null;
                 JobCardDataGrid.ItemsSource = jobCards;
             }
@@ -152,23 +146,19 @@ namespace PDC_System
 
         private void SearchBox_TextChanged2(object sender, TextChangedEventArgs e)
         {
-            // Clear first search box and date filters
-
-
-            // Apply filter based on `qname`
             ApplyFilter();
         }
+
         private void ApplyFilter()
         {
             if (NameAutoCompleteBox1.Text == null) return;
 
             string query = NameAutoCompleteBox1.Text.Trim().ToLower();
             DateTime? startDate = StartDatePicker.SelectedDate;
-            DateTime? endDate = EndDatePicker.SelectedDate?.AddDays(1).AddTicks(-1); // Include full day
+            DateTime? endDate = EndDatePicker.SelectedDate?.AddDays(1).AddTicks(-1);
 
-            var filteredFiles = jobCards.AsEnumerable(); // Start with the full list
+            var filteredFiles = jobCards.AsEnumerable();
 
-            // Apply customer name filter if a name is entered
             if (!string.IsNullOrEmpty(query))
             {
                 filteredFiles = filteredFiles
@@ -176,22 +166,16 @@ namespace PDC_System
                                  jc.Customer_Name.ToLower().Contains(query));
             }
 
-            // Apply date range filter if both dates are selected
             if (startDate != null && endDate != null)
             {
                 filteredFiles = filteredFiles
                     .Where(jc => jc.JobCardDate >= startDate && jc.JobCardDate <= endDate);
             }
 
-            // Apply sorting
             var finalList = filteredFiles.OrderByDescending(jc => jc.JobCardDate).ToList();
 
-            // Update UI without resetting search box
-            JobCardDataGrid.ItemsSource = null; // Force UI refresh
+            JobCardDataGrid.ItemsSource = null;
             JobCardDataGrid.ItemsSource = finalList;
         }
-
-
-
     }
 }

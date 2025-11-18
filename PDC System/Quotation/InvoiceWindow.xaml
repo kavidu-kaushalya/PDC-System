@@ -1,0 +1,397 @@
+﻿<Window x:Class="PDC_System.InvoiceWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Invoice" Foreground="{DynamicResource Forground}" Background="{DynamicResource Background}" Height="700" Width="1200">
+
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="500"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- LEFT SIDE: Editing Area -->
+        <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="10">
+
+                <!-- Customer Details -->
+                <TextBlock Text="Customer Details:" FontWeight="Bold" FontSize="15" Margin="0,0,0,5"/>
+
+                <ComboBox x:Name="CustomerComboBox"
+                          Visibility="Collapsed"
+                          Height="30"
+                          Margin="0,0,0,5"
+                          SelectionChanged="CustomerComboBox_SelectionChanged"/>
+
+                <TextBox Style="{DynamicResource TextBoxStyle}" Name="CustomerTextBox" 
+                         Height="60"
+                         FontSize="14"
+                         TextWrapping="Wrap"
+                         AcceptsReturn="True"
+                         Margin="0,0,0,15"
+                         TextChanged="UpdatePreview"/>
+
+
+                <!-- Invoice Details -->
+                <TextBlock Text="Invoice Details:" FontWeight="Bold" FontSize="15" Margin="0,0,0,5"/>
+
+                <TextBox Style="{DynamicResource TextBoxStyle}" Name="InvoiceTextBox" 
+                         Height="60"
+                         FontSize="14"
+                         AcceptsReturn="True"
+                         TextWrapping="Wrap"
+                         Margin="0,0,0,10"
+                         TextChanged="UpdatePreview"/>
+
+                <StackPanel Orientation="Vertical" Margin="0,0,0,10">
+                    <TextBlock Text="Email:" FontWeight="Bold"/>
+                    <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="EmailTextBox"
+                             Margin="0,5,0,0"
+                             Height="30"
+                             Width="300"
+                             HorizontalAlignment="Left"
+                             Visibility="Collapsed"/>
+                </StackPanel>
+
+
+                <!-- Total Amount -->
+                <TextBlock Text="Total Amount:" FontWeight="Bold" Margin="0,5,0,5"/>
+                <TextBox Style="{DynamicResource TextBoxStyle}" Name="TotalTextBox"
+                         Height="30"
+                         FontWeight="Bold"
+                         IsReadOnly="True"
+                         Margin="0,0,0,10"/>
+
+
+                <!-- Items List -->
+                <TextBlock Text="Items:" FontWeight="Bold" Margin="0,0,0,5"/>
+
+                <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="5">
+                    <ScrollViewer Height="250" Padding="5">
+                        <ItemsControl x:Name="ItemsControlList" ItemsSource="{Binding Items}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" Margin="0,5" VerticalAlignment="Center">
+
+                                        <!-- Item Description + Suggestion -->
+                                        <Grid>
+                                            <TextBox Style="{DynamicResource TextBoxStyle}" Width="180"
+                                                     FontSize="14"
+                                                     Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
+                                                     TextChanged="ItemTextBox_TextChanged"
+                                                     PreviewKeyDown="ItemTextBox_PreviewKeyDown"/>
+
+                                            <ListBox MaxHeight="120"
+                                                     Margin="0,30,0,0"
+                                                     Background="White"
+                                                     BorderBrush="Black"
+                                                     Visibility="Collapsed"
+                                                     SelectionChanged="ItemSuggestionList_SelectionChanged"/>
+                                        </Grid>
+
+                                        <!-- Qty -->
+                                        <TextBox  Width="40"
+                                                 Margin="5,0,0,0"
+                                                 FontSize="14"
+                                                 Text="{Binding Qty, UpdateSourceTrigger=PropertyChanged}">
+                                            <TextBox.Style>
+                                                <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxStyle}">
+
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsTitle}" Value="True">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBox.Style>
+                                        </TextBox>
+
+                                        <!-- Unit Amount -->
+                                        <TextBox Width="70"
+                                                 Margin="5,0,0,0"
+                                                 FontSize="14"
+                                                 Text="{Binding UnitAmount, UpdateSourceTrigger=PropertyChanged}">
+                                            <TextBox.Style>
+                                                <Style TargetType="TextBox"  BasedOn="{StaticResource TextBoxStyle}">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsTitle}" Value="True">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBox.Style>
+                                        </TextBox>
+
+                                        <!-- Total Amount -->
+                                        <TextBox Width="70"
+                                                 Margin="5,0,0,0"
+                                                 FontSize="14"
+                                                 Text="{Binding TotalAmount, UpdateSourceTrigger=PropertyChanged}"
+                                                 IsReadOnly="True">
+                                            <TextBox.Style>
+                                                <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxStyle}">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsTitle}" Value="True">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBox.Style>
+                                        </TextBox>
+
+                                        <!-- Delete Button -->
+                                        <Button Content="X"
+                                                Margin="10,0,0,0"
+                                                Width="25"
+                                                Height="25"
+                                                Style="{DynamicResource NavigationButtonStyle}"
+                                                Click="DeleteItem_Click"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Border>
+
+
+                <!-- Add Buttons -->
+                <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                    <Button Style="{DynamicResource ActionButton}" Content="☰ Add Title"
+                            Width="100"
+                            Margin="0,0,10,0"
+                            Click="AddTitle_Click"/>
+                    <Button Style="{DynamicResource NavigationButtonStyle}" Content="☳ Add Item"
+                            Width="100"
+                            Click="AddItem_Click"/>
+                </StackPanel>
+
+
+                <!-- Print / Save / Email -->
+                <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
+                    <Button Style="{DynamicResource ActionButton}" Content="🖨 Print" Width="100" Height="35" Click="Print_Click"/>
+                    <Button Style="{DynamicResource ActionButton}" Content="📄 Save PDF" Width="100" Height="35" Margin="10,0,0,0" Click="SavePdf_Click"/>
+                    <Button Style="{DynamicResource ActionButton}" Content="✉ Send Email" Width="100" Height="35" Margin="10,0,0,0" Click="SendEmail_Click"/>
+                </StackPanel>
+
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- RIGHT SIDE: Live Preview -->
+        <Border Grid.Column="1" 
+                BorderBrush="#CCCCCC" 
+                BorderThickness="2" 
+                Margin="10"
+                Background="White">
+            <ScrollViewer Foreground="Black" VerticalScrollBarVisibility="Auto">
+                <Grid x:Name="PreviewPanel" 
+                      Width="550" 
+                      Background="White" 
+                      Margin="20">
+
+                    <StackPanel>
+                        <!-- Header Grid -->
+                        <Grid Margin="0,0,0,30">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Customer Details (Left) -->
+                            <StackPanel Grid.Column="0">
+                                <TextBlock  FontFamily="Consolas" Text="Customer Details" 
+                                           FontWeight="Bold" 
+                                           FontSize="13"
+                                           Margin="0,0,0,10"/>
+                                <TextBlock FontFamily="Consolas" x:Name="PreviewCustomer" 
+                                           Text="Customer Name&#x0a;Address&#x0a;Contact"
+                                           FontSize="11"
+                                           TextWrapping="Wrap"/>
+                            </StackPanel>
+
+                            <!-- Company Name and Invoice Title (Right) -->
+                            <StackPanel Grid.Column="1" HorizontalAlignment="Right">
+                                <TextBlock FontFamily="Consolas" Text="PRIYANTHA DIE CUTTING" 
+                                           FontSize="16" 
+                                           FontWeight="Bold" 
+                                           TextAlignment="Right"
+                                           Margin="0,0,0,2"/>
+                                <TextBlock FontFamily="Consolas" Text="INVOICE" 
+                                           FontSize="20" 
+                                           FontWeight="Bold" 
+                                           TextAlignment="Right"
+                                           Margin="0,0,0,15"/>
+
+                                <TextBlock FontFamily="Consolas" x:Name="PreviewInvoiceDetails" 
+                                           Text="Invoice No: 00001&#x0a;Quotation No: 0001&#x0a;Date: 2025-01-01"
+                                           FontSize="11"
+                                           TextAlignment="Right"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- Items Table Header -->
+                        <Grid Margin="0,0,0,0" Background="White" Height="25">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1.2*"/>
+                                <ColumnDefinition Width="1.2*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock FontFamily="Consolas" Grid.Column="0" 
+                                       Text="Description" 
+                                       FontWeight="Bold" 
+                                       FontSize="11" 
+                                       VerticalAlignment="Center" 
+                                       Margin="5,0"/>
+                            <TextBlock FontFamily="Consolas" Grid.Column="1" 
+                                       Text="Qty." 
+                                       FontWeight="Bold" 
+                                       FontSize="11" 
+                                       TextAlignment="Center" 
+                                       VerticalAlignment="Center"/>
+                            <TextBlock FontFamily="Consolas" Grid.Column="2" 
+                                       Text="Unit Price" 
+                                       FontWeight="Bold" 
+                                       FontSize="11" 
+                                       TextAlignment="Right" 
+                                       VerticalAlignment="Center" 
+                                       Margin="0,0,10,0"/>
+                            <TextBlock FontFamily="Consolas" Grid.Column="3" 
+                                       Text="Total" 
+                                       FontWeight="Bold" 
+                                       FontSize="11" 
+                                       TextAlignment="Right" 
+                                       VerticalAlignment="Center" 
+                                       Margin="0,0,5,0"/>
+                        </Grid>
+
+                        <Border BorderBrush="Black" BorderThickness="0,1,0,0" Padding="0,5">
+                            <!-- Items List -->
+                            <ItemsControl x:Name="PreviewItemsList" ItemsSource="{Binding Items}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Margin="0,3">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="3*"/>
+                                                <ColumnDefinition Width="1*"/>
+                                                <ColumnDefinition Width="1.2*"/>
+                                                <ColumnDefinition Width="1.2*"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <!-- Description (Title or Item) -->
+                                            <TextBlock FontFamily="Consolas" Grid.Column="0" 
+                                                       Text="{Binding Description}"
+                                                       TextWrapping="Wrap"
+                                                       FontSize="11"
+                                                       Margin="5,0">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="FontWeight" Value="Normal"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsTitle}" Value="True">
+                                                                <Setter Property="FontWeight" Value="Bold"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+
+                                            <!-- Qty -->
+                                            <TextBlock FontFamily="Consolas" Grid.Column="1" 
+                                                       Text="{Binding Qty}"
+                                                       TextAlignment="Center"
+                                                       FontSize="11">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsTitle}" Value="True">
+                                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+
+                                            <!-- Unit Price -->
+                                            <TextBlock FontFamily="Consolas" Grid.Column="2" 
+                                                       Text="{Binding UnitAmount, StringFormat=N2}"
+                                                       TextAlignment="Right"
+                                                       FontSize="11"
+                                                       Margin="0,0,10,0">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsTitle}" Value="True">
+                                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+
+                                            <!-- Total -->
+                                            <TextBlock FontFamily="Consolas" Grid.Column="3" 
+                                                       Text="{Binding TotalAmount, StringFormat=N2}"
+                                                       TextAlignment="Right"
+                                                       FontSize="11"
+                                                       Margin="0,0,5,0">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsTitle}" Value="True">
+                                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Border>
+
+                        <!-- Total Section -->
+                        <Grid Margin="0,30,0,0" HorizontalAlignment="Right">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="100"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock FontFamily="Consolas" Text="Total: " 
+                                       FontWeight="Normal" 
+                                       FontSize="15"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,10,0"/>
+                            <TextBlock FontFamily="Consolas" Grid.Column="1" 
+                                       x:Name="PreviewTotal"
+                                       Text="0.00"
+                                       FontWeight="Normal" 
+                                       FontSize="15"
+                                       TextAlignment="Right"/>
+                        </Grid>
+
+                        <!-- Footer -->
+                        <StackPanel Margin="0,60,0,0">
+                            <TextBlock  FontFamily="Consolas" Text="No. 1630/4, S.M Perera Mawatha, Rajagiriya." 
+                                       FontSize="9" 
+                                       HorizontalAlignment="Center"
+                                       TextAlignment="Center"/>
+                            <TextBlock FontFamily="Consolas" FontSize="9" 
+                                       HorizontalAlignment="Center"
+                                       TextAlignment="Center"
+                                       Margin="0,2,0,0">
+                                <Run Text="Tel: 072-2978667 / 011-2864267 / 075-3222226 Email: priyanthadiecutting@gmail.com WhatsApp: 075-7729225"/>
+                            </TextBlock>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </ScrollViewer>
+        </Border>
+    </Grid>
+</Window>

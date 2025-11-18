@@ -49,8 +49,6 @@
         <Setter Property="Margin" Value="20"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
 
-
-
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="Transparent"/>
@@ -63,10 +61,8 @@
         </Style.Triggers>
     </Style>
 
-
-
     <!-- Rounded Header Style -->
-        <Style x:Key="RoundedHeaderStyle" TargetType="DataGridColumnHeader">
+    <Style x:Key="RoundedHeaderStyle" TargetType="DataGridColumnHeader">
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Foreground" Value="White"/>
@@ -76,21 +72,19 @@
         <Setter Property="Margin" Value="10"/>
 
         <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="DataGridColumnHeader">
-                        <Border Background="#FF13111A" 
+            <Setter.Value>
+                <ControlTemplate TargetType="DataGridColumnHeader">
+                    <Border Background="#FF13111A" 
                                 Padding="10"
                                 CornerRadius="20"  
                                 BorderThickness="1"
                                 BorderBrush="Transparent">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
     <!-- Rounded Header Style -->
     <Style x:Key="RoundedHeaderStyle1" TargetType="DataGridColumnHeader">
@@ -134,7 +128,6 @@
                 <ControlTemplate TargetType="DataGridColumnHeader">
                     <Border Background="#FF13111A" 
                                 Padding="10"
-                            
                                 CornerRadius="20"  
                                 BorderThickness="1"
                                 BorderBrush="Transparent">

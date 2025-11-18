@@ -1,0 +1,99 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+
+    <SolidColorBrush x:Key="BorderBrushColor" Color="Transparent"/>
+    <SolidColorBrush x:Key="SettingsBackground" Color="Transparent"/>
+
+    <Style x:Key="ThemeSelecter" TargetType="RadioButton">
+        <Setter Property="FontFamily" Value="DMSans"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="BorderThickness" Value="2"/>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RadioButton">
+                    <Border x:Name="border"
+                            Background="#f5f7f8"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            CornerRadius="8">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"/>
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <!-- Hover -->
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="BorderBrush" Value="LightBlue"/>
+                        </Trigger>
+
+                        <!-- Checked -->
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="border" Property="BorderBrush" Value="#0660FE"/>
+                   
+                        </Trigger>
+
+                        <!-- Unchecked -->
+                        <Trigger Property="IsChecked" Value="False">
+                            <Setter TargetName="border" Property="BorderBrush" Value="Black"/>
+                            <Setter TargetName="border" Property="BorderThickness" Value="0.5"/>
+                            
+                            <Setter Property="Foreground" Value="Black"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <Style x:Key="ThemeSelecter2" TargetType="RadioButton">
+        <Setter Property="FontFamily" Value="DMSans"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="BorderThickness" Value="2"/>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RadioButton">
+                    <Border x:Name="border"
+                         Background="#101922"
+                         BorderThickness="{TemplateBinding BorderThickness}"
+                         BorderBrush="{TemplateBinding BorderBrush}"
+                         CornerRadius="10">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"/>
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <!-- Hover -->
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="BorderBrush" Value="LightBlue"/>
+                        </Trigger>
+
+                        <!-- Checked -->
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="border" Property="BorderBrush" Value="#0660FE"/>
+
+                        </Trigger>
+
+                        <!-- Unchecked -->
+                        <Trigger Property="IsChecked" Value="False">
+                            <Setter TargetName="border" Property="BorderBrush" Value="Transparent"/>
+
+                            <Setter Property="Foreground" Value="Black"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+</ResourceDictionary>

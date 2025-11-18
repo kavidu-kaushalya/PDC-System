@@ -2,81 +2,317 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PDC_System"
         mc:Ignorable="d"
         ResizeMode="CanResize"
         Title="PDC System"
+        Background="Transparent"
+        WindowStyle="None" 
+        
+        MouseLeftButtonDown="TitleBar_MouseLeftButtonDown"
+        WindowStartupLocation="CenterScreen"
+        AllowsTransparency="True"
         WindowState="Maximized"
-        Background="{x:Null}" >
-    
-    
-    
-    
-    <Border     CornerRadius="10">
-        <Border.Background>
-            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                <GradientStop Color="#FFFF4980" Offset="1"/>
-                <GradientStop Color="#FF4F56FF" Offset="0"/>
-            </LinearGradientBrush>
-        </Border.Background>
+        MinWidth="1350"
+        MinHeight="750"
+        >
 
-        <Border >
-            <Border.Background>
-                <SolidColorBrush Color="#FF13111A" Opacity="0.95"/>
-            </Border.Background>
+    <!-- WindowChrome for custom window border and rounded corners -->
+    <shell:WindowChrome.WindowChrome>
+        <shell:WindowChrome CaptionHeight="32"
+                    CornerRadius="10"
+                    ResizeBorderThickness="6"
+                    GlassFrameThickness="0"
+                    NonClientFrameEdges="None"/>
+    </shell:WindowChrome.WindowChrome>
 
-            <Grid >
-                <!-- Colum and Rows -->
-                <Grid >
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="300" />
-                        <ColumnDefinition  />
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                    </Grid.RowDefinitions>
-                    
-                    
-                    
-                    <StackPanel Grid.Row="0" Width="300" >
+    <!-- Window-wide styles for Buttons -->
+    <Window.Resources>
+        <Style TargetType="Button">
+            <!-- Text color of button -->
+            <Setter Property="Foreground" Value="White"/>
+            <!-- Default button width -->
+            <Setter Property="Width" Value="100"/>
+            <!-- Remove default border -->
+            <Setter Property="BorderThickness" Value="0"/>
+            <!-- Padding inside button -->
+            <Setter Property="Padding" Value="12,8"/>
+            <!-- Font weight -->
+            <Setter Property="FontWeight" Value="Medium"/>
+            <!-- Change cursor on hover -->
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <!-- Custom button background with rounded corners -->
+                        <Border Background="{TemplateBinding Background}" 
+                             CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                           VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <!-- Main border around the Home UI -->
+    <Border CornerRadius="10" x:Name="HomeUi" Background="#0c0c0c" >
+
+        <Grid x:Name="RootGrid" >
+            <!-- Main grid for layout -->
+
+            <Grid  Height="auto">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <!-- Sidebar column -->
+                    <ColumnDefinition/>
+                    <!-- Main content column -->
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <!-- Title bar row -->
+                    <RowDefinition Height="*"/>
+
+                </Grid.RowDefinitions>
+
+                <!-- Custom Title Bar -->
+                <Border Margin="5" x:Name="TitleBar" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+                Background="{DynamicResource TitleBarBackground}" 
+                >
+                    <DockPanel>
+                        <!-- App Logo -->
+                        <Image Source="/Assets/MainLogo.png"  Height="20" Width="20" Margin="8,0"/>
+                        <!-- App Title -->
+                        <TextBlock x:Name="PDCtitel" Text="PDC System" Foreground="{DynamicResource Forground}"  VerticalAlignment="Center" Margin="8,0"/>
+                        <!-- Title bar buttons -->
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button x:Name="Minimize" Content="—" Width="25" Height="25" Click="Minimize_Click" shell:WindowChrome.IsHitTestVisibleInChrome="True" Margin="5" Background="Transparent"/>
+                            <Button x:Name="Maximize" Content="🗖" Width="25" Height="25" Click="Maximize_Click" shell:WindowChrome.IsHitTestVisibleInChrome="True" Margin="5" Background="Transparent" />
+                            <Button x:Name="Colose" Content="🗙" Width="25" Height="25" Click="Close_Click" shell:WindowChrome.IsHitTestVisibleInChrome="True" Margin="5" Background="Transparent" />
+                        </StackPanel>
+                    </DockPanel>
+                </Border>
+
+                <Grid  Grid.Row="1" Height="auto">
+                    <Border Background="{DynamicResource Background}" CornerRadius="20" Margin="10,0,10,10" >
 
 
 
-                      
-
-                        <StackPanel Margin="40" HorizontalAlignment="Left" VerticalAlignment="Center"  >
-
-                                <StackPanel Height="40"></StackPanel>
-                                <StackPanel >
-                                    <Image Source="\Assets\LogoW.png"  Margin="10" Height="40"/>
 
 
-                                    <StackPanel Height="40"></StackPanel>
-                                    <Button Content="Home" Click="OpenView8_Click" Style="{StaticResource CustomButtonStyle}" Margin="5" Width="200" Height="50"/>
-                                <Button Content="Orders" Click="OpenView9_Click"  Style="{StaticResource CustomButtonStyle}" Width="200" Height="50" Margin="5" />
-                                <Button Content="Jobcard" Click="OpenView2_Click"  Style="{StaticResource CustomButtonStyle}" Width="200" Height="50" Margin="5" />
-                                <Button Content="Customer" Click="OpenView1_Click" Style="{StaticResource CustomButtonStyle}" Width="200" Height="50"  Margin="0,30,0,5" />
-                                    <Button Content="Quotation" Click="OpenView3_Click" Style="{StaticResource CustomButtonStyle}" Width="200" Height="50"  Margin="5"/>
-                                    <Button Content="Employee" Click="OpenView4_Click" Style="{StaticResource CustomButtonStyle}" Width="200" Height="50" Margin="0,30,0,5" />
-                                <Button Content="Attendant" Click="OpenView5_Click" Style="{StaticResource CustomButtonStyle}" Width="200" Height="50" Margin="5" />
-                                    <Button Content="Salary" Click="OpenView6_Click" Style="{StaticResource CustomButtonStyle}" Width="200" Height="50" Margin="5" />
-                                    
-                   
-                                    
-                                    
-                                </StackPanel>
+                        <Grid>
+
+
+
+                            <StackPanel VerticalAlignment="Top" Margin="10" Grid.Row="0" MinHeight="500">
+
+                                <!-- Home -->
+                                <RadioButton IsChecked="True" Click="OpenView8_Click" Style="{StaticResource SelectableRadioButtonStyle}" 
+                 Margin="3" Width="250" Height="45">
+                                    <StackPanel Orientation="Horizontal" Width="200" VerticalAlignment="Center" HorizontalAlignment="Left">
+                                        <Image Source="/Assets/Asset_29.png" Width="16" Margin="0,0,0,3" RenderOptions.BitmapScalingMode="HighQuality" SnapsToDevicePixels="True"/>
+                                        <StackPanel Margin="10,0,0,0">
+                                            <TextBlock Text="Home" FontFamily="Poppins" FontWeight="SemiBold" FontSize="13" />
+                                            <TextBlock Text="Show Full Overview of System." FontFamily="Poppins" FontWeight="Regular" 
+               FontSize="9"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </RadioButton>
+
+                                <!-- Order Check -->
+                                <RadioButton Click="OpenView9_Click" Style="{StaticResource SelectableRadioButtonStyle}" 
+                 Margin="3" Width="250" Height="45">
+                                    <StackPanel Orientation="Horizontal" Width="200" VerticalAlignment="Center" HorizontalAlignment="Left">
+                                        <Image RenderOptions.BitmapScalingMode="HighQuality" SnapsToDevicePixels="True" Source="/Assets/Asset_32.png" Width="16" Margin="0,0,0,3"/>
+                                        <StackPanel Margin="10,0,0,0">
+                                            <TextBlock Text="Order Check" FontFamily="Poppins" FontWeight="SemiBold" FontSize="13"/>
+                                            <TextBlock Text="Mark and monitor daily order." FontSize="9" FontFamily="Poppins" FontWeight="Regular"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </RadioButton>
+
+                                <!-- Job Card -->
+                                <RadioButton Click="OpenView2_Click" Style="{StaticResource SelectableRadioButtonStyle}" 
+                 Margin="3" Width="250" Height="45">
+                                    <StackPanel Orientation="Horizontal" Width="200" VerticalAlignment="Center" HorizontalAlignment="Left">
+                                        <Image RenderOptions.BitmapScalingMode="HighQuality" SnapsToDevicePixels="True" Source="/Assets/Asset_23.png" Width="15" Margin="0,0,0,3"/>
+                                        <StackPanel Margin="10,0,0,0">
+                                            <TextBlock Text="Job Card" FontWeight="SemiBold" FontFamily="Poppins" FontSize="13"/>
+                                            <TextBlock Text="Mark and monitor daily Jobs." FontSize="9"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </RadioButton>
+
+                                <!-- Customer -->
+                                <RadioButton Click="OpenView1_Click" Style="{StaticResource SelectableRadioButtonStyle}" 
+                 Margin="3" Width="250" Height="45">
+                                    <StackPanel Orientation="Horizontal" Width="200" VerticalAlignment="Center" HorizontalAlignment="Left">
+                                        <Image RenderOptions.BitmapScalingMode="HighQuality" SnapsToDevicePixels="True" Source="/Assets/Asset_33.png" Width="16" Margin="0,0,0,3"/>
+                                        <StackPanel Margin="10,0,0,0">
+                                            <TextBlock Text="Customer" FontWeight="SemiBold"  FontFamily="Poppins" FontSize="13"/>
+                                            <TextBlock Text="Customers and details." FontSize="9" FontFamily="Poppins" FontWeight="Regular"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </RadioButton>
+
+                                <!-- Outsourcing -->
+                                <RadioButton Click="OpenView11_Click" Style="{StaticResource SelectableRadioButtonStyle}" 
+                 Margin="3" Width="250" Height="45">
+                                    <StackPanel Orientation="Horizontal" Width="200" VerticalAlignment="Center" HorizontalAlignment="Left">
+                                        <Image RenderOptions.BitmapScalingMode="HighQuality" SnapsToDevicePixels="True" Source="/Assets/Asset_46.png" Width="18" Margin="0,0,0,3"/>
+                                        <StackPanel Margin="10,0,0,0">
+                                            <TextBlock Text="Outsourcing" FontWeight="SemiBold" FontFamily="Poppins" FontSize="13"/>
+                                            <TextBlock Text="Outsourcing and details." FontSize="9" FontFamily="Poppins" FontWeight="Regular"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </RadioButton>
+
+                                <!-- Quotation -->
+                                <RadioButton Click="OpenView3_Click" Style="{StaticResource SelectableRadioButtonStyle}" 
+                 Margin="3" Width="250" Height="45">
+                                    <StackPanel Orientation="Horizontal" Width="200" VerticalAlignment="Center" HorizontalAlignment="Left">
+                                        <Image RenderOptions.BitmapScalingMode="HighQuality" SnapsToDevicePixels="True" Source="/Assets/Asset_34.png" Width="16" Margin="0,0,0,3"/>
+                                        <StackPanel Margin="10,0,0,0">
+                                            <TextBlock Text="Quotation" FontWeight="SemiBold" FontFamily="Poppins" FontSize="13"/>
+                                            <TextBlock Text="Create Quotation and Job details." FontSize="9" FontFamily="Poppins" FontWeight="Regular"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </RadioButton>
+
+                                <!-- Employee -->
+                                <RadioButton Click="OpenView4_Click" Style="{StaticResource SelectableRadioButtonStyle}" 
+                 Margin="3" Width="250" Height="45">
+                                    <StackPanel Orientation="Horizontal" Width="200" VerticalAlignment="Center" HorizontalAlignment="Left">
+                                        <Image Source="/Assets/Asset_27.png" Width="18" Margin="0,0,0,3" RenderOptions.BitmapScalingMode="HighQuality" SnapsToDevicePixels="True"/>
+                                        <StackPanel Margin="10,0,0,0">
+                                            <TextBlock Text="Employee" FontWeight="SemiBold" FontFamily="Poppins" FontSize="13"/>
+                                            <TextBlock Text="Add Employee and Details." FontSize="9" FontFamily="Poppins" FontWeight="Regular"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </RadioButton>
+
+                                <!-- Attendance -->
+                                <RadioButton Click="OpenView5_Click" Style="{StaticResource SelectableRadioButtonStyle}" 
+                 Margin="3" Width="250" Height="45">
+                                    <StackPanel Orientation="Horizontal" Width="200" VerticalAlignment="Center" HorizontalAlignment="Left">
+                                        <Image RenderOptions.BitmapScalingMode="HighQuality" SnapsToDevicePixels="True" Source="/Assets/Asset_35.png" Width="16" Margin="0,0,0,3"/>
+                                        <StackPanel Margin="10,0,0,0">
+                                            <TextBlock Text="Attendance Details" FontWeight="SemiBold" FontFamily="Poppins" FontSize="13"/>
+                                            <TextBlock Text="Monitor daily attendance and Holidays." FontSize="9" FontFamily="Poppins" FontWeight="Regular"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </RadioButton>
+
+                                <!-- Payroll -->
+                                <RadioButton Click="OpenView12_Click" Style="{StaticResource SelectableRadioButtonStyle}" 
+                 Margin="3" Width="250" Height="45">
+                                    <StackPanel Orientation="Horizontal" Width="200" VerticalAlignment="Center" HorizontalAlignment="Left">
+                                        <Image RenderOptions.BitmapScalingMode="HighQuality" SnapsToDevicePixels="True" Source="/Assets/Payroll.png" Width="18" Margin="0,0,0,3"/>
+                                        <StackPanel Margin="10,0,0,0">
+                                            <TextBlock Text="Payroll" FontWeight="SemiBold" FontFamily="Poppins" FontSize="13"/>
+                                            <TextBlock Text="Manage payroll and holidays." FontSize="9" FontFamily="Poppins" FontWeight="Regular"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </RadioButton>
+
+                                <!-- Paysheet -->
+                                <RadioButton Click="OpenView13_Click" Style="{StaticResource SelectableRadioButtonStyle}" 
+                 Margin="3" Width="250" Height="45">
+                                    <StackPanel Orientation="Horizontal" Width="200" VerticalAlignment="Center" HorizontalAlignment="Left">
+                                        <Image RenderOptions.BitmapScalingMode="HighQuality" SnapsToDevicePixels="True" Source="/Assets/Asset_36.png" Width="16" Margin="0,0,0,3"/>
+                                        <StackPanel Margin="10,0,0,0">
+                                            <TextBlock Text="Paysheet" FontWeight="SemiBold" FontFamily="Poppins" FontSize="13"/>
+                                            <TextBlock Text="Monitor monthly paysheets." FontSize="9" FontFamily="Poppins" FontWeight="Regular"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </RadioButton>
+
                             </StackPanel>
-                        
-                    </StackPanel>
-                    <!-- This is a Content -->
 
-                        <ContentControl Grid.Column="1" Margin="40" x:Name="MainContent"  Background="Transparent"  />
 
-                    
+                            <StackPanel VerticalAlignment="Bottom" Grid.Row="1" Width="208">
+
+                                <Button HorizontalAlignment="Left" Click="Setting_Click" Background="Transparent">
+                                    <StackPanel Orientation="Horizontal" Width="208">
+                                        <Image HorizontalAlignment="Left" VerticalAlignment="Center" Source="/Assets/Setting_G.png" Width="18"/>
+                                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0" Text="Settings" FontSize="13" Foreground="{DynamicResource Forground}" FontWeight="Regular" />
+                                    </StackPanel>
+
+
+                                </Button>
+
+                                <Button HorizontalAlignment="Left" Click="AboutButton_Click" Background="Transparent" Margin="0,10,0,0">
+                                    <StackPanel Orientation="Horizontal" Width="208">
+                                        <Image HorizontalAlignment="Left" VerticalAlignment="Center" Source="/Assets/About.png" Width="18"/>
+                                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0" Text="About" FontSize="13" Foreground="{DynamicResource Forground}" FontWeight="Regular" />
+                                    </StackPanel>
+
+
+                                </Button>
+
+                                <Line HorizontalAlignment="Center" X1="0" Y1="0" X2="300" Y2="0" Stroke="Gray" StrokeThickness="0.5" Margin="0,10,0,10"/>
+                                
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                    <!-- Google Account Display -->
+                                    <Grid x:Name="GoogleAccountInfo" Visibility="Visible">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <!-- Profile Image -->
+                                        <Grid Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right">
+                                            <Ellipse x:Name="imgProfileEllipse" Width="40" Height="40" Stroke="Gray" StrokeThickness="1"/>
+                                            <!-- Online/Status Indicator -->
+                                            <Ellipse x:Name="statusIndicator" Width="12" Height="12" Fill="Gray" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,0,5" />
+                                        </Grid>
+                                        <!-- Username and Email -->
+                                        <StackPanel Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Center" Orientation="Vertical">
+                                            <TextBlock x:Name="lblUserName" Foreground="{DynamicResource Forground}"  Text="User Name" FontWeight="Bold" FontSize="13" VerticalAlignment="Stretch"/>
+                                            <TextBlock x:Name="lblEmail"  Text="Email" Foreground="{DynamicResource Forground}" VerticalAlignment="Stretch" FontSize="10"/>
+                                        </StackPanel>
+                                    </Grid>
+
+                                </StackPanel>
+
+                            </StackPanel>
+
+
+                           
+
+
+
+
+
+                              
+
+
+
+                        </Grid>
+                    </Border>
                 </Grid>
+
+                <!-- Sidebar / Navigation Menu -->
+              
+               
+                 
+      
+
+                <!-- Right Top Section for Google Account Info and Settings -->
+
+
+                <!-- Main Content Display Area -->
+                <Grid Grid.Row="2" Grid.Column="1" Margin="0,0,10,10">
+                    <Border Background="{DynamicResource Background}" CornerRadius="20">
+                        <ContentControl  Margin="20" x:Name="MainContent"   Background="Transparent"  />
+                    </Border>
+                </Grid>
+               
+
             </Grid>
-        </Border>
+        </Grid>
 
     </Border>
 </Window>
