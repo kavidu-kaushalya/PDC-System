@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PDC_System.Paysheets"
              mc:Ignorable="d" 
+        Background="{DynamicResource Background}"
              xmlns:cal="clr-namespace:ModernCalendarLib;assembly=ModernCalendarLib"
             MinWidth="1004" MinHeight="660">
     <Grid>
@@ -59,8 +60,8 @@
 
                                         <StackPanel Width="250">
                                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                                <CheckBox  x:Name="ETF_Checked" Checked="FilterChanged" Unchecked="FilterChanged"></CheckBox>
-                                                <TextBlock VerticalAlignment="Center" Text="Include in ETF Calculation" Foreground="{DynamicResource Forground}" Margin="6,0,0,0"/>
+                                                <CheckBox  x:Name="EPF_Checked" Checked="FilterChanged" Unchecked="FilterChanged"></CheckBox>
+                                                <TextBlock VerticalAlignment="Center" Text="Include in EPF Calculation" Foreground="{DynamicResource Forground}" Margin="6,0,0,0"/>
                                             </StackPanel>
                                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                                 <CheckBox  x:Name="Earning_Checked" Checked="FilterChanged" Unchecked="FilterChanged"></CheckBox>
@@ -71,7 +72,7 @@
                                                 <TextBlock VerticalAlignment="Center" Text="Include in Deducation Calculation" Foreground="{DynamicResource Forground}" Margin="8,0,0,0"/>
                                             </StackPanel>
                                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                                <CheckBox  x:Name="Loan_Checked" Checked="FilterChanged" Unchecked="FilterChanged"></CheckBox>
+                                                <CheckBox   x:Name="Loan_Checked" Checked="FilterChanged" Unchecked="FilterChanged"></CheckBox>
                                                 <TextBlock VerticalAlignment="Center" Text="Include in Loan Calculation" Foreground="{DynamicResource Forground}" Margin="8,0,0,0"/>
                                             </StackPanel>
 
@@ -81,11 +82,18 @@
 
                                         <StackPanel Width="250" >
                                             <ComboBox x:Name="Month" Style="{DynamicResource ComboBoxFlatStyle}"/>
-                                           
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                        <TextBlock Foreground="{DynamicResource Forground}" Text="Sent Email: " VerticalAlignment="Center" />
+                                        <CheckBox IsChecked="True" x:Name="SentEmail_Check" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <Button Margin="10" Click="SavePDFPaysheet_Click" Content="Save PDF" Style="{DynamicResource ActionButton}" />
+                                        <Button Margin="10" Click="SavePaysheet_Click" Content="Apply" Style="{DynamicResource NavigationButtonStyle}"  />
+                                    </StackPanel>
 
-                                            <Button Margin="10" Click="SavePDFPaysheet_Click" Content="Save PDF" Style="{DynamicResource ActionButton}" Height="28"/>
-                                    <Button Margin="10" Click="SavePaysheet_Click" Content="Apply and Save" Style="{DynamicResource ActionButton}" Width="100" Height="28"/>
-                                        </StackPanel>
+                                    
+                                    
+                                </StackPanel>
 
                                     </StackPanel>
 
@@ -143,6 +151,13 @@
                                                 <TextBlock  Text="Absent Days:" Foreground="{DynamicResource Forground}"/>
                                                 <Border  CornerRadius="5" Background="{DynamicResource ThemeBackground}" BorderThickness="1.5" BorderBrush="{DynamicResource BorderBrush}" Margin="0,5,0,5">
                                                     <TextBlock Margin="5" x:Name="AbsentDays" Text="-"  Foreground="{DynamicResource Forground}"/>
+                                                </Border>
+                                            </StackPanel>
+                                            
+                                            <StackPanel Grid.Column="2" Margin="5,0,5,0">
+                                                <TextBlock  Text="No Pay Days:" Foreground="{DynamicResource Forground}"/>
+                                                <Border  CornerRadius="5" Background="{DynamicResource ThemeBackground}" BorderThickness="1.5" BorderBrush="{DynamicResource BorderBrush}" Margin="0,5,0,5">
+                                            <TextBox TextChanged="Nopay_Custom" Margin="5" x:Name="Nopays" Style="{DynamicResource TextBoxStyle}"/>
                                                 </Border>
                                             </StackPanel>
 

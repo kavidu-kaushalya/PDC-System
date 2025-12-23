@@ -7,17 +7,17 @@
              mc:Ignorable="d" 
               MinWidth="1004" MinHeight="660">
     <ScrollViewer VerticalScrollBarVisibility="Hidden" >
-    <Grid  Height="Auto">
+        <Grid  Height="Auto">
 
 
 
 
 
 
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
@@ -35,23 +35,23 @@
                            Foreground="#FF7D7D7D"
                            TextAlignment="Left" Padding="0,0,0,18"/>
 
-                   
-                        
-              
 
 
-                    
 
 
-        <StackPanel Grid.Row="2" Height="auto" >
 
-            <Grid Margin="0,10,0,10" >
+
+
+
+                    <StackPanel Grid.Row="2" Height="auto" >
+
+                        <Grid Margin="0,10,0,10" >
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                                 <ComboBox x:Name="TypeComboBox" Style="{StaticResource ComboBoxFlatStyle}" Width="150" HorizontalAlignment="Left" Height="35" SelectionChanged="TypeComboBox_SelectionChanged" Margin="0,0,29.6,0" />
                                 <TextBox  x:Name="SearchTextBox" Height="35" Style="{DynamicResource OutsourceSerchBar}" Width="300" TextChanged="SearchTextBox_TextChanged"  />
                             </StackPanel>
-                       
-                <!-- ComboBox for Type filter -->
+
+                            <!-- ComboBox for Type filter -->
                             <StackPanel HorizontalAlignment="Right">
                                 <Button  Style="{StaticResource ActionButton}" Click="Outsourcing_Click" Width="150" HorizontalAlignment="Right" VerticalAlignment="Center" >
                                     <StackPanel Margin="3" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
@@ -61,19 +61,19 @@
                                     </StackPanel>
                                 </Button>
                             </StackPanel>
-                           
+
 
                             <!-- TextBox for Name search -->
 
-            </Grid>
+                        </Grid>
 
-            <Grid Background="Transparent">
-
-
+                        <Grid Background="Transparent">
 
 
 
-                <DataGrid x:Name="OutsourcingDataGrid" BorderBrush="{x:Null}" HeadersVisibility="Column" IsReadOnly="False"
+
+
+                            <DataGrid x:Name="OutsourcingDataGrid" BorderBrush="{x:Null}" HeadersVisibility="Column" IsReadOnly="False"
                            Background="Transparent"
                            RowBackground="White"
                            AlternatingRowBackground="#f0f0f0"
@@ -87,55 +87,55 @@
                            ColumnHeaderStyle="{StaticResource DataGridHeaderStyle}"
                            RowStyle="{StaticResource DataGridRowStyle}">
 
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" ElementStyle="{StaticResource NameColumnStyle}"/>
-                        <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="2*" ElementStyle="{StaticResource EmailColumnStyle}"/>
-                        <DataGridTextColumn Header="Contact No:" Binding="{Binding ContactNo}" Width="2*" ElementStyle="{StaticResource ContactColumnStyle}"/>
-                        <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="2*" ElementStyle="{StaticResource TypeColumnStyle}"/>
-                        <DataGridTemplateColumn Header="Action" Width="*">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal"  HorizontalAlignment="Center">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" ElementStyle="{StaticResource NameColumnStyle}"/>
+                                    <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="2*" ElementStyle="{StaticResource EmailColumnStyle}"/>
+                                    <DataGridTextColumn Header="Contact No:" Binding="{Binding ContactNo}" Width="2*" ElementStyle="{StaticResource ContactColumnStyle}"/>
+                                    <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="2*" ElementStyle="{StaticResource TypeColumnStyle}"/>
+                                    <DataGridTemplateColumn Header="Action" Width="*">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal"  HorizontalAlignment="Center">
 
-                                        <Button Background="Transparent" Width="20" Click="EditButton_Click" Height="20" Tag="{Binding}" Margin="0,0,10,0">
-                                            <StackPanel>
-                                                <Image RenderOptions.BitmapScalingMode="HighQuality" SnapsToDevicePixels="True" Source="/Assets/Edit.png" Width="14"/>
+                                                    <Button Background="Transparent" Width="20" Click="EditButton_Click" Height="20" Tag="{Binding}" Margin="0,0,10,0">
+                                                        <StackPanel>
+                                                            <Image RenderOptions.BitmapScalingMode="HighQuality" SnapsToDevicePixels="True" Source="/Assets/Edit.png" Width="14"/>
 
-                                            </StackPanel>
-                                        </Button>
+                                                        </StackPanel>
+                                                    </Button>
 
-                                        <Button Background="Transparent" Width="20" Height="20" Tag="{Binding}" Margin="10,0,0,0">
-                                            <StackPanel>
-                                                <Image RenderOptions.BitmapScalingMode="HighQuality" SnapsToDevicePixels="True" Source="/Assets/Delete.png" Width="14"/>
-                                            </StackPanel>
-                                        </Button>
-                                    </StackPanel>
-                                    <!-- Pass the row data through Tag -->
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
+                                                    <Button Background="Transparent" Width="20" Click="DeleteButton_Click" Height="20" Tag="{Binding}" Margin="10,0,0,0">
+                                                        <StackPanel>
+                                                            <Image RenderOptions.BitmapScalingMode="HighQuality" SnapsToDevicePixels="True" Source="/Assets/Delete.png" Width="14"/>
+                                                        </StackPanel>
+                                                    </Button>
+                                                </StackPanel>
+                                                <!-- Pass the row data through Tag -->
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Grid>
+
+                    </StackPanel>
+
+
+
+                    <StackPanel Grid.Row="4"  Orientation="Horizontal" HorizontalAlignment="Right" >
+                        <Button Content="Previous" Click="PrevPage_Click" Style="{StaticResource NavigationButtonStyle}" Margin="5"/>
+                        <Button Content="Next" Click="NextPage_Click" Style="{StaticResource NavigationButtonStyle}" Margin="5"/>
+                    </StackPanel>
+                </StackPanel>
+
             </Grid>
 
-        </StackPanel>
-
-      
-
-            <StackPanel Grid.Row="4"  Orientation="Horizontal" HorizontalAlignment="Right" >
-                    <Button Content="Previous" Click="PrevPage_Click" Style="{StaticResource NavigationButtonStyle}" Margin="5"/>
-                    <Button Content="Next" Click="NextPage_Click" Style="{StaticResource NavigationButtonStyle}" Margin="5"/>
-            </StackPanel>
-                        </StackPanel>
-
-            </Grid>
-
-
-        
 
 
 
 
-    </Grid>
+
+
+        </Grid>
     </ScrollViewer>
-    </UserControl>
+</UserControl>

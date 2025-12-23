@@ -1,19 +1,16 @@
-﻿<Window x:Class="PDC_System.AddDeducationWinodw"
+﻿<Window x:Class="PDC_System.AddEPFWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PDC_System"
-        xmlns:cal="clr-namespace:ModernCalendarLib;assembly=ModernCalendarLib"
-        mc:Ignorable="d"
-        Title="Add Deduction"
+        Title="Add EPF Details"
+        Height="350" Width="550"
         Foreground="{DynamicResource Forground}"
-        Height="450" Width="600"
         WindowStartupLocation="CenterScreen"
         Background="{DynamicResource Background}">
 
     <Grid>
-        <!-- Centered Card -->
+        <!-- Center Card Layout -->
         <Border Background="{DynamicResource Background}"
                 Padding="25"
                 CornerRadius="10"
@@ -28,12 +25,10 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="140"/>
+                    <ColumnDefinition Width="150"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
@@ -48,52 +43,25 @@
                           DisplayMemberPath="Name"
                           SelectedValuePath="EmployeeId"/>
 
-                <!-- Description -->
-                <TextBlock Text="Description:" 
+                <!-- Basic Salary -->
+                <TextBlock Text="Basic Salary:" 
                            Grid.Row="1" Grid.Column="0"
                            Margin="0,12,0,0"
                            VerticalAlignment="Center"/>
-                <TextBox x:Name="DeducationDescription"
+                <TextBox x:Name="BasicSalery"
                          Grid.Row="1" Grid.Column="1"
                          Width="220"
                          Style="{DynamicResource TextBoxStyle}"
-                         
                          Margin="0,12,0,0"/>
-
-                <!-- Amount -->
-                <TextBlock Text="Amount:" 
-                           Grid.Row="2" Grid.Column="0"
-                           Margin="0,12,0,0"
-                           VerticalAlignment="Center"/>
-                <TextBox x:Name="DeducationAmount"
-                         Grid.Row="2" Grid.Column="1"
-                         Width="220"
-                          Style="{DynamicResource TextBoxStyle}"
-                         Margin="0,12,0,0"/>
-
-                <!-- Date -->
-                <TextBlock Text="Date:" 
-                           Grid.Row="3" Grid.Column="0"
-                           Margin="0,12,0,0"
-                           VerticalAlignment="Center"/>
-                <Border Grid.Row="3" Grid.Column="1"
-                        Margin="0,12,0,0"
-                        BorderBrush="{DynamicResource BorderBrush}"
-                        BorderThickness="1"
-                        CornerRadius="4">
-                    <cal:CustomDatePicker x:Name="DeducationPicker"
-                                          Width="220"/>
-                </Border>
 
                 <!-- Save Button -->
                 <Button Content="Save"
-                        Grid.Row="4" Grid.ColumnSpan="2"
-                        Width="120"
-                        Height="35"
+                        Grid.Row="2" Grid.ColumnSpan="2"
+                        Width="120" Height="35"
                         Margin="0,20,0,0"
                         HorizontalAlignment="Center"
-                       
-                        Style="{DynamicResource ActionButton}"
+                       Style="{DynamicResource ActionButton}"
+                        FontWeight="Bold"
                         Click="Save_Click"/>
             </Grid>
 

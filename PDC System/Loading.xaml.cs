@@ -1,15 +1,23 @@
 ﻿using Microsoft.Win32;
 using System;
+using PDC_System.Services;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Diagnostics;
+using System.Linq;
+using System.Net.NetworkInformation;
+using System.Net.Sockets;
+using System.ServiceProcess;
+
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using XamlAnimatedGif;
+using PDC_System.Helpers;
 
 namespace PDC_System
 {
@@ -20,195 +28,172 @@ namespace PDC_System
         public Loading()
         {
             InitializeComponent();
-            SetTitleBarColor();
-            GoogleAccountTokenCheck();
-            Loaded += LoadingWindow_Loaded; // window render වෙන විට
-            googleManager = new GoogleServiceManager();
-            googleManager.UserInfoLoaded += GoogleManager_UserInfoLoaded;
+            SeedAdmin();
+            ThemeManager.ApplyTheme(this); // Apply initial theme
+
         }
 
-        private void GoogleManager_UserInfoLoaded(string name, string pictureUrl, string email)
-        {
-            // Handle UI update
-        }
 
-        private async void LoadingWindow_Loaded(object sender, RoutedEventArgs e)
+       
+
+
+
+        private void UpdateStatus(TextBlock icon, TextBlock text, bool ok)
         {
-            // GIF load background thread
-            await Task.Run(() =>
+            if (ok)
             {
-                string baseFolder = AppDomain.CurrentDomain.BaseDirectory;
-                string gifPath = System.IO.Path.Combine(baseFolder, "Assets", "crop.gif");
-                var gifUri = new Uri(gifPath, UriKind.Absolute);
-
-                Dispatcher.Invoke(() =>
-                {
-                    AnimationBehavior.SetSourceUri(MyGifImage, gifUri);
-                    AnimationBehavior.SetRepeatBehavior(MyGifImage, System.Windows.Media.Animation.RepeatBehavior.Forever);
-                });
-            });
-
-            // Add window hook for theme changes
-            var hwndSource = HwndSource.FromHwnd(new WindowInteropHelper(this).Handle);
-            hwndSource.AddHook(WndProc);
-
-            // Animate UI elements
-            AnimateElements();
-
-            // Auto open Home window if token exists
-            if (File.Exists(GetTokenFilePath()))
-            {
-                await Task.Delay(10000); // 10-second loading
-                OpenHomeWindow();
-            }
-        }
-
-        private string GetTokenFilePath()
-        {
-            string credPath = System.IO.Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                "PDCBackupDemo",
-                "token.json"
-            );
-
-            return System.IO.Path.Combine(credPath, "Google.Apis.Auth.OAuth2.Responses.TokenResponse-user");
-        }
-
-        private void AnimateElements()
-        {
-            int delay = 0;
-
-            foreach (UIElement element in MainGrid.Children)
-            {
-                TranslateTransform trans = new TranslateTransform();
-                element.RenderTransform = trans;
-                element.Opacity = 0;
-
-                DoubleAnimation slideAnim = new DoubleAnimation
-                {
-                    From = 50,
-                    To = 0,
-                    Duration = TimeSpan.FromMilliseconds(2000),
-                    BeginTime = TimeSpan.FromMilliseconds(delay),
-                    EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseOut }
-                };
-
-                DoubleAnimation fadeAnim = new DoubleAnimation
-                {
-                    From = 0,
-                    To = 1,
-                    Duration = TimeSpan.FromMilliseconds(2000),
-                    BeginTime = TimeSpan.FromMilliseconds(delay),
-                    EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseOut }
-                };
-
-                Storyboard sb = new Storyboard();
-                sb.Children.Add(slideAnim);
-                sb.Children.Add(fadeAnim);
-
-                Storyboard.SetTarget(slideAnim, element);
-                Storyboard.SetTargetProperty(slideAnim, new PropertyPath("(UIElement.RenderTransform).(TranslateTransform.Y)"));
-
-                Storyboard.SetTarget(fadeAnim, element);
-                Storyboard.SetTargetProperty(fadeAnim, new PropertyPath(UIElement.OpacityProperty));
-
-                sb.Begin();
-                delay += 50;
-            }
-        }
-
-        private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
-        {
-            const int WM_SETTINGCHANGE = 0x001A;
-            if (msg == WM_SETTINGCHANGE)
-            {
-                string changedSetting = Marshal.PtrToStringAuto(lParam);
-                if (changedSetting == "ImmersiveColorSet" || changedSetting == "WindowsThemeElement")
-                {
-                    SetTitleBarColor();
-                }
-            }
-            return IntPtr.Zero;
-        }
-
-        private void SetTitleBarColor()
-        {
-            var key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize");
-            if (key != null)
-            {
-                var value = key.GetValue("SystemUsesLightTheme");
-                bool isLight = value != null && (int)value == 1;
-
-                if (isLight)
-                {
-                    LoadingB.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFFFFF"));
-                    LoadingWindow.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1A1A1A"));
-                    Application.Current.Resources["BtnSignLoadingColor"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF0078D7"));
-                    Application.Current.Resources["BtnSignLoadingFColor"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("White"));
-                }
-                else
-                {
-                    LoadingB.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1A1A1A"));
-                    LoadingWindow.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFFFFF"));
-                    Application.Current.Resources["BtnSignLoadingColor"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("White"));
-                    Application.Current.Resources["BtnSignLoadingFColor"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1A1A1A"));
-                }
-            }
-        }
-
-        private void GoogleAccountTokenCheck()
-        {
-            string tokenFile = GetTokenFilePath();
-
-            if (File.Exists(tokenFile))
-            {
-                GoogleSignButton.Visibility = Visibility.Collapsed;
-                LoadingBar.Visibility = Visibility.Visible;
+                icon.Text = "✅";
+                icon.Foreground = Brushes.LimeGreen;
+                text.Foreground = Brushes.LimeGreen;
             }
             else
             {
-                LoadingBar.Visibility = Visibility.Collapsed;
-                GoogleSignButton.Visibility = Visibility.Visible;
+                icon.Text = "❌";
+                icon.Foreground = Brushes.Red;
+                text.Foreground = Brushes.Red;
             }
         }
 
-        private async void Continue_click(object sender, RoutedEventArgs e)
+        private bool HasActiveNetwork()
         {
-            await LoadingWindow_LoadedAfterAsync();
+            if (!NetworkInterface.GetIsNetworkAvailable())
+                return false;
+
+            return NetworkInterface.GetAllNetworkInterfaces()
+                .Any(n =>
+                    n.OperationalStatus == OperationalStatus.Up &&
+                    n.NetworkInterfaceType != NetworkInterfaceType.Loopback &&
+                    n.NetworkInterfaceType != NetworkInterfaceType.Tunnel &&
+                    n.GetIPProperties().UnicastAddresses
+                        .Any(a => a.Address.AddressFamily == AddressFamily.InterNetwork));
         }
 
-        private async void btnOpenMain_Click(object sender, RoutedEventArgs e)
+
+
+        private async Task<bool> RunStartupChecksAsync()
         {
-            try
+            RecheckButton.Visibility = Visibility.Collapsed;
+
+            IvmsIcon.Text = "⏳";
+            SqlIcon.Text = "⏳";
+            NetIcon.Text = "⏳";
+
+            await Task.Delay(500);
+            bool ivmsOk = Process.GetProcessesByName("iVMS-4200.Framework.S").Any();
+            UpdateStatus(IvmsIcon, IvmsText, ivmsOk);
+
+            await Task.Delay(500);
+            bool sqlOk = Process.GetProcessesByName("sqlservr").Any();
+            UpdateStatus(SqlIcon, SqlText, sqlOk);
+
+            await Task.Delay(500);
+            bool netOk = HasActiveNetwork();
+            UpdateStatus(NetIcon, NetText, netOk);
+
+            bool allOk = ivmsOk && sqlOk && netOk;
+
+            if (!allOk)
             {
-                if (googleManager == null)
+                RecheckButton.Visibility = Visibility.Visible;
+            }
+
+            return allOk;
+        }
+
+
+
+        private async void RecheckButton_Click(object sender, RoutedEventArgs e)
+        {
+            bool passed = await RunStartupChecksAsync();
+
+            if (passed)
+            {
+                var users = UserService.Load();
+                var user = users.First(u => u.Username == UserName.Text);
+
+                new Home(user).Show();
+                Close();
+            }
+        }
+
+
+
+
+
+
+
+        void SeedAdmin()
+        {
+            var users = UserService.Load();
+            if (!users.Any())
+            {
+                users.Add(new Models.User
                 {
-                    MessageBox.Show("GoogleServiceManager not initialized!");
-                    return;
-                }
-
-                await googleManager.InitializeAsync();
-                await LoadingWindow_LoadedAfterAsync();
+                    Username = "admin",
+                    PasswordHash = UserService.Hash("admin"),
+                    Dashbord = true,
+                    OderCheck = true,
+                    Jobcard = true,
+                    Customer = true,
+                    Outsourcing = true,
+                    Quotation = true,
+                    Employee = true,
+                    Attendance = true,
+                    Payroll = true,
+                    Paysheet = true,
+                    UserManager = true,
+                   
+                });
+                UserService.Save(users);
             }
-            catch (Exception ex)
+        }
+
+        private async void Login_Click(object sender, RoutedEventArgs e)
+        {
+            var users = UserService.Load();
+
+            var user = users.FirstOrDefault(u =>
+                u.Username == UserName.Text &&
+                u.PasswordHash == UserService.Hash(Password.Password));
+
+            if (user == null)
             {
-                MessageBox.Show("Error during sign-in: " + ex.Message);
+                CustomMessageBox.Show("Invalid login");
+                Logininfo.IsEnabled = true;
+                return;
             }
+
+      ((Button)sender).IsEnabled = false;
+            Logininfo.IsEnabled = false;
+
+            bool needStartupCheck =
+                Properties.Settings.Default.SendDailyReport ||
+                Properties.Settings.Default.SendAttendanceEmails;
+
+            if (needStartupCheck)
+            {
+                bool passed = await RunStartupChecksAsync();
+
+                if (!passed)
+                {
+                    CustomMessageBox.Show(
+                        "System check failed.\nFix the issues and click Recheck.",
+                        "Startup Blocked",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning);
+
+                    ((Button)sender).IsEnabled = true;
+                    return; // ⛔ DO NOT open Home
+                }
+            }
+
+           
+
+            // ✅ ONLY HERE Home opens
+            new Home(user).Show();
+            Close();
         }
 
-        private async Task LoadingWindow_LoadedAfterAsync()
-        {
-            LoadingBar.Visibility = Visibility.Visible;
-            GoogleSignButton.Visibility = Visibility.Collapsed;
-            await Task.Delay(10000); // 10 seconds
-            OpenHomeWindow();
-        }
 
-        private void OpenHomeWindow()
-        {
-            Home homeWindow = new Home();
-            homeWindow.Show();
-            this.Close();
-        }
     }
 }

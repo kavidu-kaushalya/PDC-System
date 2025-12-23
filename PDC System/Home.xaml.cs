@@ -2,6 +2,7 @@
 using Google.Apis.PeopleService.v1;
 using Hardcodet.Wpf.TaskbarNotification;
 using PDC_System.Helpers;
+using PDC_System.Models;
 using PDC_System.Outsourcing;
 using PDC_System.Payroll_Details;
 using PDC_System.Paysheets;
@@ -21,6 +22,8 @@ namespace PDC_System
     /// Interaction logic for Home.xaml
     /// Main window with navigation, Google account info, tray icon, and theme handling.
     /// </summary>
+    /// 
+
     public partial class Home : Window
     {
         #region Fields
@@ -28,12 +31,13 @@ namespace PDC_System
         private GoogleServiceManager googleManager;
         private PeopleServiceService peopleService;
         private TaskbarIcon _trayIcon;
+        private User _user;
 
         #endregion
 
         #region Constructor
 
-        public Home()
+        public Home(User user)
         {
             InitializeComponent();
             ThemeManager.ApplyTheme(this); // Apply initial theme
@@ -41,11 +45,36 @@ namespace PDC_System
 
             SetupTrayIcon();
 
+            _user = user;
+            ApplyAccess();
+
             LoadCalculateSettings();
 
             // Load Google account info
             RefreshGoogleAccountInfo();
         }
+
+
+
+
+        void ApplyAccess()
+        {
+            Dashbord.Visibility = _user.Dashbord ? Visibility.Visible : Visibility.Collapsed;
+            OderCheck.Visibility = _user.OderCheck ? Visibility.Visible : Visibility.Collapsed;
+            Jobcard.Visibility = _user.Jobcard ? Visibility.Visible : Visibility.Collapsed;
+            Customer.Visibility = _user.Customer ? Visibility.Visible : Visibility.Collapsed;
+            Outsourcing.Visibility = _user.Outsourcing ? Visibility.Visible : Visibility.Collapsed;
+            Quotation.Visibility = _user.Quotation ? Visibility.Visible : Visibility.Collapsed;
+            Employee.Visibility = _user.Employee ? Visibility.Visible : Visibility.Collapsed;
+            Attendance.Visibility = _user.Attendance ? Visibility.Visible : Visibility.Collapsed;
+            Payroll.Visibility = _user.Payroll ? Visibility.Visible : Visibility.Collapsed;
+            Paysheet.Visibility = _user.Paysheet ? Visibility.Visible : Visibility.Collapsed;
+            UserManagerTAB.Visibility = _user.UserManager ? Visibility.Visible : Visibility.Collapsed;
+           
+        }
+
+
+
 
         #endregion
 
@@ -113,7 +142,7 @@ namespace PDC_System
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Failed to load profile image: " + ex.Message);
+                    CustomMessageBox.Show("Failed to load profile image: " + ex.Message);
                 }
             });
         }
@@ -232,6 +261,7 @@ namespace PDC_System
         private void OpenView8_Click(object sender, RoutedEventArgs e) => LoadView(new HomeUIWindow());
         private void OpenView9_Click(object sender, RoutedEventArgs e) => LoadView(new Oders());
         private void OpenView11_Click(object sender, RoutedEventArgs e) => LoadView(new OutsourcingWindow());
+        private void OpenView14_Click(object sender, RoutedEventArgs e) => LoadView(new UserManagerControl());
 
         private void LoadView(UserControl view)
         {
@@ -283,15 +313,31 @@ namespace PDC_System
 
         private void Maximize_Click(object sender, RoutedEventArgs e)
         {
-            this.WindowState = this.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+            if (this.WindowState == WindowState.Maximized)
+            {
+                this.WindowState = WindowState.Normal;
+            }
+            else
+            {
+                // Get the working area (screen minus taskbar)
+                var workingArea = SystemParameters.WorkArea;
+
+                // Set window position and size to working area
+                this.Left = workingArea.Left;
+                this.Top = workingArea.Top;
+                this.Width = workingArea.Width;
+                this.Height = workingArea.Height;
+
+                this.WindowState = WindowState.Normal;
+            }
         }
 
         private void Close_Click(object sender, RoutedEventArgs e)
         {
             foreach (Window win in Application.Current.Windows.OfType<BackupWindow>())
-                win.Close();
+                win.Hide();
 
-            this.Close();
+            this.Hide();
         }
 
         #endregion
@@ -362,7 +408,7 @@ namespace PDC_System
                 }
                 else
                 {
-                    MessageBox.Show("⚠️ Settings window could not be created.",
+                    CustomMessageBox.Show("⚠️ Settings window could not be created.",
                                     "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
             }
@@ -381,13 +427,13 @@ namespace PDC_System
                 }
                 else
                 {
-                    MessageBox.Show("⚠️ No attendance records found to process.",
+                    CustomMessageBox.Show("⚠️ No attendance records found to process.",
                                     "Info", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
             else
             {
-                MessageBox.Show("⚠️ Attendance Manager not initialized.",
+                CustomMessageBox.Show("⚠️ Attendance Manager not initialized.",
                                 "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }

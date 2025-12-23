@@ -12,7 +12,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Text.RegularExpressions;
+
 
 namespace PDC_System
 {
@@ -45,6 +45,8 @@ namespace PDC_System
             }
         }
 
+
+
         // Change the method signature to async and return Task
         private async void BtnSave_Click(object sender, RoutedEventArgs e)
         {
@@ -68,6 +70,14 @@ namespace PDC_System
 
                     var manager = new AttendanceManager();
                     manager.SaveManualAttendanceRecord(_record);
+
+                    // ✅ 3. NOW get FINAL calculated values
+                    string ot = _record.OverTime;
+                    string doubleOt = _record.DoubleOT;
+                    string earlyLeave = _record.EarlyLeave;
+                    string lateHours = _record.LateHours;
+                    string status = _record.Status;
+
 
                     this.DialogResult = true;
                     this.Close();
@@ -237,6 +247,32 @@ namespace PDC_System
         <div class='info-label'>Check-out Time</div>
         <div class='info-value'><span class='time-badge'>{checkOutStr}</span></div>
       </div>
+<div class='info-row'>
+  <div class='info-label'>Over Time</div>
+  <div class='info-value'><span class='time-badge'>{ot}</span></div>
+</div>
+
+<div class='info-row'>
+  <div class='info-label'>Double OT</div>
+  <div class='info-value'><span class='time-badge'>{doubleOt}</span></div>
+</div>
+
+<div class='info-row'>
+  <div class='info-label'>Early Leave</div>
+  <div class='info-value'><span class='time-badge'>{earlyLeave}</span></div>
+</div>
+
+<div class='info-row'>
+  <div class='info-label'>Late Hours</div>
+  <div class='info-value'><span class='time-badge'>{lateHours}</span></div>
+</div>
+
+<div class='info-row'>
+  <div class='info-label'>Status</div>
+  <div class='info-value'><strong>{status}</strong></div>
+</div>
+
+
     </div>
     
     <div class='success-banner'>
@@ -254,22 +290,22 @@ namespace PDC_System
                                         Application.Current.Dispatcher.Invoke(() =>
                                         {
                                             if (task.Result)
-                                                MessageBox.Show("✅ Email sent successfully!", "Mail Service", MessageBoxButton.OK, MessageBoxImage.Information);
+                                                CustomMessageBox.Show("✅ Email sent successfully!", "Mail Service", MessageBoxButton.OK, MessageBoxImage.Information);
                                             else
-                                                MessageBox.Show("❌ Failed to send email!", "Mail Service", MessageBoxButton.OK, MessageBoxImage.Error);
+                                                CustomMessageBox.Show("❌ Failed to send email!", "Mail Service", MessageBoxButton.OK, MessageBoxImage.Error);
                                         });
-                                    }).ConfigureAwait(false); 
+                                    }).ConfigureAwait(false);
 
                 }
                 else
                 {
-                    MessageBox.Show("Invalid time format. Please enter valid hours and minutes.",
+                    CustomMessageBox.Show("Invalid time format. Please enter valid hours and minutes.",
                                     "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error saving attendance record: {ex.Message}", "Error",
+                CustomMessageBox.Show($"Error saving attendance record: {ex.Message}", "Error",
                                 MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -381,79 +417,121 @@ namespace PDC_System
                 _ => false
             };
 
-            bool isSaturdayWorking = emp.Saturday;
-            bool isNonWorkingDay = !isWorkingDay && !isHoliday && !isSunday && (!isSaturdayWorking || isSaturday);
-
             // Define working hours
-            TimeSpan workStart = isSaturdayWorking ? emp.SaturdayCheckIn : emp.CheckIn;
-            TimeSpan workEnd = isSaturdayWorking ? emp.SaturdayCheckOut : emp.CheckOut;
+            TimeSpan workStart = isSaturday ? emp.SaturdayCheckIn : emp.CheckIn;
+            TimeSpan workEnd = isSaturday ? emp.SaturdayCheckOut : emp.CheckOut;
 
             if (isHoliday)
             {
-                // Holiday worked → double OT
+                // ✅ Holiday worked → double OT (with 14min threshold)
                 var totalWorked = checkOut - checkIn;
-                record.DoubleOT = $"{(int)totalWorked.TotalHours}h {totalWorked.Minutes}m";
+                if (totalWorked.TotalMinutes >= 14)
+                {
+                    totalWorked = RoundToSettingMinutes(totalWorked);
+                    record.DoubleOT = $"{(int)totalWorked.TotalHours}h {totalWorked.Minutes}m";
+                }
                 record.Status = $"{holiday.Name} (Holiday)";
             }
             else if (isSunday)
             {
-                // Sunday → double OT
+                // ✅ Sunday → double OT (with 14min threshold)
                 var totalWorked = checkOut - checkIn;
-                record.DoubleOT = $"{(int)totalWorked.TotalHours}h {totalWorked.Minutes}m";
+                if (totalWorked.TotalMinutes >= 14)
+                {
+                    totalWorked = RoundToSettingMinutes(totalWorked);
+                    record.DoubleOT = $"{(int)totalWorked.TotalHours}h {totalWorked.Minutes}m";
+                }
                 record.Status = "Sunday (Double OT)";
             }
-            else if (isSaturday && !isSaturdayWorking)
+            else if (isSaturday && !emp.Saturday)
             {
-                // Saturday marked non-working → double OT
+                // ✅ Saturday marked non-working → double OT
                 var totalWorked = checkOut - checkIn;
-                record.DoubleOT = $"{(int)totalWorked.TotalHours}h {totalWorked.Minutes}m";
+                if (totalWorked.TotalMinutes >= 14)
+                {
+                    totalWorked = RoundToSettingMinutes(totalWorked);
+                    record.DoubleOT = $"{(int)totalWorked.TotalHours}h {totalWorked.Minutes}m";
+                }
                 record.Status = "Saturday (Double OT)";
             }
-            else if (isNonWorkingDay)
+            else if (!isWorkingDay && !isHoliday)
             {
-                // Any other non-working day → double OT
+                // ✅ Any other non-working day → double OT
                 var totalWorked = checkOut - checkIn;
-                record.DoubleOT = $"{(int)totalWorked.TotalHours}h {totalWorked.Minutes}m";
+                if (totalWorked.TotalMinutes >= 14)
+                {
+                    totalWorked = RoundToSettingMinutes(totalWorked);
+                    record.DoubleOT = $"{(int)totalWorked.TotalHours}h {totalWorked.Minutes}m";
+                }
                 record.Status = "Non-Working Day (Double OT)";
             }
             else
             {
-                // Regular working day or Saturday that is working
+                // ✅ Regular working day or Saturday that is working
                 TimeSpan ot = TimeSpan.Zero;
 
-                // Early check-in OT
+                // Early check-in OT (before work start)
                 if (checkIn < workStart)
-                    ot += workStart - checkIn;
+                {
+                    var earlyOt = workStart - checkIn;
 
-                // Late check-out OT
+                    int minOtMinutes = Properties.Settings.Default.OT_RoundMinutes;
+                    // or OT_MinMinutes if you have a separate setting
+
+                    if (earlyOt.TotalMinutes >= minOtMinutes)
+                    {
+                        ot += earlyOt;
+                    }
+                }
+
+
+
+                // Late check-out OT (after work end)
                 if (checkOut > workEnd)
-                    ot += checkOut - workEnd;
+                {
+                    var lateOt = checkOut - workEnd;
+                    if (lateOt.TotalMinutes >= 14) // Only count significant overtime
+                    {
+                        ot += lateOt;
+                    }
+                }
 
-                ot = RoundToSettingMinutes(ot);
-                record.OverTime = $"{(int)ot.TotalHours}h {ot.Minutes}m";
+                if (ot.TotalMinutes > 0)
+                {
+                    ot = RoundToSettingMinutes(ot);
+                    record.OverTime = $"{(int)ot.TotalHours}h {ot.Minutes}m";
+                }
 
-                // Early leave
+                // ✅ Early leave (count any early departure)
                 if (checkOut < workEnd)
                 {
                     var early = workEnd - checkOut;
-                    record.EarlyLeave = $"{(int)early.TotalHours}h {early.Minutes}m";
+                    if (early.TotalMinutes >= 1)
+                    {
+                        record.EarlyLeave = $"{(int)early.TotalHours}h {early.Minutes}m";
+                    }
                 }
 
-                // Late hours
+                // ✅ Late hours with allowable minutes
+                int allowedLate = Properties.Settings.Default.Late_Allow_Minutes;
                 if (checkIn > workStart)
                 {
                     var late = checkIn - workStart;
-                    record.LateHours = $"{(int)late.TotalHours}h {late.Minutes}m";
+                    if (late.TotalMinutes <= allowedLate)
+                    {
+                        record.LateHours = "0h 0m"; // No late
+                    }
+                    else
+                    {
+                        var actualLate = late - TimeSpan.FromMinutes(allowedLate);
+                        record.LateHours = $"{(int)actualLate.TotalHours}h {actualLate.Minutes}m";
+                    }
                 }
 
                 // Status
-                record.Status = isSaturdayWorking ? "Saturday OK" : "OK";
+                record.Status = isSaturday && emp.Saturday ? "Saturday OK" : "OK";
             }
         }
-
-
-
-
 
         private TimeSpan RoundToSettingMinutes(TimeSpan time)
         {
@@ -487,7 +565,7 @@ namespace PDC_System
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading holidays: {ex.Message}", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                CustomMessageBox.Show($"Error loading holidays: {ex.Message}", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
 
             return new List<Holiday>();

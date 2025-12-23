@@ -88,7 +88,7 @@ namespace PDC_System
         {
             if (StartDatePicker.SelectedDate == null || EndDatePicker.SelectedDate == null)
             {
-                MessageBox.Show("Please select a date range.");
+                CustomMessageBox.Show("Please select a date range.");
                 return;
             }
 
@@ -115,7 +115,7 @@ namespace PDC_System
             }
             else
             {
-                MessageBox.Show("Please select a job card.");
+                CustomMessageBox.Show("Please select a job card.");
             }
         }
 
@@ -140,7 +140,7 @@ namespace PDC_System
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error saving job cards: {ex.Message}");
+                CustomMessageBox.Show($"Error saving job cards: {ex.Message}");
             }
         }
 

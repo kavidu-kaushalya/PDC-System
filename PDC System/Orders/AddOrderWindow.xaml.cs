@@ -42,7 +42,7 @@ namespace PDC_System
             }
             else
             {
-                MessageBox.Show("Invalid time format. Please use HH:mm (e.g., 14:30).", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                CustomMessageBox.Show("Invalid time format. Please use HH:mm (e.g., 14:30).", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

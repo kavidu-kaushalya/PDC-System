@@ -1,0 +1,261 @@
+﻿<UserControl x:Class="PDC_System.UserManagerControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Foreground="{DynamicResource Forground}"
+             MinWidth="1004" MinHeight="660">
+
+    <Border Padding="25"
+            CornerRadius="10"
+            Background="{DynamicResource Background}"
+            Width="auto">
+
+        <Grid>
+         
+
+            <!-- User Management Section -->
+            <StackPanel Grid.Row="0">
+
+                <!-- Title -->
+                <TextBlock Text="User Management"
+                           FontSize="18"
+                           FontWeight="SemiBold"
+                           Foreground="White"
+                           Margin="0,0,0,15"/>
+
+                <!-- Tab-like buttons -->
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                    <Button x:Name="BtnCreateUser" Content="Create User"
+                            Height="36" Width="150" Margin="0,0,10,0"
+                            Click="BtnCreateUser_Click"
+                            Style="{DynamicResource ActionButton}" Background="#FF129400"/>
+                    <Button x:Name="BtnManageUsers" Content="Manage Users"
+                            Height="36" Width="150"
+                            Click="BtnManageUsers_Click"
+                            Style="{DynamicResource ActionButton}" Background="#FFFE0606"/>
+                </StackPanel>
+
+
+                <StackPanel x:Name="ManageUsersPanel" Visibility="Visible" >
+
+                    <TextBlock Text="Existing Users"
+               FontSize="16"
+               FontWeight="SemiBold"
+               Foreground="White"
+               Margin="0,0,0,15"/>
+
+                    <DataGrid x:Name="UsersDataGrid"
+              AutoGenerateColumns="False"
+              CanUserAddRows="False"
+              CanUserDeleteRows="False"
+              GridLinesVisibility="Horizontal"
+              HeadersVisibility="Column"
+              SelectionMode="Single"
+              Style="{DynamicResource DataGridStyle}"
+              MinHeight="300">
+
+                        <DataGrid.Columns>
+
+                            <DataGridTextColumn Header="Username" 
+                                Binding="{Binding Username}" 
+                                Width="150"
+                                IsReadOnly="True"/>
+
+                            <DataGridCheckBoxColumn Header="Dashboard" 
+                                    Binding="{Binding Dashbord}" 
+                                    Width="80"
+                                    IsReadOnly="True"/>
+
+                            <DataGridCheckBoxColumn Header="Order Check" 
+                                    Binding="{Binding OderCheck}" 
+                                    Width="90"
+                                    IsReadOnly="True"/>
+
+                            <DataGridCheckBoxColumn Header="Job Card" 
+                                    Binding="{Binding Jobcard}" 
+                                    Width="80"
+                                    IsReadOnly="True"/>
+
+                            <DataGridCheckBoxColumn Header="Customer" 
+                                    Binding="{Binding Customer}" 
+                                    Width="80"
+                                    IsReadOnly="True"/>
+
+                            <DataGridCheckBoxColumn Header="Quotation" 
+                                    Binding="{Binding Quotation}" 
+                                    Width="80"
+                                    IsReadOnly="True"/>
+
+                            <DataGridCheckBoxColumn Header="Employee" 
+                                    Binding="{Binding Employee}" 
+                                    Width="80"
+                                    IsReadOnly="True"/>
+
+                            <DataGridCheckBoxColumn Header="Admin" 
+                                    Binding="{Binding Isadmin}" 
+                                    Width="60"
+                                    IsReadOnly="True"/>
+
+                            <DataGridTemplateColumn Header="Actions" Width="150">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button Content="Edit" 
+                                    Width="50" Height="25"
+                                    Margin="0,0,5,0"
+                                    Click="EditUser_Click"
+                                    Style="{DynamicResource ActionButton}"/>
+                                            <Button Content="Delete" 
+                                    Width="50" Height="25"
+                                    Click="DeleteUser_Click"
+                                    Style="{DynamicResource ActionButton}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                        </DataGrid.Columns>
+
+                    </DataGrid>
+
+                </StackPanel>
+                
+                
+         
+            </StackPanel>
+
+            <!-- Users Grid Panel -->
+            <!-- Create User Panel -->
+            <StackPanel Background="{DynamicResource ThemeBackground}" HorizontalAlignment="Right" x:Name="CreateUserPanel" Visibility="Collapsed">
+
+
+                <StackPanel Margin="10">
+                    <!-- Username -->
+                    <TextBlock Text="Username"
+         />
+                    <TextBox x:Name="TxtUser"
+       
+       Style="{DynamicResource TextBoxStyle}"
+       Margin="0,4,0,10"/>
+
+                    <!-- Password -->
+                    <TextBlock Text="Password"
+        />
+                    <PasswordBox x:Name="TxtPass"
+          
+           Margin="0,4,0,15"/>
+
+                    <!-- Permissions -->
+                    <TextBlock Text="Permissions"
+         FontSize="14"
+         FontWeight="SemiBold"
+         Foreground="White"
+         Margin="0,0,0,10"/>
+
+                    <UniformGrid Columns="2" Rows="5">
+
+                        <!-- Dashboard -->
+                        <StackPanel Orientation="Horizontal" Margin="0,5">
+                            <CheckBox x:Name="Dashbord" IsChecked="True" IsEnabled="False" VerticalAlignment="Center"/>
+                            <TextBlock Text="Dashboard"
+                 
+                 Margin="8,0,0,0"
+                 VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,5">
+                            <CheckBox x:Name="ChkOderCheck"/>
+                            <TextBlock Text="Order Check"
+                
+                 Margin="8,0,0,0"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,5">
+                            <CheckBox x:Name="ChkJobcard"/>
+                            <TextBlock Text="Job Card"
+                 
+                 Margin="8,0,0,0"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,5">
+                            <CheckBox x:Name="ChkCustomer"/>
+                            <TextBlock Text="Customer"
+                 
+                 Margin="8,0,0,0"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,5">
+                            <CheckBox x:Name="ChkOutsourcing"/>
+                            <TextBlock Text="Outsourcing"
+                
+                 Margin="8,0,0,0"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,5">
+                            <CheckBox x:Name="ChkQuotation"/>
+                            <TextBlock Text="Quotation"
+                 
+                 Margin="8,0,0,0"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,5">
+                            <CheckBox x:Name="ChkEmployee"/>
+                            <TextBlock Text="Employee"
+                
+                 Margin="8,0,0,0"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,5">
+                            <CheckBox x:Name="ChkAttendance"/>
+                            <TextBlock Text="Attendance"
+                
+                 Margin="8,0,0,0"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,5">
+                            <CheckBox x:Name="ChkPayroll"/>
+                            <TextBlock Text="Payroll"
+                 
+                 Margin="8,0,0,0"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,5">
+                            <CheckBox x:Name="ChkPaysheet"/>
+                            <TextBlock Text="Paysheet"
+                
+                 Margin="8,0,0,0"/>
+                        </StackPanel>
+
+                    </UniformGrid>
+
+                    <!-- Admin Checkbox -->
+                    <StackPanel Orientation="Horizontal" Margin="0,10">
+                        <CheckBox x:Name="ChkIsAdmin"/>
+                        <TextBlock Text="Administrator"
+            
+             Margin="8,0,0,0"/>
+                    </StackPanel>
+
+                    <!-- Buttons -->
+                    <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
+                        <Button x:Name="BtnCreateSave" Content="Create User"
+          Width="150" Margin="0,0,10,0"
+          Click="CreateSave_Click"
+          Style="{DynamicResource ActionButton}"
+          FontWeight="SemiBold"/>
+                        <Button x:Name="BtnClear" Content="Cancel"
+          Width="100"
+          Click="Clear_Click"
+          Style="{DynamicResource NavigationButtonStyle}"
+          FontWeight="SemiBold"/>
+                    </StackPanel>
+
+                </StackPanel>
+             
+
+            </StackPanel>
+
+
+        </Grid>
+
+    </Border>
+</UserControl>

@@ -211,10 +211,10 @@
 
 
                                     <StackPanel>
-                                        <Label Content="ETF Employee (%)" Foreground="{DynamicResource Forground}"/>
-                                        <TextBox x:Name="ETFEmployee" TextChanged="TextBox_TextChanged" Style="{DynamicResource TextBoxStyle}" ></TextBox>
-                                        <Label Content="ETF Employer (%)" Foreground="{DynamicResource Forground}"/>
-                                        <TextBox  x:Name="ETFEmployer" TextChanged="TextBox_TextChanged" Style="{DynamicResource TextBoxStyle}"></TextBox>
+                                        <Label Content="EPF Employee (%)" Foreground="{DynamicResource Forground}"/>
+                                        <TextBox x:Name="EPFEmployee" TextChanged="TextBox_TextChanged" Style="{DynamicResource TextBoxStyle}" ></TextBox>
+                                        <Label Content="EPF Employer (%)" Foreground="{DynamicResource Forground}"/>
+                                        <TextBox  x:Name="EPFEmployer" TextChanged="TextBox_TextChanged" Style="{DynamicResource TextBoxStyle}"></TextBox>
                                         <Button x:Name="btnSave" Style="{DynamicResource ActionButton}" Content="💾 Save Changes" Click="btnSave_Click"
                 Visibility="Visible" Width="150" Height="30" HorizontalAlignment="Center" Margin="10,10,10,10"/>
                                     </StackPanel>

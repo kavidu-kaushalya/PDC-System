@@ -56,14 +56,55 @@ namespace PDC_System.Paysheets
         {
             var btn = sender as Button;
             var paysheet = btn.Tag as Paysheet;
+
             if (paysheet != null)
             {
+                // ================================
+                // 🔥 1. REVERSE LOAN IF EXISTED
+                // ================================
+                var history = LoanHistoryService.GetByPaysheetId(paysheet.PaysheetId);
+
+                if (history != null)
+                {
+                    var loanJson = File.ReadAllText("Savers/loan.json");
+                    var loans = JsonConvert.DeserializeObject<List<Loan>>(loanJson) ?? new List<Loan>();
+
+                    var loan = loans.FirstOrDefault(l => l.EmployeeId == paysheet.EmployeeId);
+
+                    if (loan != null)
+                    {
+                        loan.Remeining += history.PaidAmount;
+
+                        if (loan.Remeining > 0)
+                            loan.Status = "Active";
+
+                        File.WriteAllText("Savers/loan.json",
+                            JsonConvert.SerializeObject(loans, Formatting.Indented));
+                    }
+
+                    LoanHistoryService.DeleteByPaysheetId(paysheet.PaysheetId);
+                }
+
+                // ================================
+                // 🔥 2. DELETE EPF HISTORY ALSO
+                // ================================
+                DeleteEPFHistory(paysheet.PaysheetId);
+
+                // ================================
+                // 🔥 3. DELETE PAYSHEET
+                // ================================
                 paysheets.Remove(paysheet);
                 File.WriteAllText(paysheetFile, JsonConvert.SerializeObject(paysheets, Formatting.Indented));
+
                 LoadPaysheets();
                 PaysheetGrid.Items.Refresh();
+
+                CustomMessageBox.Show("Paysheet deleted successfully. Loan & EPF corrected 🔄");
             }
         }
+
+
+
 
         private void EditPaysheet_Click(object sender, RoutedEventArgs e)
         {
@@ -93,13 +134,13 @@ namespace PDC_System.Paysheets
 
             if (string.IsNullOrWhiteSpace(path))
             {
-                MessageBox.Show("No PDF found for this paysheet.");
+                CustomMessageBox.Show("No PDF found for this paysheet.");
                 return;
             }
 
             if (!File.Exists(path))
             {
-                MessageBox.Show("PDF file does not exist in saved location!");
+                CustomMessageBox.Show("PDF file does not exist in saved location!");
                 return;
             }
 
@@ -112,6 +153,23 @@ namespace PDC_System.Paysheets
 
 
 
+
+
+        private string epfHistoryFile = "Savers/EPFHistory.json";
+
+        private void DeleteEPFHistory(string paysheetId)
+        {
+            if (!File.Exists(epfHistoryFile))
+                return;
+
+            string json = File.ReadAllText(epfHistoryFile);
+            var list = JsonConvert.DeserializeObject<List<EPFHistory>>(json) ?? new List<EPFHistory>();
+
+            // Delete matching paysheet EPF history record
+            list = list.Where(x => x.PaysheetId != paysheetId).ToList();
+
+            File.WriteAllText(epfHistoryFile, JsonConvert.SerializeObject(list, Formatting.Indented));
+        }
 
 
 

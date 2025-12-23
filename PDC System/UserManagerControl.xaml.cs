@@ -1,0 +1,217 @@
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
+using PDC_System.Models;
+using PDC_System.Services;
+
+namespace PDC_System
+{
+    public partial class UserManagerControl : UserControl
+    {
+        private List<User> users;
+        private User editingUser;
+        private bool isEditMode = false;
+
+        public UserManagerControl()
+        {
+            InitializeComponent();
+            CreateUserPanel.Visibility = Visibility.Collapsed;
+            LoadUsers();
+        }
+
+        private void LoadUsers()
+        {
+            users = UserService.Load();
+            UsersDataGrid.ItemsSource = users;
+        }
+
+        private void BtnCreateUser_Click(object sender, RoutedEventArgs e)
+        {
+            ShowCreateUserPanel();
+        }
+
+        private void BtnManageUsers_Click(object sender, RoutedEventArgs e)
+        {
+            ShowManageUsersPanel();
+        }
+
+        private void ShowCreateUserPanel()
+        {
+            CreateUserPanel.Visibility = Visibility.Visible;
+            ManageUsersPanel.IsEnabled = false;
+            LoadUsers();
+          
+        }
+
+        private void ShowManageUsersPanel()
+        {
+            ManageUsersPanel.Visibility = Visibility.Visible;
+            ClearForm();
+
+        }
+
+        private void CreateSave_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(TxtUser.Text))
+            {
+                CustomMessageBox.Show("Please enter a username.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(TxtPass.Password) && !isEditMode)
+            {
+                CustomMessageBox.Show("Please enter a password.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            // Check if username already exists (when creating or editing different user)
+            if (users.Any(u => u.Username == TxtUser.Text && (!isEditMode || u.Username != editingUser?.Username)))
+            {
+                CustomMessageBox.Show("Username already exists. Please choose a different username.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (isEditMode)
+            {
+                // Update existing user
+                editingUser.Username = TxtUser.Text;
+                if (!string.IsNullOrWhiteSpace(TxtPass.Password))
+                {
+                    editingUser.PasswordHash = UserService.Hash(TxtPass.Password);
+                }
+                UpdateUserPermissions(editingUser);
+
+                CustomMessageBox.Show("User updated successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                // Create new user
+                var newUser = new User
+                {
+                    Username = TxtUser.Text,
+                    PasswordHash = UserService.Hash(TxtPass.Password)
+                };
+                UpdateUserPermissions(newUser);
+
+                users.Add(newUser);
+                CustomMessageBox.Show("User created successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+
+            UserService.Save(users);
+            LoadUsers();
+            ClearForm();
+            ResetToCreateMode();
+        }
+
+        private void UpdateUserPermissions(User user)
+        {
+            user.Dashbord = Dashbord.IsChecked == true;
+            user.OderCheck = ChkOderCheck.IsChecked == true;
+            user.Jobcard = ChkJobcard.IsChecked == true;
+            user.Customer = ChkCustomer.IsChecked == true;
+            user.Outsourcing = ChkOutsourcing.IsChecked == true;
+            user.Quotation = ChkQuotation.IsChecked == true;
+            user.Employee = ChkEmployee.IsChecked == true;
+            user.Attendance = ChkAttendance.IsChecked == true;
+            user.Payroll = ChkPayroll.IsChecked == true;
+            user.Paysheet = ChkPaysheet.IsChecked == true;
+            user.Isadmin = ChkIsAdmin.IsChecked == true;
+        }
+
+        private void Clear_Click(object sender, RoutedEventArgs e)
+        {
+            ClearForm();
+            ResetToCreateMode();
+            CreateUserPanel.Visibility = Visibility.Collapsed;
+            ManageUsersPanel.IsEnabled = true;
+        }
+
+        private void ClearForm()
+        {
+            TxtUser.Text = "";
+            TxtPass.Password = "";
+
+            // Reset checkboxes (keep Dashboard checked and disabled)
+            Dashbord.IsChecked = true;
+            ChkOderCheck.IsChecked = false;
+            ChkJobcard.IsChecked = false;
+            ChkCustomer.IsChecked = false;
+            ChkOutsourcing.IsChecked = false;
+            ChkQuotation.IsChecked = false;
+            ChkEmployee.IsChecked = false;
+            ChkAttendance.IsChecked = false;
+            ChkPayroll.IsChecked = false;
+            ChkPaysheet.IsChecked = false;
+            ChkIsAdmin.IsChecked = false;
+        }
+
+        private void EditUser_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && button.DataContext is User user)
+            {
+
+                CreateUserPanel.Visibility = Visibility.Visible;
+                ManageUsersPanel.IsEnabled = false;
+                editingUser = user;
+                isEditMode = true;
+
+                // Switch to create panel for editing
+                ShowCreateUserPanel();
+
+                // Populate form with user data
+                TxtUser.Text = user.Username;
+                TxtPass.Password = ""; // Don't show existing password
+
+                // Set permissions
+                Dashbord.IsChecked = user.Dashbord;
+                ChkOderCheck.IsChecked = user.OderCheck;
+                ChkJobcard.IsChecked = user.Jobcard;
+                ChkCustomer.IsChecked = user.Customer;
+                ChkOutsourcing.IsChecked = user.Outsourcing;
+                ChkQuotation.IsChecked = user.Quotation;
+                ChkEmployee.IsChecked = user.Employee;
+                ChkAttendance.IsChecked = user.Attendance;
+                ChkPayroll.IsChecked = user.Payroll;
+                ChkPaysheet.IsChecked = user.Paysheet;
+                ChkIsAdmin.IsChecked = user.Isadmin;
+
+                // Update UI for edit mode
+                BtnCreateSave.Content = "Update User";
+            }
+        }
+
+        private void DeleteUser_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && button.DataContext is User user)
+            {
+                var result = CustomMessageBox.Show(
+                    $"Are you sure you want to delete user '{user.Username}'?",
+                    "Confirm Delete",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    users.Remove(user);
+                    UserService.Save(users);
+                    LoadUsers();
+                    CustomMessageBox.Show("User deleted successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+        }
+
+        private void ResetToCreateMode()
+        {
+            isEditMode = false;
+            editingUser = null;
+            BtnCreateSave.Content = "Create User";
+        }
+
+        // Keep the original Create_Click for backward compatibility
+        private void Create_Click(object sender, RoutedEventArgs e)
+        {
+            CreateSave_Click(sender, e);
+        }
+    }
+}

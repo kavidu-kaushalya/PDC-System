@@ -23,266 +23,92 @@
 
 
         <StackPanel Grid.Row="0">
-            <Border Background="#FF1D1A27" CornerRadius="30"
+           
                     
-                    >
+                  
 
                     <StackPanel Height="100" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <TextBlock Text="Order" VerticalAlignment="Center" FontSize="40" FontWeight="Bold" Foreground="White" />
+                    <TextBlock Text="Order" FontSize="40" FontWeight="Bold" Foreground="White" />
                 </StackPanel>
                
                 
 
-            </Border>
+          
         </StackPanel>
         
         <StackPanel Grid.Row="1">
 
 
             <StackPanel Grid.Row="1" Margin="20">
-                <Button x:Name="AddOrderButton" Style="{StaticResource UiWinodwButton}" Content="Add Order" HorizontalAlignment="Left" Margin="10" Click="AddOrderButton_Click" Width="150"/>
+                <Button x:Name="AddOrderButton" Style="{StaticResource ActionButton}" Content="Add Order" HorizontalAlignment="Left" Margin="10" Click="AddOrderButton_Click" Width="150"/>
             </StackPanel>
            
             
                 <StackPanel Grid.Row="3">
 
-                <Border Background="#FF1D1A27" CornerRadius="30" Height="auto" >
+               
 
                     <StackPanel>
-                        <DataGrid x:Name="OrdersDataGrid"
-                              Margin="30"
-                              Height="480"
-                   
-           Background="Transparent" 
-           AutoGenerateColumns="False" 
-           CanUserAddRows="False" 
-           CanUserReorderColumns="False"
-           CanUserResizeRows="False"
-           CanUserResizeColumns="False"
-           IsTabStop="True"
-           GridLinesVisibility="None"
-           RowHeaderWidth="0" 
-           
-                   CellStyle="{StaticResource Customers_grid}"
-           
-           ColumnHeaderStyle="{StaticResource RoundedHeaderStyle4}"
-           
-                  
-                   
-           RowBackground="Transparent" 
-                   BorderBrush="Transparent" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Hidden" >
+                        <DataGrid x:Name="OrdersDataGrid" BorderBrush="{x:Null}" HeadersVisibility="Column" IsReadOnly="False"
+               Background="Transparent"
+               RowBackground="White"
+               AlternatingRowBackground="#f0f0f0"
+               SnapsToDevicePixels="True"
+               Height="500"
+              
+               AutoGenerateColumns="False"
+               CanUserResizeColumns="False"
+               CellStyle="{StaticResource DataGridCellStyle}"
+               Style="{StaticResource DataGridStyle}"
+               ColumnHeaderStyle="{StaticResource DataGridHeaderStyle}"
+               RowStyle="{StaticResource DataGridRowStyle}">
 
-
-
-                            <DataGrid.Columns>
-
-
-
-
-                                    <DataGridTemplateColumn IsReadOnly="True" CanUserResize="False" CanUserSort="False" >
-
-
-
-
-
-
-                                        <DataGridTemplateColumn.HeaderTemplate>
-                                            <DataTemplate>
-                                                <StackPanel Grid.Column="0">
-
-                                                    <TextBlock Margin="20,0,20,0" Text="Date"/>
-
-                                                </StackPanel>
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.HeaderTemplate>
-
+                                <DataGrid.Columns>
+                                <DataGridTextColumn Header="Date" Binding="{Binding CreateDate, StringFormat='yyyy/MM/dd hh:mm tt'}" Width="*" ElementStyle="{StaticResource NameColumnStyle}"/>
+                                <DataGridTextColumn Header="Due Date" Binding="{Binding DueDate, StringFormat='yyyy/MM/dd hh:mm tt'}" Width="2*" ElementStyle="{StaticResource EmailColumnStyle}"/>
+                                <DataGridTextColumn Header="Contact No:Countdown" Binding="{Binding Countdown}" Width="2*" ElementStyle="{StaticResource ContactColumnStyle}"/>
+                                <DataGridTextColumn Header="Customer Name" Binding="{Binding CustomerName}" Width="2*" ElementStyle="{StaticResource TypeColumnStyle}"/>
+                                <DataGridTextColumn Header="Customer Description" Binding="{Binding Description}" Width="2*" ElementStyle="{StaticResource TypeColumnStyle}"/>
+                                <DataGridTextColumn Header="Notes" Binding="{Binding Notes}" Width="2*" ElementStyle="{StaticResource TypeColumnStyle}"/>
+                                    <DataGridTemplateColumn Header="Action" Width="*">
                                         <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate >
-                                                <TextBlock TextWrapping="Wrap" Width="80"  TextAlignment="Center" Text="{Binding CreateDate, StringFormat='yyyy/MM/dd hh:mm tt'}"/>
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.CellTemplate>
-
-
-                                    </DataGridTemplateColumn>
-
-
-
-                                    <DataGridTemplateColumn IsReadOnly="True" CanUserResize="False" CanUserSort="False" >
-
-
-
-
-
-
-                                    <DataGridTemplateColumn.HeaderTemplate>
-                                        <DataTemplate>
-                                            <StackPanel Grid.Column="0">
-
-                                                <TextBlock Margin="20,0,20,0" Text="Due Date"/>
-
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.HeaderTemplate>
-
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate >
-                                                <TextBlock TextWrapping="Wrap" Width="80"  TextAlignment="Center" Text="{Binding DueDate, StringFormat='yyyy/MM/dd hh:mm tt'}"/>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-
-
-                                </DataGridTemplateColumn>
-
-
-
-
-
-                                <DataGridTemplateColumn IsReadOnly="True" CanUserResize="False" CanUserSort="False" >
-
-
-
-
-
-
-                                    <DataGridTemplateColumn.HeaderTemplate>
-                                        <DataTemplate>
-                                            <StackPanel Grid.Column="0">
-
-                                                <TextBlock Margin="80,0,80,0" Text="Countdown"/>
-
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.HeaderTemplate>
-
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate >
-                                            <TextBlock TextAlignment="Center" Text="{Binding Countdown}"/>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-
-
-                                </DataGridTemplateColumn>
-
-                                <DataGridTemplateColumn  IsReadOnly="True" CanUserResize="False" CanUserSort="False" >
-                                    <DataGridTemplateColumn.HeaderTemplate>
-                                        <DataTemplate>
-                                            <StackPanel>
-                                                <TextBlock Margin="20,0,20,0" Text="Customer Name"/>
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.HeaderTemplate>
-
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate >
-                                                <TextBlock TextTrimming="CharacterEllipsis" Width="150" TextAlignment="Center" Text="{Binding CustomerName}"/>
-
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-
-                                </DataGridTemplateColumn>
-
-
-
-
-                                <DataGridTemplateColumn  IsReadOnly="True" CanUserResize="False" CanUserSort="False" >
-                                    <DataGridTemplateColumn.HeaderTemplate>
-                                        <DataTemplate>
-                                            <StackPanel >
-                                                <TextBlock Margin="20,0,20,0" Text="Description"/>
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.HeaderTemplate>
-
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate >
-                                            <TextBlock TextAlignment="Center" Text="{Binding Description}"/>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-
-                                </DataGridTemplateColumn>
-
-                                    <DataGridTemplateColumn  IsReadOnly="True" CanUserResize="False" CanUserSort="False" >
-                                        <DataGridTemplateColumn.HeaderTemplate>
                                             <DataTemplate>
-                                                <StackPanel>
-                                                    <TextBlock Margin="20,0,20,0" Text="Notes"/>
-                                                </StackPanel>
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.HeaderTemplate>
-
-                                        <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate >
-                                                <TextBlock TextTrimming="CharacterEllipsis" Width="150" TextAlignment="Center" Text="{Binding Notes}"/>
-
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.CellTemplate>
-
-                                    </DataGridTemplateColumn>
-
-                                    <DataGridTemplateColumn  IsReadOnly="True" CanUserResize="False" CanUserSort="False" >
-                                    <DataGridTemplateColumn.HeaderTemplate>
-                                        <DataTemplate>
-                                            <StackPanel >
-                                                <TextBlock Margin="20,0,20,0" Text="Action"/>
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.HeaderTemplate>
-
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
                                             <StackPanel >
                                                 <!-- Show "Mark as Finished" if the order is not finished -->
-                                                <Button Width="180" Style="{StaticResource UiWinodwButton}" Content="Mark as Finished" 
+                                                <Button Width="100" Style="{StaticResource ActionButton}" Content="Mark as Finished" 
 Click="MarkAsFinished_Click" 
 Visibility="{Binding IsFinished, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=Invert}" />
                                                 <!-- Show "Revert" if the order is finished -->
-                                                <Button Width="130" Style="{StaticResource UiWinodwButton}" Content="Revert" 
+                                                <Button Width="80" Style="{StaticResource NavigationButtonStyle}" Content="Revert" 
 Click="Revert_Click" 
 Visibility="{Binding IsFinished, Converter={StaticResource BoolToVisibilityConverter}}" />
                                             </StackPanel>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                    
-                                    
-                                    
-
-
-                                </DataGridTemplateColumn>
-
-                                    <DataGridTemplateColumn IsReadOnly="True" CanUserResize="False" CanUserSort="False"  >
-                                        <DataGridTemplateColumn.HeaderTemplate>
-                                            <DataTemplate>
-                                                <StackPanel >
-                                                    <TextBlock Margin="20,0,20,0" Text="Delete"/>
-                                                </StackPanel>
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.HeaderTemplate>
-
-                                        <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <StackPanel >
-                                                    <Button   Content="Delete"  
-                                                      Click="DeleteOrders_Click" 
-                                                      Height="30" 
-                                                      Background="DarkRed"
-                                                      Width="60" 
-                                                      FontSize="10" 
-                                                      Style="{StaticResource UiWinodwButton}"/>
-                                                </StackPanel>
+                                            <!-- Pass the row data through Tag -->
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
-
-
                                     </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="Action" Width="*">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                            <StackPanel >
+                                                <Button   Content="Delete"  
+                                                      Click="DeleteOrders_Click" 
+                                                      Height="30" 
+                                                      Width="60" 
+                                                      FontSize="10" 
+                                                      Style="{StaticResource DeleteActionButton}"/>
+                                            </StackPanel>
 
-
-
+                                    
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
                                 </DataGrid.Columns>
+                            </DataGrid>
+    
+        </StackPanel>
 
-                        </DataGrid>
-                    </StackPanel>
-
-                </Border>
+               
                     
             </StackPanel>
 

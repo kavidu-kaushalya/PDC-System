@@ -15,10 +15,21 @@ namespace PDC_System.Models
 
     public class Loan
     {
+        public string LoanId { get; set; }
         public string EmployeeId { get; set; }
         public string Name { get; set; }
+        public decimal Remeining { get; set; }
         public decimal LoanAmount { get; set; }
         public decimal MonthlyPay { get; set; }
+        public string Status { get; set; } = "Active";
+        public DateTime Date { get; set; }
+
+        public DateTime LoanDate { get; set; }
+        public Loan()
+        {
+            LoanId = Guid.NewGuid().ToString("N").Substring(0, 8);
+            Date = DateTime.Now;
+        }
     }
 
     public class AttendanceRecord
@@ -58,10 +69,24 @@ namespace PDC_System.Models
         public DateOnly EarningDate { get; set; }
 
     }
-  
 
-    public class ETF
-        {
+
+    public class EPFHistory
+    {
+        public string PaysheetId { get; set; }
+
+        public string EmployeeId { get; set; }
+        public string EmployeeName { get; set; }
+        public decimal BasicSalary { get; set; }
+        public decimal EmployeeAmount { get; set; }
+        public decimal EmployerAmount { get; set; }
+        public string Month { get; set; }
+        public DateTime Date { get; set; } = DateTime.Now;
+    }
+
+
+    public class EPF
+    {
         public string EmployeeId { get; set; }
         public string EmployeeName { get; set; }
 

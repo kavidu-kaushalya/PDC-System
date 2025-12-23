@@ -387,6 +387,39 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+    
+    <Style x:Key="DeleteActionButton" TargetType="Button">
+        <Setter Property="Background" Value="Crimson"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Height" Value="25" />
+        <Setter Property="Width" Value="60" />
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="FontFamily" Value="Poppins"/>
+        <Setter Property="FontSize" Value="10"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="Template">
+
+
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}"
+                    BorderThickness="0"
+                    CornerRadius="8">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <!-- Change background and cursor on mouse hover -->
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="#D44646"/>
+              
+                <!-- Use a custom cursor -->
+            </Trigger>
+        </Style.Triggers>
+    </Style>
 
 
 
@@ -408,11 +441,11 @@
                     <Grid>
                         <!-- Border for TextBox -->
                         <Border x:Name="border"
-                    Background="{TemplateBinding Background}"
-                    BorderBrush="{TemplateBinding BorderBrush}"
-                    BorderThickness="{TemplateBinding BorderThickness}"
-                    CornerRadius="5"
-                    Padding="{TemplateBinding Padding}">
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="5"
+                                Padding="{TemplateBinding Padding}">
                             <ScrollViewer x:Name="PART_ContentHost"/>
                         </Border>
                     </Grid>
@@ -455,8 +488,10 @@
     <Style TargetType="PasswordBox">
         <Setter Property="Background" Value="{DynamicResource Background}"/>
         <Setter Property="Foreground" Value="{DynamicResource Forground}"/>
-        <Setter Property="Padding" Value="10,5"/>
+       
         <Setter Property="Height" Value="40"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Padding" Value="4,3,4,4"/>
       
         <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
         <Setter Property="BorderThickness" Value="2"/>
@@ -466,10 +501,11 @@
                 <ControlTemplate TargetType="PasswordBox">
                     <Border CornerRadius="5" 
                             VerticalAlignment="Center"
+                            Height="40"
                             Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}">
-                        <ScrollViewer Margin="0" x:Name="PART_ContentHost"/>
+                        <ScrollViewer VerticalAlignment="Center" x:Name="PART_ContentHost" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>

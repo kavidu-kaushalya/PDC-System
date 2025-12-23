@@ -17,7 +17,8 @@ namespace PDC_System
             catch (Exception ex)
             {
                 // fallback if toast not supported
-                System.Windows.MessageBox.Show($"{title}\n{message}\n\n{ex.Message}");
+                System.Windows.
+                    MessageBox.Show($"{title}\n{message}\n\n{ex.Message}");
             }
         }
     }

@@ -44,14 +44,14 @@
     <Setting Name="isEnable" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="ETFEmployee" Type="System.Decimal" Scope="User">
-      <Value Profile="(Default)">3</Value>
+    <Setting Name="EPFEmployee" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">8</Value>
     </Setting>
-    <Setting Name="ETFEmployer" Type="System.Decimal" Scope="User">
+    <Setting Name="EPFEmployer" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">12</Value>
     </Setting>
     <Setting Name="OT_RoundMinutes" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">30</Value>
+      <Value Profile="(Default)">1</Value>
     </Setting>
     <Setting Name="TimerIntervalMinutes" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">30</Value>
@@ -64,6 +64,9 @@
     </Setting>
     <Setting Name="SenderPassword" Type="System.String" Scope="User">
       <Value Profile="(Default)">trvonxgjpentgbby</Value>
+    </Setting>
+    <Setting Name="Late_Allow_Minutes" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">15</Value>
     </Setting>
   </Settings>
 </SettingsFile>

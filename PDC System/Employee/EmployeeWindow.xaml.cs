@@ -43,15 +43,16 @@ namespace PDC_System
 
         private void AddEmployee_Click(object sender, RoutedEventArgs e)
         {
-            var addEmployeeWindow = new EmployeeAddData();
+            var addEmployeeWindow = new EmployeeAddData();  // NO PARAM
+
             if (addEmployeeWindow.ShowDialog() == true)
             {
                 employees.Add(addEmployeeWindow.Employee);
-                ApplyFilter(); // Refresh DataGrid with filter applied
-                File.WriteAllText(employeeFile,JsonConvert.SerializeObject(employees, Formatting.Indented));
-
+                ApplyFilter();
+                File.WriteAllText(employeeFile, JsonConvert.SerializeObject(employees, Formatting.Indented));
             }
         }
+
 
         private void DeleteEmployee_Click(object sender, RoutedEventArgs e)
         {
@@ -71,32 +72,9 @@ namespace PDC_System
             }
         }
 
-        private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            var selectedRow = EmployeeDataGrid.SelectedItem as Employee;
-            if (selectedRow != null)
-            {
-                MainContent.Content = new EDetailsWindow(selectedRow);
-            }
-            else
-            {
-                System.Windows.MessageBox.Show("Please select an employee.");
-            }
-        }
+   
 
-        private void OpenDuplicateWindow_Click(object sender, RoutedEventArgs e)
-        {
-            var passwordWindow = new PasswordWindow();
-            if (passwordWindow.ShowDialog() == true)
-            {
-                EmployeeDetailsEdit newWindow = new EmployeeDetailsEdit();
-                newWindow.Show();
-            }
-            else
-            {
-                System.Windows.MessageBox.Show("Password incorrect or cancelled.");
-            }
-        }
+       
 
         private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -113,5 +91,32 @@ namespace PDC_System
             EmployeeDataGrid.ItemsSource = null;
             EmployeeDataGrid.ItemsSource = filteredEmployees;
         }
+
+
+        private void EditEmployee_Click(object sender, RoutedEventArgs e)
+        {
+            var emp = (sender as Button)?.Tag as Employee;
+            if (emp == null) return;
+
+            // Pass employee to edit window
+            var editWindow = new EmployeeAddData(emp);
+
+            if (editWindow.ShowDialog() == true)
+            {
+                // Update employee in the list
+                var index = employees.FindIndex(x => x.EmployeeId == emp.EmployeeId);
+
+                if (index != -1)
+                {
+                    employees[index] = editWindow.Employee;
+                }
+
+                ApplyFilter();
+
+                // Save JSON
+                File.WriteAllText(employeeFile, JsonConvert.SerializeObject(employees, Formatting.Indented));
+            }
+        }
+
     }
 }

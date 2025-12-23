@@ -10,14 +10,14 @@
         Title="PDC System"
         Background="Transparent"
         WindowStyle="None" 
-        
         MouseLeftButtonDown="TitleBar_MouseLeftButtonDown"
         WindowStartupLocation="CenterScreen"
         AllowsTransparency="True"
-        WindowState="Maximized"
+        WindowState="Normal"
         MinWidth="1350"
-        MinHeight="750"
-        >
+        MinHeight="780"
+        Width="1350"
+        Height="780">
 
     <!-- WindowChrome for custom window border and rounded corners -->
     <shell:WindowChrome.WindowChrome>
@@ -72,7 +72,7 @@
                     <!-- Main content column -->
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="50"/>
                     <!-- Title bar row -->
                     <RowDefinition Height="*"/>
 
@@ -87,12 +87,83 @@
                         <Image Source="/Assets/MainLogo.png"  Height="20" Width="20" Margin="8,0"/>
                         <!-- App Title -->
                         <TextBlock x:Name="PDCtitel" Text="PDC System" Foreground="{DynamicResource Forground}"  VerticalAlignment="Center" Margin="8,0"/>
+                        <!-- Control Panel -->
+                       
+
+
                         <!-- Title bar buttons -->
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+
+
+
+                            <StackPanel Orientation="Horizontal" shell:WindowChrome.IsHitTestVisibleInChrome="True" HorizontalAlignment="Right">
+
+
+
+
+
+                                <StackPanel Orientation="Horizontal" >
+                                    <!-- Google Account Display -->
+                                    <Grid x:Name="GoogleAccountInfo" Visibility="Visible">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <!-- Profile Image -->
+                                        <Grid Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right">
+                                            <Ellipse x:Name="imgProfileEllipse" Width="30" Height="30" Stroke="Gray" StrokeThickness="1"/>
+                                            <!-- Online/Status Indicator -->
+                                            <Ellipse x:Name="statusIndicator" Width="10" Height="10" Fill="Gray" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,0,5" />
+                                        </Grid>
+                                        <!-- Username and Email -->
+                                        <StackPanel Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Center" Orientation="Vertical">
+                                            <TextBlock x:Name="lblUserName" Foreground="{DynamicResource Forground}"  Text="User Name" FontWeight="Bold" FontSize="10" VerticalAlignment="Stretch"/>
+                                            <TextBlock x:Name="lblEmail"  Text="Email" Foreground="{DynamicResource Forground}" VerticalAlignment="Stretch" FontSize="8"/>
+                                        </StackPanel>
+                                    </Grid>
+
+
+
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+
+                                    <Button HorizontalAlignment="Left" Click="Setting_Click" Background="Transparent">
+                                        <StackPanel Orientation="Horizontal" Width="208">
+                                            <Image HorizontalAlignment="Left" VerticalAlignment="Center" Source="/Assets/Setting_G.png" Width="15"/>
+                                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0" Text="Settings" FontSize="10" Foreground="{DynamicResource Forground}" FontWeight="Regular" />
+                                        </StackPanel>
+
+
+                                    </Button>
+
+                                    <Button HorizontalAlignment="Left" Click="AboutButton_Click" Background="Transparent" >
+                                        <StackPanel Orientation="Horizontal" Width="208">
+                                            <Image HorizontalAlignment="Left" VerticalAlignment="Center" Source="/Assets/About.png" Width="15"/>
+                                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0" Text="About" FontSize="10" Foreground="{DynamicResource Forground}" FontWeight="Regular" />
+                                        </StackPanel>
+
+
+                                    </Button>
+                                </StackPanel>
+
+
+
+                            </StackPanel>
+
+
                             <Button x:Name="Minimize" Content="—" Width="25" Height="25" Click="Minimize_Click" shell:WindowChrome.IsHitTestVisibleInChrome="True" Margin="5" Background="Transparent"/>
                             <Button x:Name="Maximize" Content="🗖" Width="25" Height="25" Click="Maximize_Click" shell:WindowChrome.IsHitTestVisibleInChrome="True" Margin="5" Background="Transparent" />
                             <Button x:Name="Colose" Content="🗙" Width="25" Height="25" Click="Close_Click" shell:WindowChrome.IsHitTestVisibleInChrome="True" Margin="5" Background="Transparent" />
                         </StackPanel>
+
+
+
+                      
+
+
+
+
                     </DockPanel>
                 </Border>
 
@@ -110,7 +181,7 @@
                             <StackPanel VerticalAlignment="Top" Margin="10" Grid.Row="0" MinHeight="500">
 
                                 <!-- Home -->
-                                <RadioButton IsChecked="True" Click="OpenView8_Click" Style="{StaticResource SelectableRadioButtonStyle}" 
+                                <RadioButton x:Name="Dashbord" IsChecked="True" Click="OpenView8_Click" Style="{StaticResource SelectableRadioButtonStyle}" 
                  Margin="3" Width="250" Height="45">
                                     <StackPanel Orientation="Horizontal" Width="200" VerticalAlignment="Center" HorizontalAlignment="Left">
                                         <Image Source="/Assets/Asset_29.png" Width="16" Margin="0,0,0,3" RenderOptions.BitmapScalingMode="HighQuality" SnapsToDevicePixels="True"/>
@@ -122,8 +193,11 @@
                                     </StackPanel>
                                 </RadioButton>
 
+
+                                <TextBlock Text="🖨️ Printing" FontSize="14" FontWeight="Bold" Margin="10,20,0,10" Foreground="{DynamicResource Forground}"/> 
+
                                 <!-- Order Check -->
-                                <RadioButton Click="OpenView9_Click" Style="{StaticResource SelectableRadioButtonStyle}" 
+                                <RadioButton x:Name="OderCheck" Click="OpenView9_Click" Style="{StaticResource SelectableRadioButtonStyle}" 
                  Margin="3" Width="250" Height="45">
                                     <StackPanel Orientation="Horizontal" Width="200" VerticalAlignment="Center" HorizontalAlignment="Left">
                                         <Image RenderOptions.BitmapScalingMode="HighQuality" SnapsToDevicePixels="True" Source="/Assets/Asset_32.png" Width="16" Margin="0,0,0,3"/>
@@ -135,7 +209,7 @@
                                 </RadioButton>
 
                                 <!-- Job Card -->
-                                <RadioButton Click="OpenView2_Click" Style="{StaticResource SelectableRadioButtonStyle}" 
+                                <RadioButton x:Name="Jobcard" Click="OpenView2_Click" Style="{StaticResource SelectableRadioButtonStyle}" 
                  Margin="3" Width="250" Height="45">
                                     <StackPanel Orientation="Horizontal" Width="200" VerticalAlignment="Center" HorizontalAlignment="Left">
                                         <Image RenderOptions.BitmapScalingMode="HighQuality" SnapsToDevicePixels="True" Source="/Assets/Asset_23.png" Width="15" Margin="0,0,0,3"/>
@@ -147,7 +221,7 @@
                                 </RadioButton>
 
                                 <!-- Customer -->
-                                <RadioButton Click="OpenView1_Click" Style="{StaticResource SelectableRadioButtonStyle}" 
+                                <RadioButton x:Name="Customer" Click="OpenView1_Click" Style="{StaticResource SelectableRadioButtonStyle}" 
                  Margin="3" Width="250" Height="45">
                                     <StackPanel Orientation="Horizontal" Width="200" VerticalAlignment="Center" HorizontalAlignment="Left">
                                         <Image RenderOptions.BitmapScalingMode="HighQuality" SnapsToDevicePixels="True" Source="/Assets/Asset_33.png" Width="16" Margin="0,0,0,3"/>
@@ -159,7 +233,7 @@
                                 </RadioButton>
 
                                 <!-- Outsourcing -->
-                                <RadioButton Click="OpenView11_Click" Style="{StaticResource SelectableRadioButtonStyle}" 
+                                <RadioButton x:Name="Outsourcing" Click="OpenView11_Click" Style="{StaticResource SelectableRadioButtonStyle}" 
                  Margin="3" Width="250" Height="45">
                                     <StackPanel Orientation="Horizontal" Width="200" VerticalAlignment="Center" HorizontalAlignment="Left">
                                         <Image RenderOptions.BitmapScalingMode="HighQuality" SnapsToDevicePixels="True" Source="/Assets/Asset_46.png" Width="18" Margin="0,0,0,3"/>
@@ -170,8 +244,10 @@
                                     </StackPanel>
                                 </RadioButton>
 
+                                <TextBlock Text="💹 Finance And Management" FontSize="14" FontWeight="Bold" Margin="10,20,0,10" Foreground="{DynamicResource Forground}"/>
+
                                 <!-- Quotation -->
-                                <RadioButton Click="OpenView3_Click" Style="{StaticResource SelectableRadioButtonStyle}" 
+                                <RadioButton x:Name="Quotation" Click="OpenView3_Click" Style="{StaticResource SelectableRadioButtonStyle}" 
                  Margin="3" Width="250" Height="45">
                                     <StackPanel Orientation="Horizontal" Width="200" VerticalAlignment="Center" HorizontalAlignment="Left">
                                         <Image RenderOptions.BitmapScalingMode="HighQuality" SnapsToDevicePixels="True" Source="/Assets/Asset_34.png" Width="16" Margin="0,0,0,3"/>
@@ -183,7 +259,7 @@
                                 </RadioButton>
 
                                 <!-- Employee -->
-                                <RadioButton Click="OpenView4_Click" Style="{StaticResource SelectableRadioButtonStyle}" 
+                                <RadioButton x:Name="Employee" Click="OpenView4_Click" Style="{StaticResource SelectableRadioButtonStyle}" 
                  Margin="3" Width="250" Height="45">
                                     <StackPanel Orientation="Horizontal" Width="200" VerticalAlignment="Center" HorizontalAlignment="Left">
                                         <Image Source="/Assets/Asset_27.png" Width="18" Margin="0,0,0,3" RenderOptions.BitmapScalingMode="HighQuality" SnapsToDevicePixels="True"/>
@@ -194,21 +270,10 @@
                                     </StackPanel>
                                 </RadioButton>
 
-                                <!-- Attendance -->
-                                <RadioButton Click="OpenView5_Click" Style="{StaticResource SelectableRadioButtonStyle}" 
-                 Margin="3" Width="250" Height="45">
-                                    <StackPanel Orientation="Horizontal" Width="200" VerticalAlignment="Center" HorizontalAlignment="Left">
-                                        <Image RenderOptions.BitmapScalingMode="HighQuality" SnapsToDevicePixels="True" Source="/Assets/Asset_35.png" Width="16" Margin="0,0,0,3"/>
-                                        <StackPanel Margin="10,0,0,0">
-                                            <TextBlock Text="Attendance Details" FontWeight="SemiBold" FontFamily="Poppins" FontSize="13"/>
-                                            <TextBlock Text="Monitor daily attendance and Holidays." FontSize="9" FontFamily="Poppins" FontWeight="Regular"/>
-                                        </StackPanel>
-                                    </StackPanel>
-                                </RadioButton>
 
                                 <!-- Payroll -->
-                                <RadioButton Click="OpenView12_Click" Style="{StaticResource SelectableRadioButtonStyle}" 
-                 Margin="3" Width="250" Height="45">
+                                <RadioButton x:Name="Payroll" Click="OpenView12_Click" Style="{StaticResource SelectableRadioButtonStyle}" 
+Margin="3" Width="250" Height="45">
                                     <StackPanel Orientation="Horizontal" Width="200" VerticalAlignment="Center" HorizontalAlignment="Left">
                                         <Image RenderOptions.BitmapScalingMode="HighQuality" SnapsToDevicePixels="True" Source="/Assets/Payroll.png" Width="18" Margin="0,0,0,3"/>
                                         <StackPanel Margin="10,0,0,0">
@@ -219,8 +284,8 @@
                                 </RadioButton>
 
                                 <!-- Paysheet -->
-                                <RadioButton Click="OpenView13_Click" Style="{StaticResource SelectableRadioButtonStyle}" 
-                 Margin="3" Width="250" Height="45">
+                                <RadioButton x:Name="Paysheet" Click="OpenView13_Click" Style="{StaticResource SelectableRadioButtonStyle}" 
+Margin="3" Width="250" Height="45">
                                     <StackPanel Orientation="Horizontal" Width="200" VerticalAlignment="Center" HorizontalAlignment="Left">
                                         <Image RenderOptions.BitmapScalingMode="HighQuality" SnapsToDevicePixels="True" Source="/Assets/Asset_36.png" Width="16" Margin="0,0,0,3"/>
                                         <StackPanel Margin="10,0,0,0">
@@ -230,54 +295,40 @@
                                     </StackPanel>
                                 </RadioButton>
 
-                            </StackPanel>
 
 
-                            <StackPanel VerticalAlignment="Bottom" Grid.Row="1" Width="208">
+                                <TextBlock Text="🤵 Attendance" FontSize="14" FontWeight="Bold" Margin="10,20,0,10" Foreground="{DynamicResource Forground}"/>
 
-                                <Button HorizontalAlignment="Left" Click="Setting_Click" Background="Transparent">
-                                    <StackPanel Orientation="Horizontal" Width="208">
-                                        <Image HorizontalAlignment="Left" VerticalAlignment="Center" Source="/Assets/Setting_G.png" Width="18"/>
-                                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0" Text="Settings" FontSize="13" Foreground="{DynamicResource Forground}" FontWeight="Regular" />
-                                    </StackPanel>
-
-
-                                </Button>
-
-                                <Button HorizontalAlignment="Left" Click="AboutButton_Click" Background="Transparent" Margin="0,10,0,0">
-                                    <StackPanel Orientation="Horizontal" Width="208">
-                                        <Image HorizontalAlignment="Left" VerticalAlignment="Center" Source="/Assets/About.png" Width="18"/>
-                                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0" Text="About" FontSize="13" Foreground="{DynamicResource Forground}" FontWeight="Regular" />
-                                    </StackPanel>
-
-
-                                </Button>
-
-                                <Line HorizontalAlignment="Center" X1="0" Y1="0" X2="300" Y2="0" Stroke="Gray" StrokeThickness="0.5" Margin="0,10,0,10"/>
-                                
-                                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
-                                    <!-- Google Account Display -->
-                                    <Grid x:Name="GoogleAccountInfo" Visibility="Visible">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="*"/>
-                                        </Grid.ColumnDefinitions>
-                                        <!-- Profile Image -->
-                                        <Grid Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right">
-                                            <Ellipse x:Name="imgProfileEllipse" Width="40" Height="40" Stroke="Gray" StrokeThickness="1"/>
-                                            <!-- Online/Status Indicator -->
-                                            <Ellipse x:Name="statusIndicator" Width="12" Height="12" Fill="Gray" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,0,5" />
-                                        </Grid>
-                                        <!-- Username and Email -->
-                                        <StackPanel Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Center" Orientation="Vertical">
-                                            <TextBlock x:Name="lblUserName" Foreground="{DynamicResource Forground}"  Text="User Name" FontWeight="Bold" FontSize="13" VerticalAlignment="Stretch"/>
-                                            <TextBlock x:Name="lblEmail"  Text="Email" Foreground="{DynamicResource Forground}" VerticalAlignment="Stretch" FontSize="10"/>
+                                <!-- Attendance -->
+                                <RadioButton x:Name="Attendance" Click="OpenView5_Click" Style="{StaticResource SelectableRadioButtonStyle}" 
+                 Margin="3" Width="250" Height="45">
+                                    <StackPanel Orientation="Horizontal" Width="200" VerticalAlignment="Center" HorizontalAlignment="Left">
+                                        <Image RenderOptions.BitmapScalingMode="HighQuality" SnapsToDevicePixels="True" Source="/Assets/Asset_35.png" Width="16" Margin="0,0,0,3"/>
+                                        <StackPanel Margin="10,0,0,0">
+                                            <TextBlock Text="Attendance Details" FontWeight="SemiBold" FontFamily="Poppins" FontSize="13"/>
+                                            <TextBlock Text="Monitor daily attendance and Holidays." FontSize="9" FontFamily="Poppins" FontWeight="Regular"/>
                                         </StackPanel>
-                                    </Grid>
+                                    </StackPanel>
+                                </RadioButton>
 
-                                </StackPanel>
+
+
+                                <!-- User Manager -->
+
+                                <RadioButton x:Name="UserManagerTAB" Click="OpenView14_Click" Style="{StaticResource SelectableRadioButtonStyle}" 
+                 Margin="3" Width="250" Height="45">
+                                    <StackPanel Orientation="Horizontal" Width="200" VerticalAlignment="Center" HorizontalAlignment="Left">
+                                        <Image RenderOptions.BitmapScalingMode="HighQuality" SnapsToDevicePixels="True" Source="/Assets/Asset_27.png" Width="16" Margin="0,0,0,3"/>
+                                        <StackPanel Margin="10,0,0,0">
+                                            <TextBlock Text="User Manager" FontWeight="SemiBold" FontFamily="Poppins" FontSize="13"/>
+                                            <TextBlock Text="Monitor monthly paysheets." FontSize="9" FontFamily="Poppins" FontWeight="Regular"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </RadioButton>
 
                             </StackPanel>
+
+                          
 
 
                            

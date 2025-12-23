@@ -152,13 +152,27 @@ Visibility="Collapsed" />
 
 
                                 </StackPanel>
-                                        
-                                <Button Click="BtnRefresh" Content="Refresh" HorizontalAlignment="Right" Style="{DynamicResource ActionButton}" Width="90" Height="30"/>
+
+                                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                                    <Button Click="BtnRefresh" Content="Refresh" HorizontalAlignment="Right" Style="{DynamicResource ActionButton}" Width="90" Height="30"/>
+                                    <Button Click="BtnExportPdf_Click" Content="ExportPdf" HorizontalAlignment="Right" Style="{DynamicResource ActionButton}" Width="90" Height="30"/>
+                                </StackPanel>
+                              
                             </Grid>
                                 </Grid>
-                            
 
-                            <DataGrid x:Name="AttendanceGrid"
+
+                        <TextBlock x:Name="TxtLoading2"
+Text="Loading data, please wait..."
+FontSize="16"
+                                   Foreground="{DynamicResource Forground}"
+FontWeight="Bold"
+HorizontalAlignment="Center"
+VerticalAlignment="Center"
+Visibility="Collapsed" />
+
+
+                        <DataGrid x:Name="AttendanceGrid"
                   PreviewMouseWheel="DataGridMain_PreviewMouseWheel"
  Background="Transparent"
  RowBackground="White"

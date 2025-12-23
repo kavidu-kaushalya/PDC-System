@@ -189,7 +189,7 @@ namespace PDC_System
 
             if (CustomerComboBox.SelectedItem is not Customerinfo selectedCustomer)
             {
-                MessageBox.Show("Please select a customer before saving.");
+                CustomMessageBox.Show("Please select a customer before saving.");
                 return;
             }
 
@@ -313,7 +313,7 @@ namespace PDC_System
 
             if (CustomerComboBox.SelectedItem is not Customerinfo selectedCustomer)
             {
-                MessageBox.Show("Please select a customer.");
+                CustomMessageBox.Show("Please select a customer.");
                 return;
             }
 
@@ -634,7 +634,7 @@ namespace PDC_System
 
             if (string.IsNullOrEmpty(email))
             {
-                MessageBox.Show("Please enter an email address.");
+                CustomMessageBox.Show("Please enter an email address.");
                 return;
             }
 
@@ -646,7 +646,7 @@ namespace PDC_System
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Failed to generate PDF: {ex.Message}");
+                CustomMessageBox.Show($"Failed to generate PDF: {ex.Message}");
                 return;
             }
 
@@ -664,15 +664,15 @@ namespace PDC_System
                 );
 
                 if (sent)
-                    MessageBox.Show("Email sent successfully!");
+                    CustomMessageBox.Show("Email sent successfully!");
 
 
                 else
-                    MessageBox.Show("Failed to send email.");
+                    CustomMessageBox.Show("Failed to send email.");
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error sending email: {ex.Message}");
+                CustomMessageBox.Show($"Error sending email: {ex.Message}");
             }
 
         }

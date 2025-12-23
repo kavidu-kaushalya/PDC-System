@@ -8,6 +8,7 @@ using PdfSharp.Charting;
 using PdfSharp.UniversalAccessibility;
 using System.Collections.ObjectModel;
 using System.Data;
+
 using System.Globalization;
 using System.IO;
 using System.Windows;
@@ -18,7 +19,8 @@ using System.Windows.Threading;
 using System.Xml.Linq;
 using static PDC_System.QuotationWindow;
 using Application = System.Windows.Application;
-using MessageBox = System.Windows.MessageBox;
+using
+   MessageBox = System.Windows.MessageBox;
 using UserControl = System.Windows.Controls.UserControl;
 
 namespace PDC_System
@@ -64,50 +66,36 @@ namespace PDC_System
 
         private void LoadData()
         {
-            
-            string jsonFile = Path.Combine(saversFolder, "ivms.json");
-            string jsonFile2 = Path.Combine(saversFolder, "Holiday.json");
-            
-            string employeeFile = Path.Combine(saversFolder, "employee.json");
-
-           
-
-            if (File.Exists(jsonFile2))
+            // Load holidays (JSON)
+            string holidayFile = Path.Combine(saversFolder, "Holiday.json");
+            if (File.Exists(holidayFile))
             {
-                var holidaysdata = JsonConvert.DeserializeObject<List<Holiday>>(File.ReadAllText(jsonFile2));
-                if (holidaysdata != null)
-                {
-                    holidays = holidaysdata;
-                    HolydayDataGrid.ItemsSource = holidays;
-                }
+                holidays = JsonConvert.DeserializeObject<List<Holiday>>(File.ReadAllText(holidayFile));
+                HolydayDataGrid.ItemsSource = holidays;
             }
 
-            // Load Employee Data
+            // Load employees (JSON)
+            string employeeFile = Path.Combine(saversFolder, "employee.json");
             if (File.Exists(employeeFile))
             {
-                var employeeData = JsonConvert.DeserializeObject<List<Employee>>(File.ReadAllText(employeeFile));
-                if (employeeData != null)
-                {
-                    employees = employeeData;
-                }
+                employees = JsonConvert.DeserializeObject<List<Employee>>(File.ReadAllText(employeeFile));
             }
 
-            // Load DataTable Data
-            if (!File.Exists(jsonFile)) return;
+            // Load raw punch data from SQLite
+            dataTable = _manager.LoadRawPunchTable();
 
-            string json = File.ReadAllText(jsonFile);
-            dataTable = JsonConvert.DeserializeObject<DataTable>(json); // assign to field
             if (dataTable != null)
             {
-                var today = DateTime.Today;
+                DataGridMain.ItemsSource = dataTable.DefaultView;
+
+                // Default filter = today’s punches
+                DateTime today = DateTime.Today;
                 DataView view = dataTable.DefaultView;
-
-                view.RowFilter = $"datetime >= #{today:yyyy-MM-dd}# AND datetime < #{today.AddDays(1):yyyy-MM-dd}#";
-
-                DataGridMain.ItemsSource = view;
+                view.RowFilter =
+                    $"DateTime >= #{today:yyyy-MM-dd}# AND DateTime < #{today.AddDays(1):yyyy-MM-dd}#";
             }
-
         }
+
 
 
 
@@ -151,7 +139,7 @@ namespace PDC_System
 
             string filter = "";
 
-            // 🔎 Search filter (Id or Empname)
+            // Search filter
             string searchText = TxtSearch.Text.Trim().Replace("'", "''");
             if (!string.IsNullOrEmpty(searchText))
             {
@@ -159,24 +147,23 @@ namespace PDC_System
                           $"OR EmployeeName LIKE '%{searchText}%')";
             }
 
-            // 📅 Date filter (datetime column)
+            // Date filters
             if (StartDate.SelectedDate.HasValue)
             {
                 if (filter != "") filter += " AND ";
-                filter += $"datetime >= #{StartDate.SelectedDate:yyyy-MM-dd}#";
+                filter += $"DateTime >= #{StartDate.SelectedDate:yyyy-MM-dd}#";
             }
 
             if (EndDate.SelectedDate.HasValue)
             {
                 if (filter != "") filter += " AND ";
-                filter += $"datetime <= #{EndDate.SelectedDate:yyyy-MM-dd}#";
+                filter += $"DateTime <= #{EndDate.SelectedDate:yyyy-MM-dd}#";
             }
 
-            // ✅ Apply filter
-            (DataGridMain.ItemsSource as DataView).RowFilter = filter;
+    (DataGridMain.ItemsSource as DataView).RowFilter = filter;
         }
 
- 
+
 
         #region Holidays
 
@@ -200,7 +187,7 @@ namespace PDC_System
 
                 if (endDate < startDate)
                 {
-                    MessageBox.Show("End date cannot be earlier than start date!", "Invalid Range", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    CustomMessageBox.Show("End date cannot be earlier than start date!", "Invalid Range", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
@@ -240,7 +227,7 @@ namespace PDC_System
                 HolidayStartDatePicker.ResetDate();
                 HolidayEndDatePicker.ResetDate();
 
-                MessageBox.Show(
+                CustomMessageBox.Show(
                     addedCount > 0
                         ? $"✅ {addedCount} holiday(s) added successfully!"
                         : "⚠️ No new holidays added (duplicates skipped).",
@@ -251,7 +238,7 @@ namespace PDC_System
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: " + ex.Message);
+                CustomMessageBox.Show("Error: " + ex.Message);
             }
         }
 
@@ -286,14 +273,14 @@ namespace PDC_System
             {
                 if (selectedHolidays.Count == 0)
                 {
-                    MessageBox.Show("Please select at least one holiday to delete.",
+                    CustomMessageBox.Show("Please select at least one holiday to delete.",
                                   "No Selection",
                                   MessageBoxButton.OK,
                                   MessageBoxImage.Warning);
                     return;
                 }
 
-                var result = MessageBox.Show(
+                var result = CustomMessageBox.Show(
                     $"Are you sure you want to delete {selectedHolidays.Count} holiday(s)?",
                     "Confirm Delete",
                     MessageBoxButton.YesNo,
@@ -318,7 +305,7 @@ namespace PDC_System
                     HolydayDataGrid.ItemsSource = null;
                     HolydayDataGrid.ItemsSource = holidays;
 
-                    MessageBox.Show($"✅ Holiday(s) deleted successfully!",
+                    CustomMessageBox.Show($"✅ Holiday(s) deleted successfully!",
                                   "Success",
                                   MessageBoxButton.OK,
                                   MessageBoxImage.Information);
@@ -326,7 +313,7 @@ namespace PDC_System
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error deleting holidays: {ex.Message}",
+                CustomMessageBox.Show($"Error deleting holidays: {ex.Message}",
                               "Error",
                               MessageBoxButton.OK,
                               MessageBoxImage.Error);
@@ -349,7 +336,9 @@ namespace PDC_System
             {
                 // Hide the DataGrid while loading
                 DataGridMain.Visibility = Visibility.Collapsed;
+                AttendanceGrid.Visibility = Visibility.Collapsed;
                 TxtLoading.Visibility = Visibility.Visible; // optional: show a "Loading..." TextBlock
+                TxtLoading2.Visibility = Visibility.Visible;
 
                 await Task.Run(() =>
                 {
@@ -371,11 +360,13 @@ namespace PDC_System
 
                 // Show the DataGrid after loading
                 DataGridMain.Visibility = Visibility.Visible;
+                AttendanceGrid.Visibility = Visibility.Visible;
+                TxtLoading2.Visibility = Visibility.Collapsed;
                 TxtLoading.Visibility = Visibility.Collapsed; // hide the loading text
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading attendance data: {ex.Message}", "Error",
+                CustomMessageBox.Show($"Error loading attendance data: {ex.Message}", "Error",
                                 MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -396,7 +387,7 @@ namespace PDC_System
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading attendance data: {ex.Message}", "Error",
+                CustomMessageBox.Show($"Error loading attendance data: {ex.Message}", "Error",
                               MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -425,7 +416,7 @@ namespace PDC_System
             {
                 if (StartDatePicker.SelectedDate > EndDatePicker.SelectedDate)
                 {
-                    MessageBox.Show("Start date cannot be after end date.", "Invalid Date Range",
+                    CustomMessageBox.Show("Start date cannot be after end date.", "Invalid Date Range",
                                   MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
@@ -518,7 +509,7 @@ namespace PDC_System
 
 
 
-                var result = MessageBox.Show(
+                var result = CustomMessageBox.Show(
                     $"Are you sure you want to reset manual edits for {record.Name} on {record.Date:yyyy-MM-dd}?",
                     "Reset Manual Edit",
                     MessageBoxButton.YesNo,
@@ -542,7 +533,7 @@ namespace PDC_System
 
                   
 
-                    MessageBox.Show("Manual edit reset successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    CustomMessageBox.Show("Manual edit reset successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
 
                     // Refresh grid
                     LoadAttendanceData();
@@ -550,9 +541,47 @@ namespace PDC_System
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error resetting row: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                CustomMessageBox.Show($"Error resetting row: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
+
+        private void BtnExportPdf_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // ✔ Convert grid rows to a simple list
+                var exportList = AttendanceGrid.Items
+                    .OfType<AttendanceRecord>()
+                    .ToList();
+
+                if (exportList.Count == 0)
+                {
+                    CustomMessageBox.Show("No data to export.", "Empty", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                // ✔ Ask user for save location
+                var dialog = new Microsoft.Win32.SaveFileDialog
+                {
+                    Filter = "PDF File|*.pdf",
+                    FileName = $"AttendanceReport_{DateTime.Now:yyyyMMdd}.pdf"
+                };
+
+                if (dialog.ShowDialog() == true)
+                {
+                    AttendancePdfGenerator.CreatePdf(exportList, dialog.FileName);
+
+                    CustomMessageBox.Show("PDF exported successfully!", "Success",
+                        MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                CustomMessageBox.Show("Error exporting PDF: " + ex.Message);
+            }
+        }
+
 
 
         #endregion

@@ -24,7 +24,7 @@ namespace PDC_System
     public partial class AddDeducationWinodw : Window
     {
 
-        private string employeeFile = "Saver/employee.json";
+        private string employeeFile = "Savers/employee.json";
         public event Action<Deducation> DeducationSaved;
         public AddDeducationWinodw()
         {
@@ -47,6 +47,8 @@ namespace PDC_System
         {
             if (EmployeeCombo.SelectedItem is Employee emp)
             {
+                var selectedDate = DeducationPicker.SelectedDate ?? DateTime.Now;
+
                 if (decimal.TryParse(DeducationAmount.Text, out decimal deducationamount))
                 {
                     var newLoan = new Deducation
@@ -56,7 +58,7 @@ namespace PDC_System
                         Status = "Deducation",
                         DeducationDescription = DeducationDescription.Text,
                         DeducationAmount = deducationamount,
-                        DeducationDate = DateOnly.FromDateTime(DateTime.Now),
+                        DeducationDate = DateOnly.FromDateTime(selectedDate), // FIXED LINE
                     };
 
                     DeducationSaved?.Invoke(newLoan);
@@ -64,12 +66,12 @@ namespace PDC_System
                 }
                 else
                 {
-                    MessageBox.Show("Please enter valid numbers for loan and monthly pay.");
+                    CustomMessageBox.Show("Please enter valid numbers for loan and monthly pay.");
                 }
             }
             else
             {
-                MessageBox.Show("Please select an employee.");
+                CustomMessageBox.Show("Please select an employee.");
             }
         }
     }

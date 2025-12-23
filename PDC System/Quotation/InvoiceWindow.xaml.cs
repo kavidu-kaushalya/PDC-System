@@ -433,7 +433,8 @@ namespace PDC_System
 
             if (string.IsNullOrEmpty(email))
             {
-                MessageBox.Show("Please enter an email address.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                CustomMessageBox.Show("Please enter an email address.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
@@ -454,9 +455,9 @@ namespace PDC_System
             );
 
             if (sent)
-                MessageBox.Show("Email sent successfully!");
+                CustomMessageBox.Show("Email sent successfully!");
             else
-                MessageBox.Show("Failed to send email.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                CustomMessageBox.Show("Failed to send email.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
 
@@ -514,7 +515,7 @@ namespace PDC_System
 
                 CloseWindow();
 
-                MessageBox.Show("PDF saved successfully!");
+                CustomMessageBox.Show("PDF saved successfully!");
             }
         }
 

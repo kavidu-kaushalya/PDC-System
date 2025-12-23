@@ -1,0 +1,84 @@
+﻿<Window x:Class="PDC_System.Payroll_Details.AddManualLoanEntryWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:cal="clr-namespace:ModernCalendarLib;assembly=ModernCalendarLib"
+        Background="{DynamicResource Background}" Foreground="{DynamicResource Forground}"
+        Title="Manual Loan Entry" Height="auto" Width="380" WindowStartupLocation="CenterScreen">
+
+    <Grid Margin="20">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Title -->
+        <TextBlock Text="Manual Loan Entry"
+                   FontSize="22"
+                   FontWeight="Bold"
+                   HorizontalAlignment="Center"
+                   Margin="0 0 0 15"/>
+
+        <!-- Input Fields -->
+        <StackPanel Grid.Row="1" VerticalAlignment="Top" >
+
+            <!-- Employee ID -->
+            <TextBlock Text="Employee ID" FontWeight="SemiBold"/>
+            <TextBlock x:Name="EmployeeIdBox"
+                     Margin="0 5 0 15"
+                     Height="30"
+                     />
+
+            <!-- Employee Name -->
+            <TextBlock Text="Employee Name" FontWeight="SemiBold"/>
+            <TextBlock x:Name="EmployeeNameBox"
+                     Margin="0 5 0 15"
+                     Height="30"
+                    />
+
+            <!-- Current Remaining -->
+            <TextBlock Text="Current Remaining Amount" FontWeight="SemiBold"/>
+            <TextBlock x:Name="CurrentRemainingBox"
+                     Margin="0 5 0 15"
+                     Height="30"
+                     FontWeight="Bold"/>
+
+            <!-- Monthly Installment -->
+            <TextBlock Text="Monthly Installment" FontWeight="SemiBold"/>
+            <TextBlock x:Name="MonthlyInstallmentBox"
+                     Margin="0 5 0 15"
+                     Height="30"
+                     
+                     
+                     FontWeight="Bold"/>
+
+            <!-- Paid amount -->
+            <TextBlock Text="Paid Amount" FontWeight="SemiBold"/>
+            <TextBox x:Name="PaidAmountBox"
+                     Margin="0 5 0 15"
+                     Style="{DynamicResource TextBoxStyle}"
+                    />
+
+            <!-- Date Picker -->
+            <TextBlock Text="Date" FontWeight="SemiBold"/>
+            <Border BorderBrush="{DynamicResource BorderBrush}" Width="255" BorderThickness="2" CornerRadius="5">
+                <cal:CustomDatePicker x:Name="DatePicker"  Width="250"/>
+            </Border>
+
+            <!-- Month -->
+            
+         
+
+        </StackPanel>
+
+        <!-- Save Button -->
+        <Button Grid.Row="2"
+                Content="Save Entry"
+               Width="100"
+              Style="{DynamicResource ActionButton}"
+                FontWeight="SemiBold"
+                Margin="0 15 0 0"
+                Click="Save_Click"/>
+    </Grid>
+</Window>

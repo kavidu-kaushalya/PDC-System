@@ -90,7 +90,8 @@ namespace PDC_System.Job_Card
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading job card data: {ex.Message}",
+
+                CustomMessageBox.Show($"Error loading job card data: {ex.Message}",
                     "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -218,7 +219,7 @@ namespace PDC_System.Job_Card
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error creating quotation: {ex.Message}",
+                CustomMessageBox.Show($"Error creating quotation: {ex.Message}",
                     "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -232,7 +233,7 @@ namespace PDC_System.Job_Card
 
                 if (customers == null || customers.Count == 0)
                 {
-                    MessageBox.Show("No customers found. Please add customers first.",
+                    CustomMessageBox.Show("No customers found. Please add customers first.",
                         "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
@@ -276,7 +277,7 @@ namespace PDC_System.Job_Card
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error creating invoice: {ex.Message}",
+                CustomMessageBox.Show($"Error creating invoice: {ex.Message}",
                     "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -336,7 +337,7 @@ namespace PDC_System.Job_Card
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Print error: {ex.Message}", "Error",
+                CustomMessageBox.Show($"Print error: {ex.Message}", "Error",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }

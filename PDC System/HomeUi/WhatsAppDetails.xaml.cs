@@ -33,7 +33,8 @@ namespace PDC_System
             // Validate the contact number (it should be 9 or 10 characters in length)
             if (string.IsNullOrEmpty(contactNo) || (contactNo.Length != 9 && contactNo.Length != 10))
             {
-                MessageBox.Show("Please enter a valid contact number (9 or 10 digits).");
+
+                CustomMessageBox.Show("Please enter a valid contact number (9 or 10 digits).");
                 return;
             }
 

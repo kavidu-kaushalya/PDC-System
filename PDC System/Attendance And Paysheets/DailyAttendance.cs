@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using PDC_System.Services;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -11,6 +12,8 @@ namespace PDC_System
 {
     public class DaliyAttendance
     {
+        private static AttendanceDatabase _db;
+
         public static async Task CheckTodayAttendance()
         {
             if (!Properties.Settings.Default.SendDailyReport)
@@ -20,13 +23,9 @@ namespace PDC_System
             string saversFolder = Path.Combine(baseFolder, "Savers");
             string logPath = Path.Combine(saversFolder, "AttendanceMailLog.txt");
             string employeePath = Path.Combine(saversFolder, "employee.json");
-            string ivmsPath = Path.Combine(saversFolder, "ivms.json");
 
-            if (!File.Exists(employeePath) || !File.Exists(ivmsPath))
-            {
-                MessageBox.Show("Employee or IVMS JSON file not found!");
-                return;
-            }
+            // Initialize SQLite database instead of reading ivms.json
+            _db = new AttendanceDatabase(saversFolder);
 
             // Read the log file to check if email was already sent
             HashSet<string> sentDates = new HashSet<string>();
@@ -43,7 +42,9 @@ namespace PDC_System
             }
 
             var employees = JsonConvert.DeserializeObject<List<Employee>>(File.ReadAllText(employeePath));
-            var ivmsData = JsonConvert.DeserializeObject<List<IVMSRecord>>(File.ReadAllText(ivmsPath));
+
+            // Get fingerprint data from SQLite database instead of JSON file
+            var ivmsData = _db.GetFingerprintData();   // returns List<FingerprintData>
 
             // Build HTML email body (same as before)
             var htmlBody = new StringBuilder();
@@ -72,9 +73,9 @@ namespace PDC_System
             foreach (var emp in employees)
             {
                 var todayRecords = ivmsData
-                    .Where(x => x.EmployeeID == emp.EmployeeId && x.DateTime.Date == today)
-                    .OrderBy(x => x.DateTime)
-                    .ToList();
+                   .Where(x => x.EmployeeID == emp.EmployeeId && x.DateTime.Date == today)
+                   .OrderBy(x => x.DateTime)
+                   .ToList();
 
                 if (todayRecords.Any())
                 {
@@ -97,16 +98,13 @@ namespace PDC_System
                 }
             }
 
-        
-
-        htmlBody.AppendLine("</table>");
+            htmlBody.AppendLine("</table>");
             htmlBody.AppendLine("<div class='footer'>");
             htmlBody.AppendLine($"<p>Generated automatically by PDC System on {DateTime.Now:yyyy-MM-dd HH:mm:ss}</p>");
             htmlBody.AppendLine("</div>");
             htmlBody.AppendLine("</div>");
             htmlBody.AppendLine("</body>");
             htmlBody.AppendLine("</html>");
-
 
             var mailService = new MailService();
             string email = Properties.Settings.Default.UserEmail;
@@ -126,16 +124,16 @@ namespace PDC_System
                 if (result)
                 {
                     writer.WriteLine(todayString); // Mark as sent
-                    MessageBox.Show("✅ Email sent successfully!", "Mail Service", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                    CustomMessageBox.Show("✅ Email sent successfully!", "Mail Service", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 else
                 {
                     writer.WriteLine($"{todayString}-FAILED"); // Mark as failed
-                    MessageBox.Show("❌ Failed to send email!", "Mail Service", MessageBoxButton.OK, MessageBoxImage.Error);
+                    CustomMessageBox.Show("❌ Failed to send email!", "Mail Service", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
-
     }
 
     public class IVMSRecord

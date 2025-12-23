@@ -193,31 +193,31 @@ namespace PDC_System.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("3")]
-        public decimal ETFEmployee {
+        [global::System.Configuration.DefaultSettingValueAttribute("8")]
+        public decimal EPFEmployee {
             get {
-                return ((decimal)(this["ETFEmployee"]));
+                return ((decimal)(this["EPFEmployee"]));
             }
             set {
-                this["ETFEmployee"] = value;
+                this["EPFEmployee"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("12")]
-        public decimal ETFEmployer {
+        public decimal EPFEmployer {
             get {
-                return ((decimal)(this["ETFEmployer"]));
+                return ((decimal)(this["EPFEmployer"]));
             }
             set {
-                this["ETFEmployer"] = value;
+                this["EPFEmployer"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("30")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
         public int OT_RoundMinutes {
             get {
                 return ((int)(this["OT_RoundMinutes"]));
@@ -272,6 +272,18 @@ namespace PDC_System.Properties {
             }
             set {
                 this["SenderPassword"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("15")]
+        public int Late_Allow_Minutes {
+            get {
+                return ((int)(this["Late_Allow_Minutes"]));
+            }
+            set {
+                this["Late_Allow_Minutes"] = value;
             }
         }
     }

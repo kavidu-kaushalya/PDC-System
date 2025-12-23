@@ -56,13 +56,7 @@
 
 
                     <TextBox  x:Name="SearchBox" Height="35" Style="{DynamicResource OutsourceSerchBar}" Width="300" TextChanged="SearchBox_TextChanged"  />
-                    <Button HorizontalAlignment="Right" Margin="20"
-                    Content="Edit"  
-                    Click="OpenDuplicateWindow_Click" 
-                   
-                   
-                    Style="{StaticResource ActionButton}"/>
-                </StackPanel>
+            </StackPanel>
 
 
 
@@ -93,7 +87,8 @@ RowStyle="{StaticResource DataGridRowStyle}">
                             <DataGridTemplateColumn Header="Action" Width="*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate >
-                                        <Button
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >
+                                    <Button
      Content="Delete"  
      Click="DeleteEmployee_Click" 
      HorizontalAlignment="Center"
@@ -101,8 +96,15 @@ RowStyle="{StaticResource DataGridRowStyle}">
      Width="60" 
      Style="{StaticResource NavigationButtonStyle}"/>
 
+                                    <Button Content="Edit" 
+                                            Style="{DynamicResource ActionButton}"
+                            Padding="5" 
+                            Click="EditEmployee_Click"
+                            Tag="{Binding}">
+                                    </Button>
+                                </StackPanel>
 
-                                    </DataTemplate>
+                            </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
 

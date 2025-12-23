@@ -4,6 +4,7 @@ using PDC_System.Settings;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using QuestPDF.Infrastructure;
 using System.Text;
 using System.Windows;
 using System.Windows.Threading; // add this for DispatcherTimer
@@ -13,11 +14,18 @@ namespace PDC_System
     public partial class App : Application
     {
 
+
+
         private DispatcherTimer appTimer; // Timer variable
 
         protected override async void OnStartup(StartupEventArgs e)
         {
+            SQLitePCL.Batteries.Init();  // REQUIRED
             base.OnStartup(e);
+
+            QuestPDF.Settings.License = LicenseType.Community; // ✅ Add this line
+
+
 
             // 🔧 FIX: enable legacy encodings (windows-1252, cp1252, etc.)
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
@@ -67,7 +75,7 @@ namespace PDC_System
             }
             catch (Exception ex)
             {
-                MessageBox.Show("❌ Timer error: " + ex.Message,
+                CustomMessageBox.Show("❌ Timer error: " + ex.Message,
                                 "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -91,7 +99,7 @@ namespace PDC_System
             }
             catch (Exception ex)
             {
-                MessageBox.Show("❌ Auto-refresh failed:\n" + ex.Message,
+                CustomMessageBox.Show("❌ Auto-refresh failed:\n" + ex.Message,
                                 "Error",
                                 MessageBoxButton.OK,
                                 MessageBoxImage.Error);

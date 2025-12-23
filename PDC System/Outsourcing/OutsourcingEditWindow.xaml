@@ -5,37 +5,39 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PDC_System.Outsourcing"
         mc:Ignorable="d"
+        Background="{StaticResource Background}"
+        Foreground="{StaticResource Forground}"
         Title="OutsourcingEditWindow" Height="450" Width="800">
     <Grid>
         <StackPanel Margin="10" Width="300">
             <TextBlock Text="Type" FontWeight="Bold"/>
-            <TextBox x:Name="TypeTextBox"  Margin="0,0,0,10" TextChanged="TypeTextBox_TextChanged"/>
+            <TextBox x:Name="TypeTextBox"  Style="{DynamicResource TextBoxStyle}" Margin="0,0,0,10" TextChanged="TypeTextBox_TextChanged"/>
 
             <!-- Plate Info -->
             <StackPanel x:Name="PlatePanel" Margin="0,0,0,10">
                 <TextBlock Text="Plate Info" FontWeight="Bold"/>
-                <TextBox x:Name="PlateNameTextBox"  Margin="0,0,0,5"/>
-                <TextBox x:Name="PlateEmailTextBox" Margin="0,0,0,5"/>
-                <TextBox x:Name="PlateContactTextBox"  Margin="0,0,0,5"/>
+                <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="PlateNameTextBox"  Margin="0,0,0,5"/>
+                <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="PlateEmailTextBox" Margin="0,0,0,5"/>
+                <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="PlateContactTextBox"  Margin="0,0,0,5"/>
             </StackPanel>
 
             <!-- Digital Info -->
             <StackPanel x:Name="DigitalPanel" Margin="0,0,0,10">
                 <TextBlock Text="Digital Info" FontWeight="Bold"/>
-                <TextBox x:Name="DigitalNameTextBox"  Margin="0,0,0,5"/>
-                <TextBox x:Name="DigitalEmailTextBox" Margin="0,0,0,5"/>
-                <TextBox x:Name="DigitalContactTextBox"  Margin="0,0,0,5"/>
+                <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="DigitalNameTextBox"  Margin="0,0,0,5"/>
+                <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="DigitalEmailTextBox" Margin="0,0,0,5"/>
+                <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="DigitalContactTextBox"  Margin="0,0,0,5"/>
             </StackPanel>
 
             <!-- Any Info -->
             <StackPanel x:Name="AnyPanel" Margin="0,0,0,10">
                 <TextBlock Text="Any Info" FontWeight="Bold"/>
-                <TextBox x:Name="AnyNameTextBox"  Margin="0,0,0,5"/>
-                <TextBox x:Name="AnyEmailTextBox" Margin="0,0,0,5"/>
-                <TextBox x:Name="AnyContactTextBox"  Margin="0,0,0,5"/>
+                <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="AnyNameTextBox"  Margin="0,0,0,5"/>
+                <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="AnyEmailTextBox" Margin="0,0,0,5"/>
+                <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="AnyContactTextBox"  Margin="0,0,0,5"/>
             </StackPanel>
 
-            <Button Content="Save" Click="SaveButton_Click" Width="80" HorizontalAlignment="Right"/>
+            <Button Style="{DynamicResource ActionButton}" Content="Save" Click="SaveButton_Click" Width="80" HorizontalAlignment="Right"/>
         </StackPanel>
 
 

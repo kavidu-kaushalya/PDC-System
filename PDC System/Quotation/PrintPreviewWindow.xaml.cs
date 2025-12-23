@@ -63,7 +63,8 @@ namespace PDC_System
                 pd.PrintTicket.PageMediaSize = new PageMediaSize(widthPx, heightPx);
                 pd.PrintVisual(_visual, "Invoice Print");
 
-                MessageBox.Show("✅ Successfully sent to printer");
+
+                CustomMessageBox.Show("✅ Successfully sent to printer");
             }
         }
 
@@ -98,7 +99,7 @@ namespace PDC_System
         {
             if (PrinterCombo.SelectedItem is not PrintQueue printer)
             {
-                MessageBox.Show("Please select a printer first.");
+                CustomMessageBox.Show("Please select a printer first.");
                 return;
             }
 
@@ -109,7 +110,7 @@ namespace PDC_System
                 // Open printer handle
                 if (!OpenPrinter(printer.FullName, out IntPtr hPrinter, IntPtr.Zero))
                 {
-                    MessageBox.Show("Failed to open printer.");
+                    CustomMessageBox.Show("Failed to open printer.");
                     return;
                 }
 
@@ -144,7 +145,7 @@ namespace PDC_System
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show("Printer Preferences could not be opened.\n\n" + ex.Message);
+                CustomMessageBox.Show("Printer Preferences could not be opened.\n\n" + ex.Message);
             }
         }
     }

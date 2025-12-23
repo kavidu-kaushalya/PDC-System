@@ -153,6 +153,36 @@ namespace PDC_System.Outsourcing
             }
         }
 
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+            if (btn != null)
+            {
+                Outsourcinginfo selectedRow = btn.DataContext as Outsourcinginfo;
+                if (selectedRow != null)
+                {
+                    // Show confirmation dialog
+                    var result = CustomMessageBox.Show($"Are you sure you want to delete {selectedRow.Name}?",
+                                                "Confirm Delete",
+                                                MessageBoxButton.YesNo,
+                                                MessageBoxImage.Warning);
+
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        // Remove from the main list
+                        outsourcings.Remove(selectedRow);
+
+                        // Save to JSON after deleting
+                        File.WriteAllText(jsonFilePath2, JsonConvert.SerializeObject(outsourcings, Formatting.Indented));
+
+                        // Refresh the display
+                        LoadData(); // Reload data to update filter dropdown if needed
+                        FilterAndLoadPage(); // Apply current filters and reload page
+                    }
+                }
+            }
+        }
+
         private void OutsourcingDataGrid_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
             // Find parent ScrollViewer
@@ -172,8 +202,5 @@ namespace PDC_System.Outsourcing
             if (parent is T typedParent) return typedParent;
             return FindParent<T>(parent);
         }
-
-
-
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Google.Apis.PeopleService.v1.Data;
 using Newtonsoft.Json;
 using PDC_System.Models;
+using PDC_System.Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,61 +14,83 @@ namespace PDC_System
     {
         public static async Task CheckTodayAttendanceAsync()
         {
-
-            // Check the setting first
             if (!Properties.Settings.Default.SendAttendanceEmails)
-            {
-                // Setting is false, so skip execution
                 return;
-            }
 
             string baseFolder = AppDomain.CurrentDomain.BaseDirectory;
             string saversFolder = Path.Combine(baseFolder, "Savers");
+            Directory.CreateDirectory(saversFolder);
 
-            string attendanceFile = Path.Combine(saversFolder, "attendance.json");
             string sentLogFile = Path.Combine(saversFolder, "SentDates.txt");
 
-            if (!File.Exists(attendanceFile))
-                return;
-
-            // Read all attendance records
-            var attendances = JsonConvert.DeserializeObject<List<AttendanceRecord>>(File.ReadAllText(attendanceFile));
+            var db = new AttendanceDatabase(saversFolder);
+            var attendances = db.GetAttendanceRecords();
             if (attendances == null || !attendances.Any())
                 return;
 
-            // Load already sent records
-            HashSet<string> sentRecords = new HashSet<string>();
+            // Load sent keys + last sent date per employee
+            var sentRecords = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var lastSentByEmp = new Dictionary<string, DateTime>(StringComparer.OrdinalIgnoreCase);
+
             if (File.Exists(sentLogFile))
             {
-                var lines = File.ReadAllLines(sentLogFile);
-                foreach (var line in lines)
-                    sentRecords.Add(line.Trim());
+                foreach (var line in File.ReadAllLines(sentLogFile))
+                {
+                    var trimmed = line.Trim();
+                    if (string.IsNullOrWhiteSpace(trimmed)) continue;
+
+                    sentRecords.Add(trimmed);
+
+                    var parts = trimmed.Split('|');
+                    if (parts.Length == 2 && DateTime.TryParse(parts[1], out var d))
+                    {
+                        var empId = parts[0].Trim();
+                        if (!lastSentByEmp.TryGetValue(empId, out var existing) || d.Date > existing.Date)
+                            lastSentByEmp[empId] = d.Date;
+                    }
+                }
             }
 
-            DateTime today = DateTime.Now.Date;
-            DateTime yesterday = today.AddDays(-1);
+            DateTime today = DateTime.Now.Date;        // run time day
+            DateTime maxDateToSend = today.AddDays(-1); // ✅ avoid sending "today" partial attendance
 
-            // Only process yesterday's attendances
-            var recentAttendances = attendances
-                .Where(a => a.Date.Date == yesterday)
+            // ✅ Send from "last sent date" onwards (per employee), until last saved dates in DB
+            var pending = attendances
+                .Where(a =>
+                {
+                    var empId = a.EmployeeId?.Trim() ?? "";
+                    var date = a.Date.Date;
+
+                    // don’t send today
+                    if (date > maxDateToSend) return false;
+
+                    // per-employee last sent date
+                    DateTime lastSent = lastSentByEmp.TryGetValue(empId, out var v) ? v.Date : DateTime.MinValue.Date;
+                    if (date <= lastSent) return false;
+
+                    // final duplicate guard
+                    string key = $"{empId}|{date:yyyy-MM-dd}";
+                    return !sentRecords.Contains(key);
+                })
+                .OrderBy(a => a.Date)
+                .ThenBy(a => a.EmployeeId)
                 .ToList();
 
-            if (!recentAttendances.Any())
+            if (!pending.Any())
                 return;
 
             var mailService = new MailService();
 
-            foreach (var a in recentAttendances)
+            foreach (var a in pending)
             {
-                string recordKey = $"{a.EmployeeId}|{a.Date:yyyy-MM-dd}".Trim();
+                string recordKey = $"{a.EmployeeId?.Trim()}|{a.Date:yyyy-MM-dd}";
 
-                // Skip if already sent
-                if (sentRecords.Contains(recordKey))
+                string recipientEmail = a.Email;
+                if (string.IsNullOrWhiteSpace(recipientEmail))
                     continue;
 
-                // Prepare email
-                string recipientEmail = a.Email; // Make sure AttendanceRecord has Email
                 string subject = $"Daily Attendance {a.Name}";
+
                 string body = $@"
 <html>
 <head>
@@ -93,33 +116,19 @@ namespace PDC_System
       margin-bottom: 15px;
       background-color: #f8f9ff;
     }}
-    .label {{
-      font-size: 12px;
-      color: #888888;
-    }}
+    .label {{ font-size: 12px; color: #888888; }}
     .check-in {{
-      background-color: #e6f9e6;
-      padding: 10px;
-      border-radius: 6px;
-      display: inline-block;
-      margin-right: 10px;
-      font-weight: bold;
+      background-color: #e6f9e6; padding: 10px; border-radius: 6px;
+      display: inline-block; margin-right: 10px; font-weight: bold;
     }}
     .check-out {{
-      background-color: #fff4e6;
-      padding: 10px;
-      border-radius: 6px;
-      display: inline-block;
-      font-weight: bold;
+      background-color: #fff4e6; padding: 10px; border-radius: 6px;
+      display: inline-block; font-weight: bold;
     }}
     .status {{
-      margin-top: 15px;
-      display: inline-block;
-      padding: 6px 12px;
-      border-radius: 20px;
-      background-color: #d4f1d4;
-      font-weight: bold;
-      color: #2b7a2b;
+      margin-top: 15px; display: inline-block; padding: 6px 12px;
+      border-radius: 20px; background-color: #d4f1d4;
+      font-weight: bold; color: #2b7a2b;
     }}
   </style>
 </head>
@@ -145,16 +154,21 @@ namespace PDC_System
 </body>
 </html>";
 
-                // Send email
                 bool emailSent = await mailService.SendEmailAsync(recipientEmail, new List<string>(), subject, body);
 
                 if (emailSent)
                 {
-                    // Log the sent record to prevent future duplicates
                     File.AppendAllText(sentLogFile, recordKey + Environment.NewLine);
                     sentRecords.Add(recordKey);
+
+                    // update cache so same run doesn't resend
+                    var empId = a.EmployeeId?.Trim() ?? "";
+                    var d = a.Date.Date;
+                    if (!lastSentByEmp.TryGetValue(empId, out var existing) || d > existing)
+                        lastSentByEmp[empId] = d;
                 }
             }
         }
+
     }
 }

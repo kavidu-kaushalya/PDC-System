@@ -80,7 +80,7 @@ namespace PDC_System
 
             if (order != null)
             {
-                var result = MessageBox.Show("Are you sure you want to mark this order as finished?", "Confirm", MessageBoxButton.YesNo);
+                var result = CustomMessageBox.Show("Are you sure you want to mark this order as finished?", "Confirm", MessageBoxButton.YesNo);
                 if (result == MessageBoxResult.Yes)
                 {
                     order.IsFinished = true;
@@ -97,7 +97,7 @@ namespace PDC_System
 
             if (order != null)
             {
-                var result = MessageBox.Show("Are you sure you want to revert this order?", "Confirm", MessageBoxButton.YesNo);
+                var result = CustomMessageBox.Show("Are you sure you want to revert this order?", "Confirm", MessageBoxButton.YesNo);
                 if (result == MessageBoxResult.Yes)
                 {
                     order.IsFinished = false;

@@ -2,7 +2,9 @@
 using Microsoft.Data.SqlClient;
 using Newtonsoft.Json;
 using PDC_System.Helpers;
+using PDC_System.Models;
 using PDC_System.Properties;
+using PDC_System.Services;
 using System;
 using System.Data;
 using System.Globalization;
@@ -26,7 +28,9 @@ namespace PDC_System.Settings
 
         private GoogleServiceManager googleManager;
         private PeopleServiceService peopleService;
-        private string jsonFile = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Savers/ivms.json");
+        // No JSON used anymore – kept only to avoid errors
+        private string jsonFile = "";
+
         public event Action GoogleAccountChanged;
         private bool isLoaded = false;
 
@@ -71,7 +75,7 @@ namespace PDC_System.Settings
             {
                 if (googleManager == null)
                 {
-                    MessageBox.Show("GoogleServiceManager not initialized!");
+                    CustomMessageBox.Show("GoogleServiceManager not initialized!");
                     return;
                 }
 
@@ -90,7 +94,7 @@ namespace PDC_System.Settings
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error during sign-in: " + ex.Message);
+                CustomMessageBox.Show("Error during sign-in: " + ex.Message);
             }
         }
 
@@ -170,7 +174,7 @@ namespace PDC_System.Settings
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Failed to load profile image: " + ex.Message);
+                    CustomMessageBox.Show("Failed to load profile image: " + ex.Message);
                 }
             });
         }
@@ -407,18 +411,43 @@ namespace PDC_System.Settings
 
         private void SaveDataToJson(DataTable dt)
         {
-            // Serialize with indentation for human readability
-            string json = JsonConvert.SerializeObject(dt, Formatting.Indented);
-            File.WriteAllText(jsonFile, json);
+            // Convert DataTable rows → List<FingerprintData>
+            var list = new List<FingerprintData>();
+
+            foreach (DataRow row in dt.Rows)
+            {
+                list.Add(new FingerprintData
+                {
+                    EmployeeID = row["EmployeeID"].ToString(),
+                    DateTime = Convert.ToDateTime(row["DateTime"])
+                });
+            }
+
+            // Save to SQLite
+            var db = new AttendanceDatabase(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Savers"));
+            db.InsertFingerprintData(list);
         }
+
+
 
         private DataTable LoadDataFromJson()
         {
-            if (!File.Exists(jsonFile)) return null;
+            var db = new AttendanceDatabase(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Savers"));
+            var fp = db.GetFingerprintData();
 
-            string json = File.ReadAllText(jsonFile);
-            return JsonConvert.DeserializeObject<DataTable>(json);
+            // convert to DataTable (same structure as before)
+            DataTable dt = new DataTable();
+            dt.Columns.Add("EmployeeID");
+            dt.Columns.Add("DateTime", typeof(DateTime));
+
+            foreach (var f in fp)
+            {
+                dt.Rows.Add(f.EmployeeID, f.DateTime);
+            }
+
+            return dt;
         }
+
 
         private void isEnableStatus()
         {
@@ -469,7 +498,7 @@ namespace PDC_System.Settings
                 string.IsNullOrWhiteSpace(TxtDBName.Text) ||
                 string.IsNullOrWhiteSpace(TxtTable.Text))
             {
-                MessageBox.Show("⚠ Please fill all fields before saving!");
+                CustomMessageBox.Show("⚠ Please fill all fields before saving!");
                 return;
             }
 
@@ -483,7 +512,7 @@ namespace PDC_System.Settings
             }
             catch (Exception ex)
             {
-                MessageBox.Show("❌ Connection failed: " + ex.Message);
+                CustomMessageBox.Show("❌ Connection failed: " + ex.Message);
                 return; // Stop saving if connection fails
             }
 
@@ -498,7 +527,7 @@ namespace PDC_System.Settings
             Properties.Settings.Default.Save();
             isEnableStatus();
 
-            MessageBox.Show("✅ Settings saved and connection verified!");
+            CustomMessageBox.Show("✅ Settings saved and connection verified!");
 
 
             isEnableStatus();
@@ -542,7 +571,7 @@ namespace PDC_System.Settings
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error loading data: " + ex.Message);
+                CustomMessageBox.Show("Error loading data: " + ex.Message);
             }
         }
 
@@ -562,7 +591,7 @@ namespace PDC_System.Settings
             isEnableStatus();
 
 
-            MessageBox.Show("🔒 Logged out, settings cleared.");
+            CustomMessageBox.Show("🔒 Logged out, settings cleared.");
         }
 
         private void TxtNumber_PreviewTextInput(object sender, TextCompositionEventArgs e)
@@ -654,8 +683,8 @@ namespace PDC_System.Settings
 
         private void LoadETF()
         {
-            ETFEmployee.Text = Properties.Settings.Default.ETFEmployee.ToString("0.##", CultureInfo.InvariantCulture);
-            ETFEmployer.Text = Properties.Settings.Default.ETFEmployer.ToString("0.##", CultureInfo.InvariantCulture);
+            EPFEmployee.Text = Properties.Settings.Default.EPFEmployee.ToString("0.##", CultureInfo.InvariantCulture);
+            EPFEmployer.Text = Properties.Settings.Default.EPFEmployer.ToString("0.##", CultureInfo.InvariantCulture);
             btnSave.Visibility = Visibility.Collapsed;
         }
 
@@ -663,12 +692,12 @@ namespace PDC_System.Settings
         {
             if (!isLoaded) return;
 
-            if (decimal.TryParse(ETFEmployee.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal empVal) &&
-                decimal.TryParse(ETFEmployer.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal emrVal))
+            if (decimal.TryParse(EPFEmployee.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal empVal) &&
+                decimal.TryParse(EPFEmployer.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal emrVal))
             {
                 // show Save button only if values changed
-                if (empVal != Properties.Settings.Default.ETFEmployee ||
-                    emrVal != Properties.Settings.Default.ETFEmployer)
+                if (empVal != Properties.Settings.Default.EPFEmployee ||
+                    emrVal != Properties.Settings.Default.EPFEmployer)
                 {
                     btnSave.Visibility = Visibility.Visible;
                 }
@@ -686,21 +715,46 @@ namespace PDC_System.Settings
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-            if (decimal.TryParse(ETFEmployee.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal empVal) &&
-                decimal.TryParse(ETFEmployer.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal emrVal))
+            if (decimal.TryParse(EPFEmployee.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal empVal) &&
+                decimal.TryParse(EPFEmployer.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal emrVal))
             {
-                Properties.Settings.Default.ETFEmployee = empVal;
-                Properties.Settings.Default.ETFEmployer = emrVal;
+                Properties.Settings.Default.EPFEmployee = empVal;
+                Properties.Settings.Default.EPFEmployer = emrVal;
                 Properties.Settings.Default.Save();
+                UpdateAllEPFRecords();
 
                 btnSave.Visibility = Visibility.Collapsed;
 
-                MessageBox.Show("Settings saved successfully ✅", "Saved", MessageBoxButton.OK, MessageBoxImage.Information);
+                CustomMessageBox.Show("Settings saved successfully ✅", "Saved", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             else
             {
-                MessageBox.Show("Please enter valid decimal values ⚠️", "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Warning);
+                CustomMessageBox.Show("Please enter valid decimal values ⚠️", "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
+        }
+
+
+        private void UpdateAllEPFRecords()
+        {
+            string file = "Savers/EPF.json";
+
+            if (!File.Exists(file))
+                return;
+
+            var list = JsonConvert.DeserializeObject<List<EPF>>(File.ReadAllText(file));
+            if (list == null) return;
+
+            decimal empPercent = Properties.Settings.Default.EPFEmployee;
+            decimal emrPercent = Properties.Settings.Default.EPFEmployer;
+
+            foreach (var e in list)
+            {
+                e.EmployeeAmount = (e.BasicSalary * empPercent) / 100;
+                e.EmployerAmount = (e.BasicSalary * emrPercent) / 100;
+                e.Total = e.EmployeeAmount + e.EmployerAmount;
+            }
+
+            File.WriteAllText(file, JsonConvert.SerializeObject(list, Formatting.Indented));
         }
 
 
@@ -768,11 +822,11 @@ namespace PDC_System.Settings
                 // Hide the save button
                 AttendancebtnSave.Visibility = Visibility.Collapsed;
 
-                MessageBox.Show("Attendance settings saved successfully ✅", "Saved", MessageBoxButton.OK, MessageBoxImage.Information);
+                CustomMessageBox.Show("Attendance settings saved successfully ✅", "Saved", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             else
             {
-                MessageBox.Show("Please enter valid decimal values ⚠️", "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Warning);
+                CustomMessageBox.Show("Please enter valid decimal values ⚠️", "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
         #endregion

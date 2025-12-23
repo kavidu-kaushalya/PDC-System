@@ -1,7 +1,10 @@
-﻿using Microsoft.VisualBasic;
+﻿using Google.Apis.PeopleService.v1.Data;
+using Microsoft.VisualBasic;
 using Newtonsoft.Json;
 using Org.BouncyCastle.Asn1.Crmf;
 using PDC_System.Models;
+using PDC_System.Payroll_Details;
+using PDC_System.Services;
 using QuestPDF.Companion;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
@@ -18,6 +21,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -31,18 +35,28 @@ namespace PDC_System.Paysheets
     public partial class AddPaysheetWindow : Window
     {
 
+        private string saversPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Savers");
+        private string earningFile => System.IO.Path.Combine(saversPath, "Earning.json");
+        private string deductionFile => System.IO.Path.Combine(saversPath, "Deduction.json");
+
+
         private Paysheet? existingPaysheet;   // 🔹 NEW
+        private string epfHistoryFile = "Savers/EPFHistory.json";
 
         private string employeeFile = "Savers/employee.json";
         private List<AttendanceRecord>? attendanceRecords;
         private List<Earning>? earnings;
         private List<Deducation>? deducations;
         private List<Loan>? loan;
-        private List<ETF>? etf;
+        private List<EPF>? epf;
         private object saleryAmount;
+
+        private AttendanceManager _attendanceManager;   // 🔹 ADD THIS
 
         public object Employeename { get; private set; }
         public object Employeeid { get; private set; }
+
+        public object EmployeeEmail { get; private set; }
 
         public object filteredEarnings { get; private set; }
         public object TotalOvertimeAmount { get; private set; }
@@ -55,6 +69,9 @@ namespace PDC_System.Paysheets
         public decimal PDFLoanamount { get; private set; }
         public decimal PDFAbsentdateamount { get; private set; }
         public decimal PDFtotalDeducations { get; private set; }
+        public decimal BasicSalery { get; private set; }
+        public decimal Nopaydays { get; private set; }
+        public int ACTNopaydays { get; private set; }
         public int PDFworkingdays { get; private set; }
         public int PDFAbsentdays { get; private set; }
         public string PDFformattedAOT { get; private set; }
@@ -65,38 +82,73 @@ namespace PDC_System.Paysheets
         public AddPaysheetWindow()
         {
             InitializeComponent();
+
+            _attendanceManager = new AttendanceManager();   // 🔹 NEW
+
             LoadEmployees();
             LoadAttendance();
             LoadEarnings();
             LoadDeducation();
             LoadLoan();
             LoadMonths();
+            EnsureFiles();
             LoadETF();
             Contorls.IsEnabled = false;
             Datepickers.IsEnabled = false;
             Infomations.IsEnabled = false;
             QuestPDF.Settings.License = LicenseType.Community; // ✅ Add this line
+        }
 
 
 
+        private void EnsureFiles()
+        {
+            Directory.CreateDirectory(saversPath);
+
+            if (!File.Exists(earningFile))
+                File.WriteAllText(earningFile, "[]");
+
+            if (!File.Exists(deductionFile))
+                File.WriteAllText(deductionFile, "[]");
         }
 
 
         public void LoadPaysheetData(Paysheet paysheet)
         {
             // Set Employee
+
+            EmployeeCombo.IsEnabled = false;
+
             EmployeeCombo.SelectedValue = paysheet.EmployeeId;
+
+
+            // CHECK IF EPF EXISTS FOR THIS EMPLOYEE
+            string empId = paysheet.EmployeeId;
+            bool hasEPF = epf.Any(x => x.EmployeeId == empId);
+
+            // Show or hide EPF checkbox
+            if (hasEPF)
+            {
+                EPF_Checked.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                EPF_Checked.Visibility = Visibility.Collapsed;
+                EPF_Checked.IsChecked = false;
+            }
 
             // Set Dates
 
             StartDatePicker.SelectedDate = paysheet.StartDate;
             EndDatePicker.SelectedDate = paysheet.EndDate;
 
+            Nopays.Text = paysheet.NopayDays.ToString();
+
             // Set Checkboxes
             Earning_Checked.IsChecked = paysheet.IncludeEarnings;
             Deducation_Checked.IsChecked = paysheet.IncludeDeductions;
             Loan_Checked.IsChecked = paysheet.IncludeLoan;
-            ETF_Checked.IsChecked = paysheet.IncludeETF;
+            EPF_Checked.IsChecked = paysheet.IncludeETF;
 
             // Set Loan Amount
             if (paysheet.IncludeLoan)
@@ -119,6 +171,20 @@ namespace PDC_System.Paysheets
 
             // Trigger calculation to load all data
             FilterChanged(null, null);
+
+
+            string[] parts = paysheet.Month.Split(' ');
+            string monthOnly = parts[0];
+
+            foreach (ComboBoxItem item in Month.Items)
+            {
+                if (item.Content.ToString() == monthOnly)
+                {
+                    Month.SelectedItem = item;
+                    break;
+                }
+            }
+
         }
 
         private void LoadEmployees()
@@ -133,9 +199,10 @@ namespace PDC_System.Paysheets
 
         private void LoadAttendance()
         {
-            var json = File.ReadAllText("Savers/Attendance.json");
-            attendanceRecords = JsonConvert.DeserializeObject<List<AttendanceRecord>>(json) ?? new List<AttendanceRecord>();
+            // 🚫 No more Attendance.json – get from AttendanceManager (SQLite)
+            attendanceRecords = _attendanceManager.LoadAttendance() ?? new List<AttendanceRecord>();
         }
+
 
         private void LoadEarnings()
         {
@@ -155,8 +222,8 @@ namespace PDC_System.Paysheets
         }
         private void LoadETF()
         {
-            var json = File.ReadAllText("Savers/ETF.json");
-            etf = JsonConvert.DeserializeObject<List<ETF>>(json) ?? new List<ETF>();
+            var json = File.ReadAllText("Savers/EPF.json");
+            epf = JsonConvert.DeserializeObject<List<EPF>>(json) ?? new List<EPF>();
         }
 
 
@@ -221,8 +288,7 @@ namespace PDC_System.Paysheets
         }
 
 
-
-
+   
 
         private void FilterChanged(object sender, EventArgs e)
         {
@@ -231,6 +297,23 @@ namespace PDC_System.Paysheets
             // Employee info
             Employeename = (EmployeeCombo.SelectedItem as Employee)?.Name ?? string.Empty;
             Employeeid = (EmployeeCombo.SelectedItem as Employee)?.EmployeeId ?? string.Empty;
+
+
+            // EPF CHECKBOX ACTIVATE ONLY IF EMPLOYEE HAS EPF RECORD
+            bool hasEPF = epf.Any(e => e.EmployeeId == Employeeid.ToString());
+
+            if (hasEPF)
+            {
+                EPF_Checked.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                EPF_Checked.Visibility = Visibility.Collapsed;
+                EPF_Checked.IsChecked = false;
+            }
+
+
+            EmployeeEmail = (EmployeeCombo.SelectedItem as Employee)?.EmployeeEmail ?? string.Empty;
 
             Datepickers.IsEnabled = true;
 
@@ -242,51 +325,83 @@ namespace PDC_System.Paysheets
             AttendanceDataGrid.ItemsSource = filtered;
 
 
-            if (Loan_Checked.IsChecked == true)
+            // 🔥 GET ACTIVE LOAN
+            var activeLoan = loan?
+                .FirstOrDefault(l =>
+                    l.EmployeeId == Employeeid.ToString() &&
+                    l.Status == "Active"
+                );
+
+            if (activeLoan == null)
             {
-                LoanAmount.Visibility = Visibility.Visible;
-
-                var filteredLoan = loan?
-                    .Where(e => e.EmployeeId == Employeeid.ToString())
-                    .ToList() ?? new List<Loan>();
-
-                decimal MonthlyPay = filteredLoan.Sum(e => e.MonthlyPay);
-
-                // If user already edited LoanAmount manually, keep that value
-                if (string.IsNullOrWhiteSpace(LoanAmount.Text))
-                {
-                    LoanAmount.Text = $"{MonthlyPay}";
-                }
-                else
-                {
-                    // Use the manually entered value for calculation
-                    if (decimal.TryParse(LoanAmount.Text, out decimal editedValue))
-                        MonthlyPay = editedValue;
-                    else
-                        LoanAmount.Text = $"{MonthlyPay}"; // fallback if invalid input
-                }
+                Loan_Checked.IsChecked = false;
+                LoanAmount.Visibility = Visibility.Collapsed;
+                LoanAmount.Text = "";
             }
             else
             {
-                LoanAmount.Visibility = Visibility.Collapsed;
-                LoanAmount.Text = null;
+                // SHOW checkbox
+                Loan_Checked.Visibility = Visibility.Visible;
+
+                // IF UNTICKED IN EDIT MODE → REVERSE OLD LOAN
+                if (existingPaysheet != null && Loan_Checked.IsChecked == false)
+                {
+                    var oldHistory = LoanHistoryService.GetByPaysheetId(existingPaysheet.PaysheetId);
+
+                    if (oldHistory != null)
+                    {
+                        // Reverse
+                        activeLoan.Remeining += oldHistory.PaidAmount;
+
+                        if (activeLoan.Remeining > 0)
+                            activeLoan.Status = "Active";
+
+                        // Delete history
+                        LoanHistoryService.DeleteByPaysheetId(existingPaysheet.PaysheetId);
+
+                        // Save loan.json
+                        File.WriteAllText("Savers/loan.json",
+                            JsonConvert.SerializeObject(loan, Formatting.Indented));
+                    }
+
+                    LoanAmount.Visibility = Visibility.Collapsed;
+                    LoanAmount.Text = "";
+                }
+                else if (Loan_Checked.IsChecked == true)
+                {
+                    // When ticked → show loan
+                    LoanAmount.Visibility = Visibility.Visible;
+
+                    if (string.IsNullOrWhiteSpace(LoanAmount.Text))
+                        LoanAmount.Text = activeLoan.MonthlyPay.ToString("N2");
+                }
+                else
+                {
+                    // Default
+                    LoanAmount.Visibility = Visibility.Collapsed;
+                    LoanAmount.Text = "";
+                }
             }
 
 
-            // ETF
+
+
+
+
+            // EPF
             // Declare ETFAmount at the beginning of the FilterChanged method
-            decimal ETFAmount = 0;
+            decimal EPFAmount = 0;
 
             // ... (rest of your method code)
 
-            // ETF
-            if (ETF_Checked.IsChecked == true)
+            // EPF
+            if (EPF_Checked.IsChecked == true)
             {
-                var filteredETF = etf?
+                var filteredETF = epf?
                                    .Where(e => e.EmployeeId == Employeeid.ToString())
-                                   .ToList() ?? new List<ETF>();
+                                   .ToList() ?? new List<EPF>();
 
-                ETFAmount = filteredETF.Sum(e => e.EmployeeAmount);
+                EPFAmount = filteredETF.Sum(e => e.EmployeeAmount);
 
             }
 
@@ -308,7 +423,8 @@ namespace PDC_System.Paysheets
                 Infomations.IsEnabled = false;
                 Contorls.IsEnabled = false;
                 string dates = string.Join(", ", missingRecords.Select(a => a.Date.ToString("yyyy-MM-dd")));
-                MessageBox.Show($"Cannot calculate totals. Missing attendance for these dates: {dates}", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+
+                CustomMessageBox.Show($"Cannot calculate totals. Missing attendance for these dates: {dates}", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
                 TotalsTextBlock.Text = "";
                 return;
             }
@@ -355,9 +471,13 @@ namespace PDC_System.Paysheets
             decimal Loanamount = 0;
             decimal.TryParse(LoanAmount.Text, out Loanamount);
 
-            absentDayAmount = (absentDays - NopayDays) * absentDayAmount;
+            int ACNopay = Nopays.Text != "" ? int.Parse(Nopays.Text) : 0;
+
+            int actabsentdate = (absentDays - ACNopay);
+
+            absentDayAmount = (actabsentdate - NopayDays) * absentDayAmount;
             decimal totalDeducations = filteredDeducations.Sum(d => d.DeducationAmount);
-            decimal totalofDeducations = absentDayAmount + totalDeducations + ETFAmount + Loanamount;
+            decimal totalofDeducations = absentDayAmount + totalDeducations + EPFAmount + Loanamount;
 
             #endregion
 
@@ -395,11 +515,13 @@ namespace PDC_System.Paysheets
             PDFdoubeovetime = TotalDoubleOvertimeAmount;
             PDFtotalOvertime = TotalOvertimeAmount;
             PDFToalEarning = TotalEarings;
-            PDFEtfAmount = ETFAmount;
+            PDFEtfAmount = EPFAmount;
             PDFLoanamount = Loanamount;
             PDFAbsentdateamount = absentDayAmount;
             PDFtotalDeducations = totalofDeducations;
-
+            BasicSalery = saleryAmount;
+            Nopaydays = NopayDays;
+            ACTNopaydays = ACNopay;
 
             PDFworkingdays = workingDays;
             PDFAbsentdays = absentDays;
@@ -426,6 +548,40 @@ namespace PDC_System.Paysheets
                 FilterChanged(sender, e);
             }
         }
+
+        private void Nopay_Custom(object sender, TextChangedEventArgs e)
+        {
+            // Get total absent days (already calculated in FilterChanged)
+            int absentDays = PDFAbsentdays;
+
+            // If textbox empty → skip
+            if (string.IsNullOrWhiteSpace(Nopays.Text))
+            {
+                FilterChanged(sender, e);
+                return;
+            }
+
+            // Validate input number
+            if (!int.TryParse(Nopays.Text, out int customNopay))
+            {
+               
+                Nopays.Text = "";
+                return;
+            }
+
+            // Check max limit
+            if (customNopay > absentDays)
+            {
+                
+                // Reset to maximum allowed
+                Nopays.Text = absentDays.ToString();
+            }
+
+            // Recalculate everything
+            FilterChanged(sender, e);
+        }
+
+
 
         private void EmployeeCombo_LostFocus(object sender, RoutedEventArgs e)
         {
@@ -488,7 +644,7 @@ namespace PDC_System.Paysheets
             Earning_Checked.IsChecked = false;
             Deducation_Checked.IsChecked = false;
             Loan_Checked.IsChecked = false;
-            ETF_Checked.IsChecked = false;
+            EPF_Checked.IsChecked = false;
 
             // Reset Month
             Month.SelectedIndex = -1;
@@ -534,6 +690,9 @@ namespace PDC_System.Paysheets
 
         private void ApplyPaysheet()
         {
+
+            bool isEditMode = existingPaysheet != null;
+
             // Load existing paysheets
             List<Paysheet> paysheets = new List<Paysheet>();
             if (File.Exists("Savers/Paysheets.json"))
@@ -560,7 +719,9 @@ namespace PDC_System.Paysheets
                 TotalDeductions = PDFtotalDeducations,
                 WorkingDays = PDFworkingdays,
                 AbsentDays = PDFAbsentdays,
-                Month = Month.Text,
+                Month = $"{Month.Text} {StartDatePicker.SelectedDate?.Year}",
+
+                NopayDays = ACTNopaydays,
 
                 StartDate = StartDatePicker.SelectedDate ?? DateTime.Today,
                 EndDate = EndDatePicker.SelectedDate ?? DateTime.Today,
@@ -569,7 +730,7 @@ namespace PDC_System.Paysheets
                 IncludeEarnings = Earning_Checked.IsChecked ?? false,
                 IncludeDeductions = Deducation_Checked.IsChecked ?? false,
                 IncludeLoan = Loan_Checked.IsChecked ?? false,
-                IncludeETF = ETF_Checked.IsChecked ?? false
+                IncludeETF = EPF_Checked.IsChecked ?? false
             };
 
             // 🔹 NEW: if this is a NEW paysheet (no existingPaysheet)
@@ -582,7 +743,7 @@ namespace PDC_System.Paysheets
 
                 if (alreadyExists)
                 {
-                    MessageBox.Show(
+                    CustomMessageBox.Show(
                         $"Paysheet for {newPaysheet.Month} already exists for this employee!",
                         "Duplicate Paysheet",
                         MessageBoxButton.OK,
@@ -594,6 +755,8 @@ namespace PDC_System.Paysheets
                 // New ID
                 newPaysheet.PaysheetId = GeneratePaysheetId(paysheets);
                 paysheets.Add(newPaysheet);
+
+
             }
             else
             {
@@ -607,12 +770,153 @@ namespace PDC_System.Paysheets
                     paysheets.Add(newPaysheet); // fallback, shouldn't normally happen
             }
 
+
+            if (Month.SelectedIndex == -1)
+            {
+                CustomMessageBox.Show("Please select the Month before saving the paysheet!",
+                                "Missing Month",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Warning);
+                return;
+            }
+
+
             File.WriteAllText("Savers/Paysheets.json", JsonConvert.SerializeObject(paysheets, Formatting.Indented));
 
-            MessageBox.Show("Paysheet saved successfully ✅");
+            CustomMessageBox.Show("Paysheet saved successfully ✅");
+
+
+
+
+            // ... inside ApplyPaysheet()
+
+            // Only add loan history for NEW paysheet
+            // LOAN PROCESS ==============================
+            if (Loan_Checked.IsChecked == true && loanAmount > 0)
+            {
+                var activeLoan = loan?.FirstOrDefault(l =>
+                    l.EmployeeId == Employeeid?.ToString() && l.Status == "Active");
+
+                if (activeLoan != null)
+                {
+                    decimal previousRemaining = activeLoan.Remeining;
+
+                    // EDIT MODE ===============================
+                    if (isEditMode)
+                    {
+                        // Get previous loan history entry
+                        var oldHistory = LoanHistoryService.GetByPaysheetId(existingPaysheet.PaysheetId);
+
+                        if (oldHistory != null)
+                        {
+                            // REVERSE OLD LOAN AMOUNT
+                            activeLoan.Remeining += oldHistory.PaidAmount;
+
+                            // Remove old history row
+                            LoanHistoryService.DeleteByPaysheetId(existingPaysheet.PaysheetId);
+                        }
+                    }
+
+                    // NEW REMAINING CALCULATION
+                    activeLoan.Remeining -= loanAmount;
+
+                    if (activeLoan.Remeining <= 0)
+                    {
+                        activeLoan.Remeining = 0;
+                        activeLoan.Status = "Finished";
+                    }
+
+                    // SAVE HISTORY — works for BOTH new & edit
+                    LoanHistoryService.AddEntry(new LoanHistoryService.LoanHistoryEntry
+                    {
+                        PaysheetId = newPaysheet.PaysheetId,
+                        EmployeeId = Employeeid?.ToString(),
+                        EmployeeName = Employeename?.ToString(),
+                        OriginalLoanAmount = previousRemaining,
+                        MonthlyInstallment = loanAmount,
+                        PaidAmount = loanAmount,
+                        RemainingAmount = activeLoan.Remeining,
+                        Month = Month.Text + " " + StartDatePicker.SelectedDate?.Year,
+                        Date = DateTime.Now
+                    });
+
+                    // Save loan file
+                    File.WriteAllText("Savers/loan.json", JsonConvert.SerializeObject(loan, Formatting.Indented));
+                }
+            }
+
+
+            // ===================== EPF HISTORY SAVE =====================
+            if (EPF_Checked.IsChecked == true)
+            {
+                // Load history
+                List<EPFHistory> epfHistory = new List<EPFHistory>();
+                if (File.Exists(epfHistoryFile))
+                {
+                    string json = File.ReadAllText(epfHistoryFile);
+                    epfHistory = JsonConvert.DeserializeObject<List<EPFHistory>>(json) ?? new List<EPFHistory>();
+                }
+
+                // If edit mode → delete old EPF history for this paysheet
+                if (existingPaysheet != null)
+                {
+                    epfHistory = epfHistory
+                        .Where(x => x.PaysheetId != existingPaysheet.PaysheetId)
+                        .ToList();
+                }
+
+                // Add new entry
+                var epfRecord = epf?.FirstOrDefault(e => e.EmployeeId == newPaysheet.EmployeeId);
+
+                if (epfRecord != null)
+                {
+                    epfHistory.Add(new EPFHistory
+                    {
+                        PaysheetId = newPaysheet.PaysheetId,
+                        EmployeeId = Employeeid.ToString(),
+                        EmployeeName = Employeename.ToString(),
+                        BasicSalary = epfRecord.BasicSalary,
+                        EmployeeAmount = epfRecord.EmployeeAmount,
+                        EmployerAmount = epfRecord.EmployerAmount,
+                        Month = $"{Month.Text} {StartDatePicker.SelectedDate?.Year}",
+                        Date = DateTime.Now
+                    });
+                }
+
+                File.WriteAllText(epfHistoryFile, JsonConvert.SerializeObject(epfHistory, Formatting.Indented));
+            }
+
+
+
+            if (existingPaysheet != null &&
+    existingPaysheet.IncludeETF == true &&
+    EPF_Checked.IsChecked == false)
+            {
+                // EPF was removed in edit mode → delete history
+                DeleteEPFHistory(existingPaysheet.PaysheetId);
+            }
+
+
 
             this.Close();
         }
+
+
+
+        private void DeleteEPFHistory(string paysheetId)
+        {
+            if (!File.Exists(epfHistoryFile))
+                return;
+
+            string json = File.ReadAllText(epfHistoryFile);
+            var list = JsonConvert.DeserializeObject<List<EPFHistory>>(json) ?? new List<EPFHistory>();
+
+            // Delete only the matching paysheet's EPF record
+            list = list.Where(x => x.PaysheetId != paysheetId).ToList();
+
+            File.WriteAllText(epfHistoryFile, JsonConvert.SerializeObject(list, Formatting.Indented));
+        }
+
 
 
         private void SavePaysheet_Click(object sender, RoutedEventArgs e)
@@ -629,6 +933,8 @@ namespace PDC_System.Paysheets
 
         public async void SavePDFPaysheet_Click(object sender, RoutedEventArgs e)
         {
+
+            bool isEditMode = existingPaysheet != null;
 
 
             var (filtered, filteredEarnings, filteredDeducations) = GetFilteredData();
@@ -716,9 +1022,10 @@ namespace PDC_System.Paysheets
                                         right.Spacing(3);
                                         right.Item().Text("Salary Information").FontSize(12).SemiBold().FontColor(Colors.Blue.Medium);
                                         right.Item().Container().Height(1).Background(Colors.Grey.Lighten2);
-                                        right.Item().PaddingTop(3).Text($"Basic Salary: {saleryAmount} LKR");
+                                        right.Item().PaddingTop(3).Text($"Basic Salary: {BasicSalery} LKR");
                                         right.Item().Text($"Working Days: {PDFworkingdays}");
-                                        right.Item().Text($"Absent Days: {PDFAbsentdays}");
+                                        right.Item().Text($"Absent Days: {PDFAbsentdays} - ({ACTNopaydays})");
+                                        right.Item().Text($"NoPay Days: {Nopaydays}");
 
                                     });
                                 });
@@ -744,7 +1051,7 @@ namespace PDC_System.Paysheets
 
                                     // Data Rows
                                     table.Cell().BorderBottom(1).BorderColor(Colors.Grey.Lighten2).Padding(5).Text("Basic Salary");
-                                    table.Cell().BorderBottom(1).BorderColor(Colors.Grey.Lighten2).Padding(5).AlignRight().Text($"{saleryAmount} LKR");
+                                    table.Cell().BorderBottom(1).BorderColor(Colors.Grey.Lighten2).Padding(5).AlignRight().Text($"{BasicSalery} LKR");
 
                                     table.Cell().BorderBottom(1).BorderColor(Colors.Grey.Lighten2).Padding(5).Text("Overtime");
                                     table.Cell().BorderBottom(1).BorderColor(Colors.Grey.Lighten2).Padding(5).AlignRight().Text($"{PDFtotalOvertime:N2} LKR");
@@ -783,7 +1090,7 @@ namespace PDC_System.Paysheets
                                     table.Cell().BorderBottom(1).BorderColor(Colors.Grey.Lighten2).Padding(5).Text("Absent");
                                     table.Cell().BorderBottom(1).BorderColor(Colors.Grey.Lighten2).Padding(5).AlignRight().Text($"{PDFAbsentdateamount:N2} LKR");
 
-                                    table.Cell().BorderBottom(1).BorderColor(Colors.Grey.Lighten2).Padding(5).Text("ETF");
+                                    table.Cell().BorderBottom(1).BorderColor(Colors.Grey.Lighten2).Padding(5).Text("EPF");
                                     table.Cell().BorderBottom(1).BorderColor(Colors.Grey.Lighten2).Padding(5).AlignRight().Text($"{PDFEtfAmount:N2} LKR");
 
                                     table.Cell().BorderBottom(1).BorderColor(Colors.Grey.Lighten2).Padding(5).Text("Loan");
@@ -903,6 +1210,9 @@ namespace PDC_System.Paysheets
                                 });
                             });
 
+
+
+
                         // Footer with automatic page numbers
                         page.Footer()
                             .AlignCenter()
@@ -915,6 +1225,10 @@ namespace PDC_System.Paysheets
                             });
 
                     });
+
+
+
+
 
                 });
 
@@ -951,7 +1265,9 @@ namespace PDC_System.Paysheets
                 TotalDeductions = PDFtotalDeducations,
                 WorkingDays = PDFworkingdays,
                 AbsentDays = PDFAbsentdays,
-                Month = Month.Text,
+                Month = $"{Month.Text} {StartDatePicker.SelectedDate?.Year}",
+
+                NopayDays = ACTNopaydays,
 
                 StartDate = StartDatePicker.SelectedDate ?? DateTime.Today,
                 EndDate = EndDatePicker.SelectedDate ?? DateTime.Today,
@@ -960,7 +1276,7 @@ namespace PDC_System.Paysheets
                 IncludeEarnings = Earning_Checked.IsChecked ?? false,
                 IncludeDeductions = Deducation_Checked.IsChecked ?? false,
                 IncludeLoan = Loan_Checked.IsChecked ?? false,
-                IncludeETF = ETF_Checked.IsChecked ?? false,
+                IncludeETF = EPF_Checked.IsChecked ?? false,
                 PDFPath = fullPath
             };
 
@@ -973,7 +1289,7 @@ namespace PDC_System.Paysheets
 
                 if (alreadyExists)
                 {
-                    MessageBox.Show(
+                    CustomMessageBox.Show(
                         $"Paysheet for {newPaysheet.Month} already exists for this employee!",
                         "Duplicate Paysheet",
                         MessageBoxButton.OK,
@@ -997,6 +1313,73 @@ namespace PDC_System.Paysheets
             }
 
 
+            // LOAN PROCESS ==============================
+            if (Loan_Checked.IsChecked == true && loanAmount > 0)
+            {
+                var activeLoan = loan?.FirstOrDefault(l =>
+                    l.EmployeeId == Employeeid?.ToString() && l.Status == "Active");
+
+                if (activeLoan != null)
+                {
+                    decimal previousRemaining = activeLoan.Remeining;
+
+                    // EDIT MODE ===============================
+                    if (isEditMode)
+                    {
+                        // Get previous loan history entry
+                        var oldHistory = LoanHistoryService.GetByPaysheetId(existingPaysheet.PaysheetId);
+
+                        if (oldHistory != null)
+                        {
+                            // REVERSE OLD LOAN AMOUNT
+                            activeLoan.Remeining += oldHistory.PaidAmount;
+
+                            // Remove old history row
+                            LoanHistoryService.DeleteByPaysheetId(existingPaysheet.PaysheetId);
+                        }
+                    }
+
+                    // NEW REMAINING CALCULATION
+                    activeLoan.Remeining -= loanAmount;
+
+                    if (activeLoan.Remeining <= 0)
+                    {
+                        activeLoan.Remeining = 0;
+                        activeLoan.Status = "Finished";
+                    }
+
+                    // SAVE HISTORY — works for BOTH new & edit
+                    LoanHistoryService.AddEntry(new LoanHistoryService.LoanHistoryEntry
+                    {
+                        PaysheetId = newPaysheet.PaysheetId,
+                        EmployeeId = Employeeid?.ToString(),
+                        EmployeeName = Employeename?.ToString(),
+                        OriginalLoanAmount = previousRemaining,
+                        MonthlyInstallment = loanAmount,
+                        PaidAmount = loanAmount,
+                        RemainingAmount = activeLoan.Remeining,
+                        Month = Month.Text + " " + StartDatePicker.SelectedDate?.Year,
+                        Date = DateTime.Now
+                    });
+
+                    // Save loan file
+                    File.WriteAllText("Savers/loan.json", JsonConvert.SerializeObject(loan, Formatting.Indented));
+                }
+            }
+
+
+            if (Month.SelectedIndex == -1)
+            {
+                CustomMessageBox.Show("Please select the Month before saving the paysheet!",
+                                "Missing Month",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Warning);
+                return;
+            }
+
+
+
+
 
 
             // Remove existing paysheet for same employee & month (edit)
@@ -1004,16 +1387,117 @@ namespace PDC_System.Paysheets
 
             paysheets.Add(newPaysheet);
 
+
+
+            if (EPF_Checked.IsChecked == true)
+            {
+                // Load history
+                List<EPFHistory> epfHistory = new List<EPFHistory>();
+                if (File.Exists(epfHistoryFile))
+                {
+                    string json = File.ReadAllText(epfHistoryFile);
+                    epfHistory = JsonConvert.DeserializeObject<List<EPFHistory>>(json) ?? new List<EPFHistory>();
+                }
+
+                // If edit mode → delete old EPF history for this paysheet
+                if (existingPaysheet != null)
+                {
+                    epfHistory = epfHistory
+                        .Where(x => x.PaysheetId != existingPaysheet.PaysheetId)
+                        .ToList();
+                }
+
+                // Add new entry
+                var epfRecord = epf?.FirstOrDefault(e => e.EmployeeId == newPaysheet.EmployeeId);
+
+                if (epfRecord != null)
+                {
+                    epfHistory.Add(new EPFHistory
+                    {
+                        PaysheetId = newPaysheet.PaysheetId,
+                        EmployeeId = Employeeid.ToString(),
+                        EmployeeName = Employeename.ToString(),
+                        BasicSalary = epfRecord.BasicSalary,
+                        EmployeeAmount = epfRecord.EmployeeAmount,
+                        EmployerAmount = epfRecord.EmployerAmount,
+                        Month = $"{Month.Text} {StartDatePicker.SelectedDate?.Year}",
+                        Date = DateTime.Now
+                    });
+                }
+
+                File.WriteAllText(epfHistoryFile, JsonConvert.SerializeObject(epfHistory, Formatting.Indented));
+            }
+
+
             File.WriteAllText("Savers/Paysheets.json", JsonConvert.SerializeObject(paysheets, Formatting.Indented));
 
-            MessageBox.Show("Paysheet saved successfully ✅");
+            CustomMessageBox.Show("Paysheet saved successfully ✅");
 
-            this.Close();
 
-            MessageBox.Show($"PDF Saved Successfully!\n\nLocation: {fullPath}",
-        "Success", MessageBoxButton.OK, MessageBoxImage.Information);
 
+
+            if (SentEmail_Check.IsChecked == true)
+            {
+
+
+                var loanWindow = new LoanHistoryWindow(Employeeid.ToString(), Employeename.ToString());
+
+                loanWindow.SendLoanEmailDirect();
+
+                var mailService = new MailServicePaysheet();
+
+                string recipientEmail = EmployeeEmail.ToString();
+                string subject = $"Paysheet - {Employeename} - {Month.Text}";
+                string body = $"Dear {Employeename},<br><br>Please find your paysheet attached.<br><br>Regards,<br>PDC System";
+
+                await mailService.SendEmailAsync(
+                    recipientEmail,
+                    new List<string>(),
+                    subject,
+                    body,
+                    fullPath
+                )
+                .ContinueWith(task =>
+                {
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        if (task.Result)
+                            NotificationHelper.ShowNotification("PDC System!", "✅ Email sent successfully!");
+                        else
+                            NotificationHelper.ShowNotification("PDC System!", "❌ Failed to send email!");
+
+                        this.Close();
+                        NotificationHelper.ShowNotification(
+                            "PDC System!",
+                            $"PDF Saved Successfully!\n\nLocation: {fullPath}");
+                    });
+                })
+                .ConfigureAwait(false);
+            }
+            else
+            {
+
+                if (existingPaysheet != null &&
+    existingPaysheet.IncludeETF == true &&
+    EPF_Checked.IsChecked == false)
+                {
+                    // EPF was removed in edit mode → delete history
+                    DeleteEPFHistory(existingPaysheet.PaysheetId);
+                }
+
+
+                this.Close();
+                NotificationHelper.ShowNotification(
+                    "PDC System!",
+                    $"PDF Saved Successfully!\n\nLocation: {fullPath}");
+            }
         }
+
+
+
+
+
+
 
         private void EndDatePicker_SelectedDateChanged(object sender, ModernCalendarLib.SelectedDateChangedEventArgs e)
         {
@@ -1071,6 +1555,10 @@ namespace PDC_System.Paysheets
             }
         }
 
+
+
+
+
       
     }
 
@@ -1084,7 +1572,7 @@ namespace PDC_System.Paysheets
         public int WorkingDays { get; set; }
         public int AbsentDays { get; set; }
         public string Month { get; set; }
-
+        public int NopayDays { get; set; }
         // NEW FIELDS - Add these to save complete paysheet state
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }

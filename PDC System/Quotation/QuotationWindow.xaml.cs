@@ -59,7 +59,8 @@ namespace PDC_System
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading quotations: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                CustomMessageBox.Show($"Error loading quotations: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -77,7 +78,7 @@ namespace PDC_System
         {
             if (sender is Button btn && btn.DataContext is Quotation selectedQuotation)
             {
-                var result = MessageBox.Show($"Are you sure you want to delete quotation {selectedQuotation.QuotationNumber}?",
+                var result = CustomMessageBox.Show($"Are you sure you want to delete quotation {selectedQuotation.QuotationNumber}?",
                                              "Confirm Delete", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                 if (result == MessageBoxResult.Yes)
                 {
@@ -154,7 +155,7 @@ namespace PDC_System
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error loading invoices: " + ex.Message);
+                CustomMessageBox.Show("Error loading invoices: " + ex.Message);
             }
         }
 
@@ -172,7 +173,7 @@ namespace PDC_System
         {
             if (sender is Button btn && btn.DataContext is InvoiceRecord record)
             {
-                if (MessageBox.Show("Delete invoice?", "Confirm", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                if (CustomMessageBox.Show("Delete invoice?", "Confirm", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 {
                     SavedInvoices.Remove(record);
 

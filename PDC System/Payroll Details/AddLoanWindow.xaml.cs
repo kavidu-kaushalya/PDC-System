@@ -23,9 +23,10 @@ namespace PDC_System
     /// </summary>
     public partial class AddLoanWindow : Window
     {
-       
-        
-        private string employeeFile = "Saver/employee.json";
+
+        private string loanFile = "Savers/loan.json";
+
+        private string employeeFile = "Savers/employee.json";
         public event Action<Loan> LoanSaved;
 
         public AddLoanWindow()
@@ -48,6 +49,26 @@ namespace PDC_System
         {
             if (EmployeeCombo.SelectedItem is Employee emp)
             {
+                // Load all loans
+                var existingLoans = File.Exists(loanFile)
+                    ? JsonConvert.DeserializeObject<List<Loan>>(File.ReadAllText(loanFile))
+                    : new List<Loan>();
+
+                // ❗ Block if employee has ANY previous loan (Active or Finished)
+                bool hasAnyLoan = existingLoans.Any(l =>
+                    l.EmployeeId == emp.EmployeeId
+                );
+
+                if (hasAnyLoan)
+                {
+
+
+                    CustomMessageBox.Show("This employee already has a loan. Loan End and Can Create Loan");
+                    return;
+                }
+
+                var selectedDate = LoanDatePicker.SelectedDate ?? DateTime.Now;
+
                 if (decimal.TryParse(LoanAmountBox.Text, out decimal loanAmt) &&
                     decimal.TryParse(MonthlyPayBox.Text, out decimal monthly))
                 {
@@ -56,21 +77,30 @@ namespace PDC_System
                         EmployeeId = emp.EmployeeId,
                         Name = emp.Name,
                         LoanAmount = loanAmt,
-                        MonthlyPay = monthly
+                        MonthlyPay = monthly,
+                        Remeining = loanAmt,
+                        LoanDate = selectedDate,
+                        Status = "Active"
                     };
+
+                    existingLoans.Add(newLoan);
+                    File.WriteAllText(loanFile, JsonConvert.SerializeObject(existingLoans, Formatting.Indented));
 
                     LoanSaved?.Invoke(newLoan);
                     this.Close();
                 }
                 else
                 {
-                    MessageBox.Show("Please enter valid numbers for loan and monthly pay.");
+                    CustomMessageBox.Show("Please enter valid numbers for loan and monthly pay.");
                 }
             }
             else
             {
-                MessageBox.Show("Please select an employee.");
+                CustomMessageBox.Show("Please select an employee.");
             }
         }
+
+
+
     } 
 }

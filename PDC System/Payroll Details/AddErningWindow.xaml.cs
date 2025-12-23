@@ -24,7 +24,7 @@ namespace PDC_System
     public partial class AddErningWindow : Window
     {
 
-        private string employeeFile = "Saver/employee.json";
+        private string employeeFile = "Savers/employee.json";
         public event Action<Earning> Earingsaved;
 
         public AddErningWindow()
@@ -64,12 +64,16 @@ namespace PDC_System
                 }
                 else
                 {
-                    MessageBox.Show("Please enter valid numbers for loan and monthly pay.");
+
+
+
+
+                    CustomMessageBox.Show("Please enter valid numbers for loan and monthly pay.");
                 }
             }
             else
             {
-                MessageBox.Show("Please select an employee.");
+                CustomMessageBox.Show("Please select an employee.");
             }
         }
     }

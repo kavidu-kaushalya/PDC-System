@@ -1,27 +1,36 @@
-﻿using PDC_System.Models;
+﻿using Microsoft.Data.Sqlite;
 using Newtonsoft.Json;
+using PDC_System;
+using PDC_System.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using PDC_System;
+
 
 namespace PDC_System.Services
 {
     public class AttendanceManager
     {
-        private string basePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Savers");
+        string basePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Savers");
+
+        private readonly AttendanceDatabase _db;   // 🔹 NEW
 
         public AttendanceManager()
         {
             if (!Directory.Exists(basePath))
                 Directory.CreateDirectory(basePath);
 
-            EnsureJsonFile("ivms.json");
+            // ❌ ivms.json / attendance.json NOT needed now
+            // EnsureJsonFile("ivms.json");
+            // EnsureJsonFile("attendance.json");
+
             EnsureJsonFile("employee.json");
             EnsureJsonFile("holiday.json");
-            EnsureJsonFile("attendance.json");
+
+            _db = new AttendanceDatabase(basePath);   // 🔹 init SQLite
         }
 
         private void EnsureJsonFile(string fileName)
@@ -34,7 +43,7 @@ namespace PDC_System.Services
         // ✅ Load all attendance (read-only, NO auto-save)
         public List<AttendanceRecord> LoadAttendance()
         {
-            var data = JsonConvert.DeserializeObject<List<FingerprintData>>(File.ReadAllText(Path.Combine(basePath, "ivms.json")));
+            var data = _db.GetFingerprintData();   // 🔹 from SQLite
             var employees = JsonConvert.DeserializeObject<List<Employee>>(File.ReadAllText(Path.Combine(basePath, "employee.json")));
             var holidays = JsonConvert.DeserializeObject<List<Holiday>>(File.ReadAllText(Path.Combine(basePath, "holiday.json")));
 
@@ -75,7 +84,7 @@ namespace PDC_System.Services
         // ✅ Load with date range (read-only, NO auto-save)
         public List<AttendanceRecord> LoadAttendanceWithDateRange(DateTime startDate, DateTime endDate)
         {
-            var data = JsonConvert.DeserializeObject<List<FingerprintData>>(File.ReadAllText(Path.Combine(basePath, "ivms.json")));
+            var data = _db.GetFingerprintData();   // 🔹 from SQLite
             var employees = JsonConvert.DeserializeObject<List<Employee>>(File.ReadAllText(Path.Combine(basePath, "employee.json")));
             var holidays = JsonConvert.DeserializeObject<List<Holiday>>(File.ReadAllText(Path.Combine(basePath, "holiday.json")));
 
@@ -126,17 +135,7 @@ namespace PDC_System.Services
         {
             try
             {
-                var savedRecords = LoadSavedAttendanceRecords();
-
-                savedRecords.RemoveAll(r =>
-                    r.EmployeeId == record.EmployeeId &&
-                    r.Date.Date == record.Date.Date);
-
-                savedRecords.Add(record);
-
-                string attendancePath = Path.Combine(basePath, "attendance.json");
-                var json = JsonConvert.SerializeObject(savedRecords, Formatting.Indented);
-                File.WriteAllText(attendancePath, json);
+                _db.SaveOrUpdateAttendanceRecord(record);
             }
             catch (Exception ex)
             {
@@ -144,14 +143,11 @@ namespace PDC_System.Services
             }
         }
 
-        // ✅ Save all records (use with caution - overwrites everything)
         public void SaveAllAttendanceRecords(List<AttendanceRecord> records)
         {
             try
             {
-                string attendancePath = Path.Combine(basePath, "attendance.json");
-                var json = JsonConvert.SerializeObject(records, Formatting.Indented);
-                File.WriteAllText(attendancePath, json);
+                _db.SaveAllAttendanceRecords(records);
             }
             catch (Exception ex)
             {
@@ -159,23 +155,13 @@ namespace PDC_System.Services
             }
         }
 
+
         private List<AttendanceRecord> LoadSavedAttendanceRecords()
         {
-            try
-            {
-                string attendancePath = Path.Combine(basePath, "attendance.json");
-                if (File.Exists(attendancePath))
-                {
-                    var json = File.ReadAllText(attendancePath);
-                    return JsonConvert.DeserializeObject<List<AttendanceRecord>>(json) ?? new List<AttendanceRecord>();
-                }
-            }
-            catch (Exception)
-            {
-            }
-
-            return new List<AttendanceRecord>();
+            // NOW just read from SQLite
+            return _db.GetAttendanceRecords();
         }
+
 
         private AttendanceRecord CalculateAttendanceRecord(Employee emp, DateTime day, List<DateTime> times, List<Holiday> holidays)
         {
@@ -308,12 +294,25 @@ namespace PDC_System.Services
                         var early = workEnd - last.TimeOfDay;
                         earlyLeave = $"{(int)early.TotalHours}h {early.Minutes}m";
                     }
+                    // LATE CALCULATION WITH ALLOWABLE MINUTES
+                    int allowedLate = Properties.Settings.Default.Late_Allow_Minutes;
 
                     if (first.TimeOfDay > workStart)
                     {
                         var late = first.TimeOfDay - workStart;
-                        lateHours = $"{(int)late.TotalHours}h {late.Minutes}m";
+
+                        // If late is less than allowed minutes → treat as no late
+                        if (late.TotalMinutes <= allowedLate)
+                        {
+                            lateHours = "0h 0m";   // No late
+                        }
+                        else
+                        {
+                            var actualLate = late - TimeSpan.FromMinutes(allowedLate);
+                            lateHours = $"{(int)actualLate.TotalHours}h {actualLate.Minutes}m";
+                        }
                     }
+
 
                     status = "OK";
                 }
@@ -369,21 +368,10 @@ namespace PDC_System.Services
         {
             try
             {
-                // ✅ Manual edit flag set කරන්න
                 record.IsManualEdit = true;
                 record.Status = "Manual Edit";
 
-                var savedRecords = LoadSavedAttendanceRecords();
-
-                savedRecords.RemoveAll(r =>
-                    r.EmployeeId == record.EmployeeId &&
-                    r.Date.Date == record.Date.Date);
-
-                savedRecords.Add(record);
-
-                string attendancePath = Path.Combine(basePath, "attendance.json");
-                var json = JsonConvert.SerializeObject(savedRecords, Formatting.Indented);
-                File.WriteAllText(attendancePath, json);
+                _db.SaveOrUpdateAttendanceRecord(record);
             }
             catch (Exception ex)
             {
@@ -396,17 +384,7 @@ namespace PDC_System.Services
         {
             try
             {
-                var savedRecords = LoadSavedAttendanceRecords();
-
-                // Manual edits remove කරන්න
-                savedRecords.RemoveAll(r =>
-                    r.Date.Date >= startDate.Date &&
-                    r.Date.Date <= endDate.Date &&
-                    r.IsManualEdit);
-
-                string attendancePath = Path.Combine(basePath, "attendance.json");
-                var json = JsonConvert.SerializeObject(savedRecords, Formatting.Indented);
-                File.WriteAllText(attendancePath, json);
+                _db.DeleteManualEdits(startDate, endDate);
             }
             catch (Exception ex)
             {
@@ -414,27 +392,43 @@ namespace PDC_System.Services
             }
         }
 
+
         // ✅ Reset single manual edit
         public void ResetManualEditForRecord(AttendanceRecord record)
         {
             try
             {
-                var savedRecords = LoadSavedAttendanceRecords();
-
-                // Manual record එක remove කරන්න
-                savedRecords.RemoveAll(r =>
-                    r.EmployeeId == record.EmployeeId &&
-                    r.Date.Date == record.Date.Date &&
-                    r.IsManualEdit);
-
-                string path = Path.Combine(basePath, "attendance.json");
-                File.WriteAllText(path, JsonConvert.SerializeObject(savedRecords, Formatting.Indented));
+                _db.DeleteManualEditForRecord(record.EmployeeId, record.Date);
             }
             catch (Exception ex)
             {
                 throw new Exception($"Error resetting manual edit for record: {ex.Message}");
             }
         }
+
+
+        // Returns DataTable for raw IVMS logs (instead of ivms.json)
+        public DataTable LoadRawPunchTable()
+        {
+            var dt = new DataTable();
+            dt.Columns.Add("EmployeeID", typeof(string));
+            dt.Columns.Add("EmployeeName", typeof(string));
+            dt.Columns.Add("DateTime", typeof(DateTime));
+
+            var db = new AttendanceDatabase(basePath);
+            var fp = db.GetFingerprintData();
+            var employees = JsonConvert.DeserializeObject<List<Employee>>(
+                File.ReadAllText(Path.Combine(basePath, "employee.json")));
+
+            foreach (var f in fp)
+            {
+                var emp = employees.FirstOrDefault(x => x.EmployeeId == f.EmployeeID);
+                dt.Rows.Add(f.EmployeeID, emp?.Name ?? "-", f.DateTime);
+            }
+
+            return dt;
+        }
+
 
         public class Holiday
         {

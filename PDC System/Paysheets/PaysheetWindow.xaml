@@ -14,11 +14,11 @@
 
     <StackPanel>
         <StackPanel>
-            <Button Click="CreatePaysheet_Click"  Content="paysheet"></Button>
+            <Button Style="{DynamicResource ActionButton}" Width="150" Click="CreatePaysheet_Click"  Content="➕ Create Paysheet"></Button>
 
         </StackPanel>
 
-        <StackPanel>
+        <StackPanel HorizontalAlignment="Center">
             <DataGrid x:Name="PaysheetGrid" Height="300"
 AlternatingRowBackground="#f0f0f0"
 SnapsToDevicePixels="True"
@@ -30,22 +30,22 @@ Style="{StaticResource DataGridStyle}"
 ColumnHeaderStyle="{StaticResource DataGridHeaderStyle}"
 RowStyle="{StaticResource DataGridRowStyle}">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Employee ID" Binding="{Binding EmployeeId}" />
-                    <DataGridTextColumn Header="Month" Binding="{Binding Month}" />
-                    <DataGridTextColumn Header="Paysheet ID" Binding="{Binding PaysheetId }" />
-                    
-                    <DataGridTextColumn Header="Name" Binding="{Binding EmployeeName}" />
-                    <DataGridTextColumn Header="Salary" Binding="{Binding Salary}" />
-                    <DataGridTextColumn Header="Earnings" Binding="{Binding TotalEarnings}" />
-                    <DataGridTextColumn Header="Deductions" Binding="{Binding TotalDeductions}" />
+                    <DataGridTextColumn Header="Employee ID" Binding="{Binding EmployeeId}" ElementStyle="{DynamicResource DataGridColumnsStyle}" />
+                    <DataGridTextColumn Header="Month" Binding="{Binding Month}" ElementStyle="{DynamicResource DataGridColumnsStyle}" />
+                    <DataGridTextColumn Header="Paysheet ID" Binding="{Binding PaysheetId }" ElementStyle="{DynamicResource DataGridColumnsStyle}" />
+
+                    <DataGridTextColumn Header="Name" Binding="{Binding EmployeeName}"  ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+                    <DataGridTextColumn Header="Salary" Binding="{Binding Salary}"  ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+                    <DataGridTextColumn Header="Earnings" Binding="{Binding TotalEarnings}" ElementStyle="{DynamicResource DataGridColumnsStyle}" />
+                    <DataGridTextColumn Header="Deductions" Binding="{Binding TotalDeductions}" ElementStyle="{DynamicResource DataGridColumnsStyle}" />
                     <DataGridTemplateColumn Header="Actions">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                     <Button Style="{DynamicResource ActionButton}" Content="Edit" Click="EditPaysheet_Click" Tag="{Binding}" Margin="2"/>
-                                    <Button Style="{DynamicResource NavigationButtonStyle}" Content="Delete" Click="DeletePaysheet_Click" Tag="{Binding}" Margin="2"/>
+                                    <Button Style="{DynamicResource DeleteActionButton}" Content="🚫 Delete" Click="DeletePaysheet_Click" Tag="{Binding}" Margin="2"/>
 
-                                    <Button Content="Open"
+                                    <Button Content="View"
                                             Style="{DynamicResource ActionButton}"
         Tag="{Binding PDFPath}"
         Click="OpenPDF_Click"

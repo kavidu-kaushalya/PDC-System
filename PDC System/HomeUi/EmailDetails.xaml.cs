@@ -37,7 +37,7 @@ namespace PDC_System
 
             if (string.IsNullOrWhiteSpace(email))
             {
-                MessageBox.Show("Please enter an email address.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                CustomMessageBox.Show("Please enter an email address.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
@@ -48,7 +48,7 @@ namespace PDC_System
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error opening email client: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                CustomMessageBox.Show("Error opening email client: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }
