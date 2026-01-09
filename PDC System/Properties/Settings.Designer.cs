@@ -241,7 +241,7 @@ namespace PDC_System.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool SendDailyReport {
             get {
                 return ((bool)(this["SendDailyReport"]));
@@ -253,7 +253,7 @@ namespace PDC_System.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool SendAttendanceEmails {
             get {
                 return ((bool)(this["SendAttendanceEmails"]));

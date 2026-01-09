@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using Newtonsoft.Json;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -49,6 +48,9 @@ namespace PDC_System
             {
                 if (decimal.TryParse(EarningAmount.Text, out decimal Earningamount))
                 {
+                    // Get the selected date from DatePicker, fallback to today if none selected
+                    DateTime selectedDateTime = EarningDate.SelectedDate ?? DateTime.Now;
+
                     var newEaring = new Earning
                     {
                         EmployeeId = emp.EmployeeId,
@@ -56,7 +58,7 @@ namespace PDC_System
                         EarningAmount = Earningamount,
                         Status = "Earning",
                         EarningDescription = EarningDescription.Text,
-                        EarningDate = DateOnly.FromDateTime(DateTime.Now)
+                        EarningDate = DateOnly.FromDateTime(selectedDateTime)
                     };
 
                     Earingsaved?.Invoke(newEaring);
@@ -64,11 +66,7 @@ namespace PDC_System
                 }
                 else
                 {
-
-
-
-
-                    CustomMessageBox.Show("Please enter valid numbers for loan and monthly pay.");
+                    CustomMessageBox.Show("Please enter valid numbers for earning amount.");
                 }
             }
             else

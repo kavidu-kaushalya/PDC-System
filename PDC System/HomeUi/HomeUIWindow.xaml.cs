@@ -8,6 +8,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json;
 using PDC_System.Helpers;
 using PDC_System.HomeUi;
+using PDC_System.Services;
+using PDC_System.Models;
 using System;
 using System.Globalization;
 using System.Globalization;
@@ -22,7 +24,7 @@ using System.Windows.Threading;
 using Application = System.Windows.Application;
 using Color = System.Windows.Media.Color;
 using ColorConverter = System.Windows.Media.ColorConverter;
-
+using System.Collections.Generic;
 
 namespace PDC_System
 {
@@ -35,28 +37,20 @@ namespace PDC_System
         public List<BirthdayInfo> UpcomingBirthdays { get; set; } = new List<BirthdayInfo>();
         private List<Employee> employees = new List<Employee>();
         public SeriesCollection SalesValues { get; set; }
+        public SeriesCollection AttendanceSeries { get; set; }
         public string[] Labels { get; set; }
 
         // Set the directory path
         private string saversDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Savers");
 
-
-
         public HomeUIWindow()
         {
             InitializeComponent();
-            //StartClock();//
-            //EnsureSaversDirectoryExists();//
             LoadData();
             ThemeManager.ApplyTheme(this); // Apply initial theme
             LoadBarChartData();
-           
-
-
-
+            LoadAttendanceOverview();
         }
-
-
 
         // JsonData class
         public class JobCard
@@ -82,6 +76,9 @@ namespace PDC_System
 
             string json = File.ReadAllText(jsonFilePath);
             var jsonData = JsonConvert.DeserializeObject<List<JobCard>>(json);
+
+            if (jsonData == null || !jsonData.Any())
+                return;
 
             // Last 5 months based on JSON data
             var monthsFromData = jsonData
@@ -120,44 +117,104 @@ namespace PDC_System
             Countofjob.Text = latestCount.ToString();
         }
 
+        private void LoadAttendanceOverview()
+        {
+            try
+            {
+                var attendanceManager = new AttendanceManager();
+                DateTime endDate = DateTime.Today;
+                DateTime startDate = endDate.AddDays(-6); // Last 7 days
 
+                var attendanceRecords = attendanceManager.LoadAttendanceWithDateRange(startDate, endDate);
 
+                if (attendanceRecords == null || !attendanceRecords.Any())
+                {
+                    // Set empty chart
+                    AttendanceSeries = new SeriesCollection();
+                    Labels = new string[0];
+                    DataContext = this;
+                    return;
+                }
 
-        // Hook system theme changes
+                // Calculate daily attendance statistics
+                var dailyStats = new List<DailyAttendanceStats>();
 
-        // SystemEvents.UserPreferenceChanged += SystemEvents_UserPreferenceChanged;//
+                for (DateTime date = startDate; date <= endDate; date = date.AddDays(1))
+                {
+                    var dayRecords = attendanceRecords.Where(r => r.Date.Date == date.Date).ToList();
 
+                    int presentCount = dayRecords.Count(r =>
+                        !string.IsNullOrEmpty(r.Status) &&
+                        r.Status != "Absent" &&
+                        r.Status != "Missing Finger Print");
 
+                    int absentCount = dayRecords.Count(r =>
+                        r.Status == "Absent" ||
+                        r.Status == "Missing Finger Print");
 
+                    // Calculate attendance percentage
+                    int totalEmployees = dayRecords.Count;
+                    double attendancePercentage = totalEmployees > 0 ? (double)presentCount / totalEmployees * 100 : 0;
 
+                    dailyStats.Add(new DailyAttendanceStats
+                    {
+                        Date = date,
+                        PresentCount = presentCount,
+                        AbsentCount = absentCount,
+                        TotalEmployees = totalEmployees,
+                        AttendancePercentage = attendancePercentage
+                    });
+                }
 
-        /* private void StartClock()
-         {
-             timer = new DispatcherTimer();
-             timer.Interval = TimeSpan.FromSeconds(1);
-             timer.Tick += Timer_Tick;
-             timer.Start();
-         }
-         private void SystemEvents_UserPreferenceChanged(object sender, UserPreferenceChangedEventArgs e)
-         {
-             if (e.Category == UserPreferenceCategory.General)
-             {
-                 // Use Dispatcher to update UI thread
-                 Dispatcher.Invoke(SetTitleBarColor);
-             }
-         }
+                // Create line chart series
+                AttendanceSeries = new SeriesCollection
+                {
+                    new LineSeries
+                    {
+                        Title = "Present Employees",
+                        Values = new ChartValues<int>(dailyStats.Select(d => d.PresentCount)),
+                        Stroke = Brushes.DodgerBlue,
+                        Fill = new SolidColorBrush(Color.FromArgb(40, 30, 144, 255)),
+                        StrokeThickness = 3,
+                        PointGeometry = DefaultGeometries.Circle,
+                        PointGeometrySize = 8,
+                        PointForeground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4CAF50")),
+                        DataLabels = true,
+                        LabelPoint = point => $"{point.Y}"
+                    },
+                    new LineSeries
+                    {
+                        Title = "Absent Employees",
+                        Values = new ChartValues<int>(dailyStats.Select(d => d.AbsentCount)),
+                        Stroke = Brushes.Red,
+                        Fill = new SolidColorBrush(Color.FromArgb(40, 255, 0, 0)),
 
+                        StrokeThickness = 3,
+                        PointGeometry = DefaultGeometries.Circle,
+                        PointGeometrySize = 8,
+                        PointForeground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F44336")),
+                        DataLabels = true,
+                        LabelPoint = point => $"{point.Y}"
+                    }
+                };
 
-         private void Timer_Tick(object sender, EventArgs e)
-         {
-             TimeText.Text = DateTime.Now.ToString("hh:mm tt"); // 12-hour format
-         }
+                // Create labels (day names with dates)
+                Labels = dailyStats.Select(d => $"{d.Date:ddd}\n{d.Date:dd}").ToArray();
 
-         private void EnsureSaversDirectoryExists()
-         {
-             if (!Directory.Exists(saversDirectory))
-                 Directory.CreateDirectory(saversDirectory);
-         } */
+                // Update UI
+                DataContext = this;
+            }
+            catch (Exception ex)
+            {
+                // Handle error gracefully
+                AttendanceSeries = new SeriesCollection();
+                Labels = new string[0];
+                DataContext = this;
+
+                // Optionally log the error
+                System.Diagnostics.Debug.WriteLine($"Error loading attendance overview: {ex.Message}");
+            }
+        }
 
         private void LoadData()
         {
@@ -203,10 +260,14 @@ namespace PDC_System
                 .ToList();
         }
 
-
-
-        
-
-
+        // Helper class for daily attendance statistics
+        public class DailyAttendanceStats
+        {
+            public DateTime Date { get; set; }
+            public int PresentCount { get; set; }
+            public int AbsentCount { get; set; }
+            public int TotalEmployees { get; set; }
+            public double AttendancePercentage { get; set; }
+        }
     }
 }

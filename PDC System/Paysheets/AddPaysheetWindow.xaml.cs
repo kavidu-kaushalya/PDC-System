@@ -474,8 +474,10 @@ namespace PDC_System.Paysheets
             int ACNopay = Nopays.Text != "" ? int.Parse(Nopays.Text) : 0;
 
             int actabsentdate = (absentDays - ACNopay);
+            decimal calculatedAbsentAmount = (actabsentdate - NopayDays) * absentDayAmount;
 
-            absentDayAmount = (actabsentdate - NopayDays) * absentDayAmount;
+// Prevent negative absent day deductions
+absentDayAmount = Math.Max(0, calculatedAbsentAmount);
             decimal totalDeducations = filteredDeducations.Sum(d => d.DeducationAmount);
             decimal totalofDeducations = absentDayAmount + totalDeducations + EPFAmount + Loanamount;
 
@@ -499,14 +501,15 @@ namespace PDC_System.Paysheets
             #region Text Box Assign
             eMPLOYEENAME.Text = $"{Employeename}";
             EmployeeID.Text = $"{Employeeid}";
-            TotalEarnings.Text = $"{totalEarnings:N2} LKR";
-            TotalDeducations.Text = $"{totalDeducations:N2} LKR";
+            TotalEarnings.Text = $"{TotalEarings:N2} LKR";
+            TotalDeducations.Text = $"{totalofDeducations:N2} LKR";
             WorkingDays.Text = $"{workingDays}";
             DoubleOTTextBox.Text = $"{TotalDoubleOvertimeAmount:N2} LKR";
             AbsentDays.Text = $"{absentDays}";
             OTTextBox.Text = $"{TotalOvertimeAmount:N2} LKR";
             OTTextBox.Text = $"{TotalOvertimeAmount:N2} LKR";
             EmployeeSalary.Text = $"{TotalOfSalary:N2} LKR";
+            AbsentAmunt.Text = $"{absentDayAmount:N2} LKR";
             #endregion
 
             #region PDF Variable

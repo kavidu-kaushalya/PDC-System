@@ -74,7 +74,7 @@
                     <!-- Total Employees -->
                     <StackPanel Grid.Column="2" Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Top">
                         <Image VerticalAlignment="Center" Source="/Assets/Asset_24.png" Width="30" Margin="30,10,5,10"/>
-                        <TextBlock VerticalAlignment="Center" FontFamily="DM Sans 14pt" FontWeight="Medium" Foreground="{DynamicResource Forground}" TextAlignment="Left" Margin="5" Text="Total Employees"/>
+                        <TextBlock VerticalAlignment="Center" FontFamily="DM Sans 14pt" FontWeight="Medium" Foreground="{DynamicResource Forground}" TextAlignment="Left" Margin="5" Text="Present Today"/>
                     </StackPanel>
                     <StackPanel Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center">
                         <TextBlock Text="11" FontSize="30" FontFamily="DM Sans 14pt" Foreground="#FF272727" FontWeight="Medium" Margin="5"/>
@@ -198,6 +198,13 @@
                                 <VisualBrush Visual="{Binding ElementName=BDRounded}"/>
                             </DataGrid.OpacityMask>
                         </DataGrid>
+                        
+                        
+                        
+
+                        
+                        
+                        
                     </Grid>
 
 
@@ -211,6 +218,50 @@
                 </StackPanel>
             </Border>
         </StackPanel>
+
+
+        <Border Grid.Row="2" Grid.ColumnSpan="3" Grid.Column="0"
+Background="{DynamicResource Background}"
+            BorderBrush="{DynamicResource BorderBrush}"
+            BorderThickness="3"
+CornerRadius="14"
+Padding="16"
+Margin="5">
+
+            <StackPanel>
+                <TextBlock Text="Attendance Overview (Last 7 Days)"
+           FontSize="16"
+           FontWeight="SemiBold"
+           Margin="0,0,0,12"/>
+
+                <lvc:CartesianChart Series="{Binding AttendanceSeries}"
+                    LegendLocation="None"
+                    Height="220"
+                    Background="Transparent">
+
+                    <!-- X AXIS -->
+                    <lvc:CartesianChart.AxisX>
+                        <lvc:Axis Labels="{Binding Labels}"
+                  Foreground="#8A8F98">
+                            <lvc:Axis.Separator>
+                                <lvc:Separator Step="1"
+                                           IsEnabled="False"/>
+                            </lvc:Axis.Separator>
+                        </lvc:Axis>
+                    </lvc:CartesianChart.AxisX>
+
+                    <!-- Y AXIS (hidden) -->
+                    <lvc:CartesianChart.AxisY>
+                        <lvc:Axis ShowLabels="True">
+                            <lvc:Axis.Separator>
+                                <lvc:Separator IsEnabled="False"/>
+                            </lvc:Axis.Separator>
+                        </lvc:Axis>
+                    </lvc:CartesianChart.AxisY>
+
+                </lvc:CartesianChart>
+            </StackPanel>
+        </Border>
 
     </Grid>
 </UserControl>
