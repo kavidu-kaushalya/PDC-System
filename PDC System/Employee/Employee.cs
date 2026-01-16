@@ -2,14 +2,11 @@
 {
     public class Employee
     {
-
-
         // The name of the employee (required field)
         public  string Name { get; set; }
 
         // The employee's unique ID (required field)
         public  string ID { get; set; }
-
 
         public string FullName => $"{Name} - {ID}";
 
@@ -97,8 +94,6 @@
         public bool Sunday { get; set; }
 
 
-        public DateTime ValidFrom { get; set; }
-        public DateTime ValidTo { get; set; }
-
+        // Removed ValidFrom and ValidTo properties
     }
 }

@@ -18,17 +18,29 @@ namespace PDC_System
             InitializeComponent();
             CreateUserPanel.Visibility = Visibility.Collapsed;
             LoadUsers();
+            UpdateUserCountDisplay();
         }
 
         private void LoadUsers()
         {
             users = UserService.Load();
             UsersDataGrid.ItemsSource = users;
+            UpdateUserCountDisplay();
+        }
+
+        private void UpdateUserCountDisplay()
+        {
+            if (users != null)
+            {
+                UserCountText.Text = $"{users.Count} Users";
+            }
         }
 
         private void BtnCreateUser_Click(object sender, RoutedEventArgs e)
         {
             ShowCreateUserPanel();
+            ResetToCreateMode();
+            UpdatePanelHeader("➕ Create New User", "Fill in the details to create a new user account");
         }
 
         private void BtnManageUsers_Click(object sender, RoutedEventArgs e)
@@ -39,36 +51,54 @@ namespace PDC_System
         private void ShowCreateUserPanel()
         {
             CreateUserPanel.Visibility = Visibility.Visible;
+            ManageUsersPanel.Opacity = 0.5;
             ManageUsersPanel.IsEnabled = false;
-            LoadUsers();
-          
+            ClearForm();
         }
 
         private void ShowManageUsersPanel()
         {
-            ManageUsersPanel.Visibility = Visibility.Visible;
-            ClearForm();
+            CreateUserPanel.Visibility = Visibility.Collapsed;
+            ManageUsersPanel.Opacity = 1.0;
+            ManageUsersPanel.IsEnabled = true;
+            LoadUsers();
+        }
 
+        private void UpdatePanelHeader(string title, string description)
+        {
+            // Find the header TextBlocks in the CreateUserPanel
+            var headerBorder = CreateUserPanel.Child as ScrollViewer;
+            if (headerBorder?.Content is StackPanel stackPanel)
+            {
+                var border = stackPanel.Children[0] as Border;
+                if (border?.Child is StackPanel headerStack)
+                {
+                    if (headerStack.Children[0] is TextBlock titleBlock)
+                        titleBlock.Text = title;
+                    if (headerStack.Children[1] is TextBlock descBlock)
+                        descBlock.Text = description;
+                }
+            }
         }
 
         private void CreateSave_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(TxtUser.Text))
             {
-                CustomMessageBox.Show("Please enter a username.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                CustomMessageBox.Show("⚠️ Please enter a username.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
             if (string.IsNullOrWhiteSpace(TxtPass.Password) && !isEditMode)
             {
-                CustomMessageBox.Show("Please enter a password.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                CustomMessageBox.Show("⚠️ Please enter a password.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
             // Check if username already exists (when creating or editing different user)
             if (users.Any(u => u.Username == TxtUser.Text && (!isEditMode || u.Username != editingUser?.Username)))
             {
-                CustomMessageBox.Show("Username already exists. Please choose a different username.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                CustomMessageBox.Show("⚠️ Username already exists. Please choose a different username.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
@@ -82,7 +112,7 @@ namespace PDC_System
                 }
                 UpdateUserPermissions(editingUser);
 
-                CustomMessageBox.Show("User updated successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                CustomMessageBox.Show("✅ User updated successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             else
             {
@@ -95,13 +125,13 @@ namespace PDC_System
                 UpdateUserPermissions(newUser);
 
                 users.Add(newUser);
-                CustomMessageBox.Show("User created successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                CustomMessageBox.Show("✅ User created successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             }
 
             UserService.Save(users);
             LoadUsers();
             ClearForm();
-            ResetToCreateMode();
+            ShowManageUsersPanel();
         }
 
         private void UpdateUserPermissions(User user)
@@ -122,9 +152,7 @@ namespace PDC_System
         private void Clear_Click(object sender, RoutedEventArgs e)
         {
             ClearForm();
-            ResetToCreateMode();
-            CreateUserPanel.Visibility = Visibility.Collapsed;
-            ManageUsersPanel.IsEnabled = true;
+            ShowManageUsersPanel();
         }
 
         private void ClearForm()
@@ -150,14 +178,11 @@ namespace PDC_System
         {
             if (sender is Button button && button.DataContext is User user)
             {
-
-                CreateUserPanel.Visibility = Visibility.Visible;
-                ManageUsersPanel.IsEnabled = false;
                 editingUser = user;
                 isEditMode = true;
 
-                // Switch to create panel for editing
                 ShowCreateUserPanel();
+                UpdatePanelHeader("✏️ Edit User", $"Modify details for user: {user.Username}");
 
                 // Populate form with user data
                 TxtUser.Text = user.Username;
@@ -177,7 +202,7 @@ namespace PDC_System
                 ChkIsAdmin.IsChecked = user.Isadmin;
 
                 // Update UI for edit mode
-                BtnCreateSave.Content = "Update User";
+                BtnCreateSave.Content = "💾 Update User";
             }
         }
 
@@ -186,7 +211,7 @@ namespace PDC_System
             if (sender is Button button && button.DataContext is User user)
             {
                 var result = CustomMessageBox.Show(
-                    $"Are you sure you want to delete user '{user.Username}'?",
+                    $"⚠️ Are you sure you want to delete user '{user.Username}'?\n\nThis action cannot be undone.",
                     "Confirm Delete",
                     MessageBoxButton.YesNo,
                     MessageBoxImage.Question);
@@ -196,7 +221,7 @@ namespace PDC_System
                     users.Remove(user);
                     UserService.Save(users);
                     LoadUsers();
-                    CustomMessageBox.Show("User deleted successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    CustomMessageBox.Show("✅ User deleted successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
         }
@@ -205,7 +230,7 @@ namespace PDC_System
         {
             isEditMode = false;
             editingUser = null;
-            BtnCreateSave.Content = "Create User";
+            BtnCreateSave.Content = "✅ Create User";
         }
 
         // Keep the original Create_Click for backward compatibility

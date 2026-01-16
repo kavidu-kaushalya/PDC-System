@@ -22,10 +22,7 @@
 
                         <!-- Personal Details -->
                         <TextBlock Text="Personal Details:" Margin="10" FontSize="20" FontWeight="Bold"/>
-                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                            <Image Name="ImageDisplay" Width="150" Height="150" Margin="10" VerticalAlignment="Top" OpacityMask="Black" />
-                            <Button Content="Employee Image" HorizontalAlignment="Center"  Style="{DynamicResource ActionButton}" Width="133" Margin="10" Click="ImportImageButton_Click" Height="27"/>
-                        </StackPanel>
+                      
 
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -113,7 +110,7 @@
                             </Grid.ColumnDefinitions>
 
                             <StackPanel Grid.Row="0" Grid.Column="0">
-                                <Label Content="Job Role:" Margin="10" TextBlock.FontSize="14"/>
+                                <Label Content="Job Role:" Foreground="{DynamicResource Forground}" Margin="10" TextBlock.FontSize="14"/>
                                 <ComboBox Style="{DynamicResource ComboBoxFlatStyle}" x:Name="jrole" IsEditable="True" DisplayMemberPath="Content" Margin="10" FontSize="16">
                                     <ComboBoxItem Content="Graphic Designer" />
                                     <ComboBoxItem Content="Pre-Press Technician" />
@@ -138,7 +135,7 @@
                             </StackPanel>
 
                             <StackPanel Grid.Row="0" Grid.Column="1">
-                                <Label Content="Depratment:" Margin="10" TextBlock.FontSize="14"/>
+                                <Label Content="Depratment:" Foreground="{DynamicResource Forground}" Margin="10" TextBlock.FontSize="14"/>
                                 <ComboBox Style="{DynamicResource ComboBoxFlatStyle}" x:Name="Department" IsEditable="True" DisplayMemberPath="Content" Margin="10" FontSize="16">
                                     <ComboBoxItem Content="Offset Printing" />
                                     <ComboBoxItem Content="Digital Printing" />
@@ -166,31 +163,24 @@
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
 
+                            <StackPanel Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <Image Name="ImageDisplay" Width="150" Height="150" Margin="10" VerticalAlignment="Top" OpacityMask="Black" />
+                                <Button Content="Employee Image" HorizontalAlignment="Center"  Style="{DynamicResource ActionButton}" Width="133" Margin="10" Click="ImportImageButton_Click" Height="27"/>
+                            </StackPanel>
+                            
                             <StackPanel Grid.Row="0" Grid.Column="0">
-                                <TextBlock Text="EmployeeID:" Margin="10" FontSize="14"/>
+                                <TextBlock Text="Employee ID/Attendance ID:" Margin="10" FontSize="14"/>
                                 <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="EmployeeIDTextBox" Margin="10" SelectionTextBrush="White" PreviewTextInput="NumberOnly_PreviewTextInput" FontSize="16"/>
+                                <StackPanel Grid.Row="1">
+                                    <TextBlock Text="NoPay" Margin="10" FontSize="14"/>
+                                    <TextBox  x:Name="NoPayTextBox" Style="{DynamicResource TextBoxStyle}" Margin="10" SelectionTextBrush="White" PreviewTextInput="NumberOnly_PreviewTextInput" FontSize="16"/>
+                                </StackPanel>
+
                             </StackPanel>
 
-                            <StackPanel  Margin="5" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1">
-                                <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1.5" CornerRadius="10">
-                                    <StackPanel Margin="5">
-                                        <TextBlock Text="Attendance ValidFrom:" Margin="10" FontSize="14"/>
-                                        <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="2"  Margin="10" CornerRadius="5" >
-                                            <cal:CustomDatePicker x:Name="ValidFrom"  Width="auto"  Height="auto" />
-                                        </Border>
-                                        <TextBlock Text="Attendance ValidTo:" Margin="10" FontSize="14"/>
-                                        <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="2"  Margin="10" CornerRadius="5" >
-                                            <cal:CustomDatePicker x:Name="ValidTo"  Width="auto" Height="auto" />
-                                        </Border>
-                                    </StackPanel>
-                                </Border>
-                            </StackPanel>
+                           
 
-                            <StackPanel Grid.Row="1">
-                                <TextBlock Text="NoPay" Margin="10" FontSize="14"/>
-                                <TextBox  x:Name="NoPayTextBox" Style="{DynamicResource TextBoxStyle}" Margin="10" SelectionTextBrush="White" PreviewTextInput="NumberOnly_PreviewTextInput" FontSize="16"/>
-                            </StackPanel>
-
+                         
                             <StackPanel Margin="5" Grid.Row="2" Grid.ColumnSpan="2" VerticalAlignment="Center">
                                 <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1.5" CornerRadius="10">
                                     <StackPanel Margin="5">

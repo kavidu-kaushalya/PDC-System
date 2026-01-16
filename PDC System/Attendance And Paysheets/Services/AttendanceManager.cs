@@ -9,28 +9,23 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 
-
 namespace PDC_System.Services
 {
     public class AttendanceManager
     {
         string basePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Savers");
 
-        private readonly AttendanceDatabase _db;   // 🔹 NEW
+        private readonly AttendanceDatabase _db;
 
         public AttendanceManager()
         {
             if (!Directory.Exists(basePath))
                 Directory.CreateDirectory(basePath);
 
-            // ❌ ivms.json / attendance.json NOT needed now
-            // EnsureJsonFile("ivms.json");
-            // EnsureJsonFile("attendance.json");
-
             EnsureJsonFile("employee.json");
             EnsureJsonFile("holiday.json");
 
-            _db = new AttendanceDatabase(basePath);   // 🔹 init SQLite
+            _db = new AttendanceDatabase(basePath);
         }
 
         private void EnsureJsonFile(string fileName)
@@ -43,7 +38,7 @@ namespace PDC_System.Services
         // ✅ Load all attendance (read-only, NO auto-save)
         public List<AttendanceRecord> LoadAttendance()
         {
-            var data = _db.GetFingerprintData();   // 🔹 from SQLite
+            var data = _db.GetFingerprintData();
             var employees = JsonConvert.DeserializeObject<List<Employee>>(File.ReadAllText(Path.Combine(basePath, "employee.json")));
             var holidays = JsonConvert.DeserializeObject<List<Holiday>>(File.ReadAllText(Path.Combine(basePath, "holiday.json")));
 
@@ -53,8 +48,9 @@ namespace PDC_System.Services
 
             foreach (var emp in employees)
             {
-                DateTime startDate = emp.ValidFrom;
-                DateTime endDate = emp.ValidTo;
+                // Generate records for the last 30 days only (or adjust as needed)
+                DateTime startDate = DateTime.Today.AddDays(-30);
+                DateTime endDate = DateTime.Today;
 
                 for (var day = startDate.Date; day <= endDate.Date; day = day.AddDays(1))
                 {
@@ -62,14 +58,12 @@ namespace PDC_System.Services
                         r.EmployeeId == emp.EmployeeId &&
                         r.Date.Date == day.Date);
 
-                    // ✅ Manual edit එකක් තිබුනොත්, එක විතරක් use කරන්න
                     if (savedRecord != null && savedRecord.IsManualEdit)
                     {
                         records.Add(savedRecord);
                         continue;
                     }
 
-                    // IVMS data එකෙන් calculate කරන්න
                     var grp = grouped.FirstOrDefault(g => g.Key.EmployeeID == emp.EmployeeId && g.Key.Date == day);
                     var times = grp?.OrderBy(x => x.DateTime).Select(x => x.DateTime).ToList();
 
@@ -81,10 +75,10 @@ namespace PDC_System.Services
             return records.OrderBy(r => r.Date).ThenBy(r => r.EmployeeId).ToList();
         }
 
-        // ✅ Load with date range (read-only, NO auto-save)
+        // ✅ Load with date range - now generates temporary absence records
         public List<AttendanceRecord> LoadAttendanceWithDateRange(DateTime startDate, DateTime endDate)
         {
-            var data = _db.GetFingerprintData();   // 🔹 from SQLite
+            var data = _db.GetFingerprintData();
             var employees = JsonConvert.DeserializeObject<List<Employee>>(File.ReadAllText(Path.Combine(basePath, "employee.json")));
             var holidays = JsonConvert.DeserializeObject<List<Holiday>>(File.ReadAllText(Path.Combine(basePath, "holiday.json")));
 
@@ -102,22 +96,16 @@ namespace PDC_System.Services
             {
                 foreach (var day in dateRange)
                 {
-                    // Employee valid period එකෙන් එළියේ නම් skip කරන්න
-                    if (day < emp.ValidFrom.Date || day > emp.ValidTo.Date)
-                        continue;
-
                     var savedRecord = savedRecords.FirstOrDefault(r =>
                         r.EmployeeId == emp.EmployeeId &&
                         r.Date.Date == day.Date);
 
-                    // ✅ Manual edit තිබුනොත් HIGHEST PRIORITY
                     if (savedRecord != null && savedRecord.IsManualEdit)
                     {
                         records.Add(savedRecord);
                         continue;
                     }
 
-                    // IVMS data එකෙන් calculate කරන්න
                     var grp = grouped.FirstOrDefault(g => g.Key.EmployeeID == emp.EmployeeId && g.Key.Date == day);
                     var times = grp?.OrderBy(x => x.DateTime).Select(x => x.DateTime).ToList();
 
@@ -126,7 +114,6 @@ namespace PDC_System.Services
                 }
             }
 
-            // ⛔ AUTO-SAVE REMOVED - Load only, don't save
             return records.OrderBy(r => r.Date).ThenBy(r => r.EmployeeId).ToList();
         }
 
@@ -155,13 +142,10 @@ namespace PDC_System.Services
             }
         }
 
-
         private List<AttendanceRecord> LoadSavedAttendanceRecords()
         {
-            // NOW just read from SQLite
             return _db.GetAttendanceRecords();
         }
-
 
         private AttendanceRecord CalculateAttendanceRecord(Employee emp, DateTime day, List<DateTime> times, List<Holiday> holidays)
         {
@@ -226,7 +210,8 @@ namespace PDC_System.Services
             }
             else if (times == null || times.Count == 0)
             {
-                status = "Absent";
+                // This creates temporary absence records without saving to database
+                status = "Absent (Temporary)";
             }
             else if (times.Count == 1)
             {
@@ -294,17 +279,16 @@ namespace PDC_System.Services
                         var early = workEnd - last.TimeOfDay;
                         earlyLeave = $"{(int)early.TotalHours}h {early.Minutes}m";
                     }
-                    // LATE CALCULATION WITH ALLOWABLE MINUTES
+
                     int allowedLate = Properties.Settings.Default.Late_Allow_Minutes;
 
                     if (first.TimeOfDay > workStart)
                     {
                         var late = first.TimeOfDay - workStart;
 
-                        // If late is less than allowed minutes → treat as no late
                         if (late.TotalMinutes <= allowedLate)
                         {
-                            lateHours = "0h 0m";   // No late
+                            lateHours = "0h 0m";
                         }
                         else
                         {
@@ -312,7 +296,6 @@ namespace PDC_System.Services
                             lateHours = $"{(int)actualLate.TotalHours}h {actualLate.Minutes}m";
                         }
                     }
-
 
                     status = "OK";
                 }
@@ -331,7 +314,7 @@ namespace PDC_System.Services
                 EarlyLeave = earlyLeave,
                 LateHours = lateHours,
                 Status = status,
-                IsManualEdit = false // ✅ IVMS එකෙන් calculate කරපු එක
+                IsManualEdit = false
             };
         }
 
@@ -392,7 +375,6 @@ namespace PDC_System.Services
             }
         }
 
-
         // ✅ Reset single manual edit
         public void ResetManualEditForRecord(AttendanceRecord record)
         {
@@ -405,7 +387,6 @@ namespace PDC_System.Services
                 throw new Exception($"Error resetting manual edit for record: {ex.Message}");
             }
         }
-
 
         // Returns DataTable for raw IVMS logs (instead of ivms.json)
         public DataTable LoadRawPunchTable()
@@ -428,7 +409,6 @@ namespace PDC_System.Services
 
             return dt;
         }
-
 
         public class Holiday
         {

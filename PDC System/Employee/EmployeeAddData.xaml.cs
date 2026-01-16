@@ -66,8 +66,7 @@ namespace PDC_System
             birthday.SelectedDate = Employee.Birthday;
             Department.Text = Employee.Department;
 
-            ValidFrom.SelectedDate = Employee.ValidFrom;
-            ValidTo.SelectedDate = Employee.ValidTo;
+        
 
             Mon.IsChecked = Employee.Monday;
             Tue.IsChecked = Employee.Tuesday;
@@ -115,8 +114,7 @@ namespace PDC_System
                 NID = existingEmployee.NID,
                 Birthday = existingEmployee.Birthday,
                 Department = existingEmployee.Department,
-                ValidFrom = existingEmployee.ValidFrom,
-                ValidTo = existingEmployee.ValidTo,
+
                 Salary = existingEmployee.Salary,
                 BSalary = existingEmployee.BSalary,
                 OvertimeAmount = existingEmployee.OvertimeAmount,
@@ -309,8 +307,6 @@ namespace PDC_System
             }
 
 
-            DateTime ValidFromDate = ValidFrom.SelectedDate ?? DateTime.Now;
-            DateTime ValidToDate = ValidTo.SelectedDate ?? DateTime.Now;
 
             // Create Employee Object
             Employee = new Employee
@@ -330,8 +326,7 @@ namespace PDC_System
                 Birthday = birthday.SelectedDate,
                 Department = Department.Text.Trim(),
 
-                ValidFrom = ValidFromDate,
-                ValidTo = ValidToDate,
+
 
                 Monday = (Mon.IsChecked == true),
                 Tuesday = (Tue.IsChecked == true),
@@ -403,8 +398,7 @@ namespace PDC_System
 
                 CheckChange("Department", originalEmployee.Department, Employee.Department);
 
-                CheckChange("Valid From", originalEmployee.ValidFrom.Date, Employee.ValidFrom.Date);
-                CheckChange("Valid To", originalEmployee.ValidTo.Date, Employee.ValidTo.Date);
+
 
 
                 CheckChange("Salary", originalEmployee.Salary, Employee.Salary);
