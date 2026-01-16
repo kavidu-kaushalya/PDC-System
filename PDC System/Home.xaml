@@ -356,8 +356,31 @@ Margin="3" Width="250" Height="45">
 
                 <!-- Main Content Display Area -->
                 <Grid Grid.Row="2" Grid.Column="1" Margin="0,0,10,10">
-                    <Border Background="{DynamicResource Background}" CornerRadius="20">
-                        <ContentControl  Margin="20" x:Name="MainContent"   Background="Transparent"  />
+                    <Border Margin="15,0,15,15" CornerRadius="15" BorderThickness="1" BorderBrush="Transparent" Grid.Row="1" Grid.Column="1" Background="{DynamicResource ContBackground}">
+                        <Grid   >
+
+                            <Grid.Background>
+                                <DrawingBrush TileMode="Tile"
+           Viewport="0,0,30,30"
+           ViewportUnits="Absolute"
+           Stretch="None">
+                                    <DrawingBrush.Drawing>
+                                        <GeometryDrawing Brush="{DynamicResource ThemeBackgroundDotsColor}">
+                                            <GeometryDrawing.Geometry>
+                                                <EllipseGeometry
+                 Center="3,3"
+                 RadiusX="1"
+                 RadiusY="1"/>
+                                            </GeometryDrawing.Geometry>
+                                        </GeometryDrawing>
+                                    </DrawingBrush.Drawing>
+                                </DrawingBrush>
+                            </Grid.Background>
+
+                            <Border CornerRadius="20">
+                                <ContentControl  Margin="20" x:Name="MainContent"   Background="Transparent"  />
+                            </Border>
+                        </Grid>
                     </Border>
                 </Grid>
                

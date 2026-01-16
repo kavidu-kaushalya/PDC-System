@@ -154,6 +154,7 @@ namespace PDC_System.Helpers
 
             // Birthday border
             Application.Current.Resources["BirthdayBoderBackColor"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString(isLight ? "#FFFFFF" : "#0F0F0F"));
+            Application.Current.Resources["ThemeBackgroundDotsColor"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString(isLight ? "#33252525" : "#30FFFFFF"));
 
             // Foreground colors
             Application.Current.Resources["CountofjobForeground"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString(isLight ? "#0F0F0F" : "#FFFFFF"));

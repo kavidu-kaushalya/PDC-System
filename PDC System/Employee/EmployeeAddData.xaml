@@ -48,7 +48,7 @@
 
                             <StackPanel Grid.Column="1" Width="auto">
                                 <TextBlock Text="Email:" Margin="10" FontSize="14"/>
-                                <TextBox x:Name="EmployeeEmailTextBox" Style="{DynamicResource TextBoxStyle}" Width="auto" Margin="10" FontSize="16"/>
+                                <TextBox x:Name="EmployeeEmailTextBox"  Style="{DynamicResource TextBoxStyle}" Width="auto" Margin="10" FontSize="16"/>
                             </StackPanel>
 
                             <StackPanel Grid.Row="1" Grid.Column="0" Width="auto">

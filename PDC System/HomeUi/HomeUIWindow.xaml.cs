@@ -50,6 +50,9 @@ namespace PDC_System
             ThemeManager.ApplyTheme(this); // Apply initial theme
             LoadBarChartData();
             LoadAttendanceOverview();
+            LoadTotalJobs(); // Load total jobs count
+            LoadPresentEmployeesToday(); // Load present employees for today
+            LoadTotalCustomers(); // Load total customers count
         }
 
         // JsonData class
@@ -65,6 +68,83 @@ namespace PDC_System
         {
             public string Label { get; set; }
             public int Value { get; set; }
+        }
+
+        private void LoadPresentEmployeesToday()
+        {
+            try
+            {
+                var attendanceManager = new AttendanceManager();
+                DateTime today = DateTime.Today;
+
+                // Load today's attendance records
+                var todayRecords = attendanceManager.LoadAttendanceWithDateRange(today, today);
+
+                if (todayRecords == null || !todayRecords.Any())
+                {
+                    Present_Employee.Text = "0";
+                    return;
+                }
+
+                // Count present employees (excluding absent and missing fingerprint)
+                int presentCount = todayRecords.Count(r =>
+                    !string.IsNullOrEmpty(r.Status) &&
+                    r.Status != "Absent" &&
+                    r.Status != "Missing Finger Print");
+
+                Present_Employee.Text = presentCount.ToString();
+            }
+            catch (Exception ex)
+            {
+                // Handle error gracefully
+                Present_Employee.Text = "Error";
+                System.Diagnostics.Debug.WriteLine($"Error loading present employees: {ex.Message}");
+            }
+        }
+
+        private void LoadTotalJobs()
+        {
+            try
+            {
+                string jsonFilePath = Path.Combine(saversDirectory, "jobcards.json");
+
+                if (!File.Exists(jsonFilePath))
+                {
+                    Total_Jobs.Text = "0";
+                    return;
+                }
+
+                string json = File.ReadAllText(jsonFilePath);
+                var jobCards = JsonConvert.DeserializeObject<List<JobCard>>(json);
+
+                if (jobCards == null || !jobCards.Any())
+                {
+                    Total_Jobs.Text = "0";
+                    return;
+                }
+
+                int totalJobs = jobCards.Count;
+
+                // Format the number with appropriate suffix (K for thousands, etc.)
+                string formattedCount = FormatJobCount(totalJobs);
+                Total_Jobs.Text = formattedCount;
+            }
+            catch (Exception ex)
+            {
+                // Handle error gracefully
+                Total_Jobs.Text = "Error";
+                System.Diagnostics.Debug.WriteLine($"Error loading total jobs: {ex.Message}");
+            }
+        }
+
+        private string FormatJobCount(int count)
+        {
+            if (count >= 1000000)
+                return (count / 1000000.0).ToString("0.#") + "M";
+            else if (count >= 1000)
+                return (count / 1000.0).ToString("0.#") + "K";
+            else
+                return count.ToString();
         }
 
         private void LoadBarChartData()
@@ -258,6 +338,38 @@ namespace PDC_System
                 .Where(b => b.DaysLeft <= daysAhead)
                 .OrderBy(b => b.DaysLeft)
                 .ToList();
+        }
+
+        private void LoadTotalCustomers()
+        {
+            try
+            {
+                string customersFilePath = Path.Combine(saversDirectory, "customers.json");
+
+                if (!File.Exists(customersFilePath))
+                {
+                    Total_Customers.Text = "0";
+                    return;
+                }
+
+                string json = File.ReadAllText(customersFilePath);
+                var customers = JsonConvert.DeserializeObject<List<Customerinfo>>(json);
+
+                if (customers == null || !customers.Any())
+                {
+                    Total_Customers.Text = "0";
+                    return;
+                }
+
+                int totalCustomers = customers.Count;
+                Total_Customers.Text = totalCustomers.ToString();
+            }
+            catch (Exception ex)
+            {
+                // Handle error gracefully
+                Total_Customers.Text = "Error";
+                System.Diagnostics.Debug.WriteLine($"Error loading total customers: {ex.Message}");
+            }
         }
 
         // Helper class for daily attendance statistics

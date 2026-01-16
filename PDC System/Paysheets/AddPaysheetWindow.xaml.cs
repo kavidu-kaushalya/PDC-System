@@ -541,6 +541,12 @@ absentDayAmount = Math.Max(0, calculatedAbsentAmount);
 
 
             TotalsTextBlock.Text = $"Working Days: {workingDays} | Absent Days: {absentDays} | OT: {formattedAOT} | Double OT: {formattedDoubleOT} |Late: {formattedLate} | Early Leave: {formattedLeave}";
+
+            WorkingDays.Text = workingDays.ToString();
+            AbsentDays.Text = absentDays.ToString();
+            NoPayDaysShow.Text = NopayDays.ToString();
+            OThours.Text = formattedAOT;
+            DoubleOT.Text = formattedDoubleOT;
         }
 
         private void LoanAmount_TextChanged(object sender, TextChangedEventArgs e)
@@ -631,6 +637,8 @@ absentDayAmount = Math.Max(0, calculatedAbsentAmount);
             EmployeeSalary.Text = string.Empty;
             LoanAmount.Text = string.Empty;
             TotalsTextBlock.Text = string.Empty;
+
+           
 
             // Hide loan box
             LoanAmount.Visibility = Visibility.Collapsed;

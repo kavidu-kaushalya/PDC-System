@@ -299,9 +299,9 @@ namespace PDC_System
                 return;
             }
 
-            // ✅ Validate Email
+            // ✅ Validate Email (allow empty, but validate format if provided)
             string email = EmployeeEmailTextBox.Text.Trim();
-            if (string.IsNullOrEmpty(email) || !Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+            if (!string.IsNullOrEmpty(email) && !Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
             {
                 CustomMessageBox.Show("Please enter a valid email address.", "Invalid Email", MessageBoxButton.OK, MessageBoxImage.Warning);
                 EmployeeEmailTextBox.Focus();

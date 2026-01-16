@@ -11,7 +11,7 @@
             MinWidth="1004" MinHeight="660">
     <Grid>
        
-                <ScrollViewer VerticalScrollBarVisibility="Hidden">
+                <ScrollViewer Margin="20" VerticalScrollBarVisibility="Hidden">
 
 
                     <Grid HorizontalAlignment="Center" >
@@ -35,12 +35,35 @@
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                             <Button Margin="10" Click="SavePDFPaysheet_Click" Content="Save PDF" Style="{DynamicResource ActionButton}" />
                             <Button Margin="10" Click="SavePaysheet_Click" Content="Apply" Style="{DynamicResource NavigationButtonStyle}"  />
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <TextBlock Foreground="{DynamicResource Forground}" Text="Sent Email: " VerticalAlignment="Center" />
+                                <CheckBox IsChecked="True" x:Name="SentEmail_Check" />
+
+                            </StackPanel>
                         </StackPanel>
+
                         
+
                     </StackPanel>
+
+
+
+                    <Grid>
+                        
+                        
+                    </Grid>
+                            
+                            
+                            
                             <Border Background="{DynamicResource Background}"  BorderThickness="1" BorderBrush="{DynamicResource BorderBrush}" CornerRadius="10">
 
                         <Grid>
+
+
+
+
+
+
                             <StackPanel Margin="15">
 
                                 <StackPanel>
@@ -144,17 +167,26 @@
 
                                     </Grid>
 
-                                    <Grid Margin="20,0,0,0">
+                                    <Grid Margin="0,10,0,0">
 
-                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                            <TextBlock Foreground="{DynamicResource Forground}" Text="Sent Email: " VerticalAlignment="Center" />
-                                            <CheckBox IsChecked="True" x:Name="SentEmail_Check" />
-                                        </StackPanel>
-                                      
-
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        
+                                    </Grid.ColumnDefinitions>
 
 
-                                    </Grid>
+                                    <StackPanel >
+
+                                        <TextBlock  Text="No Pay Days:" Foreground="{DynamicResource Forground}" Margin="0,0,0,5"/>
+
+                                        <TextBox TextChanged="Nopay_Custom" x:Name="Nopays" Style="{DynamicResource TextBoxStyle}"/>
+
+                                    </StackPanel>
+
+
+
+
+                                </Grid>
 
                                 </StackPanel>
 
@@ -169,7 +201,7 @@
                         </StackPanel>
                         
                         
-                        <Border Background="#FF1469FF" Width="auto" x:Name="Infomations" CornerRadius="20"  Grid.Column="1">
+                        <Border Background="#7F1469FF" Width="auto" x:Name="Infomations" CornerRadius="20"  Grid.Column="1">
                             
                             
                         <StackPanel Margin="15" >
@@ -179,13 +211,9 @@
 
 
 
-                        <TextBlock   x:Name="eMPLOYEENAME" Text="Full Name" FontSize="25" FontWeight="Bold" Foreground="{DynamicResource Forground}" />
-                        <TextBlock x:Name="EmployeeID" Text="-" Foreground="{DynamicResource Forground}"/>
+                        <TextBlock   x:Name="eMPLOYEENAME" Text="Full Name" FontSize="25" FontWeight="Bold" Foreground="White" />
+                        <TextBlock x:Name="EmployeeID" Text="-" Foreground="White"/>
 
-
-                        <TextBlock  Text="No Pay Days:" Foreground="{DynamicResource Forground}"/>
-
-                        <TextBox TextChanged="Nopay_Custom" x:Name="Nopays" Style="{DynamicResource TextBoxStyle}"/>
 
 
 
@@ -198,12 +226,12 @@
 
                             <StackPanel>
                                 <TextBlock FontSize="15" HorizontalAlignment="Center" FontWeight="Light" Foreground="White" Text="Toral Earnings" />
-                                <TextBlock x:Name="TotalEarnings" Text="0.00" FontSize="25" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/>
+                                <TextBlock x:Name="TotalEarnings" Text="0.00" FontSize="25" FontWeight="Bold" Foreground="LawnGreen" HorizontalAlignment="Center"/>
                             </StackPanel>
                             
                             <StackPanel Grid.Column="1">
                                 <TextBlock  FontSize="15" HorizontalAlignment="Center" FontWeight="Light" Foreground="White" Text="Toral Deducation" />
-                                <TextBlock x:Name="TotalDeducations" Text="0.00" FontSize="25" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/>
+                                <TextBlock x:Name="TotalDeducations" Text="0.00" FontSize="25" FontWeight="Bold" Foreground="Red" HorizontalAlignment="Center"/>
                             </StackPanel>
 
                            
@@ -258,11 +286,11 @@
 
                             <StackPanel>
                                 <TextBlock FontSize="15" HorizontalAlignment="Center" FontWeight="Light" Foreground="White" Text="OverTime Amount" />
-                                <TextBlock x:Name="DoubleOTTextBox" Text="0.00" FontSize="25" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/> 
+                                <TextBlock  x:Name="OTTextBox" Text="0.00" FontSize="25" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/> 
                             </StackPanel>
                             <StackPanel Grid.Column="1">
                                 <TextBlock FontSize="15" HorizontalAlignment="Center" FontWeight="Light" Foreground="White" Text="DoubleOT Amount" />
-                                <TextBlock x:Name="OTTextBox" Text="0.00" FontSize="25" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/> 
+                                <TextBlock x:Name="DoubleOTTextBox" Text="0.00" FontSize="25" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/> 
                             </StackPanel>
                         </Grid>
 
@@ -289,7 +317,7 @@
 
                         <StackPanel HorizontalAlignment="Center" Margin="0,10,0,0">
                             <TextBlock HorizontalAlignment="Center" Text="NETPAY" Foreground="White"/>
-                            <TextBlock HorizontalAlignment="Center" x:Name="EmployeeSalary" FontSize="25" Text="0" FontWeight="Bold" Foreground="LightGreen" />
+                            <TextBlock HorizontalAlignment="Center" x:Name="EmployeeSalary" FontSize="30" Text="0" FontWeight="Bold" Foreground="LightGreen" />
                         </StackPanel>
 
                     </StackPanel>
@@ -298,7 +326,7 @@
 
                         <StackPanel Grid.Row="1" Grid.ColumnSpan="2">
                             <TextBlock x:Name="TotalsTextBlock" Foreground="{DynamicResource Forground}" />
-                            <DataGrid x:Name="AttendanceDataGrid" AutoGenerateColumns="False" Height="350"  Margin="0,10,0,0"
+                            <DataGrid  x:Name="AttendanceDataGrid" AutoGenerateColumns="False" Height="350"  Margin="20"
                       
  Background="Transparent"
  RowBackground="White"

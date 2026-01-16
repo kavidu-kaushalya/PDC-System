@@ -59,14 +59,14 @@
                         <TextBlock VerticalAlignment="Center" FontFamily="DM Sans 14pt" FontWeight="Medium" TextAlignment="Left" Foreground="{DynamicResource Forground}" Margin="5" Text="Total Jobs"/>
                     </StackPanel>
                     <StackPanel Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center">
-                        <TextBlock Text="105K" FontSize="30" FontFamily="DM Sans 14pt" Foreground="#FF272727" FontWeight="Medium" Margin="5"/>
+                        <TextBlock Text="105K" FontSize="30" x:Name="Total_Jobs" FontFamily="DM Sans 14pt" Foreground="Gray" FontWeight="Medium" Margin="5"/>
                     </StackPanel>
 
                     <!-- Divider -->
                     <StackPanel Grid.RowSpan="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
                         <Rectangle RadiusX="3" RadiusY="1" Width="1.5" Height="100" VerticalAlignment="Center" Margin="0,30,0,10">
                             <Rectangle.Fill>
-                                <SolidColorBrush Color="#FF5B5B5B" Opacity="0.5"/>
+                                <SolidColorBrush Color="Gray" Opacity="0.5"/>
                             </Rectangle.Fill>
                         </Rectangle>
                     </StackPanel>
@@ -77,14 +77,14 @@
                         <TextBlock VerticalAlignment="Center" FontFamily="DM Sans 14pt" FontWeight="Medium" Foreground="{DynamicResource Forground}" TextAlignment="Left" Margin="5" Text="Present Today"/>
                     </StackPanel>
                     <StackPanel Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center">
-                        <TextBlock Text="11" FontSize="30" FontFamily="DM Sans 14pt" Foreground="#FF272727" FontWeight="Medium" Margin="5"/>
+                        <TextBlock Text="11" FontSize="30" x:Name="Present_Employee" FontFamily="DM Sans 14pt" Foreground="Gray" FontWeight="Medium" Margin="5"/>
                     </StackPanel>
 
                     <!-- Divider -->
                     <StackPanel Grid.RowSpan="2" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center">
                         <Rectangle RadiusX="3" RadiusY="1" Width="1.5" Height="100" VerticalAlignment="Center" Margin="0,30,0,10">
                             <Rectangle.Fill>
-                                <SolidColorBrush Color="#FF5B5B5B" Opacity="0.5"/>
+                                <SolidColorBrush Color="Gray" Opacity="0.5"/>
                             </Rectangle.Fill>
                         </Rectangle>
                     </StackPanel>
@@ -95,14 +95,14 @@
                         <TextBlock VerticalAlignment="Center" FontFamily="DM Sans 14pt" FontWeight="Medium" Foreground="{DynamicResource Forground}" TextAlignment="Left" Margin="5" Text="Total Customers"/>
                     </StackPanel>
                     <StackPanel Grid.Column="4" Grid.Row="1" HorizontalAlignment="Center">
-                        <TextBlock Text="11" FontSize="30" FontFamily="DM Sans 14pt" Foreground="#FF272727" FontWeight="Medium" Margin="5"/>
+                        <TextBlock Text="11" FontSize="30" x:Name="Total_Customers" FontFamily="DM Sans 14pt" Foreground="Gray" FontWeight="Medium" Margin="5"/>
                     </StackPanel>
                 </Grid>
             </Border>
         </StackPanel>
 
         <!-- Left Bar Chart -->
-        <Border x:Name="Panel_2" Grid.Column="0" Grid.Row="1" CornerRadius="30" Margin="20" HorizontalAlignment="Stretch">
+        <Border x:Name="Panel_2" Grid.Column="0" Grid.Row="1" BorderThickness="2" Background="{DynamicResource Background}" BorderBrush="{DynamicResource BorderBrush}" CornerRadius="30" Margin="20" HorizontalAlignment="Stretch">
             <Border.Effect>
                 <DropShadowEffect ShadowDepth="0" Opacity="0.15" BlurRadius="15"/>
             </Border.Effect>
@@ -135,10 +135,8 @@
 
         <!-- Upcoming Birthdays -->
         <StackPanel Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" Margin="20">
-            <Border x:Name="BirthdayBorder" Background="White"  CornerRadius="30" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                <Border.Effect>
-                    <DropShadowEffect ShadowDepth="0" Opacity="0.15" BlurRadius="15"/>
-                </Border.Effect>
+            <Border x:Name="BirthdayBorder" Background="{DynamicResource Background}" BorderThickness="2" BorderBrush="{DynamicResource BorderBrush}"  CornerRadius="30" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                
 
 
 
@@ -231,6 +229,7 @@ Margin="5">
             <StackPanel>
                 <TextBlock Text="Attendance Overview (Last 7 Days)"
            FontSize="16"
+                           Foreground="{DynamicResource Forground}"
            FontWeight="SemiBold"
            Margin="0,0,0,12"/>
 
