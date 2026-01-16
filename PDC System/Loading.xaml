@@ -33,6 +33,11 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
+            <StackPanel HorizontalAlignment="Left" Margin="30
+                        " >
+                <Button Click="closeButton_Click" Content="X" Width="25" Style="{DynamicResource ActionButton}" />
+            </StackPanel>
+
 
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                 
@@ -71,9 +76,9 @@
 
                 <StackPanel x:Name="Logininfo">
 
-                    <TextBlock Text="User Name:"/>
+                    <TextBlock Text="User Name:" Margin="0,0,0,8"/>
                     <TextBox x:Name="UserName" Style="{DynamicResource TextBoxStyle}"/>
-                    <TextBlock Text="Password:"/>
+                    <TextBlock Text="Password:" Margin="0,8,0,8"/>
                     <PasswordBox x:Name="Password"/>
 
                     <Button Content="Login" Style="{DynamicResource ActionButton}" Width="100" Click="Login_Click" Margin="0,20,0,0"/>

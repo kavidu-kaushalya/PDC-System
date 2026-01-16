@@ -14,9 +14,9 @@
         WindowStartupLocation="CenterScreen"
         AllowsTransparency="True"
         WindowState="Normal"
-        MinWidth="1350"
+        MinWidth="1450"
         MinHeight="780"
-        Width="1350"
+        Width="1450"
         Height="780">
 
     <!-- WindowChrome for custom window border and rounded corners -->

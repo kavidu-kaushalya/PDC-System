@@ -35,7 +35,10 @@ namespace PDC_System
 
 
        
-
+        private void closeButton_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
 
 
         private void UpdateStatus(TextBlock icon, TextBlock text, bool ok)
