@@ -196,7 +196,7 @@ namespace PDC_System.Helpers
             Application.Current.Resources["Forground"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString(isLight ? "#111111" : "#FFFFFF"));
 
             Application.Current.Resources["IsMouseOver"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString(isLight ? "#f3f3f7" : "#1a1a1a"));
-            Application.Current.Resources["BorderBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString(isLight ? "#f3f3f7" : "#2b2b2b"));
+            Application.Current.Resources["BorderBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString(isLight ? "#c7c7c7" : "#2b2b2b"));
 
             #endregion
 

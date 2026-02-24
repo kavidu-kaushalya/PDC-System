@@ -102,10 +102,7 @@
         </StackPanel>
 
         <!-- Left Bar Chart -->
-        <Border x:Name="Panel_2" Grid.Column="0" Grid.Row="1" BorderThickness="2" Background="{DynamicResource Background}" BorderBrush="{DynamicResource BorderBrush}" CornerRadius="30" Margin="20" HorizontalAlignment="Stretch">
-            <Border.Effect>
-                <DropShadowEffect ShadowDepth="0" Opacity="0.15" BlurRadius="15"/>
-            </Border.Effect>
+        <Border x:Name="Panel_2" Grid.Column="0" Grid.Row="1" BorderThickness="3" Background="{DynamicResource Background}" BorderBrush="{DynamicResource BorderBrush}" CornerRadius="30" Margin="5,20,5,20" HorizontalAlignment="Stretch">
             <StackPanel VerticalAlignment="Bottom" Margin="20" HorizontalAlignment="Stretch">
                 <TextBlock x:Name="countjobname" Text="Monthly Jobs" Foreground="{DynamicResource Forground}" FontSize="20"/>
                 <TextBlock x:Name="Countofjob" Text="10" Foreground="{DynamicResource Forground}" FontSize="30"/>
@@ -134,8 +131,8 @@
 
 
         <!-- Upcoming Birthdays -->
-        <StackPanel Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" Margin="20">
-            <Border x:Name="BirthdayBorder" Background="{DynamicResource Background}" BorderThickness="2" BorderBrush="{DynamicResource BorderBrush}"  CornerRadius="30" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+        <StackPanel Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" Margin="5,20,5,20">
+            <Border x:Name="BirthdayBorder" Background="{DynamicResource Background}" BorderThickness="3" BorderBrush="{DynamicResource BorderBrush}"  CornerRadius="30" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                 
 
 
@@ -249,9 +246,9 @@ Margin="5">
                         </lvc:Axis>
                     </lvc:CartesianChart.AxisX>
 
-                    <!-- Y AXIS (hidden) -->
+                    <!-- Y AXIS -->
                     <lvc:CartesianChart.AxisY>
-                        <lvc:Axis ShowLabels="True">
+                        <lvc:Axis ShowLabels="True" MinValue="0">
                             <lvc:Axis.Separator>
                                 <lvc:Separator IsEnabled="False"/>
                             </lvc:Axis.Separator>

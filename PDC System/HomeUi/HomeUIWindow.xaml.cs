@@ -88,9 +88,7 @@ namespace PDC_System
 
                 // Count present employees (excluding absent and missing fingerprint)
                 int presentCount = todayRecords.Count(r =>
-                    !string.IsNullOrEmpty(r.Status) &&
-                    r.Status != "Absent" &&
-                    r.Status != "Missing Finger Print");
+                    r.CheckIn != "-");
 
                 Present_Employee.Text = presentCount.ToString();
             }
@@ -224,13 +222,10 @@ namespace PDC_System
                     var dayRecords = attendanceRecords.Where(r => r.Date.Date == date.Date).ToList();
 
                     int presentCount = dayRecords.Count(r =>
-                        !string.IsNullOrEmpty(r.Status) &&
-                        r.Status != "Absent" &&
-                        r.Status != "Missing Finger Print");
+      r.CheckIn != "-");
 
                     int absentCount = dayRecords.Count(r =>
-                        r.Status == "Absent" ||
-                        r.Status == "Missing Finger Print");
+                        r.CheckIn == "-");
 
                     // Calculate attendance percentage
                     int totalEmployees = dayRecords.Count;

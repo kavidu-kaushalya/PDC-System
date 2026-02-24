@@ -6,115 +6,144 @@
              xmlns:local="clr-namespace:PDC_System"
              mc:Ignorable="d" 
              MinWidth="1004" MinHeight="660"
-              FontFamily="{StaticResource CustomFont}"
-             >
+             FontFamily="{StaticResource CustomFont}">
 
-    <StackPanel >
-       
-            <StackPanel>
+    <!-- MAIN GRID -->
+    <Grid Margin="10">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Title -->
+            <RowDefinition Height="Auto"/>
+            <!-- Buttons -->
+            <RowDefinition Height="*"/>
+            <!-- DataGrid AUTO RESIZE -->
+        </Grid.RowDefinitions>
 
 
-
+        <!-- TITLE -->
+        <StackPanel Grid.Row="0">
 
             <TextBlock Text="Employee" 
-       FontSize="20" 
-       FontWeight="SemiBold" 
-       Foreground="{DynamicResource Forground}"                        
-       TextAlignment="Left" />
+                       FontSize="20" 
+                       FontWeight="SemiBold" 
+                       Foreground="{DynamicResource Forground}" />
 
             <TextBlock Text="Show all Plate,Digital and Any" 
-       FontSize="12" 
-       FontWeight="Normal" 
-       Foreground="#FF7D7D7D"
-       TextAlignment="Left" Padding="0,0,0,18"/>
+                       FontSize="12" 
+                       Foreground="#FF7D7D7D"
+                       Padding="0,0,0,18"/>
+        </StackPanel>
 
 
+        <!-- BUTTONS + SEARCH -->
+        <StackPanel Grid.Row="1">
 
+            <Button Content="Add Employee"
+                    Click="AddEmployee_Click"
+                    Width="200"
+                    Style="{StaticResource ActionButton}"
+                    Margin="0,0,0,10"/>
+
+            <TextBox x:Name="SearchBox"
+                     Height="35"
+                     Width="300"
+                     Style="{DynamicResource OutsourceSerchBar}"
+                     TextChanged="SearchBox_TextChanged"/>
 
         </StackPanel>
-            
-
-            <StackPanel Grid.Column="1" Grid.RowSpan="2" Margin="30,0,0,0">
-                <ContentControl x:Name="MainContent"  Width="auto" Height="auto" Background="Transparent" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            </StackPanel>
 
 
 
+        <!-- DATAGRID AUTO RESIZE -->
+        <DataGrid Grid.Row="2"
+                  x:Name="EmployeeDataGrid"
+                  AutoGenerateColumns="False"
+
+                  AlternatingRowBackground="#f0f0f0"
+                  SnapsToDevicePixels="True"
+
+                  CanUserResizeColumns="False"
+
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch"
+
+                  CellStyle="{StaticResource DataGridCellStyle}"
+                  Style="{StaticResource DataGridStyle}"
+                  ColumnHeaderStyle="{StaticResource DataGridHeaderStyle}"
+                  RowStyle="{StaticResource DataGridRowStyle}">
+
+            <DataGrid.Columns>
 
 
 
-
-            <StackPanel >
+                <DataGridTextColumn Header="ID"
+                                    Binding="{Binding EmployeeId}"
+                                    Width="*"
+                                    ElementStyle="{StaticResource NameColumnStyle}"/>
                 
+
+                <DataGridTextColumn Header="Name"
+                                    Binding="{Binding Name}"
+                                    Width="*"
+                                    ElementStyle="{StaticResource NameColumnStyle}"/>
+
+
                 
-                <StackPanel >
-                    <Button Content="Add Employee" Click="AddEmployee_Click" Width="200" Style="{StaticResource ActionButton}" Margin="10"/>
-                </StackPanel>
+                <DataGridTextColumn Header="NIC"
+                                    Binding="{Binding NID}"
+                                    Width="*"
+                                    ElementStyle="{StaticResource NameColumnStyle}"/>
 
-              <StackPanel Margin="10" Orientation="Horizontal" >
+                <DataGridTextColumn Header="Birthday"
+                                    Binding="{Binding Birthday, StringFormat={}{0:dd MMMM yyyy}}"
+                                    Width="*"
+                                    ElementStyle="{StaticResource NameColumnStyle}"/>
 
+                <DataGridTextColumn Header="City"
+                         Binding="{Binding City}"
+                         Width="*"
+                         ElementStyle="{StaticResource NameColumnStyle}"/>
+                
 
+                <DataGridTextColumn Header="Contact No"
+                                    Binding="{Binding Contactn1}"
+                                    Width="*"
+                                    ElementStyle="{StaticResource NameColumnStyle}"/>
 
-                    <TextBox  x:Name="SearchBox" Height="35" Style="{DynamicResource OutsourceSerchBar}" Width="300" TextChanged="SearchBox_TextChanged"  />
-            </StackPanel>
+                <DataGridTemplateColumn Header="Action" Width="*">
 
+                    <DataGridTemplateColumn.CellTemplate>
 
+                        <DataTemplate>
 
+                            <StackPanel Orientation="Horizontal"
+                                        HorizontalAlignment="Center">
 
+                                <Button Content="Delete"
+                                        Click="DeleteEmployee_Click"
+                                        Height="30"
+                                        Width="60"
+                                        Style="{StaticResource NavigationButtonStyle}"/>
 
+                                <Button Content="Edit"
+                                        Click="EditEmployee_Click"
+                                        Tag="{Binding}"
+                                        Style="{DynamicResource ActionButton}"
+                                        Padding="5"/>
 
+                            </StackPanel>
 
+                        </DataTemplate>
 
+                    </DataGridTemplateColumn.CellTemplate>
 
+                </DataGridTemplateColumn>
 
-                    
-              
-                    <DataGrid x:Name="EmployeeDataGrid" AutoGenerateColumns="False" Height="300"
-AlternatingRowBackground="#f0f0f0"
-SnapsToDevicePixels="True"
+            </DataGrid.Columns>
 
+        </DataGrid>
 
-CanUserResizeColumns="False"
-CellStyle="{StaticResource DataGridCellStyle}"
-Style="{StaticResource DataGridStyle}"
-ColumnHeaderStyle="{StaticResource DataGridHeaderStyle}"
-RowStyle="{StaticResource DataGridRowStyle}">
-                        <DataGrid.Columns>
-                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" ElementStyle="{StaticResource NameColumnStyle}"/>
-                    <DataGridTextColumn Header="Employee ID" Binding="{Binding EmployeeId}" Width="*" ElementStyle="{StaticResource NameColumnStyle}"/>
-                    <DataGridTemplateColumn Header="Action" Width="*">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate >
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >
-                                    <Button
-     Content="Delete"  
-     Click="DeleteEmployee_Click" 
-     HorizontalAlignment="Center"
-     Height="30" 
-     Width="60" 
-     Style="{StaticResource NavigationButtonStyle}"/>
+    </Grid>
 
-                                    <Button Content="Edit" 
-                                            Style="{DynamicResource ActionButton}"
-                            Padding="5" 
-                            Click="EditEmployee_Click"
-                            Tag="{Binding}">
-                                    </Button>
-                                </StackPanel>
-
-                            </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-
-                        </DataGrid.Columns>
-                    </DataGrid>
-
-            
-            </StackPanel>
-
-
-
-
-        
-    </StackPanel>
 </UserControl>
