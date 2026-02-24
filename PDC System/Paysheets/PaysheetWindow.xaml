@@ -12,54 +12,117 @@
         <conv:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
     </UserControl.Resources>
 
-    <StackPanel>
-        <StackPanel>
-            <Button Style="{DynamicResource ActionButton}" Width="150" Click="CreatePaysheet_Click"  Content="➕ Create Paysheet"></Button>
+    <!-- CHANGE StackPanel to Grid -->
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Button row -->
+            <RowDefinition Height="*"/>
+            <!-- DataGrid row (auto resize) -->
+        </Grid.RowDefinitions>
 
-        </StackPanel>
-
-        <StackPanel HorizontalAlignment="Center">
-            <DataGrid x:Name="PaysheetGrid" Height="300"
-AlternatingRowBackground="#f0f0f0"
-SnapsToDevicePixels="True"
-
-AutoGenerateColumns="False"
-CanUserResizeColumns="False"
-CellStyle="{StaticResource DataGridCellStyle}"
-Style="{StaticResource DataGridStyle}"
-ColumnHeaderStyle="{StaticResource DataGridHeaderStyle}"
-RowStyle="{StaticResource DataGridRowStyle}">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Employee ID" Binding="{Binding EmployeeId}" ElementStyle="{DynamicResource DataGridColumnsStyle}" />
-                    <DataGridTextColumn Header="Month" Binding="{Binding Month}" ElementStyle="{DynamicResource DataGridColumnsStyle}" />
-                    <DataGridTextColumn Header="Paysheet ID" Binding="{Binding PaysheetId }" ElementStyle="{DynamicResource DataGridColumnsStyle}" />
-
-                    <DataGridTextColumn Header="Name" Binding="{Binding EmployeeName}"  ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
-                    <DataGridTextColumn Header="Salary" Binding="{Binding Salary}"  ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
-                    <DataGridTextColumn Header="Earnings" Binding="{Binding TotalEarnings}" ElementStyle="{DynamicResource DataGridColumnsStyle}" />
-                    <DataGridTextColumn Header="Deductions" Binding="{Binding TotalDeductions}" ElementStyle="{DynamicResource DataGridColumnsStyle}" />
-                    <DataGridTemplateColumn Header="Actions">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                    <Button Style="{DynamicResource ActionButton}" Content="Edit" Click="EditPaysheet_Click" Tag="{Binding}" Margin="2"/>
-                                    <Button Style="{DynamicResource DeleteActionButton}" Content="🚫 Delete" Click="DeletePaysheet_Click" Tag="{Binding}" Margin="2"/>
-
-                                    <Button Content="View"
-                                            Style="{DynamicResource ActionButton}"
-        Tag="{Binding PDFPath}"
-        Click="OpenPDF_Click"
-        Visibility="{Binding PDFPath, Converter={StaticResource StringToVisibilityConverter}}"/>
-
-
-                                </StackPanel>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                </DataGrid.Columns>
-            </DataGrid>
-
+        <!-- Button -->
+        <StackPanel Grid.Row="0">
+            <Button Style="{DynamicResource ActionButton}"
+                    Width="150"
+                    Click="CreatePaysheet_Click"
+                    Content="➕ Create Paysheet"/>
         </StackPanel>
         
-    </StackPanel>
+        
+
+        <!-- DataGrid -->
+        <DataGrid x:Name="PaysheetGrid"
+                  Grid.Row="1"
+                  AlternatingRowBackground="#f0f0f0"
+                  SnapsToDevicePixels="True"
+                  AutoGenerateColumns="False"
+                  CanUserResizeColumns="False"
+                  CellStyle="{StaticResource DataGridCellStyle}"
+                  Style="{StaticResource DataGridStyle}"
+                  ColumnHeaderStyle="{StaticResource DataGridHeaderStyle}"
+                  RowStyle="{StaticResource DataGridRowStyle}">
+
+            <DataGrid.Columns>
+
+                <DataGridTextColumn Header="Employee ID"
+                                    Binding="{Binding EmployeeId}"
+                                     Width="*"
+                                    ElementStyle="{DynamicResource DataGridColumnsStyle}" />
+
+                <DataGridTextColumn Header="Month"
+                                    Binding="{Binding Month}"
+                                     Width="*"
+                                    ElementStyle="{DynamicResource DataGridColumnsStyle}" />
+
+                <DataGridTextColumn Header="Paysheet ID"
+                                    Binding="{Binding PaysheetId}"
+                                     Width="*"
+                                    Foreground="#5b9ced"
+                                    ElementStyle="{DynamicResource DataGridColumnsStyle}" />
+
+                <DataGridTextColumn Header="Name"
+                                    Binding="{Binding EmployeeName}"
+                                     Width="*"
+                                    ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+
+               
+                <DataGridTextColumn Header="Earnings"
+                                     Width="*"
+                                    Foreground="#35d499"
+                                    Binding="{Binding TotalEarnings, StringFormat=LKR {0:N2}}"
+                                    ElementStyle="{DynamicResource DataGridColumnsStyle}" />
+
+                <DataGridTextColumn Header="Deductions"
+                                     Width="*"
+                                    Foreground="#FFE84E4E"
+                                   Binding="{Binding TotalDeductions, StringFormat=LKR {0:N2}}"
+                                    ElementStyle="{DynamicResource DataGridColumnsStyle}" />
+
+                <DataGridTextColumn Header="Salary"
+                        Binding="{Binding Salary, StringFormat=LKR {0:N2}}"
+                      Width="*"
+                                    FontWeight="Bold"
+                     ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+
+
+                <DataGridTemplateColumn Header="Actions"  Width="300">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+
+                                <Button Style="{DynamicResource EditActionButton}"
+                                        Content="Edit"
+                                        Click="EditPaysheet_Click"
+                                        Tag="{Binding}"
+                                        Margin="2"/>
+
+                              
+                                <Button Content="View"
+                                        Style="{DynamicResource ViewActionButton}"
+                                        Tag="{Binding PDFPath}"
+                                        Click="OpenPDF_Click"
+                                        
+                                        Margin="5,2,5,2"
+                                        
+                                        Visibility="{Binding PDFPath, Converter={StaticResource StringToVisibilityConverter}}"/>
+
+                                <Button Style="{DynamicResource DeleteActionButton}"
+          Content="🚫 Delete"
+          Click="DeletePaysheet_Click"
+          Tag="{Binding}"
+          />
+
+
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+            </DataGrid.Columns>
+
+        </DataGrid>
+
+    </Grid>
+
 </UserControl>

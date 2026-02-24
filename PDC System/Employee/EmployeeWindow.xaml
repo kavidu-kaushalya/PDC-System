@@ -82,9 +82,7 @@ RowStyle="{StaticResource DataGridRowStyle}">
                         <DataGrid.Columns>
                     <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" ElementStyle="{StaticResource NameColumnStyle}"/>
                     <DataGridTextColumn Header="Employee ID" Binding="{Binding EmployeeId}" Width="*" ElementStyle="{StaticResource NameColumnStyle}"/>
-                    <DataGridTextColumn Header="Employee ValidFrom" Binding="{Binding ValidFrom}" Width="*" ElementStyle="{StaticResource NameColumnStyle}"/>
-                    <DataGridTextColumn Header="Employee ValidTo" Binding="{Binding ValidTo}" Width="*" ElementStyle="{StaticResource NameColumnStyle}"/>
-                            <DataGridTemplateColumn Header="Action" Width="*">
+                    <DataGridTemplateColumn Header="Action" Width="*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate >
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >

@@ -57,52 +57,63 @@ namespace PDC_System.Paysheets
             var btn = sender as Button;
             var paysheet = btn.Tag as Paysheet;
 
-            if (paysheet != null)
+            if (paysheet == null)
+                return;
+
+            // ================================
+            // ✅ CONFIRMATION MESSAGE BOX
+            // ================================
+            var result = CustomMessageBox.Show(
+                $"Are you sure you want to delete Paysheet '{paysheet.PaysheetId}'?\n\nThis will also reverse Loan and EPF history.",
+                "Confirm Delete",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+            if (result != MessageBoxResult.Yes)
+                return;
+
+            // ================================
+            // 🔥 1. REVERSE LOAN IF EXISTED
+            // ================================
+            var history = LoanHistoryService.GetByPaysheetId(paysheet.PaysheetId);
+
+            if (history != null)
             {
-                // ================================
-                // 🔥 1. REVERSE LOAN IF EXISTED
-                // ================================
-                var history = LoanHistoryService.GetByPaysheetId(paysheet.PaysheetId);
+                var loanJson = File.ReadAllText("Savers/loan.json");
+                var loans = JsonConvert.DeserializeObject<List<Loan>>(loanJson) ?? new List<Loan>();
 
-                if (history != null)
+                var loan = loans.FirstOrDefault(l => l.EmployeeId == paysheet.EmployeeId);
+
+                if (loan != null)
                 {
-                    var loanJson = File.ReadAllText("Savers/loan.json");
-                    var loans = JsonConvert.DeserializeObject<List<Loan>>(loanJson) ?? new List<Loan>();
+                    loan.Remeining += history.PaidAmount;
 
-                    var loan = loans.FirstOrDefault(l => l.EmployeeId == paysheet.EmployeeId);
+                    if (loan.Remeining > 0)
+                        loan.Status = "Active";
 
-                    if (loan != null)
-                    {
-                        loan.Remeining += history.PaidAmount;
-
-                        if (loan.Remeining > 0)
-                            loan.Status = "Active";
-
-                        File.WriteAllText("Savers/loan.json",
-                            JsonConvert.SerializeObject(loans, Formatting.Indented));
-                    }
-
-                    LoanHistoryService.DeleteByPaysheetId(paysheet.PaysheetId);
+                    File.WriteAllText("Savers/loan.json",
+                        JsonConvert.SerializeObject(loans, Formatting.Indented));
                 }
 
-                // ================================
-                // 🔥 2. DELETE EPF HISTORY ALSO
-                // ================================
-                DeleteEPFHistory(paysheet.PaysheetId);
-
-                // ================================
-                // 🔥 3. DELETE PAYSHEET
-                // ================================
-                paysheets.Remove(paysheet);
-                File.WriteAllText(paysheetFile, JsonConvert.SerializeObject(paysheets, Formatting.Indented));
-
-                LoadPaysheets();
-                PaysheetGrid.Items.Refresh();
-
-                CustomMessageBox.Show("Paysheet deleted successfully. Loan & EPF corrected 🔄");
+                LoanHistoryService.DeleteByPaysheetId(paysheet.PaysheetId);
             }
-        }
 
+            // ================================
+            // 🔥 2. DELETE EPF HISTORY ALSO
+            // ================================
+            DeleteEPFHistory(paysheet.PaysheetId);
+
+            // ================================
+            // 🔥 3. DELETE PAYSHEET
+            // ================================
+            paysheets.Remove(paysheet);
+            File.WriteAllText(paysheetFile, JsonConvert.SerializeObject(paysheets, Formatting.Indented));
+
+            LoadPaysheets();
+            PaysheetGrid.Items.Refresh();
+
+            CustomMessageBox.Show("Paysheet deleted successfully. Loan & EPF corrected 🔄");
+        }
 
 
 

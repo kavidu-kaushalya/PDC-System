@@ -137,6 +137,7 @@
     
     <Style x:Key="DataGridColumnsStyle" TargetType="TextBlock">
         <Setter Property="TextAlignment" Value="Center"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>
@@ -388,10 +389,15 @@
         </Style.Triggers>
     </Style>
     
+    
+    
+    
     <Style x:Key="DeleteActionButton" TargetType="Button">
-        <Setter Property="Background" Value="Crimson"/>
-        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Background" Value="#66E84E4E"/>
+        <Setter Property="Foreground" Value="#FFE84E4E"/>
         <Setter Property="Height" Value="25" />
+        <Setter Property="BorderBrush" Value="#FFE84E4E"/>
+        <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Width" Value="60" />
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="FontFamily" Value="Poppins"/>
@@ -403,7 +409,8 @@
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
                     <Border Background="{TemplateBinding Background}"
-                    BorderThickness="0"
+                    BorderThickness="2"
+                            BorderBrush="{TemplateBinding BorderBrush}"
                     CornerRadius="8">
                         <ContentPresenter HorizontalAlignment="Center"
                                   VerticalAlignment="Center"/>
@@ -414,13 +421,85 @@
         <Style.Triggers>
             <!-- Change background and cursor on mouse hover -->
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#D44646"/>
+                <Setter Property="Background" Value="#B2E84E4E"/>
               
                 <!-- Use a custom cursor -->
             </Trigger>
         </Style.Triggers>
     </Style>
 
+    <Style x:Key="EditActionButton" TargetType="Button">
+        <Setter Property="Background" Value="#660660FE"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Height" Value="25" />
+        <Setter Property="BorderBrush" Value="#0660FE"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Width" Value="60" />
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="FontFamily" Value="Poppins"/>
+        <Setter Property="FontSize" Value="10"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="Template">
+
+
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}"
+                BorderThickness="2"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                CornerRadius="8">
+                        <ContentPresenter HorizontalAlignment="Center"
+                              VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <!-- Change background and cursor on mouse hover -->
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="#B20660FE"/>
+
+                <!-- Use a custom cursor -->
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+    
+    <Style x:Key="ViewActionButton" TargetType="Button">
+        <Setter Property="Background" Value="#324154"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Height" Value="25" />
+        <Setter Property="BorderBrush" Value="#47111d"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Width" Value="60" />
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="FontFamily" Value="Poppins"/>
+        <Setter Property="FontSize" Value="10"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="Template">
+
+
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}"
+ 
+                        
+                 CornerRadius="8">
+                        <ContentPresenter HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <!-- Change background and cursor on mouse hover -->
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="#FF415165"/>
+
+                <!-- Use a custom cursor -->
+            </Trigger>
+        </Style.Triggers>
+    </Style>
 
 
     <Style x:Key="TextBoxStyle" TargetType="TextBox">
@@ -840,13 +919,123 @@
 
 
 
+    <Style TargetType="ScrollBar">
+        <Setter Property="Width" Value="3"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ScrollBar">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="16"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="16"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Up Arrow -->
+                        <Button
+                            Style="{DynamicResource ScrollButton}"
+                        Grid.Row="0"
+                        Command="ScrollBar.LineUpCommand"
+                  
+                        Content="▲"
+                        FontSize="12"
+                        Foreground="{DynamicResource BorderBrush}" />
+
+                        <!-- Track + Thumb -->
+                        <Track
+                        Grid.Row="1"
+                        Name="PART_Track"
+                        IsDirectionReversed="True">
+                            <Track.Thumb>
+                                <Thumb>
+                                    <Thumb.Style>
+                                        <Style TargetType="Thumb">
+                                            <Setter Property="Background" Value="{DynamicResource BorderBrush}"/>
+                                            <Setter Property="Width" Value="10"/>
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="Thumb">
+                                                        <Border
+                                                        Background="{TemplateBinding Background}"
+                                                        CornerRadius="5"
+                                                        Margin="1"/>
+                                                        <ControlTemplate.Triggers>
+                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                <Setter Property="Background"
+                                                                    Value="{DynamicResource TextSecondaryBrush}"/>
+                                                            </Trigger>
+                                                        </ControlTemplate.Triggers>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </Thumb.Style>
+                                </Thumb>
+                            </Track.Thumb>
+                        </Track>
+
+                        <!-- Down Arrow -->
+                        <Button
+                            Style="{DynamicResource ScrollButton}"
+                        Grid.Row="2"
+                        Command="ScrollBar.LineDownCommand"
+                        Foreground="{DynamicResource BorderBrush}"
+                        Content="▼"
+                        FontSize="12"
+                        />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
 
 
 
 
 
-   
+
+    <Style x:Key="ScrollButton" TargetType="Button">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Height" Value="auto" />
+        <Setter Property="Width" Value="auto" />
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+
+
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}"
+                BorderThickness="0"
+                CornerRadius="3">
+                        <ContentPresenter HorizontalAlignment="Center"
+                              VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <!-- Change background and cursor on mouse hover -->
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="Transparent"/>
+
+                <!-- Use a custom cursor -->
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+
+
+
+
+
+
+
+
+
+
 
 
 
