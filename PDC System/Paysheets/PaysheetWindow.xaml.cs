@@ -33,6 +33,8 @@ namespace PDC_System.Paysheets
         {
             var window = new AddPaysheetWindow();
             window.ShowDialog();
+
+            LoadPaysheets();          // ✅ reload JSON → list update
             PaysheetGrid.Items.Refresh();
         }
 
@@ -47,9 +49,94 @@ namespace PDC_System.Paysheets
                 string json = File.ReadAllText(paysheetFile);
                 paysheets = JsonConvert.DeserializeObject<List<Paysheet>>(json) ?? new List<Paysheet>();
             }
-            PaysheetGrid.ItemsSource = null;
+
+            PaysheetGrid.ItemsSource = paysheets;
+
+            LoadYears();
+        }
+
+
+        private void LoadYears()
+        {
+            YearCombo.Items.Clear();
+            YearCombo.Items.Add("All Years");
+
+            var years = paysheets
+                .Select(p =>
+                {
+                    DateTime d;
+                    if (DateTime.TryParse(p.Month, out d))
+                        return d.Year.ToString();
+                    return null;
+                })
+                .Where(y => y != null)
+                .Distinct()
+                .OrderByDescending(y => y);
+
+            foreach (var year in years)
+                YearCombo.Items.Add(year);
+
+            YearCombo.SelectedIndex = 0;
+        }
+
+        private void Filter_Click(object sender, RoutedEventArgs e)
+        {
+            var filtered = paysheets.AsEnumerable();
+
+            // SEARCH FILTER
+            string search = SearchBox.Text?.ToLower();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                filtered = filtered.Where(p =>
+                    (p.EmployeeName != null && p.EmployeeName.ToLower().Contains(search)) ||
+                    (p.EmployeeId != null && p.EmployeeId.ToLower().Contains(search)) ||
+                    (p.PaysheetId != null && p.PaysheetId.ToLower().Contains(search))
+                );
+            }
+
+            // MONTH FILTER
+            if (MonthCombo.SelectedIndex > 0)
+            {
+                string selectedMonth = ((ComboBoxItem)MonthCombo.SelectedItem).Content.ToString();
+
+                filtered = filtered.Where(p =>
+                {
+                    DateTime d;
+                    if (DateTime.TryParse(p.Month, out d))
+                        return d.ToString("MMMM") == selectedMonth;
+                    return false;
+                });
+            }
+
+            // YEAR FILTER
+            if (YearCombo.SelectedIndex > 0)
+            {
+                string selectedYear = YearCombo.SelectedItem.ToString();
+
+                filtered = filtered.Where(p =>
+                {
+                    DateTime d;
+                    if (DateTime.TryParse(p.Month, out d))
+                        return d.Year.ToString() == selectedYear;
+                    return false;
+                });
+            }
+
+            PaysheetGrid.ItemsSource = filtered.ToList();
+        }
+
+
+        private void Reset_Click(object sender, RoutedEventArgs e)
+        {
+            SearchBox.Text = "";
+
+            MonthCombo.SelectedIndex = 0;
+            YearCombo.SelectedIndex = 0;
+
             PaysheetGrid.ItemsSource = paysheets;
         }
+
 
 
         private void DeletePaysheet_Click(object sender, RoutedEventArgs e)
@@ -181,6 +268,9 @@ namespace PDC_System.Paysheets
 
             File.WriteAllText(epfHistoryFile, JsonConvert.SerializeObject(list, Formatting.Indented));
         }
+
+
+
 
 
 
