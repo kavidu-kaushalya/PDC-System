@@ -16,206 +16,222 @@
         </Style>
     </UserControl.Resources>
 
+    <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto">
+        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 
-    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+            <!-- Top Panels -->
+            <StackPanel Grid.Row="0" Grid.ColumnSpan="3" Margin="20">
+                <Border x:Name="Panel_1" BorderBrush="Transparent" Background="Transparent" Height="150" CornerRadius="30" HorizontalAlignment="Stretch">
+                    <Border.Effect>
+                        <DropShadowEffect ShadowDepth="0" Opacity="0.15" BlurRadius="15"/>
+                    </Border.Effect>
 
-        <!-- Top Panels -->
-        <StackPanel Grid.Row="0" Grid.ColumnSpan="3" Margin="20">
-            <Border x:Name="Panel_1" BorderBrush="Transparent" Background="Transparent" Height="150" CornerRadius="30" HorizontalAlignment="Stretch">
-                <Border.Effect>
-                    <DropShadowEffect ShadowDepth="0" Opacity="0.15" BlurRadius="15"/>
-                </Border.Effect>
+                    <Grid HorizontalAlignment="Stretch">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="2" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="2" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
 
-                <Grid HorizontalAlignment="Stretch">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="2" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="2" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
 
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
+                        <!-- Total Jobs -->
+                        <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Top">
+                            <Image VerticalAlignment="Center" Source="/Assets/Asset_25.png" Width="30" Margin="30,10,5,10"/>
+                            <TextBlock VerticalAlignment="Center" FontFamily="DM Sans 14pt" FontWeight="Medium" TextAlignment="Left" Foreground="{DynamicResource Forground}" Margin="5" Text="Total Jobs"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center">
+                            <TextBlock Text="105K" FontSize="30" x:Name="Total_Jobs" FontFamily="DM Sans 14pt" Foreground="Gray" FontWeight="Medium" Margin="5"/>
+                        </StackPanel>
 
-                    <!-- Total Jobs -->
-                    <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Top">
-                        <Image VerticalAlignment="Center" Source="/Assets/Asset_25.png" Width="30" Margin="30,10,5,10"/>
-                        <TextBlock VerticalAlignment="Center" FontFamily="DM Sans 14pt" FontWeight="Medium" TextAlignment="Left" Foreground="{DynamicResource Forground}" Margin="5" Text="Total Jobs"/>
-                    </StackPanel>
-                    <StackPanel Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center">
-                        <TextBlock Text="105K" FontSize="30" x:Name="Total_Jobs" FontFamily="DM Sans 14pt" Foreground="Gray" FontWeight="Medium" Margin="5"/>
-                    </StackPanel>
+                        <!-- Divider -->
+                        <StackPanel Grid.RowSpan="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Rectangle RadiusX="3" RadiusY="1" Width="1.5" Height="100" VerticalAlignment="Center" Margin="0,30,0,10">
+                                <Rectangle.Fill>
+                                    <SolidColorBrush Color="Gray" Opacity="0.5"/>
+                                </Rectangle.Fill>
+                            </Rectangle>
+                        </StackPanel>
 
-                    <!-- Divider -->
-                    <StackPanel Grid.RowSpan="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <Rectangle RadiusX="3" RadiusY="1" Width="1.5" Height="100" VerticalAlignment="Center" Margin="0,30,0,10">
-                            <Rectangle.Fill>
-                                <SolidColorBrush Color="Gray" Opacity="0.5"/>
-                            </Rectangle.Fill>
-                        </Rectangle>
-                    </StackPanel>
+                        <!-- Total Employees -->
+                        <StackPanel Grid.Column="2" Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Top">
+                            <Image VerticalAlignment="Center" Source="/Assets/Asset_24.png" Width="30" Margin="30,10,5,10"/>
+                            <TextBlock VerticalAlignment="Center" FontFamily="DM Sans 14pt" FontWeight="Medium" Foreground="{DynamicResource Forground}" TextAlignment="Left" Margin="5" Text="Present Today"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center">
+                            <TextBlock Text="11" FontSize="30" x:Name="Present_Employee" FontFamily="DM Sans 14pt" Foreground="Gray" FontWeight="Medium" Margin="5"/>
+                        </StackPanel>
 
-                    <!-- Total Employees -->
-                    <StackPanel Grid.Column="2" Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Top">
-                        <Image VerticalAlignment="Center" Source="/Assets/Asset_24.png" Width="30" Margin="30,10,5,10"/>
-                        <TextBlock VerticalAlignment="Center" FontFamily="DM Sans 14pt" FontWeight="Medium" Foreground="{DynamicResource Forground}" TextAlignment="Left" Margin="5" Text="Present Today"/>
-                    </StackPanel>
-                    <StackPanel Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center">
-                        <TextBlock Text="11" FontSize="30" x:Name="Present_Employee" FontFamily="DM Sans 14pt" Foreground="Gray" FontWeight="Medium" Margin="5"/>
-                    </StackPanel>
+                        <!-- Divider -->
+                        <StackPanel Grid.RowSpan="2" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Rectangle RadiusX="3" RadiusY="1" Width="1.5" Height="100" VerticalAlignment="Center" Margin="0,30,0,10">
+                                <Rectangle.Fill>
+                                    <SolidColorBrush Color="Gray" Opacity="0.5"/>
+                                </Rectangle.Fill>
+                            </Rectangle>
+                        </StackPanel>
 
-                    <!-- Divider -->
-                    <StackPanel Grid.RowSpan="2" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <Rectangle RadiusX="3" RadiusY="1" Width="1.5" Height="100" VerticalAlignment="Center" Margin="0,30,0,10">
-                            <Rectangle.Fill>
-                                <SolidColorBrush Color="Gray" Opacity="0.5"/>
-                            </Rectangle.Fill>
-                        </Rectangle>
-                    </StackPanel>
-
-                    <!-- Total Customers -->
-                    <StackPanel Grid.Column="4" Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Top">
-                        <Image VerticalAlignment="Center" Source="/Assets/Asset_37.png" Width="30" Margin="30,10,5,10"/>
-                        <TextBlock VerticalAlignment="Center" FontFamily="DM Sans 14pt" FontWeight="Medium" Foreground="{DynamicResource Forground}" TextAlignment="Left" Margin="5" Text="Total Customers"/>
-                    </StackPanel>
-                    <StackPanel Grid.Column="4" Grid.Row="1" HorizontalAlignment="Center">
-                        <TextBlock Text="11" FontSize="30" x:Name="Total_Customers" FontFamily="DM Sans 14pt" Foreground="Gray" FontWeight="Medium" Margin="5"/>
-                    </StackPanel>
-                </Grid>
-            </Border>
-        </StackPanel>
-
-        <!-- Left Bar Chart -->
-        <Border x:Name="Panel_2" Grid.Column="0" Grid.Row="1" BorderThickness="3" Background="{DynamicResource Background}" BorderBrush="{DynamicResource BorderBrush}" CornerRadius="30" Margin="5,20,5,20" HorizontalAlignment="Stretch">
-            <StackPanel VerticalAlignment="Bottom" Margin="20" HorizontalAlignment="Stretch">
-                <TextBlock x:Name="countjobname" Text="Monthly Jobs" Foreground="{DynamicResource Forground}" FontSize="20"/>
-                <TextBlock x:Name="Countofjob" Text="10" Foreground="{DynamicResource Forground}" FontSize="30"/>
-
-                <Grid Margin="20">
-                    <ItemsControl Name="BarChart" HorizontalAlignment="Stretch">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" />
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Margin="10" VerticalAlignment="Bottom">
-                                    <Rectangle Width="50" Height="{Binding Value}" Fill="#FF0660FE" RadiusX="5" RadiusY="5" />
-                                    <TextBlock Text="{Binding Label}" Foreground="{StaticResource Barcolor}" FontSize="13" FontWeight="Medium" HorizontalAlignment="Center" Margin="0,5,0,0"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </Grid>
+                        <!-- Total Customers -->
+                        <StackPanel Grid.Column="4" Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Top">
+                            <Image VerticalAlignment="Center" Source="/Assets/Asset_37.png" Width="30" Margin="30,10,5,10"/>
+                            <TextBlock VerticalAlignment="Center" FontFamily="DM Sans 14pt" FontWeight="Medium" Foreground="{DynamicResource Forground}" TextAlignment="Left" Margin="5" Text="Total Customers"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="4" Grid.Row="1" HorizontalAlignment="Center">
+                            <TextBlock Text="11" FontSize="30" x:Name="Total_Customers" FontFamily="DM Sans 14pt" Foreground="Gray" FontWeight="Medium" Margin="5"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
             </StackPanel>
-        </Border>
+
+            <!-- Left Bar Chart -->
+            <Border x:Name="Panel_2" Grid.Column="0" Grid.Row="1" BorderThickness="3" Background="{DynamicResource Background}" BorderBrush="{DynamicResource BorderBrush}" CornerRadius="30" Margin="5,20,5,20" HorizontalAlignment="Stretch">
+                <StackPanel VerticalAlignment="Bottom" Margin="20" HorizontalAlignment="Stretch">
+                    <TextBlock x:Name="countjobname" Text="Monthly Jobs" Foreground="{DynamicResource Forground}" FontSize="20"/>
+                    <TextBlock x:Name="Countofjob" Text="10" Foreground="{DynamicResource Forground}" FontSize="30"/>
+
+                    <Grid Margin="20">
+                        <ItemsControl Name="BarChart" HorizontalAlignment="Stretch">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="10" VerticalAlignment="Bottom">
+                                        <Rectangle Width="50" Height="{Binding Value}" Fill="#FF0660FE" RadiusX="5" RadiusY="5" />
+                                        <TextBlock Text="{Binding Label}" Foreground="{StaticResource Barcolor}" FontSize="13" FontWeight="Medium" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Grid>
+                </StackPanel>
+            </Border>
 
 
 
 
-        <!-- Upcoming Birthdays -->
-        <StackPanel Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" Margin="5,20,5,20">
-            <Border x:Name="BirthdayBorder" Background="{DynamicResource Background}" BorderThickness="3" BorderBrush="{DynamicResource BorderBrush}"  CornerRadius="30" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                
+            <!-- Upcoming Birthdays -->
+            <StackPanel Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" Margin="5,20,5,20">
 
+                <Border Background="{DynamicResource Background}" 
+            BorderThickness="3" 
+            BorderBrush="{DynamicResource BorderBrush}"  
+            CornerRadius="30"
+            Padding="10">
 
+                    <StackPanel Width="500">
+                        <!-- Title -->
+                        <TextBlock x:Name="birthdayname"
+                       Grid.Row="0"
+                       FontSize="23"
+                       FontWeight="Bold"
+                       Margin="10"
+                       Foreground="White"
+                       TextAlignment="Center"
+                       Text="Up Coming Birthdays"/>
 
-
-
-
-                <StackPanel HorizontalAlignment="Center" Margin="30" >
-                    <TextBlock x:Name="birthdayname" FontSize="23" FontWeight="Bold" Margin="10" Foreground="White" TextAlignment="Center" Text="Up Coming Birthdays" Width="auto"/>
-
-
-
-
-
-
-
-                    <Grid Background="Transparent">
-                        <Border x:Name="BDRounded" BorderThickness="1" SnapsToDevicePixels="True" CornerRadius="10" BorderBrush="Transparent" Margin="1" Background="{DynamicResource Background}"/>
-                        <DataGrid x:Name="MyDataGrid" 
-                         ItemsSource="{Binding UpcomingBirthdays}"
-                         BorderBrush="{x:Null}" HeadersVisibility="Column" IsReadOnly="False"
-                 Background="Transparent"
-                 RowBackground="White"
-                 AlternatingRowBackground="#f0f0f0"
-                 SnapsToDevicePixels="True"   
-                 AutoGenerateColumns="False"
-                 CanUserResizeColumns="False"
-                 CellStyle="{StaticResource DataGridCellStyle}"
-                 Style="{StaticResource DataGridStyle}"
-                 ColumnHeaderStyle="{StaticResource DataGridHeaderStyle}"
-                 RowStyle="{StaticResource DataGridRowStyle}">
+                        <!-- DataGrid -->
+                        <DataGrid x:Name="MyDataGrid"
+                      Grid.Row="1"
+                               
+                      ItemsSource="{Binding UpcomingBirthdays}"
+                      AlternatingRowBackground="#f0f0f0"
+                      SnapsToDevicePixels="True"
+                      AutoGenerateColumns="False"
+                      CanUserResizeColumns="False"
+                      VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Auto"
+                      CellStyle="{StaticResource DataGridCellStyle}"
+                      Style="{StaticResource DataGridStyle}"
+                      ColumnHeaderStyle="{StaticResource DataGridHeaderStyle}"
+                      RowStyle="{StaticResource DataGridRowStyle}">
 
                             <DataGrid.Columns>
-                                <DataGridTextColumn  Binding="{Binding Name}" Width="*" ElementStyle="{StaticResource NameColumnStyle}"/>
-                                <DataGridTextColumn  Binding="{Binding BirthDate, StringFormat=MMMM dd}" Width="2*" ElementStyle="{StaticResource NameColumnStyle}"/>
 
-                                <DataGridTemplateColumn Width="*">
+                                <DataGridTextColumn Binding="{Binding Name}"
+                    Width="*"
+               
+                                                    
+                    ElementStyle="{StaticResource DataGridColumnsStyle}"/>
+
+                                <DataGridTextColumn Binding="{Binding BirthDate, StringFormat=MMMM dd}"
+                    Width="*"
+               
+                    ElementStyle="{StaticResource DataGridColumnsStyle}"/>
+
+                                <!-- Days left column -->
+                                <DataGridTemplateColumn  Width="*">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                                <TextBlock.Style>
-                                                    <Style TargetType="TextBlock">
-                                                        <Setter Property="Text" Value="{Binding DaysLeft, StringFormat='Days Left: {0}'}"/>
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding DaysLeft}" Value="0">
-                                                                <Setter Property="Text" Value="TODAY IS BIRTHDAY"/>
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </TextBlock.Style>
-                                            </TextBlock>
+
+
+                                            <StackPanel HorizontalAlignment="Center">
+                                                <TextBlock TextAlignment="Center"
+         VerticalAlignment="Center"
+         HorizontalAlignment="Center">
+
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+
+                                                            <!-- Default text -->
+                                                            <Setter Property="Text"
+                  Value="{Binding DaysLeft, StringFormat=Days Left: {0}}"/>
+
+                                                            <!-- Birthday today trigger -->
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding DaysLeft}" Value="0">
+                                                                    <Setter Property="Text"
+                          Value="TODAY IS BIRTHDAY"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+
+                                                        </Style>
+                                                    </TextBlock.Style>
+
+                                                </TextBlock>
+                                            </StackPanel>
+
+
+
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
+
                             </DataGrid.Columns>
 
-                            <DataGrid.OpacityMask>
-                                <VisualBrush Visual="{Binding ElementName=BDRounded}"/>
-                            </DataGrid.OpacityMask>
                         </DataGrid>
-                        
-                        
-                        
+                    </StackPanel>
 
-                        
-                        
-                        
-                    </Grid>
+               
 
 
 
+             
+                </Border>
 
+            </StackPanel>
 
-
-
-
-
-                </StackPanel>
-            </Border>
-        </StackPanel>
-
-
-        <Border Grid.Row="2" Grid.ColumnSpan="3" Grid.Column="0"
+            <Border Grid.Row="2" Grid.ColumnSpan="3" Grid.Column="0"
 Background="{DynamicResource Background}"
             BorderBrush="{DynamicResource BorderBrush}"
             BorderThickness="3"
@@ -223,41 +239,43 @@ CornerRadius="14"
 Padding="16"
 Margin="5">
 
-            <StackPanel>
-                <TextBlock Text="Attendance Overview (Last 7 Days)"
+                <StackPanel>
+                    <TextBlock Text="Attendance Overview (Last 7 Days)"
            FontSize="16"
                            Foreground="{DynamicResource Forground}"
            FontWeight="SemiBold"
            Margin="0,0,0,12"/>
 
-                <lvc:CartesianChart Series="{Binding AttendanceSeries}"
+                    <lvc:CartesianChart Series="{Binding AttendanceSeries}"
                     LegendLocation="None"
                     Height="220"
                     Background="Transparent">
 
-                    <!-- X AXIS -->
-                    <lvc:CartesianChart.AxisX>
-                        <lvc:Axis Labels="{Binding Labels}"
+                        <!-- X AXIS -->
+                        <lvc:CartesianChart.AxisX>
+                            <lvc:Axis Labels="{Binding Labels}"
                   Foreground="#8A8F98">
-                            <lvc:Axis.Separator>
-                                <lvc:Separator Step="1"
+                                <lvc:Axis.Separator>
+                                    <lvc:Separator Step="1"
                                            IsEnabled="False"/>
-                            </lvc:Axis.Separator>
-                        </lvc:Axis>
-                    </lvc:CartesianChart.AxisX>
+                                </lvc:Axis.Separator>
+                            </lvc:Axis>
+                        </lvc:CartesianChart.AxisX>
 
-                    <!-- Y AXIS -->
-                    <lvc:CartesianChart.AxisY>
-                        <lvc:Axis ShowLabels="True" MinValue="0">
-                            <lvc:Axis.Separator>
-                                <lvc:Separator IsEnabled="False"/>
-                            </lvc:Axis.Separator>
-                        </lvc:Axis>
-                    </lvc:CartesianChart.AxisY>
+                        <!-- Y AXIS -->
+                        <lvc:CartesianChart.AxisY>
+                            <lvc:Axis ShowLabels="True" MinValue="0">
+                                <lvc:Axis.Separator>
+                                    <lvc:Separator IsEnabled="False"/>
+                                </lvc:Axis.Separator>
+                            </lvc:Axis>
+                        </lvc:CartesianChart.AxisY>
 
-                </lvc:CartesianChart>
-            </StackPanel>
-        </Border>
+                    </lvc:CartesianChart>
+                </StackPanel>
+            </Border>
 
-    </Grid>
+        </Grid>
+    </ScrollViewer>
+
 </UserControl>

@@ -6,48 +6,71 @@
         AllowsTransparency="True"
         Background="Transparent"
         Width="420"
+        SizeToContent="Height"
         Foreground="{DynamicResource Forground}"
-        Height="220"
         WindowStartupLocation="CenterOwner"
         ShowInTaskbar="False">
+
     <Window.Effect>
-        <DropShadowEffect ShadowDepth="0" Opacity="0.505" BlurRadius="8"/>
+        <DropShadowEffect ShadowDepth="0"
+                          Opacity="0.5"
+                          BlurRadius="10"/>
     </Window.Effect>
+
     <Border CornerRadius="14"
-           Margin="10"
+            Margin="10"
+            BorderBrush="{DynamicResource BorderBrush}"
+            BorderThickness="2"
             Background="{DynamicResource ThemeBackground}"
             Padding="20">
 
         <Grid>
+
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <!-- Title -->
+            <!-- TITLE -->
             <TextBlock x:Name="TxtTitle"
                        FontSize="16"
                        FontWeight="SemiBold"
-                       />
+                       TextWrapping="Wrap"/>
 
-            <!-- Content -->
-            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,15,0,0">
+
+            <!-- CONTENT AREA -->
+            <Grid Grid.Row="1" Margin="0,15,0,0">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- ICON -->
                 <TextBlock x:Name="TxtIcon"
                            FontSize="28"
-                           Margin="0,0,12,0"/>
-                <TextBlock x:Name="TxtMessage"
-                          
-                           FontSize="14"
-                           TextWrapping="WrapWithOverflow"/>
-            </StackPanel>
+                           Margin="0,0,12,0"
+                           VerticalAlignment="Top"/>
 
-            <!-- Buttons -->
+                <!-- MESSAGE -->
+                <TextBlock x:Name="TxtMessage"
+                           Grid.Column="1"
+                           FontSize="14"
+                           TextWrapping="Wrap"
+                           VerticalAlignment="Center"/>
+
+            </Grid>
+
+
+            <!-- BUTTON PANEL -->
             <StackPanel x:Name="ButtonPanel"
                         Grid.Row="2"
                         Orientation="Horizontal"
                         HorizontalAlignment="Right"
                         Margin="0,20,0,0"/>
+
         </Grid>
+
     </Border>
 </Window>

@@ -79,6 +79,7 @@
 		<None Remove="Assets\Setting_G.png" />
 		<None Remove="Assets\Warning.png" />
 		<None Remove="Assets\WhatsApp.png" />
+		<None Remove="Assets\Wonder_Things.gif" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -249,6 +250,9 @@
 		</Content>
 		<Content Include="Assets\WhatsApp.png">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\Wonder_Things.gif">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 	</ItemGroup>
 

@@ -59,7 +59,7 @@
     </Window.Resources>
 
     <!-- Main border around the Home UI -->
-    <Border CornerRadius="10" x:Name="HomeUi" Background="#0c0c0c" >
+    <Border CornerRadius="6" BorderThickness="2" BorderBrush="{DynamicResource BorderBrush}" x:Name="HomeUi" Background="#0c0c0c" >
 
         <Grid x:Name="RootGrid" >
             <!-- Main grid for layout -->
@@ -152,9 +152,9 @@
                             </StackPanel>
 
 
-                            <Button x:Name="Minimize" Content="—" Width="25" Height="25" Click="Minimize_Click" shell:WindowChrome.IsHitTestVisibleInChrome="True" Margin="5" Background="Transparent"/>
-                            <Button x:Name="Maximize" Content="🗖" Width="25" Height="25" Click="Maximize_Click" shell:WindowChrome.IsHitTestVisibleInChrome="True" Margin="5" Background="Transparent" />
-                            <Button x:Name="Colose" Content="🗙" Width="25" Height="25" Click="Close_Click" shell:WindowChrome.IsHitTestVisibleInChrome="True" Margin="5" Background="Transparent" />
+                            <Button x:Name="Minimize" Content="—" Width="25" Height="25" Click="Minimize_Click" shell:WindowChrome.IsHitTestVisibleInChrome="True" Margin="5" Style="{DynamicResource NavigationButtonStyle}" />
+                            <Button x:Name="Maximize" Content="🗖" Width="25" Height="25" Click="Maximize_Click" shell:WindowChrome.IsHitTestVisibleInChrome="True" Margin="5" Style="{DynamicResource NavigationButtonStyle}"  />
+                            <Button x:Name="Colose" Content="🗙" Width="25" Height="25" Click="Close_Click" shell:WindowChrome.IsHitTestVisibleInChrome="True" Margin="5" Style="{DynamicResource NavigationButtonStyle}" />
                         </StackPanel>
 
 

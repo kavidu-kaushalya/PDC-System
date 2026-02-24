@@ -29,12 +29,35 @@ namespace PDC_System
         {
             InitializeComponent();
             SeedAdmin();
+            Loaded += LoadingWindow_Loaded; // window render වෙන විට
             ThemeManager.ApplyTheme(this); // Apply initial theme
 
         }
 
 
-       
+
+        private async void LoadingWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            // GIF load background thread
+            await Task.Run(() =>
+            {
+                string baseFolder = AppDomain.CurrentDomain.BaseDirectory;
+                string gifPath = System.IO.Path.Combine(baseFolder, "Assets", "Wonder_Things.gif");
+                var gifUri = new Uri(gifPath, UriKind.Absolute);
+
+                Dispatcher.Invoke(() =>
+                {
+                    AnimationBehavior.SetSourceUri(MyGifImage, gifUri);
+                    AnimationBehavior.SetRepeatBehavior(MyGifImage, System.Windows.Media.Animation.RepeatBehavior.Forever);
+                });
+            });
+
+
+
+
+        }
+
+
         private void closeButton_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
@@ -175,7 +198,9 @@ namespace PDC_System
 
             if (needStartupCheck)
             {
+               
                 bool passed = await RunStartupChecksAsync();
+                IvmsVisibility.Visibility = Visibility.Visible;
 
                 if (!passed)
                 {

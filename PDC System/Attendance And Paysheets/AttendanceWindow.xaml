@@ -200,7 +200,7 @@ Visibility="Collapsed" />
                                     <DataGridTextColumn Header="Early Leave" Binding="{Binding EarlyLeave}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
                                     <DataGridTextColumn Header="Late" Binding="{Binding LateHours}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
 
-                                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="*">
+                                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="150">
                                     <DataGridTextColumn.CellStyle>
                                         <Style TargetType="DataGridCell">
                                             <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -225,7 +225,7 @@ Visibility="Collapsed" />
                                 SnapsToDevicePixels="True"
                                 Padding="4">
                                                             <TextBlock Text="{Binding Status}"
-                                       TextWrapping="WrapWithOverflow"
+                                       TextWrapping="Wrap"
                                                                 
                                        TextAlignment="Center"
                                        VerticalAlignment="Center"
@@ -238,6 +238,7 @@ Visibility="Collapsed" />
 
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding Status}" Value="Missing Finger Print">
+                                                   
                                                     <Setter Property="Foreground" Value="Red"/>
                                                     
                                                 </DataTrigger>

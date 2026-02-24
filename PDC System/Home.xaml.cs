@@ -294,15 +294,6 @@ namespace PDC_System
 
         #region Window Control
 
-        public static readonly DependencyProperty IsLightProperty =
-            DependencyProperty.Register("IsLight", typeof(bool), typeof(Home), new PropertyMetadata(true));
-
-        public bool IsLight
-        {
-            get => (bool)GetValue(IsLightProperty);
-            set => SetValue(IsLightProperty, value);
-        }
-
         private void TitleBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ButtonState == MouseButtonState.Pressed)
@@ -311,14 +302,31 @@ namespace PDC_System
 
         private void Minimize_Click(object sender, RoutedEventArgs e) => this.WindowState = WindowState.Minimized;
 
+        private bool _isMaximized = false;
+        private double _previousLeft;
+        private double _previousTop;
+        private double _previousWidth;
+        private double _previousHeight;
+
         private void Maximize_Click(object sender, RoutedEventArgs e)
         {
-            if (this.WindowState == WindowState.Maximized)
+            if (_isMaximized)
             {
-                this.WindowState = WindowState.Normal;
+                // Restore to previous size and position
+                this.Left = _previousLeft;
+                this.Top = _previousTop;
+                this.Width = _previousWidth;
+                this.Height = _previousHeight;
+                _isMaximized = false;
             }
             else
             {
+                // get before maximizing
+                _previousLeft = this.Left;
+                _previousTop = this.Top;
+                _previousWidth = this.Width;
+                _previousHeight = this.Height;
+
                 // Get the working area (screen minus taskbar)
                 var workingArea = SystemParameters.WorkArea;
 
@@ -328,16 +336,14 @@ namespace PDC_System
                 this.Width = workingArea.Width;
                 this.Height = workingArea.Height;
 
-                this.WindowState = WindowState.Normal;
+                _isMaximized = true;
             }
         }
 
         private void Close_Click(object sender, RoutedEventArgs e)
         {
-            foreach (Window win in Application.Current.Windows.OfType<BackupWindow>())
-                win.Hide();
 
-            this.Hide();
+            Hide();
         }
 
         #endregion

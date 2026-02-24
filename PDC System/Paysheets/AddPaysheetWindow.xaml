@@ -2,16 +2,53 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+           xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PDC_System.Paysheets"
              mc:Ignorable="d" 
-        Background="{DynamicResource Background}"
+        AllowsTransparency="True"
+        Foreground="{DynamicResource Forground}"
+        WindowStyle="None"
+        
+
+        Background="{DynamicResource ThemeBackground}"
              xmlns:cal="clr-namespace:ModernCalendarLib;assembly=ModernCalendarLib"
         Width="1000"
             MinWidth="1004" MinHeight="660">
+
+    <shell:WindowChrome.WindowChrome>
+        <shell:WindowChrome CaptionHeight="32"
+                  CornerRadius="10"
+                            
+                  ResizeBorderThickness="6"
+                  GlassFrameThickness="0"
+                  NonClientFrameEdges="None"/>
+    </shell:WindowChrome.WindowChrome>
+
+
+
     <Grid>
-       
-                <ScrollViewer Margin="20" VerticalScrollBarVisibility="Hidden">
+
+        <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="2" CornerRadius="6" >
+            <Grid>
+
+
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+
+
+
+
+
+                <!-- Custom Title Bar -->
+    
+
+
+                <ScrollViewer Grid.Row="1" Margin="20" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
 
 
                     <Grid HorizontalAlignment="Center" >
@@ -28,422 +65,309 @@
 
                         <StackPanel Grid.Column="0" Margin="15">
 
-                    <StackPanel>
-                        <TextBlock Text="Payroll Paysheet"  FontSize="20" FontWeight="Bold" />
-                        <TextBlock Text="Generate and review monthly employee compensation records." />
+                            <StackPanel>
+                                <TextBlock Text="Payroll Paysheet"  FontSize="20" FontWeight="Bold" />
+                                <TextBlock Text="Generate and review monthly employee compensation records." />
 
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <Button Margin="10" Click="SavePDFPaysheet_Click" Content="Save PDF" Style="{DynamicResource ActionButton}" />
-                            <Button Margin="10" Click="SavePaysheet_Click" Content="Apply" Style="{DynamicResource NavigationButtonStyle}"  />
-                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                <TextBlock Foreground="{DynamicResource Forground}" Text="Sent Email: " VerticalAlignment="Center" />
-                                <CheckBox IsChecked="True" x:Name="SentEmail_Check" />
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <Button Margin="10" Click="SavePDFPaysheet_Click" Content="Save PDF" Style="{DynamicResource ActionButton}" />
+                                    <Button Margin="10" Click="SavePaysheet_Click" Content="Apply" Style="{DynamicResource NavigationButtonStyle}"  />
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                        <TextBlock Foreground="{DynamicResource Forground}" Text="Sent Email: " VerticalAlignment="Center" />
+                                        <CheckBox IsChecked="False" x:Name="SentEmail_Check" />
 
-                            </StackPanel>
-                        </StackPanel>
-
-                        
-
-                    </StackPanel>
-
-
-
-                    <Grid>
-                        
-                        
-                    </Grid>
-                            
-                            
-                            
-                            <Border Background="{DynamicResource Background}"  BorderThickness="1" BorderBrush="{DynamicResource BorderBrush}" CornerRadius="10">
-
-                        <Grid>
-
-
-
-
-
-
-                            <StackPanel Margin="15">
-
-                                <StackPanel>
-                                    <TextBlock FontSize="18" FontWeight="Medium" Foreground="{DynamicResource Forground}" Text="Control Panel" />
+                                    </StackPanel>
                                 </StackPanel>
 
-                                <StackPanel Orientation="Vertical">
-                                    <StackPanel Margin="5">
-                                        <TextBlock FontSize="15" Text="EmployeeID" Margin="0,5,0,5" Foreground="{DynamicResource Forground}"/>
-                                        <ComboBox x:Name="EmployeeCombo" Style="{StaticResource ComboBoxFlatStyle}" Height="35"
+
+
+                            </StackPanel>
+
+
+
+                            <Grid>
+
+
+                            </Grid>
+
+
+
+                            <Border Background="{DynamicResource Background}"  BorderThickness="1" BorderBrush="{DynamicResource BorderBrush}" CornerRadius="10">
+
+                                <Grid>
+
+
+
+
+
+
+                                    <StackPanel Margin="15">
+
+                                        <StackPanel>
+                                            <TextBlock FontSize="18" FontWeight="Medium" Foreground="{DynamicResource Forground}" Text="Control Panel" />
+                                        </StackPanel>
+
+                                        <StackPanel Orientation="Vertical">
+                                            <StackPanel Margin="5">
+                                                <TextBlock FontSize="15" Text="EmployeeID" Margin="0,5,0,5" Foreground="{DynamicResource Forground}"/>
+                                                <ComboBox x:Name="EmployeeCombo" Style="{StaticResource ComboBoxFlatStyle}" Height="35"
   IsEditable="True"
   DisplayMemberPath="Name"
   SelectedValuePath="EmployeeId"
   LostFocus="EmployeeCombo_LostFocus"
   SelectionChanged="FilterChanged"/>
 
+                                            </StackPanel>
+
+                                            <Grid x:Name="Datepickers" Margin="5,10,5,5">
+
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+
+                                                <StackPanel Grid.Column="0" Orientation="Vertical">
+                                                    <TextBlock FontSize="15" Text="Start Date" Margin="0,5,0,5" Foreground="{DynamicResource Forground}"/>
+
+                                                    <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="2" CornerRadius="5">
+                                                        <cal:CustomDatePicker x:Name="StartDatePicker"  SelectedDateChanged ="FilterChanged"   Width="auto"  Height="auto" />
+                                                    </Border>
+                                                </StackPanel>
+
+                                                <StackPanel Grid.Column="1" Orientation="Vertical" Margin="10,0,0,0">
+                                                    <TextBlock FontSize="15" Text="End Date" Margin="0,5,0,5" Foreground="{DynamicResource Forground}"/>
+
+                                                    <Border  BorderBrush="{DynamicResource BorderBrush}" BorderThickness="2" CornerRadius="5">
+                                                        <cal:CustomDatePicker x:Name="EndDatePicker"  SelectedDateChanged ="FilterChanged"   Width="auto"  Height="auto" />
+                                                    </Border>
+                                                </StackPanel>
+
+                                            </Grid>
+                                        </StackPanel>
+
+                                        <TextBlock FontSize="15" Text="Payroll Components" Margin="5,10,0,5" Foreground="{DynamicResource Forground}"/>
+
+                                        <Grid x:Name="Contorls">
+
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                                                <CheckBox  x:Name="EPF_Checked" Checked="FilterChanged" Unchecked="FilterChanged"></CheckBox>
+                                                <TextBlock VerticalAlignment="Center" Text="EPF" Foreground="{DynamicResource Forground}" Margin="6,0,0,0"/>
+                                            </StackPanel>
+                                            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                                                <CheckBox  x:Name="Earning_Checked" Checked="FilterChanged" Unchecked="FilterChanged"></CheckBox>
+                                                <TextBlock VerticalAlignment="Center" Text="Earnings" Foreground="{DynamicResource Forground}" Margin="7,0,0,0"/>
+                                            </StackPanel>
+                                            <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                                                <CheckBox  x:Name="Deducation_Checked" Checked="FilterChanged" Unchecked="FilterChanged"></CheckBox>
+                                                <TextBlock VerticalAlignment="Center" Text="Deducation" Foreground="{DynamicResource Forground}" Margin="8,0,0,0"/>
+                                            </StackPanel>
+                                            <StackPanel Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Center">
+                                                <CheckBox   x:Name="Loan_Checked" Checked="FilterChanged" Unchecked="FilterChanged"></CheckBox>
+                                                <TextBlock VerticalAlignment="Center" Text="Loan" Foreground="{DynamicResource Forground}" Margin="8,0,0,0"/>
+                                            </StackPanel>
+
+
+                                        </Grid>
+
+
+
+
+
+
+                                        <Grid Margin="0,10,0,0" >
+
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+
+
+                                            <StackPanel  Margin="0,0,5,0"  >
+                                                <TextBlock FontSize="15" Text="Loan Amount" Foreground="{DynamicResource Forground}" Margin="0,5,0,5"/>
+
+                                                <TextBox Visibility="Visible"  x:Name="LoanAmount"  Grid.Column="0" TextChanged="LoanAmount_TextChanged"  Style="{DynamicResource TextBoxStyle}" />
+                                            </StackPanel>
+
+                                            <StackPanel  Grid.Column="1" Margin="5,0,0,0" >
+                                                <TextBlock  FontSize="15"  Text="Paysheet Month"  Foreground="{DynamicResource Forground}" Margin="0,5,0,5"/>
+                                                <ComboBox x:Name="Month" Style="{DynamicResource ComboBoxFlatStyle}" />
+                                            </StackPanel>
+
+
+
+                                        </Grid>
+
+                                        <Grid Margin="0,10,0,0">
+
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+
+                                            </Grid.ColumnDefinitions>
+
+
+                                            <StackPanel >
+
+                                                <TextBlock  Text="No Pay Days:" Foreground="{DynamicResource Forground}" Margin="0,0,0,5"/>
+
+                                                <TextBox TextChanged="Nopay_Custom" x:Name="Nopays" Style="{DynamicResource TextBoxStyle}"/>
+
+                                            </StackPanel>
+
+
+
+
+                                        </Grid>
+
                                     </StackPanel>
 
-                                    <Grid x:Name="Datepickers" Margin="5,10,5,5">
+
+
+
+
+                                </Grid>
+
+
+                            </Border>
+                        </StackPanel>
+
+
+                        <Border Background="#FF1469FF" Width="auto" x:Name="Infomations" CornerRadius="20"  Grid.Column="1">
+
+
+                            <StackPanel Margin="15" >
+
+
+                                <TextBlock FontSize="18" FontWeight="Medium" Foreground="White" Text="Employee Information" Margin="0,0,0,10"/>
+
+
+
+                                <TextBlock   x:Name="eMPLOYEENAME"  FontSize="25" FontWeight="Bold" Foreground="White" />
+                                <TextBlock x:Name="EmployeeID" Foreground="White"/>
+
+
+
+
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+
+                                    <StackPanel>
+                                        <TextBlock FontSize="15" HorizontalAlignment="Center" FontWeight="Light" Foreground="White" Text="Toral Earnings" />
+                                        <TextBlock x:Name="TotalEarnings" Text="0.00" FontSize="25" FontWeight="Bold" Foreground="LawnGreen" HorizontalAlignment="Center"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock  FontSize="15" HorizontalAlignment="Center" FontWeight="Light" Foreground="White" Text="Toral Deducation" />
+                                        <TextBlock x:Name="TotalDeducations" Text="0.00" FontSize="25" FontWeight="Bold" Foreground="Red" HorizontalAlignment="Center"/>
+                                    </StackPanel>
+
+
+
+                                </Grid>
+
+
+
+                                <Border CornerRadius="20" Height="100" Background="#44000000" Margin="0,10,0,10" >
+
+
+                                    <Grid VerticalAlignment="Center">
 
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
 
-                                        <StackPanel Grid.Column="0" Orientation="Vertical">
-                                            <TextBlock FontSize="15" Text="Start Date" Margin="0,5,0,5" Foreground="{DynamicResource Forground}"/>
-
-                                            <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="2" CornerRadius="5">
-                                                <cal:CustomDatePicker x:Name="StartDatePicker"  SelectedDateChanged ="FilterChanged"   Width="auto"  Height="auto" />
-                                            </Border>
+                                        <StackPanel  VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="0" >
+                                            <TextBlock FontSize="12" FontWeight="Light" Foreground="White" Text="Working" />
+                                            <TextBlock x:Name="WorkingDays" Text="0d" FontSize="20" FontWeight="Bold" Foreground="White"/>
                                         </StackPanel>
 
-                                        <StackPanel Grid.Column="1" Orientation="Vertical" Margin="10,0,0,0">
-                                            <TextBlock FontSize="15" Text="End Date" Margin="0,5,0,5" Foreground="{DynamicResource Forground}"/>
+                                        <Line Grid.Column="1" X1="0" Y1="0" X2="0" Y2="60" Stroke="White" HorizontalAlignment="Center"  StrokeThickness="1" VerticalAlignment="Center"/>
 
-                                            <Border  BorderBrush="{DynamicResource BorderBrush}" BorderThickness="2" CornerRadius="5">
-                                                <cal:CustomDatePicker x:Name="EndDatePicker"  SelectedDateChanged ="FilterChanged"   Width="auto"  Height="auto" />
-                                            </Border>
+                                        <StackPanel  VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="2" >
+                                            <TextBlock FontSize="12" FontWeight="Light" Foreground="White" Text="Absent" />
+                                            <TextBlock x:Name="AbsentDays" Text="0d" FontSize="20" FontWeight="Bold" Foreground="White"/>
                                         </StackPanel>
 
-                                    </Grid>
-                                </StackPanel>
+                                        <Line Grid.Column="3" X1="0" Y1="0" X2="0" Y2="60" Stroke="White" StrokeThickness="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
-                                <TextBlock FontSize="15" Text="Payroll Components" Margin="5,10,0,5" Foreground="{DynamicResource Forground}"/>
+                                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="4" >
+                                            <TextBlock FontSize="12" FontWeight="Light" Foreground="White" Text="No-Pay" />
+                                            <TextBlock x:Name="NoPayDaysShow" Text="0d" FontSize="20" FontWeight="Bold" Foreground="White"/>
+                                        </StackPanel>
 
-                                <Grid x:Name="Contorls">
-
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    
-                                    <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-                                        <CheckBox  x:Name="EPF_Checked" Checked="FilterChanged" Unchecked="FilterChanged"></CheckBox>
-                                        <TextBlock VerticalAlignment="Center" Text="EPF" Foreground="{DynamicResource Forground}" Margin="6,0,0,0"/>
-                                    </StackPanel>
-                                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                                        <CheckBox  x:Name="Earning_Checked" Checked="FilterChanged" Unchecked="FilterChanged"></CheckBox>
-                                        <TextBlock VerticalAlignment="Center" Text="Earnings" Foreground="{DynamicResource Forground}" Margin="7,0,0,0"/>
-                                    </StackPanel>
-                                    <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
-                                        <CheckBox  x:Name="Deducation_Checked" Checked="FilterChanged" Unchecked="FilterChanged"></CheckBox>
-                                        <TextBlock VerticalAlignment="Center" Text="Deducation" Foreground="{DynamicResource Forground}" Margin="8,0,0,0"/>
-                                    </StackPanel>
-                                    <StackPanel Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Center">
-                                        <CheckBox   x:Name="Loan_Checked" Checked="FilterChanged" Unchecked="FilterChanged"></CheckBox>
-                                        <TextBlock VerticalAlignment="Center" Text="Loan" Foreground="{DynamicResource Forground}" Margin="8,0,0,0"/>
-                                    </StackPanel>
-
-                                   
-                                </Grid>
-
-                                
-
-
-
-
-                                    <Grid Margin="0,10,0,0" >
-
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-
-
-                                    <StackPanel  Margin="0,0,5,0"  >
-                                        <TextBlock FontSize="15" Text="Loan Amount" Foreground="{DynamicResource Forground}" Margin="0,5,0,5"/>
-
-                                        <TextBox Visibility="Visible"  x:Name="LoanAmount"  Grid.Column="0" TextChanged="LoanAmount_TextChanged"  Style="{DynamicResource TextBoxStyle}" />
-                                    </StackPanel>
-
-                                    <StackPanel  Grid.Column="1" Margin="5,0,0,0" >
-                                        <TextBlock  FontSize="15"  Text="Paysheet Month"  Foreground="{DynamicResource Forground}" Margin="0,5,0,5"/>
-                                        <ComboBox x:Name="Month" Style="{DynamicResource ComboBoxFlatStyle}" />
-                                    </StackPanel>
-
-                                       
 
                                     </Grid>
 
-                                    <Grid Margin="0,10,0,0">
 
+                                </Border>
+
+                                <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>
-                                        
+                                        <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
 
-
-                                    <StackPanel >
-
-                                        <TextBlock  Text="No Pay Days:" Foreground="{DynamicResource Forground}" Margin="0,0,0,5"/>
-
-                                        <TextBox TextChanged="Nopay_Custom" x:Name="Nopays" Style="{DynamicResource TextBoxStyle}"/>
-
+                                    <StackPanel>
+                                        <TextBlock FontSize="15" HorizontalAlignment="Center" FontWeight="Light" Foreground="White" Text="OverTime Amount" />
+                                        <TextBlock  x:Name="OTTextBox" Text="0.00" FontSize="25" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/>
                                     </StackPanel>
-
-
-
-
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock FontSize="15" HorizontalAlignment="Center" FontWeight="Light" Foreground="White" Text="DoubleOT Amount" />
+                                        <TextBlock x:Name="DoubleOTTextBox" Text="0.00" FontSize="25" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/>
+                                    </StackPanel>
                                 </Grid>
 
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel Grid.Column="0" Margin="0,10,0,0">
+                                        <TextBlock FontSize="12" FontWeight="Light"  Foreground="White" Text="OT Hours" HorizontalAlignment="Center"/>
+                                        <TextBlock x:Name="OThours" Text="0.00" FontSize="16" FontWeight="Bold"  Foreground="White" HorizontalAlignment="Center"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="1" Margin="0,10,0,0">
+                                        <TextBlock FontSize="12" FontWeight="Light"  Foreground="White" Text="Double OT" HorizontalAlignment="Center"/>
+                                        <TextBlock x:Name="DoubleOT" Text="0.00" FontSize="16" FontWeight="Bold"  Foreground="White" HorizontalAlignment="Center"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="2" Margin="0,10,0,0">
+                                        <TextBlock FontSize="12" FontWeight="Light" Foreground="White" Text="Absent Deduct" HorizontalAlignment="Center"/>
+                                        <TextBlock x:Name="AbsentAmunt" Text="0.00" FontSize="16" FontWeight="Bold"  Foreground="LightCoral" HorizontalAlignment="Center"/>
+                                    </StackPanel>
+                                </Grid>
+
+                                <StackPanel HorizontalAlignment="Center" Margin="0,10,0,0">
+                                    <TextBlock HorizontalAlignment="Center" Text="NETPAY" Foreground="White"/>
+                                    <TextBlock HorizontalAlignment="Center" x:Name="EmployeeSalary" FontSize="30" Text="0" FontWeight="Bold" Foreground="LightGreen" />
                                 </StackPanel>
 
-
-
-
-                      
-                        </Grid>
-                                
-                             
-                            </Border>
-                        </StackPanel>
-                        
-                        
-                        <Border Background="#7F1469FF" Width="auto" x:Name="Infomations" CornerRadius="20"  Grid.Column="1">
-                            
-                            
-                        <StackPanel Margin="15" >
-                               
-
-                        <TextBlock FontSize="18" FontWeight="Medium" Foreground="White" Text="Employee Information" Margin="0,0,0,10"/>
-
-
-
-                        <TextBlock   x:Name="eMPLOYEENAME" Text="Full Name" FontSize="25" FontWeight="Bold" Foreground="White" />
-                        <TextBlock x:Name="EmployeeID" Text="-" Foreground="White"/>
-
-
-
-
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-
-
-                            <StackPanel>
-                                <TextBlock FontSize="15" HorizontalAlignment="Center" FontWeight="Light" Foreground="White" Text="Toral Earnings" />
-                                <TextBlock x:Name="TotalEarnings" Text="0.00" FontSize="25" FontWeight="Bold" Foreground="LawnGreen" HorizontalAlignment="Center"/>
                             </StackPanel>
-                            
-                            <StackPanel Grid.Column="1">
-                                <TextBlock  FontSize="15" HorizontalAlignment="Center" FontWeight="Light" Foreground="White" Text="Toral Deducation" />
-                                <TextBlock x:Name="TotalDeducations" Text="0.00" FontSize="25" FontWeight="Bold" Foreground="Red" HorizontalAlignment="Center"/>
-                            </StackPanel>
-
-                           
-
-                        </Grid>
-
-                                
-                                
-                        <Border CornerRadius="20" Height="100" Background="#44000000" Margin="0,10,0,10" >
-
-
-                            <Grid VerticalAlignment="Center">
-
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-
-                                <StackPanel  VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="0" >
-                                    <TextBlock FontSize="12" FontWeight="Light" Foreground="White" Text="Working" />
-                                    <TextBlock x:Name="WorkingDays" Text="0d" FontSize="20" FontWeight="Bold" Foreground="White"/>
-                                </StackPanel>
-
-                                <Line Grid.Column="1" X1="0" Y1="0" X2="0" Y2="60" Stroke="White" HorizontalAlignment="Center"  StrokeThickness="1" VerticalAlignment="Center"/>
-
-                                <StackPanel  VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="2" >
-                                    <TextBlock FontSize="12" FontWeight="Light" Foreground="White" Text="Absent" />
-                                    <TextBlock x:Name="AbsentDays" Text="0d" FontSize="20" FontWeight="Bold" Foreground="White"/>
-                                </StackPanel>
-
-                                <Line Grid.Column="3" X1="0" Y1="0" X2="0" Y2="60" Stroke="White" StrokeThickness="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-
-                                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="4" >
-                                    <TextBlock FontSize="12" FontWeight="Light" Foreground="White" Text="No-Pay" />
-                                    <TextBlock x:Name="NoPayDaysShow" Text="0d" FontSize="20" FontWeight="Bold" Foreground="White"/>
-                                </StackPanel>
-
-
-                            </Grid>
-                           
-
-                        </Border>
-
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-
-                            <StackPanel>
-                                <TextBlock FontSize="15" HorizontalAlignment="Center" FontWeight="Light" Foreground="White" Text="OverTime Amount" />
-                                <TextBlock  x:Name="OTTextBox" Text="0.00" FontSize="25" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/> 
-                            </StackPanel>
-                            <StackPanel Grid.Column="1">
-                                <TextBlock FontSize="15" HorizontalAlignment="Center" FontWeight="Light" Foreground="White" Text="DoubleOT Amount" />
-                                <TextBlock x:Name="DoubleOTTextBox" Text="0.00" FontSize="25" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/> 
-                            </StackPanel>
-                        </Grid>
-
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                          
-                            <StackPanel Grid.Column="0" Margin="0,10,0,0">
-                                <TextBlock FontSize="12" FontWeight="Light"  Foreground="White" Text="OT Hours" HorizontalAlignment="Center"/>
-                                <TextBlock x:Name="OThours" Text="0.00" FontSize="16" FontWeight="Bold"  Foreground="White" HorizontalAlignment="Center"/>
-                            </StackPanel>
-                            <StackPanel Grid.Column="1" Margin="0,10,0,0">
-                                <TextBlock FontSize="12" FontWeight="Light"  Foreground="White" Text="Double OT" HorizontalAlignment="Center"/>
-                                <TextBlock x:Name="DoubleOT" Text="0.00" FontSize="16" FontWeight="Bold"  Foreground="White" HorizontalAlignment="Center"/>
-                            </StackPanel>
-                            <StackPanel Grid.Column="2" Margin="0,10,0,0">
-                                <TextBlock FontSize="12" FontWeight="Light" Foreground="White" Text="Absent Deduct" HorizontalAlignment="Center"/>
-                                <TextBlock x:Name="AbsentAmunt" Text="0.00" FontSize="16" FontWeight="Bold"  Foreground="LightCoral" HorizontalAlignment="Center"/>
-                            </StackPanel>
-                        </Grid>
-
-                        <StackPanel HorizontalAlignment="Center" Margin="0,10,0,0">
-                            <TextBlock HorizontalAlignment="Center" Text="NETPAY" Foreground="White"/>
-                            <TextBlock HorizontalAlignment="Center" x:Name="EmployeeSalary" FontSize="30" Text="0" FontWeight="Bold" Foreground="LightGreen" />
-                        </StackPanel>
-
-                    </StackPanel>
                         </Border>
 
 
                         <StackPanel Grid.Row="1" Grid.ColumnSpan="2">
                             <TextBlock x:Name="TotalsTextBlock" Foreground="{DynamicResource Forground}" />
-                            <DataGrid  x:Name="AttendanceDataGrid" AutoGenerateColumns="False" Height="350"  Margin="20"
-                      
- Background="Transparent"
- RowBackground="White"
- AlternatingRowBackground="#f0f0f0"
- SnapsToDevicePixels="True"
- 
- 
- CanUserResizeColumns="False"
- ScrollViewer.CanContentScroll="True"
- ScrollViewer.VerticalScrollBarVisibility="Hidden"
- CellStyle="{StaticResource DataGridCellStyle}"
- Style="{StaticResource DataGridStyle}"
- ColumnHeaderStyle="{StaticResource DataGridHeaderStyle}"
- RowStyle="{StaticResource DataGridRowStyle}">
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Employee ID" Binding="{Binding EmployeeId}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
-                                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
-                                    <DataGridTextColumn Header="Date" Binding="{Binding Date, StringFormat=d}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
-                                    <DataGridTextColumn Header="Check In" Binding="{Binding CheckIn}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
-                                    <DataGridTextColumn Header="Check Out" Binding="{Binding CheckOut}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
-                                    <DataGridTextColumn Header="Over Time" Binding="{Binding OverTime}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
-                                    <DataGridTextColumn Header="Double OT" Binding="{Binding DoubleOT}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
-                                    <DataGridTextColumn Header="Early Leave" Binding="{Binding EarlyLeave}" Width="100" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
-                                    <DataGridTextColumn Header="Late" Binding="{Binding LateHours}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
-                                    <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="*">
-                                        <DataGridTextColumn.CellStyle>
-                                            <Style TargetType="DataGridCell">
-                                                <Setter Property="HorizontalAlignment" Value="Center"/>
-                                                <Setter Property="VerticalAlignment" Value="Center"/>
-                                                <Setter Property="Padding" Value="4"/>
-                                                <Setter Property="FontSize" Value="12"/>
-                                                <Setter Property="BorderThickness" Value="2"/>
-                                                <Setter Property="BorderBrush" Value="Transparent"/>
-                                                <Setter Property="Background" Value="Transparent"/>
 
-                                                <Setter Property="Template">
-                                                    <Setter.Value>
-                                                        <ControlTemplate TargetType="DataGridCell">
-                                                            <Border x:Name="CellBorder"
-                                BorderBrush="{TemplateBinding BorderBrush}" 
-                                BorderThickness="{TemplateBinding BorderThickness}" 
-                                CornerRadius="8"
-                                Background="{DynamicResource BorderBrush}"
-                                Width="120"
-                                Height="Auto"
-                                SnapsToDevicePixels="True"
-                                Padding="4">
-                                                                <TextBlock Text="{Binding Status}"
-                                       TextWrapping="WrapWithOverflow"
-                                                                       
-                                       TextAlignment="Center"
-                                       VerticalAlignment="Center"
-                                       HorizontalAlignment="Center"
-                                       FontSize="11.5"/>
-                                                            </Border>
-                                                        </ControlTemplate>
-                                                    </Setter.Value>
-                                                </Setter>
-
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding Status}" Value="Missing Finger Print">
-                                                        <Setter Property="Foreground" Value="Red"/>
-
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding Status}" Value="OK">
-                                                        <Setter Property="Foreground" Value="Green"/>
-
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding Status}" Value="Non-Working Day">
-                                                        <Setter Property="Foreground" Value="Goldenrod"/>
-
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding Status}" Value="Saturday OK">
-                                                        <Setter Property="Foreground" Value="Goldenrod"/>
-
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </DataGridTextColumn.CellStyle>
-                                    </DataGridTextColumn>
-
-                                </DataGrid.Columns>
-
-                            </DataGrid>
-
-                           
-
-                        </StackPanel>
-
-                        <StackPanel Grid.Row="2" Margin="0,20,0,0">
-                            <TextBlock Text="All Earnings" FontWeight="Bold" FontSize="16" Margin="0,10,0,10" HorizontalAlignment="Center" Foreground="{DynamicResource Forground}"/>
-
-                            <DataGrid  x:Name="EarningGrid" AutoGenerateColumns="False" Height="300"
-AlternatingRowBackground="#f0f0f0"
-SnapsToDevicePixels="True"
-
-
-CanUserResizeColumns="False"
-ScrollViewer.CanContentScroll="True"
-ScrollViewer.VerticalScrollBarVisibility="Hidden"
-CellStyle="{StaticResource DataGridCellStyle}"
-Style="{StaticResource DataGridStyle}"
-ColumnHeaderStyle="{StaticResource DataGridHeaderStyle}"
-RowStyle="{StaticResource DataGridRowStyle}" SelectionChanged="EarningGrid_SelectionChanged">
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Date" Binding="{Binding EarningDate}" Width="*"/>
-                                    <DataGridTextColumn Header="Employee Name" Binding="{Binding EmployeeName}" Width="*"/>
-                                    <DataGridTextColumn Header="Earning Description" Binding="{Binding EarningDescription}" Width="*"/>
-                                    <DataGridTextColumn Header="Amount" Binding="{Binding EarningAmount}" Width="*"/>
-                                </DataGrid.Columns>
-                            </DataGrid>
-
-                        </StackPanel>
-
-                        <StackPanel Grid.Row="2" Grid.Column="1" Margin="0,20,0,0">
-                            <TextBlock Text="All Deductions" FontWeight="Bold" FontSize="16" Margin="0,10,0,10" HorizontalAlignment="Center" Foreground="{DynamicResource Forground}"/>
-                            <DataGrid x:Name="DeductionGrid" AutoGenerateColumns="False" Height="300"
+                            <Border Background="{DynamicResource Background}"  BorderThickness="1" BorderBrush="{DynamicResource BorderBrush}" CornerRadius="10">
+                                <DataGrid  x:Name="AttendanceDataGrid" AutoGenerateColumns="False" Height="auto" VerticalScrollBarVisibility="Auto" MinHeight="200"  Margin="20"
+                     
+Background="Transparent"
 RowBackground="White"
 AlternatingRowBackground="#f0f0f0"
 SnapsToDevicePixels="True"
@@ -456,19 +380,158 @@ CellStyle="{StaticResource DataGridCellStyle}"
 Style="{StaticResource DataGridStyle}"
 ColumnHeaderStyle="{StaticResource DataGridHeaderStyle}"
 RowStyle="{StaticResource DataGridRowStyle}">
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Date" Binding="{Binding DeducationDate}" Width="*"/>
-                                    <DataGridTextColumn Header="Employee Name" Binding="{Binding EmployeeName}" Width="*"/>
-                                    <DataGridTextColumn Header="Deduction Description" Binding="{Binding DeducationDescription}" Width="*"/>
-                                    <DataGridTextColumn Header="Deduction Amount" Binding="{Binding DeducationAmount}" Width="*"/>
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="ID" Binding="{Binding EmployeeId}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+                                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+                                        <DataGridTextColumn Header="Date" Binding="{Binding Date, StringFormat=d}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+                                        <DataGridTextColumn Header="Check In" Binding="{Binding CheckIn}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+                                        <DataGridTextColumn Header="Check Out" Binding="{Binding CheckOut}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+                                        <DataGridTextColumn Header="Over Time" Binding="{Binding OverTime}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+                                        <DataGridTextColumn Header="Double OT" Binding="{Binding DoubleOT}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+                                        <DataGridTextColumn Header="Early Leave" Binding="{Binding EarlyLeave}" Width="100" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+                                        <DataGridTextColumn Header="Late" Binding="{Binding LateHours}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+                                        <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="*">
+                                            <DataGridTextColumn.CellStyle>
+                                                <Style TargetType="DataGridCell">
+                                                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                                    <Setter Property="Padding" Value="4"/>
+                                                    <Setter Property="FontSize" Value="12"/>
+                                                    <Setter Property="BorderThickness" Value="2"/>
+                                                    <Setter Property="BorderBrush" Value="Transparent"/>
+                                                    <Setter Property="Background" Value="Transparent"/>
 
-                                </DataGrid.Columns>
-                            </DataGrid>
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="DataGridCell">
+                                                                <Border x:Name="CellBorder"
+                               BorderBrush="{TemplateBinding BorderBrush}" 
+                               BorderThickness="{TemplateBinding BorderThickness}" 
+                               CornerRadius="8"
+                               Background="{DynamicResource BorderBrush}"
+                               Width="120"
+                               Height="Auto"
+                               SnapsToDevicePixels="True"
+                               Padding="4">
+                                                                    <TextBlock Text="{Binding Status}"
+                                      TextWrapping="WrapWithOverflow"
+                                                                      
+                                      TextAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      HorizontalAlignment="Center"
+                                      FontSize="11.5"/>
+                                                                </Border>
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Status}" Value="Missing Finger Print">
+                                                            <Setter Property="Foreground" Value="Red"/>
+
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Status}" Value="OK">
+                                                            <Setter Property="Foreground" Value="Green"/>
+
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Status}" Value="Non-Working Day">
+                                                            <Setter Property="Foreground" Value="Goldenrod"/>
+
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Status}" Value="Saturday OK">
+                                                            <Setter Property="Foreground" Value="Goldenrod"/>
+
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </DataGridTextColumn.CellStyle>
+                                        </DataGridTextColumn>
+
+                                    </DataGrid.Columns>
+
+                                </DataGrid>
+                            </Border>
+
+
+
+
+                        </StackPanel>
+
+
+
+                        <StackPanel Grid.Row="2" Margin="0,20,10,0">
+
+                            <Border Background="{DynamicResource Background}"  BorderThickness="1" BorderBrush="{DynamicResource BorderBrush}" CornerRadius="10">
+                                <StackPanel>
+                                    <TextBlock Text="All Earnings" FontWeight="Bold" FontSize="16" Margin="0,10,0,10" HorizontalAlignment="Center" Foreground="{DynamicResource Forground}"/>
+
+                                    <DataGrid  x:Name="EarningGrid" AutoGenerateColumns="False" Height="300"
+AlternatingRowBackground="#f0f0f0"
+SnapsToDevicePixels="True"
+
+
+CanUserResizeColumns="False"
+ScrollViewer.CanContentScroll="True"
+ScrollViewer.VerticalScrollBarVisibility="Hidden"
+CellStyle="{StaticResource DataGridCellStyle}"
+Style="{StaticResource DataGridStyle}"
+ColumnHeaderStyle="{StaticResource DataGridHeaderStyle}"
+RowStyle="{StaticResource DataGridRowStyle}" SelectionChanged="EarningGrid_SelectionChanged">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="Date" Binding="{Binding EarningDate}" Width="*"/>
+                                            <DataGridTextColumn Header="Name" Binding="{Binding EmployeeName}" Width="*"/>
+                                            <DataGridTextColumn Header="Description" Binding="{Binding EarningDescription}" Width="*"/>
+                                            <DataGridTextColumn Header="Amount" Binding="{Binding EarningAmount}" Width="*"/>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+
+                                </StackPanel>
+                            </Border>
+
+
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="2" Grid.Column="1" Margin="10,20,0,0">
+
+
+                            <Border Background="{DynamicResource Background}"  BorderThickness="1" BorderBrush="{DynamicResource BorderBrush}" CornerRadius="10">
+                                <StackPanel>
+                                    <TextBlock Text="All Deductions" FontWeight="Bold" FontSize="16" Margin="0,10,0,10" HorizontalAlignment="Center" Foreground="{DynamicResource Forground}"/>
+                                    <DataGrid x:Name="DeductionGrid" AutoGenerateColumns="False" Height="300"
+RowBackground="White"
+AlternatingRowBackground="#f0f0f0"
+SnapsToDevicePixels="True"
+
+
+CanUserResizeColumns="False"
+ScrollViewer.CanContentScroll="True"
+ScrollViewer.VerticalScrollBarVisibility="Hidden"
+CellStyle="{StaticResource DataGridCellStyle}"
+Style="{StaticResource DataGridStyle}"
+ColumnHeaderStyle="{StaticResource DataGridHeaderStyle}"
+RowStyle="{StaticResource DataGridRowStyle}">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="Date" Binding="{Binding DeducationDate}" Width="*"/>
+                                            <DataGridTextColumn Header="Name" Binding="{Binding EmployeeName}" Width="*"/>
+                                            <DataGridTextColumn Header="Description" Binding="{Binding DeducationDescription}" Width="*"/>
+                                            <DataGridTextColumn Header="Amount" Binding="{Binding DeducationAmount}" Width="*"/>
+
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </StackPanel>
+                            </Border>
+
+
+
                         </StackPanel>
 
 
                     </Grid>
                 </ScrollViewer>
-          
+
+            </Grid>
+        </Border>
     </Grid>
+    
+
 </Window>

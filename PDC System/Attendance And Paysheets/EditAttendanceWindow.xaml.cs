@@ -24,6 +24,9 @@ namespace PDC_System
         public EditAttendanceWindow(AttendanceRecord record)
         {
             InitializeComponent();
+
+            LoadTimeDropdowns();
+
             _record = record;
 
             TxtEmployeeId.Text = record.EmployeeId;
@@ -31,19 +34,47 @@ namespace PDC_System
             employeeemail = record.Email;
             TxtDate.Text = record.Date.ToString("yyyy-MM-dd");
 
-            // Split CheckIn and CheckOut into hour/minute boxes
             if (TimeSpan.TryParse(record.CheckIn, out var checkInTime))
             {
-                TxtCheckIn_Hour.Text = checkInTime.Hours.ToString("00");
-                TxtCheckIn_Minute.Text = checkInTime.Minutes.ToString("00");
+                CmbCheckIn_Hour.SelectedItem = checkInTime.Hours.ToString("00");
+                CmbCheckIn_Minute.SelectedItem = checkInTime.Minutes.ToString("00");
             }
 
             if (TimeSpan.TryParse(record.CheckOut, out var checkOutTime))
             {
-                TxtCheckOut_Hour.Text = checkOutTime.Hours.ToString("00");
-                TxtCheckOut_Minute.Text = checkOutTime.Minutes.ToString("00");
+                CmbCheckOut_Hour.SelectedItem = checkOutTime.Hours.ToString("00");
+                CmbCheckOut_Minute.SelectedItem = checkOutTime.Minutes.ToString("00");
             }
         }
+
+
+        private void LoadTimeDropdowns()
+        {
+            // Hours 00–23
+            for (int i = 0; i < 24; i++)
+            {
+                string hour = i.ToString("00");
+
+                CmbCheckIn_Hour.Items.Add(hour);
+                CmbCheckOut_Hour.Items.Add(hour);
+            }
+
+            // Minutes 00–59
+            for (int i = 0; i < 60; i++)
+            {
+                string minute = i.ToString("00");
+
+                CmbCheckIn_Minute.Items.Add(minute);
+                CmbCheckOut_Minute.Items.Add(minute);
+            }
+
+            // Default values
+            CmbCheckIn_Hour.SelectedIndex = 0;
+            CmbCheckIn_Minute.SelectedIndex = 0;
+            CmbCheckOut_Hour.SelectedIndex = 0;
+            CmbCheckOut_Minute.SelectedIndex = 0;
+        }
+
 
 
 
@@ -57,8 +88,8 @@ namespace PDC_System
                 string name = TxtName.Text;
                 string date = TxtDate.Text;
                 // Combine hour + minute fields
-                string checkInStr = $"{TxtCheckIn_Hour.Text}:{TxtCheckIn_Minute.Text}";
-                string checkOutStr = $"{TxtCheckOut_Hour.Text}:{TxtCheckOut_Minute.Text}";
+                string checkInStr = $"{CmbCheckIn_Hour.SelectedItem}:{CmbCheckIn_Minute.SelectedItem}";
+                string checkOutStr = $"{CmbCheckOut_Hour.SelectedItem}:{CmbCheckOut_Minute.SelectedItem}";
 
                 if (TimeSpan.TryParse(checkInStr, out TimeSpan checkIn) &&
                     TimeSpan.TryParse(checkOutStr, out TimeSpan checkOut))
@@ -290,9 +321,9 @@ namespace PDC_System
                                         Application.Current.Dispatcher.Invoke(() =>
                                         {
                                             if (task.Result)
-                                                CustomMessageBox.Show("✅ Email sent successfully!", "Mail Service", MessageBoxButton.OK, MessageBoxImage.Information);
+                                                NotificationHelper.ShowNotification("PDC System!","✅ Email sent successfully!");
                                             else
-                                                CustomMessageBox.Show("❌ Failed to send email!", "Mail Service", MessageBoxButton.OK, MessageBoxImage.Error);
+                                                NotificationHelper.ShowNotification("PDC System!","❌ Failed to send email!");
                                         });
                                     }).ConfigureAwait(false);
 
@@ -354,27 +385,7 @@ namespace PDC_System
             }
         }
 
-        private void TxtHour_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                TextBox targetBox = null;
-
-                if (sender == TxtCheckIn_Hour)
-                    targetBox = TxtCheckIn_Minute;
-                else if (sender == TxtCheckOut_Hour)
-                    targetBox = TxtCheckOut_Minute;
-
-                if (targetBox != null)
-                {
-                    targetBox.Focus();
-                    targetBox.SelectAll(); // ✅ highlight the minute text
-                }
-
-                e.Handled = true; // prevent the default "ding" sound
-            }
-        }
-
+  
 
 
 

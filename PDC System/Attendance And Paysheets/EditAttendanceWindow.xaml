@@ -46,22 +46,38 @@
                 <!-- Editable Times -->
                 <StackPanel Orientation="Horizontal" Margin="0,5" Grid.Row="3">
                     <Label Content="Check In:" Width="100" Foreground="{DynamicResource Forground}"/>
-                    <TextBox x:Name="TxtCheckIn_Hour" KeyDown="TxtHour_KeyDown" MaxLength="2" Width="40" PreviewTextInput="TimeBox_PreviewTextInput"
-             LostFocus="TxtHour_LostFocus"  Style="{DynamicResource TextBoxStyle}"/>
-                    <TextBlock Text=":" FontSize="15" FontWeight="Bold" VerticalAlignment="Center" Margin="6,0,6,0"/>
-                    <TextBox x:Name="TxtCheckIn_Minute" MaxLength="2" Width="40" PreviewTextInput="TimeBox_PreviewTextInput"
-             LostFocus="TxtMinute_LostFocus" Style="{DynamicResource TextBoxStyle}"/>
+
+                    <!-- Hours -->
+                    <ComboBox x:Name="CmbCheckIn_Hour"
+              Width="60"
+              Style="{DynamicResource ComboBoxFlatStyle}"/>
+
+                    <TextBlock Text=":" FontSize="15" FontWeight="Bold"
+               VerticalAlignment="Center" Margin="6,0,6,0"/>
+
+                    <!-- Minutes -->
+                    <ComboBox x:Name="CmbCheckIn_Minute"
+              Width="60"
+              Style="{DynamicResource ComboBoxFlatStyle}"/>
                 </StackPanel>
+
 
                 <StackPanel Orientation="Horizontal" Margin="0,5" Grid.Row="4">
                     <Label Content="Check Out:" Width="100" Foreground="{DynamicResource Forground}"/>
-                    <TextBox x:Name="TxtCheckOut_Hour" KeyDown="TxtHour_KeyDown" MaxLength="2" Width="40"  PreviewTextInput="TimeBox_PreviewTextInput"
-             LostFocus="TxtHour_LostFocus" Style="{DynamicResource TextBoxStyle}"/>
-                    <TextBlock Text=":" FontSize="15" FontWeight="Bold" VerticalAlignment="Center" Margin="6,0,6,0"/>
-                    <TextBox x:Name="TxtCheckOut_Minute" MaxLength="2" Width="40"  PreviewTextInput="TimeBox_PreviewTextInput"
-             LostFocus="TxtMinute_LostFocus" Style="{DynamicResource TextBoxStyle}"/>
-                </StackPanel>
 
+                    <!-- Hours -->
+                    <ComboBox x:Name="CmbCheckOut_Hour"
+              Width="60"
+              Style="{DynamicResource ComboBoxFlatStyle}"/>
+
+                    <TextBlock Text=":" FontSize="15" FontWeight="Bold"
+               VerticalAlignment="Center" Margin="6,0,6,0"/>
+
+                    <!-- Minutes -->
+                    <ComboBox x:Name="CmbCheckOut_Minute"
+              Width="60"
+              Style="{DynamicResource ComboBoxFlatStyle}"/>
+                </StackPanel>
                 <!-- Buttons -->
                 <StackPanel Orientation="Horizontal" Grid.Row="5" Margin="0,20,0,0" HorizontalAlignment="Right">
                     <Button Content="Save" Width="80" Click="BtnSave_Click" Margin="5" Style="{DynamicResource ActionButton}"/>
