@@ -57,24 +57,34 @@ namespace PDC_System
         private void DeleteEmployee_Click(object sender, RoutedEventArgs e)
         {
             var selectedEmployee = EmployeeDataGrid.SelectedItem as Employee;
+
             if (selectedEmployee != null)
             {
-                var confirmationDialog = new ConfirmationDialogEmployee();
-                confirmationDialog.Owner = Application.Current.MainWindow;
-                confirmationDialog.ShowDialog();
+                MessageBoxResult result = CustomMessageBox.Show(
+                    $"Are you sure you want to delete employee '{selectedEmployee.Name}'?",
+                    "Confirm Delete",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Warning);
 
-                if (confirmationDialog.IsConfirmed)
+                if (result == MessageBoxResult.Yes)
                 {
                     employees.Remove(selectedEmployee);
                     ApplyFilter();
                     File.WriteAllText(employeeFile, JsonConvert.SerializeObject(employees));
                 }
             }
+            else
+            {
+                CustomMessageBox.Show(
+                    "Please select an employee to delete.",
+                    "No Selection",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+            }
         }
 
-   
 
-       
+
 
         private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
         {
