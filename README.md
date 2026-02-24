@@ -4,15 +4,6 @@
 ![WPF](https://img.shields.io/badge/WPF-.NET%208-green.svg)
 ![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)
 
-
-
-<img width="1773" height="939" alt="image" src="https://github.com/user-attachments/assets/fe6547c7-405e-4fcd-b764-32620f4e52d2" />
-<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/d4d6cb43-0ea4-4f2d-b738-e55ba8ca586a" />
-<img width="1916" height="1025" alt="image" src="https://github.com/user-attachments/assets/a0ae26c5-6734-4d46-90dd-ec1ee71c55f5" />
-<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/3d3a8a9b-ad83-486c-a56a-b094f0249bd8" />
-
-
-
 ---
 
 ## 📖 Table of Contents
