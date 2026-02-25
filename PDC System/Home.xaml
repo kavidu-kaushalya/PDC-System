@@ -378,7 +378,7 @@ Margin="3" Width="250" Height="45">
                             </Grid.Background>
 
                             <Border CornerRadius="20">
-                                <ContentControl  Margin="20" x:Name="MainContent"   Background="Transparent"  />
+                                <ContentControl  Margin="20,20,5,20" x:Name="MainContent"   Background="Transparent"  />
                             </Border>
                         </Grid>
                     </Border>

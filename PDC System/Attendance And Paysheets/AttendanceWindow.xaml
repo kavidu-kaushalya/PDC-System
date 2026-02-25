@@ -16,36 +16,35 @@
 
             <TabItem Style="{StaticResource TabItem}" Header="Ivms"   >
 
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+
+                    <Grid Margin="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBox Margin="0,10,0,10" HorizontalAlignment="Left" Grid.Row="0" x:Name="TxtSearch" Height="35" Style="{DynamicResource OutsourceSerchBar}" Width="300" TextChanged="FilterChanged" />
+
+                        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,10">
 
 
 
-                <Grid Margin="10">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
 
-                    <TextBox Margin="0,10,0,10" HorizontalAlignment="Left" Grid.Row="0" x:Name="TxtSearch" Height="35" Style="{DynamicResource OutsourceSerchBar}" Width="300" TextChanged="FilterChanged" />
+                            <TextBlock Text="  From:  " VerticalAlignment="Center" Foreground="{DynamicResource Forground}" FontWeight="Regular" FontSize="13" Margin="5"/>
+                            <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="2" CornerRadius="5">
+                                <cal:CustomDatePicker x:Name="StartDate"  SelectedDateChanged ="FilterChanged"   Width="249" Loaded="StartDate_Loaded" Height="auto" />
+                            </Border>
+                            <TextBlock Text="  to:  " VerticalAlignment="Center" Foreground="{DynamicResource Forground}" FontWeight="Regular" FontSize="13" Margin="5"/>
+                            <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="2" CornerRadius="5">
+                                <cal:CustomDatePicker x:Name="EndDate"  SelectedDateChanged ="FilterChanged"   Width="250"/>
+                            </Border>
 
-                    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,10">
-                       
+                        </StackPanel>
+                        <Grid Grid.Row="2">
 
-
-
-                        <TextBlock Text="  From:  " VerticalAlignment="Center" Foreground="{DynamicResource Forground}" FontWeight="Regular" FontSize="13" Margin="5"/>
-                        <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="2" CornerRadius="5">
-                            <cal:CustomDatePicker x:Name="StartDate"  SelectedDateChanged ="FilterChanged"   Width="249" Loaded="StartDate_Loaded" Height="auto" />
-                        </Border>
-                        <TextBlock Text="  to:  " VerticalAlignment="Center" Foreground="{DynamicResource Forground}" FontWeight="Regular" FontSize="13" Margin="5"/>
-                        <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="2" CornerRadius="5">
-                            <cal:CustomDatePicker x:Name="EndDate"  SelectedDateChanged ="FilterChanged"   Width="250"/>
-                        </Border>
-
-                    </StackPanel>
-                    <Grid Grid.Row="2">
-
-                        <TextBlock x:Name="TxtLoading"
+                            <TextBlock x:Name="TxtLoading"
 Text="Loading data, please wait..."
 FontSize="16"
                                    Foreground="{DynamicResource Forground}"
@@ -53,8 +52,8 @@ FontWeight="Bold"
 HorizontalAlignment="Center"
 VerticalAlignment="Center"
 Visibility="Collapsed" />
-                        
-                        <DataGrid x:Name="DataGridMain"
+
+                            <DataGrid x:Name="DataGridMain"
           PreviewMouseWheel="DataGridMain_PreviewMouseWheel"
           Background="Transparent"
           RowBackground="White"
@@ -64,45 +63,49 @@ Visibility="Collapsed" />
           ItemsSource="{Binding UpcomingBirthdays}"
           CanUserResizeColumns="False"
           ScrollViewer.CanContentScroll="True"
-          ScrollViewer.VerticalScrollBarVisibility="Hidden"
-          Height="500"
+          ScrollViewer.VerticalScrollBarVisibility="Auto"
+          MaxHeight="500"
           CellStyle="{StaticResource DataGridCellStyle}"
           Style="{StaticResource DataGridStyle}"
           ColumnHeaderStyle="{StaticResource DataGridHeaderStyle}"
           RowStyle="{StaticResource DataGridRowStyle}">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="ID" Binding="{Binding EmployeeID}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}" />
-                                <DataGridTextColumn Header="Employee Name" Binding="{Binding EmployeeName}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}" />
-                                <DataGridTextColumn Header="Date And Time" Binding="{Binding DateTime}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}" />
-                            </DataGrid.Columns>
-                        </DataGrid>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="ID" Binding="{Binding EmployeeID}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}" />
+                                    <DataGridTextColumn Header="Employee Name" Binding="{Binding EmployeeName}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}" />
+                                    <DataGridTextColumn Header="Date And Time" Binding="{Binding DateTime}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}" />
+                                </DataGrid.Columns>
+                            </DataGrid>
 
+
+                        </Grid>
 
                     </Grid>
+                    
+                </ScrollViewer>
 
-                </Grid>
+
 
             </TabItem>
 
             <TabItem Header="Attendance All" Width="160" Style="{StaticResource TabItem}">
 
-                <Grid>
-                    
-                        <StackPanel>
-                        
+                <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+
+                    <StackPanel>
 
 
 
-                            <!-- Filter Controls -->
-                            
-                                <Grid Margin="0,20,0,0">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                    </Grid.RowDefinitions>
 
-                                    <!-- Date Range Filter -->
-                                    <StackPanel HorizontalAlignment="Left" Grid.Row="0" Orientation="Horizontal" Margin="0 0 0 10">
+                        <!-- Filter Controls -->
+
+                        <Grid Margin="0,20,0,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Date Range Filter -->
+                            <StackPanel HorizontalAlignment="Left" Grid.Row="0" Orientation="Horizontal" Margin="0 0 0 10">
 
 
 
@@ -126,16 +129,16 @@ Visibility="Collapsed" />
                                 <Button x:Name="BtnResetDates" Content="Clear" Width="60" Height="25"
                                          Style="{StaticResource NavigationButtonStyle}"
                                          Click="BtnResetDates_Click" Margin="10,0,0,0" />
-                                
+
 
 
 
                             </StackPanel>
 
-                                    <!-- Search Filter -->
-                                    
-                                    
-                                    <Grid Grid.Row="1">
+                            <!-- Search Filter -->
+
+
+                            <Grid Grid.Row="1">
 
 
 
@@ -157,9 +160,9 @@ Visibility="Collapsed" />
                                     <Button Click="BtnRefresh" Content="Refresh" HorizontalAlignment="Right" Style="{DynamicResource ActionButton}" Width="90" Height="30"/>
                                     <Button Click="BtnExportPdf_Click" Content="ExportPdf" HorizontalAlignment="Right" Style="{DynamicResource ActionButton}" Width="90" Height="30"/>
                                 </StackPanel>
-                              
+
                             </Grid>
-                                </Grid>
+                        </Grid>
 
 
                         <TextBlock x:Name="TxtLoading2"
@@ -172,6 +175,186 @@ VerticalAlignment="Center"
 Visibility="Collapsed" />
 
 
+
+                        <Grid Margin="0,10,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Missing Today -->
+                            <Border Background="{DynamicResource Background}"
+                                    BorderBrush="{DynamicResource BorderBrush}"
+                                    BorderThickness="2"
+            CornerRadius="15"
+            Padding="20"
+            Margin="0,0,10,0">
+
+                                <StackPanel>
+
+                                    <TextBlock Text="MISSING TODAY"
+                       Foreground="#9CA3AF"/>
+
+                                    <TextBlock x:Name="MissingTodayTxt"
+                       Text="0"
+                       Foreground="#ef4444"
+                       FontSize="28"
+                       FontWeight="Bold"/>
+
+                                </StackPanel>
+
+                            </Border>
+
+                            <!-- Total Missing -->
+                            <Border Grid.Column="1"
+           Background="{DynamicResource Background}"
+                                    BorderBrush="{DynamicResource BorderBrush}"
+                                    BorderThickness="2"
+            CornerRadius="15"
+            Padding="20">
+
+                                <StackPanel>
+
+                                    <TextBlock Text="TOTAL MISSING"
+                       Foreground="#9CA3AF"/>
+
+                                    <TextBlock x:Name="TotalMissingTxt"
+                       Text="0"
+                       Foreground="#f59e0b"
+                       FontSize="28"
+                       FontWeight="Bold"/>
+
+                                </StackPanel>
+
+                            </Border>
+
+                        </Grid>
+
+
+
+                        <ListBox x:Name="MissingListBox"
+         MaxHeight="180"
+         Background="Transparent"
+         BorderThickness="0"
+         HorizontalAlignment="Stretch"
+         HorizontalContentAlignment="Stretch"
+         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+         ScrollViewer.VerticalScrollBarVisibility="Auto">
+
+
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+
+                                    <Setter Property="Background" Value="Transparent"/>
+                                    <Setter Property="BorderThickness" Value="0"/>
+                                    <Setter Property="Padding" Value="0"/>
+                                    <Setter Property="Margin" Value="0"/>
+                                    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="ListBoxItem">
+
+                                                <ContentPresenter/>
+
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+
+                            
+                            
+
+                            <!-- 2 Columns -->
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Columns="2"
+                     HorizontalAlignment="Stretch"/>
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
+                            
+                            <ListBox.ItemTemplate>
+
+                                <DataTemplate>
+                                    <Border Background="{DynamicResource Background}"
+                                            BorderBrush="{DynamicResource BorderBrush}"
+                                            BorderThickness="1"
+        CornerRadius="10"
+        Margin="5"
+        Padding="8"
+        Height="70"
+        HorizontalAlignment="Stretch">
+
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+
+                                                <Setter Property="Background" Value="{DynamicResource Background}"/>
+
+                                                <Style.Triggers>
+
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Background" Value="{DynamicResource Background}"/>
+                                                    </Trigger>
+
+                                                </Style.Triggers>
+
+                                            </Style>
+                                        </Border.Style>
+
+                                        <Grid>
+
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="28"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="60"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <!-- Small warning dot -->
+                                            <Ellipse Width="10"
+                             Height="10"
+                             Fill="#ef4444"
+                             VerticalAlignment="Center"/>
+
+
+                                            <!-- Name + Date -->
+                                            <StackPanel VerticalAlignment="Center" Grid.Column="1"
+                                Margin="5,0,0,0">
+
+                                                <TextBlock Text="{Binding Name}"
+                                   Foreground="{DynamicResource Forground}"
+                                   FontSize="13"
+                                   FontWeight="SemiBold"/>
+
+                                                <TextBlock Text="{Binding Date, StringFormat={}{0:MMM dd}}"
+                                   Foreground="#9CA3AF"
+                                   FontSize="11"/>
+
+                                            </StackPanel>
+
+
+                                            <!-- Small Edit button -->
+                                            <Button Grid.Column="2"
+                            Content="Edit"
+                            Height="26"
+                            Padding="5,0"
+                            FontSize="11"
+                            Style="{DynamicResource ActionButton}"
+                            Tag="{Binding}"
+                            Click="EditMissingAttendance_Click"/>
+
+                                        </Grid>
+
+                                    </Border>
+
+                                </DataTemplate>
+
+                            </ListBox.ItemTemplate>
+
+                        </ListBox>
+                        
+
                         <DataGrid x:Name="AttendanceGrid"
                   PreviewMouseWheel="DataGridMain_PreviewMouseWheel"
  Background="Transparent"
@@ -183,25 +366,25 @@ Visibility="Collapsed" />
  ItemsSource="{Binding UpcomingBirthdays}"
  CanUserResizeColumns="False"
  ScrollViewer.CanContentScroll="True"
- ScrollViewer.VerticalScrollBarVisibility="Hidden"
- Height="510"
+ ScrollViewer.VerticalScrollBarVisibility="Auto"
+ MaxHeight="510"
  CellStyle="{StaticResource DataGridCellStyle}"
  Style="{StaticResource DataGridStyle}"
  ColumnHeaderStyle="{StaticResource DataGridHeaderStyle}"
  RowStyle="{StaticResource DataGridRowStyle}">
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Employee ID" Binding="{Binding EmployeeId}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Employee ID" Binding="{Binding EmployeeId}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
                                 <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
                                 <DataGridTextColumn Header="Date"
                     Binding="{Binding Date, StringFormat={}{0:yyyy MMMM dd dddd}}"
                     Width="*"
                     ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
                                 <DataGridTextColumn Header="Check In" Binding="{Binding CheckIn}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
-                                    <DataGridTextColumn Header="Check Out" Binding="{Binding CheckOut}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
-                                    <DataGridTextColumn Header="Over Time" Binding="{Binding OverTime}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
-                                    <DataGridTextColumn Header="Double OT" Binding="{Binding DoubleOT}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
-                                    <DataGridTextColumn Header="Early Leave" Binding="{Binding EarlyLeave}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
-                                    <DataGridTextColumn Header="Late" Binding="{Binding LateHours}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+                                <DataGridTextColumn Header="Check Out" Binding="{Binding CheckOut}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+                                <DataGridTextColumn Header="Over Time" Binding="{Binding OverTime}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+                                <DataGridTextColumn Header="Double OT" Binding="{Binding DoubleOT}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+                                <DataGridTextColumn Header="Early Leave" Binding="{Binding EarlyLeave}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+                                <DataGridTextColumn Header="Late" Binding="{Binding LateHours}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
 
                                 <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="150">
                                     <DataGridTextColumn.CellStyle>
@@ -241,21 +424,21 @@ Visibility="Collapsed" />
 
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding Status}" Value="Missing Finger Print">
-                                                   
+
                                                     <Setter Property="Foreground" Value="Red"/>
-                                                    
+
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding Status}" Value="OK">
                                                     <Setter Property="Foreground" Value="Green"/>
-                                                   
+
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding Status}" Value="Non-Working Day">
                                                     <Setter Property="Foreground" Value="Goldenrod"/>
-                                                   
+
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding Status}" Value="Saturday OK">
                                                     <Setter Property="Foreground" Value="Goldenrod"/>
-                                                   
+
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
@@ -277,110 +460,115 @@ Visibility="Collapsed" />
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                    
-                            </DataGrid.Columns>
-                            </DataGrid>
-                        </StackPanel>
-              
-                </Grid>
-
-            </TabItem>
-
-            <TabItem Header="Holydays" Width="120" Style="{StaticResource TabItem}">
-
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="auto"/>
-                    </Grid.ColumnDefinitions>
-
-
-                    <StackPanel Grid.Column="0">
-
-                        <StackPanel Orientation="Horizontal">
-
-                            <Button  Style="{StaticResource ActionButton}" Click="BtnAdd_Click" Width="120" HorizontalAlignment="Right" VerticalAlignment="Center" >
-                                <StackPanel Margin="3" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                    <TextBlock Text="+" VerticalAlignment="Center" FontSize="18" Margin="0,0,10,0"/>
-                                    <TextBlock Text="Add Holiday" VerticalAlignment="Center" FontSize="12"/>
-
-                                </StackPanel>
-                            </Button>
-                            <Button Margin="8" Content="Delete" Click="HolidayDelete_Click" Style="{DynamicResource NavigationButtonStyle}" />
-
-                        </StackPanel>
-                        
-                        
-                        
-                        <DataGrid AutoGenerateColumns="False" x:Name="HolydayDataGrid"                 PreviewMouseWheel="DataGridMain_PreviewMouseWheel"
-                        Background="Transparent"
-                        RowBackground="White"
-                        AlternatingRowBackground="#f0f0f0"
-                        SnapsToDevicePixels="True"
-                        CanUserResizeColumns="False"
-                        ScrollViewer.CanContentScroll="True"
-                        ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                        Height="500"
-                        CellStyle="{StaticResource DataGridCellStyle}"
-                        Style="{StaticResource DataGridStyle}"
-                        ColumnHeaderStyle="{StaticResource DataGridHeaderStyle}"
-                        RowStyle="{StaticResource DataGridRowStyle}">
-
-                            <DataGrid.Columns>
-
-                                <DataGridTemplateColumn Header="Select" Width="80">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <CheckBox HorizontalAlignment="Center" 
-                     Tag="{Binding}" 
-                     Checked="CheckBox_Checked" 
-                     Unchecked="CheckBox_Unchecked"/>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-
-                                <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
-                                <DataGridTextColumn Header="Date"
-                    Binding="{Binding Date, StringFormat={}{0:yyyy-MM-dd}}"
-                    Width="*"
-                    ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
-
 
                             </DataGrid.Columns>
                         </DataGrid>
                     </StackPanel>
 
-                    <StackPanel Width="300" Grid.Column="1" x:Name="InputStackPanel"
-            Visibility="Collapsed" Orientation="Vertical" Margin="10" HorizontalAlignment="Left" >
-                        <TextBlock Text="Add Holyday" FontSize="20" FontWeight="Bold" Margin="10"/>
+                </ScrollViewer>
 
-                        <StackPanel HorizontalAlignment="Left">
-                            <Label Content="Name"/>
-                            <TextBox x:Name="TxtName" Width="200" Style="{DynamicResource TextBoxStyle}"/>
+            </TabItem>
+
+            <TabItem Header="Holydays" Width="120" Style="{StaticResource TabItem}">
+
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="191*"/>
+                            <ColumnDefinition Width="813*"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+
+
+                        <StackPanel Grid.Column="0" Grid.ColumnSpan="2">
+
+                            <StackPanel Orientation="Horizontal">
+
+                                <Button  Style="{StaticResource ActionButton}" Click="BtnAdd_Click" Width="120" HorizontalAlignment="Right" VerticalAlignment="Center" >
+                                    <StackPanel Margin="3" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                        <TextBlock Text="+" VerticalAlignment="Center" FontSize="18" Margin="0,0,10,0"/>
+                                        <TextBlock Text="Add Holiday" VerticalAlignment="Center" FontSize="12"/>
+
+                                    </StackPanel>
+                                </Button>
+                                <Button Margin="8" Content="Delete" Click="HolidayDelete_Click" Style="{DynamicResource NavigationButtonStyle}" />
+
+                            </StackPanel>
+
+
+
+                            <DataGrid AutoGenerateColumns="False" x:Name="HolydayDataGrid"                 PreviewMouseWheel="DataGridMain_PreviewMouseWheel"
+            Background="Transparent"
+            RowBackground="White"
+            AlternatingRowBackground="#f0f0f0"
+            SnapsToDevicePixels="True"
+            CanUserResizeColumns="False"
+            ScrollViewer.CanContentScroll="True"
+            ScrollViewer.VerticalScrollBarVisibility="Auto"
+            MaxHeight="500"
+            CellStyle="{StaticResource DataGridCellStyle}"
+            Style="{StaticResource DataGridStyle}"
+            ColumnHeaderStyle="{StaticResource DataGridHeaderStyle}"
+            RowStyle="{StaticResource DataGridRowStyle}">
+
+                                <DataGrid.Columns>
+
+                                    <DataGridTemplateColumn Header="Select" Width="80">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox HorizontalAlignment="Center" 
+         Tag="{Binding}" 
+         Checked="CheckBox_Checked" 
+         Unchecked="CheckBox_Unchecked"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+                                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+                                    <DataGridTextColumn Header="Date"
+        Binding="{Binding Date, StringFormat={}{0:yyyy-MM-dd}}"
+        Width="*"
+        ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+
+
+                                </DataGrid.Columns>
+                            </DataGrid>
                         </StackPanel>
-                        <StackPanel HorizontalAlignment="Left">
-                            <Label Content="Date"/>
-                            <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="2" CornerRadius="5">
-                                <cal:CustomDatePicker x:Name="HolidayStartDatePicker" Width="250"/>
-                            </Border>
-                           
-                            <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="2" CornerRadius="5">
-                                <cal:CustomDatePicker x:Name="HolidayEndDatePicker" Width="250"/>
-                            </Border>
-                           
+
+                        <StackPanel Width="300" Grid.Column="2" x:Name="InputStackPanel"
+Visibility="Collapsed" Orientation="Vertical" Margin="10,10,0,10" HorizontalAlignment="Left" >
+                            <TextBlock Text="Add Holyday" FontSize="20" FontWeight="Bold" Margin="10"/>
+
+                            <StackPanel HorizontalAlignment="Left">
+                                <Label Content="Name"/>
+                                <TextBox x:Name="TxtName" Width="200" Style="{DynamicResource TextBoxStyle}"/>
+                            </StackPanel>
+                            <StackPanel HorizontalAlignment="Left">
+                                <Label Content="Date"/>
+                                <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="2" CornerRadius="5">
+                                    <cal:CustomDatePicker x:Name="HolidayStartDatePicker" Width="250"/>
+                                </Border>
+
+                                <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="2" CornerRadius="5">
+                                    <cal:CustomDatePicker x:Name="HolidayEndDatePicker" Width="250"/>
+                                </Border>
+
+                            </StackPanel>
+
+                            <StackPanel Margin="10" HorizontalAlignment="Center">
+                                <Button Content="Save" Style="{DynamicResource ActionButton}" Width="200" Height="30" Click="BtnSave_Click" />
+                            </StackPanel>
                         </StackPanel>
 
-                        <StackPanel Margin="10" HorizontalAlignment="Center">
-                            <Button Content="Save" Style="{DynamicResource ActionButton}" Width="200" Height="30" Click="BtnSave_Click" />
-                        </StackPanel>
-                    </StackPanel>
-
-                    <!-- Add Button -->
+                        <!-- Add Button -->
 
 
 
 
-                </Grid>
+                    </Grid>
+                </ScrollViewer>
+
+                
 
             </TabItem>
 

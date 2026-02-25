@@ -34,6 +34,9 @@ namespace PDC_System
 
             LoadData();
             JobCardDataGrid.Items.Refresh();
+
+            // Load Mini Widget checkbox state from settings
+            LoadMiniWidgetCheckBoxState();
         }
 
         private void LoadData()
@@ -52,6 +55,64 @@ namespace PDC_System
             {
                 customers = JsonConvert.DeserializeObject<List<Customerinfo>>(File.ReadAllText(customersFile));
             }
+        }
+
+        private void LoadMiniWidgetCheckBoxState()
+        {
+            // Load the checkbox state from settings
+            bool isChecked = Properties.Settings.Default.MiniWidgetCheckBoxState;
+
+            // Assuming your checkbox is named MiniWidgetCheckBox in XAML
+            if (MiniWidgetCheckBox != null)
+            {
+                MiniWidgetCheckBox.IsChecked = isChecked;
+
+                // Show or hide the Mini Widget Window based on the saved state
+                if (isChecked)
+                {
+                    ShowMiniWidgetWindow();
+                }
+            }
+        }
+
+        private void MiniWidgetCheckBox_CheckedChanged(object sender, RoutedEventArgs e)
+        {
+            if (MiniWidgetCheckBox != null)
+            {
+                bool isChecked = MiniWidgetCheckBox.IsChecked == true;
+
+                // Save the checkbox state to settings
+                Properties.Settings.Default.MiniWidgetCheckBoxState = isChecked;
+                Properties.Settings.Default.Save();
+
+                // Show or hide the Mini Widget Window
+                if (isChecked)
+                {
+                    ShowMiniWidgetWindow();
+                }
+                else
+                {
+                    HideMiniWidgetWindow();
+                }
+            }
+        }
+
+        private void ShowMiniWidgetWindow()
+        {
+            // Check if the window is already open
+            var existingWindow = Application.Current.Windows.OfType<MiniWidgetWindow>().FirstOrDefault();
+            if (existingWindow == null)
+            {
+                var miniWidgetWindow = new MiniWidgetWindow();
+                miniWidgetWindow.Show();
+            }
+        }
+
+        private void HideMiniWidgetWindow()
+        {
+            // Find and close the Mini Widget Window
+            var existingWindow = Application.Current.Windows.OfType<MiniWidgetWindow>().FirstOrDefault();
+            existingWindow?.Close();
         }
 
         private void AddJobCard_Click(object sender, RoutedEventArgs e)

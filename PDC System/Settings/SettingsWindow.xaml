@@ -71,7 +71,7 @@
                                 <!-- Account Section -->
                                 <StackPanel Grid.Row="1">
                                     <TextBlock Margin="0,20,0,20"  Text="Account" FontSize="18" FontWeight="SemiBold" />
-                                    <Border CornerRadius="20" BorderThickness="1" VerticalAlignment="Center" HorizontalAlignment="Center" BorderBrush="{DynamicResource BorderBrushColor}" Width="542">
+                                    <Border CornerRadius="20" BorderThickness="1" VerticalAlignment="Center" HorizontalAlignment="Center" BorderBrush="{DynamicResource BorderBrush}" Width="542">
                                         <StackPanel>
                                             <StackPanel Margin="20" x:Name="GoogleAccount" Visibility="Collapsed" >
                                                 <Ellipse x:Name="imgProfileEllipse" Width="50" Height="50" Stroke="Gray" StrokeThickness="1"/>
@@ -102,7 +102,7 @@
                                 <!-- General Settings Section -->
                                 <StackPanel Grid.Row="2">
                                     <TextBlock Margin="0,20,0,20"  Text="Genaral" FontSize="18" FontWeight="SemiBold" />
-                                    <Border CornerRadius="20" BorderThickness="1" VerticalAlignment="Center" HorizontalAlignment="Center" BorderBrush="{DynamicResource BorderBrushColor}" Width="542">
+                                    <Border CornerRadius="20" BorderThickness="1" VerticalAlignment="Center" HorizontalAlignment="Center" BorderBrush="{DynamicResource BorderBrush}" Width="542">
                                         <StackPanel>
                                             <Grid  Margin="20" >
                                                 <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Text="Launch app on system startup" FontSize="14" FontWeight="Regular"/>
@@ -114,8 +114,8 @@
 
                                 <!-- Appearance Section -->
                                 <StackPanel Grid.Row="3">
-                                    <TextBlock Margin="0,20,0,20" FontSize="18" FontWeight="SemiBold" Text="Appearance"/>
-                                    <Border Background="{DynamicResource SettingsBackground}"  BorderBrush="{DynamicResource BorderBrushColor}" BorderThickness="1" CornerRadius="20" HorizontalAlignment="Center" Height="204" Width="542">
+                                    <TextBlock Margin="0,20,0,20" FontSize="18"  Foreground="{DynamicResource Forground}" FontWeight="SemiBold" Text="Appearance"/>
+                                    <Border Background="{DynamicResource SettingsBackground}"  BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="20" HorizontalAlignment="Center" Height="204" Width="542">
                                         <StackPanel Margin="30">
                                             <Grid>
                                                 <Grid.RowDefinitions>
@@ -151,7 +151,7 @@
                                 <!-- Database Section -->
                                 <StackPanel Grid.Row="4" Margin="0,0,0,30">
                                     <StackPanel>
-                                        <TextBlock Text="Database" Margin="0,20,0,20" FontSize="18" FontWeight="SemiBold"/>
+                                        <TextBlock  Foreground="{DynamicResource Forground}" Text="Database" Margin="0,20,0,20" FontSize="18" FontWeight="SemiBold"/>
                                     </StackPanel>
 
                                     <StackPanel IsEnabled="True" x:Name="SettingsDisable" Orientation="Vertical" VerticalAlignment="Top">
@@ -194,7 +194,7 @@
                                                 <TextBlock Text="Table:" Margin="0,0,0,10" />
                                                 <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="TxtTable"/>
                                             </StackPanel>
-                                         
+
                                         </Grid>
                                     </StackPanel>
                                     <Grid Grid.Row="3" Grid.ColumnSpan="2" Margin="0,0,0,10">
@@ -206,7 +206,7 @@
 
 
                                     <StackPanel>
-                                        <TextBlock Text="ETF | EPF" Margin="0,20,0,20" FontSize="18" FontWeight="SemiBold"/>
+                                        <TextBlock Text="ETF | EPF"  Foreground="{DynamicResource Forground}" Margin="0,20,0,20" FontSize="18" FontWeight="SemiBold"/>
                                     </StackPanel>
 
 
@@ -221,7 +221,7 @@
 
 
                                     <StackPanel>
-                                        <TextBlock Text="Attendance" Margin="0,20,0,20" FontSize="18" FontWeight="SemiBold"/>
+                                        <TextBlock Text="Attendance" Foreground="{DynamicResource Forground}" Margin="0,20,0,20" FontSize="18" FontWeight="SemiBold"/>
                                     </StackPanel>
 
 
@@ -231,10 +231,25 @@
                                         <Label Content="Attendance Calculation Time" Foreground="{DynamicResource Forground}"/>
                                         <TextBox x:Name="TimerIntervalMinutes" Style="{DynamicResource TextBoxStyle}"></TextBox>
                                     </StackPanel>
-                                    
+
                                     <StackPanel  HorizontalAlignment="Left" Margin="0,10,0,0">
-                                        <CheckBox x:Name="chkSendDailyReport" Content="Daliy Report"></CheckBox>
-                                        <CheckBox x:Name="SendAttendanceEmails" Content="Employee Daily Report"></CheckBox>
+
+                                        <StackPanel Orientation="Horizontal">
+                                            <CheckBox x:Name="chkSendDailyReport" Content="Daliy Report"></CheckBox>
+                                            <TextBlock VerticalAlignment="Center" Text="Send daily attendance report to employees via email." FontSize="12" Foreground="{DynamicResource Forground}" Margin="20,0,0,0"/>
+                                        </StackPanel>
+
+                                        <StackPanel Orientation="Horizontal">
+                                            <CheckBox x:Name="SendAttendanceEmails" Content="Employee Daily Report"></CheckBox>
+                                            <TextBlock VerticalAlignment="Center" Text="Send daily attendance report to employees via email." FontSize="12" Foreground="{DynamicResource Forground}" Margin="20,0,0,0"/>
+                                        </StackPanel>
+
+
+
+
+
+
+
                                     </StackPanel>
 
                                     <Button x:Name="AttendancebtnSave" Style="{DynamicResource ActionButton}" Content="💾 Save Changes" Click="AttendancebtnSave_Click"

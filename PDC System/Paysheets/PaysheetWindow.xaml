@@ -17,9 +17,11 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <!-- Button row -->
+            <!-- CARDS -->
+            <RowDefinition Height="Auto"/>
+            <!-- FILTER -->
             <RowDefinition Height="*"/>
-            <!-- DataGrid row (auto resize) -->
+            <!-- DATAGRID -->
         </Grid.RowDefinitions>
 
         <!-- FILTER PANEL -->
@@ -68,21 +70,112 @@
           Style="{DynamicResource NavigationButtonStyle}"
             Click="Reset_Click" Margin="5,0,0,0"/>
 
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Right">
+                <Button Style="{DynamicResource ActionButton}"
+                Width="150"
+                        
+                Click="CreatePaysheet_Click"
+                Content="➕ Create Paysheet"/>
+            </StackPanel>
+
+
+
         </StackPanel>
 
         <!-- Button -->
-        <StackPanel Grid.Row="0">
-            <Button Style="{DynamicResource ActionButton}"
-                    Width="150"
-                    Click="CreatePaysheet_Click"
-                    Content="➕ Create Paysheet"/>
-        </StackPanel>
-        
-        
+
+
+
+
+
+
+        <!-- SALARY SUMMARY CARDS -->
+        <Grid Grid.Row="1" Margin="0,0,0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- ONE DAY SALARY -->
+            <Border Grid.Column="0"
+            Background="{DynamicResource Background}"
+            CornerRadius="15"
+                    BorderThickness="2"
+                    BorderBrush="{DynamicResource BorderBrush}"
+            Padding="20"
+            Margin="0,0,10,0">
+
+                <StackPanel>
+                    <TextBlock Text="DAY SALARY TOTAL"
+                       Foreground="#9CA3AF"
+                       FontSize="13"/>
+
+                    <StackPanel Orientation="Horizontal">
+
+                        <TextBlock x:Name="OneDaySalaryText"
+                           Text="LKR 0.00"
+                           Foreground="{DynamicResource Forground}"
+                           FontSize="28"
+                           FontWeight="Bold"/>
+
+                        <TextBlock x:Name="OneDayChangeText"
+                           Text=""
+                           Foreground="#35d499"
+                           FontSize="14"
+                           Margin="10,8,0,0"/>
+                    </StackPanel>
+
+                </StackPanel>
+            </Border>
+
+
+            <!-- MONTH SALARY -->
+            <Border Grid.Column="1"
+            Background="{DynamicResource Background}"
+BorderBrush="{DynamicResource BorderBrush}"
+                    
+                    BorderThickness="2"
+                    CornerRadius="15"
+            Padding="20"
+            Margin="10,0,0,0">
+
+                <StackPanel>
+
+                    <TextBlock Text="SALARY TOTAL"
+                       Foreground="#9CA3AF"
+                       FontSize="13"/>
+
+                    <StackPanel Orientation="Horizontal">
+
+                        <TextBlock x:Name="MonthSalaryText"
+                           Text="LKR 0.00"
+                           Foreground="{DynamicResource Forground}"
+                           FontSize="28"
+                           FontWeight="Bold"/>
+
+                        <TextBlock x:Name="MonthProjectionText"
+                           Text=""
+                           Foreground="#5b9ced"
+                           FontSize="14"
+                           Margin="10,8,0,0"/>
+
+                    </StackPanel>
+
+                </StackPanel>
+            </Border>
+
+        </Grid>
+
+
+
+
+
+
+
 
         <!-- DataGrid -->
         <DataGrid x:Name="PaysheetGrid"
-                  Grid.Row="1"
+                  Grid.Row="2"
                   AlternatingRowBackground="#f0f0f0"
                   SnapsToDevicePixels="True"
                   AutoGenerateColumns="False"

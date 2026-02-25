@@ -52,7 +52,34 @@ namespace PDC_System.Paysheets
 
             PaysheetGrid.ItemsSource = paysheets;
 
+            CalculateSalaryTotals();
+
             LoadYears();
+        }
+
+
+
+        private void CalculateSalaryTotals()
+        {
+            var today = DateTime.Today;
+
+            // One day total - sum paysheets where the date matches today
+            // In CalculateSalaryTotals
+            decimal oneDayTotal = paysheets
+                .Where(p =>
+                {
+                    // FIX: Use p.Date directly, since it's already a DateTime
+                    return p.Date.Date == today;
+                })
+                .Sum(p => p.Salary);
+
+            // In CalculateSalaryTotals
+            decimal monthTotal = paysheets
+                     .Sum(p => p.Salary);
+
+
+            OneDaySalaryText.Text = $"LKR {oneDayTotal:N2}";
+            MonthSalaryText.Text = $"LKR {monthTotal:N2}";
         }
 
 

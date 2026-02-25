@@ -36,6 +36,7 @@ namespace PDC_System
         private List<AttendanceRecord> _allAttendanceRecords;
         private AttendanceManager _manager;
 
+
         private readonly string saversFolder; // Folder to store JSON files
 
         #endregion
@@ -48,7 +49,7 @@ namespace PDC_System
 
             // Populate Month and Year ComboBoxes
             _manager = new AttendanceManager();
-
+           
             // Set the Savers folder inside the current working directory
             saversFolder = Path.Combine(Directory.GetCurrentDirectory(), "Savers");
             if (!Directory.Exists(saversFolder))
@@ -358,6 +359,9 @@ namespace PDC_System
                 StartDatePicker.SelectedDate = today;
                 EndDatePicker.SelectedDate = today;
 
+                // ✅ Add this line - Load missing dashboard AFTER data is loaded!
+                LoadMissingDashboard();
+
                 // Show the DataGrid after loading
                 DataGridMain.Visibility = Visibility.Visible;
                 AttendanceGrid.Visibility = Visibility.Visible;
@@ -370,7 +374,6 @@ namespace PDC_System
                                 MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
 
 
 
@@ -592,8 +595,50 @@ namespace PDC_System
         }
 
 
+        private void EditMissingAttendance_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            var record = button.Tag as AttendanceRecord;
+
+            var dim = new DimWindow();
+            dim.Show();
+
+            var edit = new EditAttendanceWindow(record);
+            edit.Owner = dim;
+            edit.ShowDialog();
+
+            dim.Close();
+
+            if (edit.DialogResult == true)
+            {
+                LoadAttendanceData();
+                LoadMissingDashboard();
+            }
+        }
 
 
-       
+        private void LoadMissingDashboard()
+        {
+            if (_allAttendanceRecords == null) return;
+
+            var missing = _allAttendanceRecords
+                .Where(x => x.Status == "Missing Finger Print")
+                .OrderByDescending(x => x.Date)
+                .ToList();
+
+            MissingListBox.ItemsSource = missing;
+
+            // Chart values
+            var today = DateTime.Today;
+
+            int missingToday = missing.Count(x => x.Date.Date == today);
+
+            MissingTodayTxt.Text = missingToday.ToString();
+            TotalMissingTxt.Text = missing.Count.ToString();
+        }
+
+
+
+
     }
 }

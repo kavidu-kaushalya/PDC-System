@@ -41,6 +41,32 @@
 
 
 
+                <Border Margin="5" x:Name="TitleBar" Grid.Row="0"
+Background="{DynamicResource TitleBarBackground}" 
+>
+                    <DockPanel>
+                        <!-- App Logo -->
+                        <Image Source="/Assets/MainLogo.png"  Height="20" Width="20" Margin="8,0"/>
+                        <!-- App Title -->
+                        <TextBlock x:Name="PDCtitel" Text="Paysheet" Foreground="{DynamicResource Forground}"  VerticalAlignment="Center" Margin="8,0"/>
+                        <!-- Control Panel -->
+
+
+
+                        <!-- Title bar buttons -->
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button x:Name="Minimize" Content="—" Width="25" Height="25" Click="Minimize_Click" shell:WindowChrome.IsHitTestVisibleInChrome="True" Margin="5" Background="Transparent" Style="{DynamicResource NavigationButtonStyle}" BorderBrush="{x:Null}"/>
+                            <Button x:Name="Maximize" Content="🗖" Width="25" Height="25" Click="Maximize_Click" shell:WindowChrome.IsHitTestVisibleInChrome="True" Margin="5" Background="Transparent" Style="{DynamicResource NavigationButtonStyle}" BorderBrush="{x:Null}" />
+                            <Button x:Name="Colose" Content="🗙" Width="25" Height="25" Click="Close_Click" shell:WindowChrome.IsHitTestVisibleInChrome="True" Margin="5" Background="Transparent" Style="{DynamicResource NavigationButtonStyle}" BorderBrush="{x:Null}" />
+                        </StackPanel>
+
+
+
+                    </DockPanel>
+                </Border>
+
+
+
 
 
 
@@ -48,7 +74,7 @@
     
 
 
-                <ScrollViewer Grid.Row="1" Margin="20" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <ScrollViewer Grid.Row="1" Margin="20,20,8,20" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
 
 
                     <Grid HorizontalAlignment="Center" >
@@ -238,128 +264,274 @@
                         </StackPanel>
 
 
-                        <Border Background="#FF1469FF" Width="auto" x:Name="Infomations" CornerRadius="20"  Grid.Column="1">
+                        <Border Background="{DynamicResource Background}"
+        BorderBrush="{DynamicResource BorderBrush}"
+        BorderThickness="2"
+        CornerRadius="20"
+        Grid.Column="1"
+        x:Name="Infomations"
+        Padding="20">
+
+                            <StackPanel>
+
+                                <!-- Header -->
+                                <TextBlock Text="Employee Information"
+                   FontSize="20"
+                   FontWeight="SemiBold"
+                  Foreground="{DynamicResource Forground}"
+                   Margin="0,0,0,15"/>
+
+                                <!-- Name + ID -->
+                                <StackPanel Margin="0,0,0,15">
+                                    <TextBlock x:Name="eMPLOYEENAME"
+                       FontSize="26"
+                       FontWeight="Bold"
+                       Foreground="{DynamicResource Forground}"/>
+
+                                    <TextBlock x:Name="EmployeeID"
+                       FontSize="14"
+                       Foreground="#BBBBBB"/>
+                                </StackPanel>
 
 
-                            <StackPanel Margin="15" >
-
-
-                                <TextBlock FontSize="18" FontWeight="Medium" Foreground="White" Text="Employee Information" Margin="0,0,0,10"/>
-
-
-
-                                <TextBlock   x:Name="eMPLOYEENAME"  FontSize="25" FontWeight="Bold" Foreground="White" />
-                                <TextBlock x:Name="EmployeeID" Foreground="White"/>
-
-
-
-
-                                <Grid>
+                                <!-- Earnings + Deductions -->
+                                <Grid Margin="0,0,0,15">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
 
+                                    <!-- Earnings -->
+                                    <StackPanel HorizontalAlignment="Center">
+                                        <TextBlock Text="Total Earnings"
+                           FontSize="14"
+                           Foreground="#CCCCCC"
+                           HorizontalAlignment="Center"/>
 
-                                    <StackPanel>
-                                        <TextBlock FontSize="15" HorizontalAlignment="Center" FontWeight="Light" Foreground="White" Text="Toral Earnings" />
-                                        <TextBlock x:Name="TotalEarnings" Text="0.00" FontSize="25" FontWeight="Bold" Foreground="LawnGreen" HorizontalAlignment="Center"/>
+                                        <TextBlock x:Name="TotalEarnings"
+                           Text="0.00"
+                           FontSize="28"
+                           FontWeight="Bold"
+                           Foreground="LawnGreen"
+                           HorizontalAlignment="Center"/>
                                     </StackPanel>
 
-                                    <StackPanel Grid.Column="1">
-                                        <TextBlock  FontSize="15" HorizontalAlignment="Center" FontWeight="Light" Foreground="White" Text="Toral Deducation" />
-                                        <TextBlock x:Name="TotalDeducations" Text="0.00" FontSize="25" FontWeight="Bold" Foreground="Red" HorizontalAlignment="Center"/>
+                                    <!-- Deductions -->
+                                    <StackPanel Grid.Column="1" HorizontalAlignment="Center">
+                                        <TextBlock Text="Total Deductions"
+                           FontSize="14"
+                           Foreground="#CCCCCC"
+                           HorizontalAlignment="Center"/>
+
+                                        <TextBlock x:Name="TotalDeducations"
+                           Text="0.00"
+                           FontSize="28"
+                           FontWeight="Bold"
+                           Foreground="#FF5555"
+                           HorizontalAlignment="Center"/>
                                     </StackPanel>
-
-
 
                                 </Grid>
 
 
+                                <!-- Working Stats Card -->
+                                <Border Background="{DynamicResource ThemeBackground}"  BorderBrush="{DynamicResource BorderBrush}"
+ BorderThickness="2"                CornerRadius="15"
+                Padding="15"
+                Margin="0,0,0,15">
 
-                                <Border CornerRadius="20" Height="100" Background="#44000000" Margin="0,10,0,10" >
-
-
-                                    <Grid VerticalAlignment="Center">
-
+                                    <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
                                             <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
                                             <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
 
-                                        <StackPanel  VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="0" >
-                                            <TextBlock FontSize="12" FontWeight="Light" Foreground="White" Text="Working" />
-                                            <TextBlock x:Name="WorkingDays" Text="0d" FontSize="20" FontWeight="Bold" Foreground="White"/>
+                                        <!-- Working -->
+                                        <StackPanel HorizontalAlignment="Center">
+                                            <TextBlock Text="Working"
+                               FontSize="12"
+                               Foreground="#CCCCCC"
+                               HorizontalAlignment="Center"/>
+
+                                            <TextBlock x:Name="WorkingDays"
+                               Text="0d"
+                               FontSize="20"
+                               FontWeight="Bold"
+                               Foreground="{DynamicResource Forground}"
+                               HorizontalAlignment="Center"/>
                                         </StackPanel>
 
-                                        <Line Grid.Column="1" X1="0" Y1="0" X2="0" Y2="60" Stroke="White" HorizontalAlignment="Center"  StrokeThickness="1" VerticalAlignment="Center"/>
+                                        <Separator Grid.Column="1"
+                           Width="1"
+                           Height="40"
+                           Background="#55FFFFFF"/>
 
-                                        <StackPanel  VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="2" >
-                                            <TextBlock FontSize="12" FontWeight="Light" Foreground="White" Text="Absent" />
-                                            <TextBlock x:Name="AbsentDays" Text="0d" FontSize="20" FontWeight="Bold" Foreground="White"/>
+                                        <!-- Absent -->
+                                        <StackPanel Grid.Column="2"
+                            HorizontalAlignment="Center">
+
+                                            <TextBlock Text="Absent"
+                               FontSize="12"
+                               Foreground="#CCCCCC"
+                               HorizontalAlignment="Center"/>
+
+                                            <TextBlock x:Name="AbsentDays"
+                               Text="0d"
+                               FontSize="20"
+                               FontWeight="Bold"
+                                 Foreground="{DynamicResource Forground}"
+                               HorizontalAlignment="Center"/>
                                         </StackPanel>
 
-                                        <Line Grid.Column="3" X1="0" Y1="0" X2="0" Y2="60" Stroke="White" StrokeThickness="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        <Separator Grid.Column="3"
+                           Width="1"
+                           Height="40"
+                           Background="#55FFFFFF"/>
 
-                                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="4" >
-                                            <TextBlock FontSize="12" FontWeight="Light" Foreground="White" Text="No-Pay" />
-                                            <TextBlock x:Name="NoPayDaysShow" Text="0d" FontSize="20" FontWeight="Bold" Foreground="White"/>
+                                        <!-- No Pay -->
+                                        <StackPanel Grid.Column="4"
+                            HorizontalAlignment="Center">
+
+                                            <TextBlock Text="No-Pay"
+                               FontSize="12"
+                               Foreground="#CCCCCC"
+                               HorizontalAlignment="Center"/>
+
+                                            <TextBlock x:Name="NoPayDaysShow"
+                               Text="0d"
+                               FontSize="20"
+                               FontWeight="Bold"
+                                Foreground="{DynamicResource Forground}"
+                               HorizontalAlignment="Center"/>
                                         </StackPanel>
-
 
                                     </Grid>
 
+                                </Border>
+
+
+                                <!-- OT Amounts -->
+                                <Grid Margin="0,0,0,15">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel HorizontalAlignment="Center">
+                                        <TextBlock Text="Overtime Amount"
+                           FontSize="13"
+                           Foreground="#CCCCCC"
+                           HorizontalAlignment="Center"/>
+
+                                        <TextBlock x:Name="OTTextBox"
+                           Text="0.00"
+                           FontSize="22"
+                           FontWeight="Bold"
+                           Foreground="{DynamicResource Forground}"
+                           HorizontalAlignment="Center"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="1"
+                        HorizontalAlignment="Center">
+
+                                        <TextBlock Text="Double OT Amount"
+                           FontSize="13"
+                           Foreground="#CCCCCC"
+                           HorizontalAlignment="Center"/>
+
+                                        <TextBlock x:Name="DoubleOTTextBox"
+                           Text="0.00"
+                           FontSize="22"
+                           FontWeight="Bold"
+                            Foreground="{DynamicResource Forground}"
+                           HorizontalAlignment="Center"/>
+                                    </StackPanel>
+
+                                </Grid>
+
+
+                                <!-- OT Hours Info -->
+                                <Grid Margin="0,0,0,20">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel HorizontalAlignment="Center">
+                                        <TextBlock Text="OT Hours"
+                           FontSize="12"
+                           Foreground="#CCCCCC"/>
+
+                                        <TextBlock x:Name="OThours"
+                           Text="0.00"
+                           FontSize="16"
+                           FontWeight="Bold"
+                             Foreground="{DynamicResource Forground}"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="1"
+                        HorizontalAlignment="Center">
+
+                                        <TextBlock Text="Double OT Hours"
+                           FontSize="12"
+                           Foreground="#CCCCCC"/>
+
+                                        <TextBlock x:Name="DoubleOT"
+                           Text="0.00"
+                           FontSize="16"
+                           FontWeight="Bold"
+                            Foreground="{DynamicResource Forground}"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="2"
+                        HorizontalAlignment="Center">
+
+                                        <TextBlock Text="Absent Deduction"
+                           FontSize="12"
+                           Foreground="#CCCCCC"/>
+
+                                        <TextBlock x:Name="AbsentAmunt"
+                           Text="0.00"
+                           FontSize="16"
+                           FontWeight="Bold"
+                           Foreground="LightCoral"/>
+                                    </StackPanel>
+
+                                </Grid>
+
+
+                                <!-- Net Pay -->
+                                <Border Background="#2200FF88"
+                                        BorderThickness="2"
+                                        BorderBrush="#FF00FF88"
+                CornerRadius="15"
+                Padding="15">
+
+                                    <StackPanel HorizontalAlignment="Center">
+
+                                        <TextBlock Text="NET PAY"
+                           FontSize="14"
+                           Foreground="#CCCCCC"
+                           HorizontalAlignment="Center"/>
+
+                                        <TextBlock x:Name="EmployeeSalary"
+                           Text="0.00"
+                           FontSize="32"
+                           FontWeight="Bold"
+                           Foreground="#00FF88"
+                           HorizontalAlignment="Center"/>
+                                    </StackPanel>
 
                                 </Border>
 
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-
-                                    <StackPanel>
-                                        <TextBlock FontSize="15" HorizontalAlignment="Center" FontWeight="Light" Foreground="White" Text="OverTime Amount" />
-                                        <TextBlock  x:Name="OTTextBox" Text="0.00" FontSize="25" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/>
-                                    </StackPanel>
-                                    <StackPanel Grid.Column="1">
-                                        <TextBlock FontSize="15" HorizontalAlignment="Center" FontWeight="Light" Foreground="White" Text="DoubleOT Amount" />
-                                        <TextBlock x:Name="DoubleOTTextBox" Text="0.00" FontSize="25" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/>
-                                    </StackPanel>
-                                </Grid>
-
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-
-                                    <StackPanel Grid.Column="0" Margin="0,10,0,0">
-                                        <TextBlock FontSize="12" FontWeight="Light"  Foreground="White" Text="OT Hours" HorizontalAlignment="Center"/>
-                                        <TextBlock x:Name="OThours" Text="0.00" FontSize="16" FontWeight="Bold"  Foreground="White" HorizontalAlignment="Center"/>
-                                    </StackPanel>
-                                    <StackPanel Grid.Column="1" Margin="0,10,0,0">
-                                        <TextBlock FontSize="12" FontWeight="Light"  Foreground="White" Text="Double OT" HorizontalAlignment="Center"/>
-                                        <TextBlock x:Name="DoubleOT" Text="0.00" FontSize="16" FontWeight="Bold"  Foreground="White" HorizontalAlignment="Center"/>
-                                    </StackPanel>
-                                    <StackPanel Grid.Column="2" Margin="0,10,0,0">
-                                        <TextBlock FontSize="12" FontWeight="Light" Foreground="White" Text="Absent Deduct" HorizontalAlignment="Center"/>
-                                        <TextBlock x:Name="AbsentAmunt" Text="0.00" FontSize="16" FontWeight="Bold"  Foreground="LightCoral" HorizontalAlignment="Center"/>
-                                    </StackPanel>
-                                </Grid>
-
-                                <StackPanel HorizontalAlignment="Center" Margin="0,10,0,0">
-                                    <TextBlock HorizontalAlignment="Center" Text="NETPAY" Foreground="White"/>
-                                    <TextBlock HorizontalAlignment="Center" x:Name="EmployeeSalary" FontSize="30" Text="0" FontWeight="Bold" Foreground="LightGreen" />
-                                </StackPanel>
 
                             </StackPanel>
-                        </Border>
 
+                        </Border>
 
                         <StackPanel Grid.Row="1" Grid.ColumnSpan="2">
                             <TextBlock x:Name="TotalsTextBlock" Foreground="{DynamicResource Forground}" />

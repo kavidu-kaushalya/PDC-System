@@ -787,7 +787,7 @@ absentDayAmount = Math.Max(0, calculatedAbsentAmount);
                 WorkingDays = PDFworkingdays,
                 AbsentDays = PDFAbsentdays,
                 Month = $"{Month.Text} {StartDatePicker.SelectedDate?.Year}",
-
+                Date = DateTime.Now,
                 NopayDays = ACTNopaydays,
 
                 StartDate = StartDatePicker.SelectedDate ?? DateTime.Today,
@@ -1332,6 +1332,7 @@ absentDayAmount = Math.Max(0, calculatedAbsentAmount);
                 TotalDeductions = PDFtotalDeducations,
                 WorkingDays = PDFworkingdays,
                 AbsentDays = PDFAbsentdays,
+                Date = DateTime.Now,
                 Month = $"{Month.Text} {StartDatePicker.SelectedDate?.Year}",
 
                 NopayDays = ACTNopaydays,
@@ -1649,6 +1650,7 @@ absentDayAmount = Math.Max(0, calculatedAbsentAmount);
         public bool IncludeDeductions { get; set; }
         public bool IncludeLoan { get; set; }
         public bool IncludeETF { get; set; }
+        public DateTime Date { get; set; }
 
         public string PDFPath { get; set; }
 

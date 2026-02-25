@@ -31,8 +31,45 @@ namespace PDC_System
             SeedAdmin();
             Loaded += LoadingWindow_Loaded; // window render වෙන විට
             ThemeManager.ApplyTheme(this); // Apply initial theme
+            LoadSavedCredentials();
 
         }
+
+
+        private void LoadSavedCredentials()
+        {
+            if (Properties.Settings.Default.RememberMe)
+            {
+                // Auto-fill username and password
+                UserName.Text = Properties.Settings.Default.SavedUsername;
+                Password.Password = Properties.Settings.Default.SavedPassword;
+                RememberMeCheckBox.IsChecked = true;
+            }
+        }
+
+        /// <summary>
+        /// Save credentials to Settings if Remember Me is checked
+        /// </summary>
+        private void SaveCredentials()
+        {
+            if (RememberMeCheckBox.IsChecked == true)
+            {
+                Properties.Settings.Default.RememberMe = true;
+                Properties.Settings.Default.SavedUsername = UserName.Text;
+                Properties.Settings.Default.SavedPassword = Password.Password;
+            }
+            else
+            {
+                // Clear saved credentials
+                Properties.Settings.Default.RememberMe = false;
+                Properties.Settings.Default.SavedUsername = string.Empty;
+                Properties.Settings.Default.SavedPassword = string.Empty;
+            }
+            Properties.Settings.Default.Save();
+        }
+
+
+
 
 
 
@@ -189,7 +226,9 @@ namespace PDC_System
                 return;
             }
 
-      ((Button)sender).IsEnabled = false;
+            SaveCredentials();
+
+            ((Button)sender).IsEnabled = false;
             Logininfo.IsEnabled = false;
 
             bool needStartupCheck =
@@ -219,6 +258,14 @@ namespace PDC_System
 
             // ✅ ONLY HERE Home opens
             new Home(user).Show();
+
+            // ✅ Open MiniWidgetWindow only if setting is enabled
+            if (Properties.Settings.Default.MiniWidgetCheckBoxState)
+            {
+                MiniWidgetWindow widget = new MiniWidgetWindow();
+                widget.Show();
+            }
+
             Close();
         }
 

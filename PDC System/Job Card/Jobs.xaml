@@ -23,41 +23,53 @@
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
-   
+
 
 
         <StackPanel Grid.Row="0">
-            
+
+            <TextBlock Text="Job Card" 
+FontSize="20" 
+FontWeight="SemiBold" 
+Foreground="{DynamicResource Forground}"                        
+TextAlignment="Left" />
+
+            <TextBlock Text="Add job card and show job history." 
+FontSize="12" 
+FontWeight="Normal" 
+Foreground="#FF7D7D7D"
+TextAlignment="Left" Padding="0,0,0,18"/>
+
         </StackPanel>
 
-       
-            <StackPanel Grid.Row="1">
-                <TextBox Margin="0,10,0,10" HorizontalAlignment="Left" Grid.Row="0" Name="NameAutoCompleteBox1" ToolTip="Search by Employee Name or ID" Height="35" Style="{DynamicResource OutsourceSerchBar}" Width="300" TextChanged="SearchBox_TextChanged2" />
-            </StackPanel>
-            
-            <StackPanel Grid.Row="2" Orientation="Horizontal">
 
-                <Label Content="From:" VerticalAlignment="Center" Foreground="White"/>
+        <StackPanel Grid.Row="1">
+            <TextBox Margin="0,10,0,10" HorizontalAlignment="Left" Grid.Row="0" Name="NameAutoCompleteBox1" ToolTip="Search by Employee Name or ID" Height="35" Style="{DynamicResource OutsourceSerchBar}" Width="300" TextChanged="SearchBox_TextChanged2" />
+        </StackPanel>
 
-                <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="2" Height="35" CornerRadius="5">
-                    <cal:CustomDatePicker x:Name="StartDatePicker" Width="250"/>
-                </Border>
-                <Label Content="To:" VerticalAlignment="Center" Foreground="White"/>
-                <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="2" Height="35" CornerRadius="5">
-                    <cal:CustomDatePicker x:Name="EndDatePicker" Width="250"/>
-                </Border>
+        <StackPanel Grid.Row="2" Orientation="Horizontal">
 
+            <Label Content="From:" VerticalAlignment="Center" Foreground="White"/>
 
-
-
-                <Button Content="Search" Click="Search_Click" Margin="5" Width="150" Height="35"  Style="{StaticResource ActionButton}" />
-                <Button Content="Reset" Click="Reset_Click" Margin="5" Width="80" Height="35"  Style="{StaticResource NavigationButtonStyle}" />
-
-            </StackPanel>
+            <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="2" Height="35" CornerRadius="5">
+                <cal:CustomDatePicker x:Name="StartDatePicker" Width="250"/>
+            </Border>
+            <Label Content="To:" VerticalAlignment="Center" Foreground="White"/>
+            <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="2" Height="35" CornerRadius="5">
+                <cal:CustomDatePicker x:Name="EndDatePicker" Width="250"/>
+            </Border>
 
 
 
-       
+
+            <Button Content="Search" Click="Search_Click" Margin="5" Width="150" Height="35"  Style="{StaticResource ActionButton}" />
+            <Button Content="Reset" Click="Reset_Click" Margin="5" Width="80" Height="35"  Style="{StaticResource NavigationButtonStyle}" />
+
+        </StackPanel>
+
+
+
+
 
 
         <StackPanel Grid.Row="3">
@@ -68,8 +80,19 @@
 
 
 
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="+ Add Job" Click="AddJobCard_Click" HorizontalAlignment="Right" Margin="10" Width="150"  Style="{StaticResource ActionButton}" Height="30"/>
+                        <StackPanel Orientation="Horizontal">
+                            <CheckBox x:Name="MiniWidgetCheckBox" 
+          Content="Show Mini Widget" 
+          Checked="MiniWidgetCheckBox_CheckedChanged"
+          Unchecked="MiniWidgetCheckBox_CheckedChanged"/>
+                            <TextBlock VerticalAlignment="Center" Text="Mini Widget" FontSize="12" Foreground="{DynamicResource Forground}" Margin="20,0,0,0"/>
+                        </StackPanel>
 
-                    <Button Content="+ Add Job" Click="AddJobCard_Click" HorizontalAlignment="Right" Margin="10" Width="150"  Style="{StaticResource ActionButton}" Height="30"/>
+                    </StackPanel>
+
+
 
                     <DataGrid x:Name="JobCardDataGrid"
 
@@ -87,7 +110,7 @@ CellStyle="{StaticResource DataGridCellStyle}"
 Style="{StaticResource DataGridStyle}"
 ColumnHeaderStyle="{StaticResource DataGridHeaderStyle}"
 RowStyle="{StaticResource DataGridRowStyle}">
-                        
+
                         <DataGrid.Columns>
                             <!-- Action/Edit button -->
                             <DataGridTemplateColumn Header="Select" Width="80">
@@ -134,7 +157,7 @@ LostFocus="CheckBox_LostFocus" />
 
 
 
-           
+
                 </StackPanel>
             </Border>
         </StackPanel>

@@ -43,6 +43,9 @@ namespace PDC_System.Payroll_Details
             LoadLoans();
             LoadOldLoans();
 
+            UpdateDeductionSummary();
+            UpdateEarningSummary();
+
 
             if (File.Exists("Savers/EPFHistory.json"))
             {
@@ -125,6 +128,8 @@ namespace PDC_System.Payroll_Details
             }
             LoanGrid.ItemsSource = loans;
 
+            UpdateLoanSummary(); // ✅ ADD THIS LINE
+
             if (File.Exists(deducationanFile))
             {
                 string json = File.ReadAllText(deducationanFile);
@@ -178,6 +183,7 @@ namespace PDC_System.Payroll_Details
             Directory.CreateDirectory(System.IO.Path.GetDirectoryName(loanFile));
             File.WriteAllText(loanFile, JsonConvert.SerializeObject(loans, Newtonsoft.Json.Formatting.Indented));
             LoanGrid.Items.Refresh();
+            UpdateLoanSummary(); // ✅ ADD
         }
         private void AddLoan_EPFSaved(EPF newEPF)
         {
@@ -271,6 +277,7 @@ namespace PDC_System.Payroll_Details
             }
 
             LoanGrid.Items.Refresh();
+            UpdateLoanSummary(); // ✅ ADD
             CustomMessageBox.Show("Loan successfully marked as FINISHED.");
         }
 
@@ -313,6 +320,103 @@ namespace PDC_System.Payroll_Details
                 OldLoanGrid.ItemsSource = oldLoans;
             }
         }
+
+
+        private void DeleteDeduction_Click(object sender, RoutedEventArgs e)
+        {
+            if (EDeductionGrid.SelectedItem is not Deducation selected)
+            {
+                CustomMessageBox.Show("Select a deduction to delete!");
+                return;
+            }
+
+            if (CustomMessageBox.Show(
+                "Are you sure you want to delete this deduction?",
+                "Confirm Delete",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning) != MessageBoxResult.Yes)
+                return;
+
+            dedecations.Remove(selected);
+
+            File.WriteAllText(deducationanFile,
+                JsonConvert.SerializeObject(dedecations, Formatting.Indented));
+
+            EDeductionGrid.Items.Refresh();
+
+            CustomMessageBox.Show("Deduction deleted successfully!");
+            UpdateEarningSummary();
+        }
+
+
+        private void DeleteEarning_Click(object sender, RoutedEventArgs e)
+        {
+            if (EEarningGrid.SelectedItem is not Earning selected)
+            {
+                CustomMessageBox.Show("Select an earning to delete!");
+                return;
+            }
+
+            if (CustomMessageBox.Show(
+                "Are you sure you want to delete this earning?",
+                "Confirm Delete",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning) != MessageBoxResult.Yes)
+                return;
+
+            earnings.Remove(selected);
+
+            File.WriteAllText(earningFile,
+                JsonConvert.SerializeObject(earnings, Formatting.Indented));
+
+            EEarningGrid.Items.Refresh();
+
+            CustomMessageBox.Show("Earning deleted successfully!");
+            UpdateEarningSummary();
+        }
+
+
+
+        private void UpdateDeductionSummary()
+        {
+            var today = DateTime.Today;
+
+            var todayTotal = dedecations
+                .Where(x => x.DeducationDate.ToDateTime(TimeOnly.MinValue).Date == today)
+                .Sum(x => x.DeducationAmount);
+
+            var total = dedecations.Sum(x => x.DeducationAmount);
+
+            TodayDeductionTxt.Text = $"LKR {todayTotal:N2}";
+            TotalDeductionTxt.Text = $"LKR {total:N2}";
+        }
+
+
+        private void UpdateEarningSummary()
+        {
+            var today = DateTime.Today;
+
+            var todayTotal = earnings
+                .Where(x => x.EarningDate.ToDateTime(TimeOnly.MinValue).Date == today)
+                .Sum(x => x.EarningAmount);
+
+            var total = earnings.Sum(x => x.EarningAmount);
+
+            TodayEarningTxt.Text = $"LKR {todayTotal:N2}";
+            TotalEarningTxt.Text = $"LKR {total:N2}";
+        }
+
+
+
+        private void UpdateLoanSummary()
+        {
+            double totalLoan = loans.Sum(x => (double)x.LoanAmount);
+            double totalRemaining = loans.Sum(x => (double)x.Remeining);
+
+            TotalLoanAmountTxt.Text = $"LKR {totalLoan:N2}";
+            TotalRemainingLoanTxt.Text = $"LKR {totalRemaining:N2}";
+        }
+
 
         #region Paysheet
 
