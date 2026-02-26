@@ -46,6 +46,16 @@ namespace PDC_System
             }
         }
 
+        #region Close Button
+
+        private void Close_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+
+        #endregion
+
 
         private void ContactNoTextBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {

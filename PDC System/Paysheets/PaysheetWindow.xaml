@@ -25,7 +25,16 @@
         </Grid.RowDefinitions>
 
         <!-- FILTER PANEL -->
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,50,0,10">
+        <Grid Grid.Row="0" Margin="0,50,0,10">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
 
             <TextBox  x:Name="SearchBox" Height="35" ToolTip="Search by Name, Employee ID or Paysheet ID" Style="{DynamicResource OutsourceSerchBar}" Width="300"  />
@@ -33,10 +42,10 @@
 
 
             <!-- MONTH COMBO -->
-            <ComboBox Style="{DynamicResource ComboBoxFlatStyle}" x:Name="MonthCombo"
+            <ComboBox Grid.Column="1" Style="{DynamicResource ComboBoxFlatStyle}" x:Name="MonthCombo"
               Width="130"
  
-              Margin="5"
+              Margin="9.8,5,5,5"
               SelectedIndex="0">
                 <ComboBoxItem Content="All Months"/>
                 <ComboBoxItem Content="January"/>
@@ -55,22 +64,22 @@
 
 
             <!-- YEAR COMBO -->
-            <ComboBox x:Name="YearCombo"
+            <ComboBox Grid.Column="2" x:Name="YearCombo"
               Width="100"
              Style="{DynamicResource ComboBoxFlatStyle}"
               Margin="5"/>
 
             <!-- FILTER BUTTON -->
-            <Button Content="Filter"
+            <Button Grid.Column="3" Content="Filter"
       Style="{DynamicResource ActionButton}"
             Click="Filter_Click"/>
 
             <!-- RESET BUTTON -->
-            <Button Content="Reset"
+            <Button Grid.Column="4" Content="Reset"
           Style="{DynamicResource NavigationButtonStyle}"
             Click="Reset_Click" Margin="5,0,0,0"/>
 
-            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Right">
+            <StackPanel Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Right">
                 <Button Style="{DynamicResource ActionButton}"
                 Width="150"
                         
@@ -80,7 +89,7 @@
 
 
 
-        </StackPanel>
+        </Grid>
 
         <!-- Button -->
 

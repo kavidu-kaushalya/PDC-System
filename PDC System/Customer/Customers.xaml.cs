@@ -41,6 +41,8 @@ namespace PDC_System
             {
                 customers = JsonConvert.DeserializeObject<List<Customerinfo>>(File.ReadAllText(jsonFilePath));
                 CustomerDataGrid.ItemsSource = customers;
+
+                UpdateCustomerSummary(); // ADD THIS
             }
         }
 
@@ -51,6 +53,7 @@ namespace PDC_System
             {
                 customers.Add(addCustomerWindow.Customer);
                 CustomerDataGrid.Items.Refresh();
+                UpdateCustomerSummary(); // ADD THIS
                 File.WriteAllText(jsonFilePath, JsonConvert.SerializeObject(customers, Formatting.Indented));
             }
         }
@@ -70,9 +73,27 @@ namespace PDC_System
                 {
                     customers.Remove(selectedCustomer);
                     CustomerDataGrid.Items.Refresh();
+                    UpdateCustomerSummary(); // ADD THIS
                     File.WriteAllText(jsonFilePath, JsonConvert.SerializeObject(customers, Formatting.Indented));
                 }
             }
         }
+
+
+        private void UpdateCustomerSummary()
+        {
+            if (customers == null) return;
+
+            int totalCustomers = customers.Count;
+
+            int totalCompanies = customers
+                .Count(x => x.Type != null &&
+                       x.Type.ToLower().Contains("company"));
+
+            TotalCustomersTxt.Text = totalCustomers.ToString();
+            TotalCompaniesTxt.Text = totalCompanies.ToString();
+        }
+
+
     }
 }

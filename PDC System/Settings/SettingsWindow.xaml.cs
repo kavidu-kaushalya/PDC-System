@@ -666,7 +666,7 @@ namespace PDC_System.Settings
 
         #region Close Button
 
-        private void BtnClose_Click(object sender, RoutedEventArgs e)
+        private void Close_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }

@@ -33,72 +33,157 @@
             </Grid.RowDefinitions>
 
             <!-- Top Panels -->
-            <StackPanel Grid.Row="0" Grid.ColumnSpan="3" Margin="20">
-                <Border x:Name="Panel_1" BorderBrush="Transparent" Background="Transparent" Height="150" CornerRadius="30" HorizontalAlignment="Stretch">
-                    <Border.Effect>
-                        <DropShadowEffect ShadowDepth="0" Opacity="0.15" BlurRadius="15"/>
-                    </Border.Effect>
+            <StackPanel Grid.Row="0" Grid.ColumnSpan="3" Margin="0,20,0,20">
+                <UniformGrid Grid.Row="0"
+             Grid.ColumnSpan="3"
+             Columns="3"
+             Margin="0,10,0,10">
 
-                    <Grid HorizontalAlignment="Stretch">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="2" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="2" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
+                    <!-- TOTAL JOBS CARD -->
+                    <Border Background="{DynamicResource Background}"
+                            BorderBrush="{DynamicResource BorderBrush}"
+                            BorderThickness="2"
+            CornerRadius="20"
+            Margin="0,5,5,5"
+            Padding="20">
 
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
+                        <Grid>
 
-                        <!-- Total Jobs -->
-                        <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Top">
-                            <Image VerticalAlignment="Center" Source="/Assets/Asset_25.png" Width="30" Margin="30,10,5,10"/>
-                            <TextBlock VerticalAlignment="Center" FontFamily="DM Sans 14pt" FontWeight="Medium" TextAlignment="Left" Foreground="{DynamicResource Forground}" Margin="5" Text="Total Jobs"/>
-                        </StackPanel>
-                        <StackPanel Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center">
-                            <TextBlock Text="105K" FontSize="30" x:Name="Total_Jobs" FontFamily="DM Sans 14pt" Foreground="Gray" FontWeight="Medium" Margin="5"/>
-                        </StackPanel>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
 
-                        <!-- Divider -->
-                        <StackPanel Grid.RowSpan="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <Rectangle RadiusX="3" RadiusY="1" Width="1.5" Height="100" VerticalAlignment="Center" Margin="0,30,0,10">
-                                <Rectangle.Fill>
-                                    <SolidColorBrush Color="Gray" Opacity="0.5"/>
-                                </Rectangle.Fill>
-                            </Rectangle>
-                        </StackPanel>
+                            <!-- Icon -->
+                            <Border Width="50"
+                    Height="50"
+                    Background="#FFEB6E4E"
+                    CornerRadius="25"
+                    VerticalAlignment="Center">
 
-                        <!-- Total Employees -->
-                        <StackPanel Grid.Column="2" Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Top">
-                            <Image VerticalAlignment="Center" Source="/Assets/Asset_24.png" Width="30" Margin="30,10,5,10"/>
-                            <TextBlock VerticalAlignment="Center" FontFamily="DM Sans 14pt" FontWeight="Medium" Foreground="{DynamicResource Forground}" TextAlignment="Left" Margin="5" Text="Present Today"/>
-                        </StackPanel>
-                        <StackPanel Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center">
-                            <TextBlock Text="11" FontSize="30" x:Name="Present_Employee" FontFamily="DM Sans 14pt" Foreground="Gray" FontWeight="Medium" Margin="5"/>
-                        </StackPanel>
+                                <Image Source="/Assets/Asset_25.png"
+                       Width="24"
+                       Height="24"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"/>
+                            </Border>
 
-                        <!-- Divider -->
-                        <StackPanel Grid.RowSpan="2" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <Rectangle RadiusX="3" RadiusY="1" Width="1.5" Height="100" VerticalAlignment="Center" Margin="0,30,0,10">
-                                <Rectangle.Fill>
-                                    <SolidColorBrush Color="Gray" Opacity="0.5"/>
-                                </Rectangle.Fill>
-                            </Rectangle>
-                        </StackPanel>
+                            <!-- Text -->
+                            <StackPanel Grid.Column="1"
+                        Margin="15,0,0,0"
+                        VerticalAlignment="Center">
 
-                        <!-- Total Customers -->
-                        <StackPanel Grid.Column="4" Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Top">
-                            <Image VerticalAlignment="Center" Source="/Assets/Asset_37.png" Width="30" Margin="30,10,5,10"/>
-                            <TextBlock VerticalAlignment="Center" FontFamily="DM Sans 14pt" FontWeight="Medium" Foreground="{DynamicResource Forground}" TextAlignment="Left" Margin="5" Text="Total Customers"/>
-                        </StackPanel>
-                        <StackPanel Grid.Column="4" Grid.Row="1" HorizontalAlignment="Center">
-                            <TextBlock Text="11" FontSize="30" x:Name="Total_Customers" FontFamily="DM Sans 14pt" Foreground="Gray" FontWeight="Medium" Margin="5"/>
-                        </StackPanel>
-                    </Grid>
-                </Border>
+                                <TextBlock Text="TOTAL JOBS"
+                           Foreground="#9CA3AF"
+                           FontSize="13"/>
+
+                                <TextBlock x:Name="Total_Jobs"
+                           Text="0"
+                           Foreground="White"
+                           FontSize="30"
+                           FontWeight="Bold"/>
+
+                            </StackPanel>
+
+                        </Grid>
+
+                    </Border>
+
+
+                    <!-- PRESENT TODAY CARD -->
+                    <Border Background="{DynamicResource Background}"
+                            BorderBrush="{DynamicResource BorderBrush}"
+                            BorderThickness="2"
+            CornerRadius="20"
+            Margin="5"
+            Padding="20">
+
+                        <Grid>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Border Width="50"
+                    Height="50"
+                    Background="#16a34a"
+                    CornerRadius="25">
+
+                                <Image Source="/Assets/Asset_24.png"
+                       Width="24"
+                       Height="24"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"/>
+                            </Border>
+
+                            <StackPanel Grid.Column="1"
+                        Margin="15,0,0,0">
+
+                                <TextBlock Text="PRESENT TODAY"
+                           Foreground="#9CA3AF"
+                           FontSize="13"/>
+
+                                <TextBlock x:Name="Present_Employee"
+                           Text="0"
+                           Foreground="White"
+                           FontSize="30"
+                           FontWeight="Bold"/>
+
+                            </StackPanel>
+
+                        </Grid>
+
+                    </Border>
+
+
+                    <!-- TOTAL CUSTOMERS CARD -->
+                    <Border Background="{DynamicResource Background}"
+                            BorderBrush="{DynamicResource BorderBrush}"
+                            BorderThickness="2"
+            CornerRadius="20"
+            Margin="5,5,0,5"
+            Padding="20">
+
+                        <Grid>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Border Width="50"
+                    Height="50"
+                    Background="#FFEB194E"
+                    CornerRadius="25">
+
+                                <Image Source="/Assets/Asset_37.png"
+                       Width="24"
+                       Height="24"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"/>
+                            </Border>
+
+                            <StackPanel Grid.Column="1"
+                        Margin="15,0,0,0">
+
+                                <TextBlock Text="TOTAL CUSTOMERS"
+                           Foreground="#9CA3AF"
+                           FontSize="13"/>
+
+                                <TextBlock x:Name="Total_Customers"
+                           Text="0"
+                           Foreground="White"
+                           FontSize="30"
+                           FontWeight="Bold"/>
+
+                            </StackPanel>
+
+                        </Grid>
+
+                    </Border>
+
+                </UniformGrid>
             </StackPanel>
 
             <!-- Left Bar Chart -->

@@ -33,12 +33,9 @@
             <Grid>
 
                 <!-- ❌ Close button - Fixed (Not inside ScrollViewer) -->
-                <StackPanel VerticalAlignment="Top" Margin="20" HorizontalAlignment="Right">
-                    <Button shell:WindowChrome.IsHitTestVisibleInChrome="True" Width="23" Height="23" Style="{StaticResource BtnCloseInStyle}" Click="BtnClose_Click">
-                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <TextBlock Padding="5" Text="x" FontSize="10" FontWeight="SemiBold" TextAlignment="Center" VerticalAlignment="Center" />
-                        </StackPanel>
-                    </Button>
+                <StackPanel VerticalAlignment="Top" Margin="20" Orientation="Horizontal" HorizontalAlignment="Right">
+
+                    <Button x:Name="Colose" Content="🗙" Width="25" Height="25" Click="Close_Click" shell:WindowChrome.IsHitTestVisibleInChrome="True" Margin="5" Background="Transparent" Style="{DynamicResource NavigationButtonStyle}" BorderBrush="{x:Null}" />
                 </StackPanel>
 
                 <!-- ✅ Scrollable area -->

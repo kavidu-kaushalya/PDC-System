@@ -413,7 +413,7 @@ namespace PDC_System
             AttendanceGrid.ItemsSource = filteredRecords.ToList();
         }
 
-        private void DatePicker_SelectedDateChanged(object sender, SelectedDateChangedEventArgs e)
+        private void BtnFilterAttendance_Click(object sender, RoutedEventArgs e)
         {
             if (StartDatePicker.SelectedDate.HasValue && EndDatePicker.SelectedDate.HasValue)
             {
@@ -426,7 +426,18 @@ namespace PDC_System
 
                 LoadAttendanceData();
             }
+            else
+            {
+                CustomMessageBox.Show("Please select both start and end dates.", "Missing Dates",
+                              MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
         }
+
+
+
+
+
+
 
         private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -616,29 +627,30 @@ namespace PDC_System
             }
         }
 
-
         private void LoadMissingDashboard()
         {
-            if (_allAttendanceRecords == null) return;
+            // ✅ Always load fresh data for the dashboard - don't rely on _allAttendanceRecords
+            var today = DateTime.Today;
+            var startOfMonth = new DateTime(today.Year, today.Month, 1);
+            var endOfMonth = startOfMonth.AddMonths(1).AddDays(-1);
 
-            var missing = _allAttendanceRecords
+            // Load attendance records for the entire current month
+            var monthlyRecords = _manager.LoadAttendanceWithDateRange(startOfMonth, endOfMonth);
+
+            if (monthlyRecords == null) return;
+
+            var missing = monthlyRecords
                 .Where(x => x.Status == "Missing Finger Print")
                 .OrderByDescending(x => x.Date)
                 .ToList();
 
             MissingListBox.ItemsSource = missing;
 
-            // Chart values
-            var today = DateTime.Today;
-
             int missingToday = missing.Count(x => x.Date.Date == today);
 
             MissingTodayTxt.Text = missingToday.ToString();
             TotalMissingTxt.Text = missing.Count.ToString();
         }
-
-
-
 
     }
 }

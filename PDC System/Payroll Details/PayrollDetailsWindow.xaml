@@ -12,8 +12,7 @@
 
             <TabItem Header="Loans" IsSelected="True" Style="{StaticResource TabItem}">
                 <StackPanel Margin="10">
-                    <Button Content="Add Loan" Width="120" Style="{DynamicResource ActionButton}" Height="30" Margin="0,0,0,10" Click="AddLoan_Click"/>
-
+             
                     <Grid Margin="0,0,0,15">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -72,13 +71,16 @@
                         </Border>
 
                     </Grid>
-                    
+
+                    <Button HorizontalAlignment="Right" Content="Add Loan" Width="120" Style="{DynamicResource ActionButton}" Height="30" Margin="0,0,0,10" Click="AddLoan_Click"/>
+
+
                     <DataGrid x:Name="LoanGrid" BorderBrush="{x:Null}" HeadersVisibility="Column" IsReadOnly="False"
                            Background="Transparent"
                            RowBackground="White"
                            AlternatingRowBackground="#f0f0f0"
                            SnapsToDevicePixels="True"
-                           Height="500"
+                           
                            AutoGenerateColumns="False"
                            CanUserResizeColumns="False"
                            CellStyle="{StaticResource DataGridCellStyle}"
@@ -146,7 +148,7 @@
                            RowBackground="White"
                            AlternatingRowBackground="#f0f0f0"
                            SnapsToDevicePixels="True"
-                           Height="500"
+                         
                            AutoGenerateColumns="False"
                            CanUserResizeColumns="False"
                            CellStyle="{StaticResource DataGridCellStyle}"
@@ -168,108 +170,116 @@
             </TabItem>
 
             <TabItem Style="{StaticResource TabItem}" Header="Deductions" Width="120">
-                <StackPanel Margin="10">
-                    <Button Margin="10" Style="{DynamicResource ActionButton}" Width="100" Click="AddDeducation" Content="Add Deducation" />
+
+                <Grid Margin="0,10,0,10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    
+                    
+                   
+
+                        <Grid Grid.Row="0" Margin="0,0,0,10">
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <!-- Today Deduction -->
 
 
-                    <Grid Margin="0,0,0,10">
-
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <!-- Today Deduction -->
-                        
-                        
-                        <Border 
+                            <Border 
               Background="{DynamicResource Background}"
                             BorderBrush="{DynamicResource BorderBrush}"
 BorderThickness="2"            CornerRadius="15"
             Padding="20"
             Margin="0,0,10,0" >
 
-                            <StackPanel>
-                                <TextBlock Text="Today Deductions"
+                                <StackPanel>
+                                    <TextBlock Text="Today Deductions"
                         Foreground="#9CA3AF"
                        FontSize="13"/>
 
-                                <TextBlock x:Name="TodayDeductionTxt"
+                                    <TextBlock x:Name="TodayDeductionTxt"
                        Text="LKR 0.00"
                            Foreground="{DynamicResource Forground}"
                            FontSize="28"
                            FontWeight="Bold"/>
-                            </StackPanel>
+                                </StackPanel>
 
-                        </Border>
+                            </Border>
 
-                        <!-- Total Deduction -->
-                        <Border Grid.Column="1"
-                                Background="{DynamicResource Background}"
-                                       BorderBrush="{DynamicResource BorderBrush}"
+                            <!-- Total Deduction -->
+                            <Border Grid.Column="1"
+                                Background="#4CFF0000"
+                                       BorderBrush="Red"
 BorderThickness="2"  
             CornerRadius="15"
             Padding="20"
             Margin="0,0,10,0">
 
-                            <StackPanel>
-                                <TextBlock Text="Total Deductions"
+                                <StackPanel>
+                                    <TextBlock Text="Total Deductions"
                        Foreground="#9CA3AF"
                        FontSize="13"/>
 
-                                <TextBlock x:Name="TotalDeductionTxt"
+                                    <TextBlock x:Name="TotalDeductionTxt"
                      Text="LKR 0.00"
-                           Foreground="{DynamicResource Forground}"
+                           Foreground="Red"
                            FontSize="28"
                            FontWeight="Bold"/>
-                            </StackPanel>
+                                </StackPanel>
 
-                        </Border>
+                            </Border>
 
-                    </Grid>
+                        </Grid>
 
 
+                        <Button Grid.Row="1" HorizontalAlignment="Right" Margin="10" Style="{DynamicResource ActionButton}" Width="100" Click="AddDeducation" Content="Add Deducation" />
 
-                    <DataGrid x:Name="EDeductionGrid"  BorderBrush="{x:Null}" HeadersVisibility="Column" IsReadOnly="False"
+                        <DataGrid Grid.Row="2" x:Name="EDeductionGrid"  BorderBrush="{x:Null}" HeadersVisibility="Column" IsReadOnly="False"
                            Background="Transparent"
                            RowBackground="White"
                            AlternatingRowBackground="#f0f0f0"
                            SnapsToDevicePixels="True"
-                           Height="500"
+                        
                            AutoGenerateColumns="False"
                            CanUserResizeColumns="False"
                            CellStyle="{StaticResource DataGridCellStyle}"
                            Style="{StaticResource DataGridStyle}"
                            ColumnHeaderStyle="{StaticResource DataGridHeaderStyle}"
                            RowStyle="{StaticResource DataGridRowStyle}">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Employee ID" Binding="{Binding EmployeeId}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
-                            <DataGridTextColumn Header="Date" Binding="{Binding DeducationDate}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
-                            <DataGridTextColumn Header="Employee Name" Binding="{Binding EmployeeName}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
-                            <DataGridTextColumn Header="Deduction Description" Binding="{Binding DeducationDescription}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
-                            <DataGridTextColumn Header="Deduction Amount" Foreground="Red" FontWeight="Bold" Binding="{Binding DeducationAmount, StringFormat={}{0:N2} LKR}" 
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Employee ID" Binding="{Binding EmployeeId}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+                                <DataGridTextColumn Header="Date" Binding="{Binding DeducationDate}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+                                <DataGridTextColumn Header="Employee Name" Binding="{Binding EmployeeName}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+                                <DataGridTextColumn Header="Deduction Description" Binding="{Binding DeducationDescription}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+                                <DataGridTextColumn Header="Deduction Amount" Foreground="Red" FontWeight="Bold" Binding="{Binding DeducationAmount, StringFormat={}{0:N2} LKR}" 
                     Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
 
-                            <DataGridTemplateColumn Header="Delete">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Button Content="Delete"
+                                <DataGridTemplateColumn Header="Delete">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Content="Delete"
                     Style="{DynamicResource DeleteActionButton}"
                     Padding="5,2"
                     Click="DeleteDeduction_Click"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
 
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </StackPanel>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                 
+                </Grid>
+                
             </TabItem>
 
             <TabItem Header="Eraning" Style="{StaticResource TabItem}">
 
                 <StackPanel Margin="10">
-
-                    <Button Click="AddErning" Content="Add Earning" Style="{DynamicResource ActionButton}" Width="100" Height="30" Margin="0,0,0,10"/>
 
 
 
@@ -306,8 +316,8 @@ BorderThickness="2"            CornerRadius="15"
 
                         <!-- Total Deduction -->
                         <Border Grid.Column="1"
-                                Background="{DynamicResource Background}"
-                                       BorderBrush="{DynamicResource BorderBrush}"
+                                Background="#4C008000"
+                                       BorderBrush="Green"
 BorderThickness="2"  
             CornerRadius="15"
             Padding="20"
@@ -320,7 +330,7 @@ BorderThickness="2"
 
                                 <TextBlock x:Name="TotalEarningTxt"
                      Text="LKR 0.00"
-                           Foreground="{DynamicResource Forground}"
+                           Foreground="Green"
                            FontSize="28"
                                            
                            FontWeight="Bold"/>
@@ -332,13 +342,15 @@ BorderThickness="2"
 
 
 
+                    <Button HorizontalAlignment="Right" Click="AddErning" Content="Add Earning" Style="{DynamicResource ActionButton}" Width="100" Height="30" Margin="0,0,0,10"/>
+
 
                     <DataGrid x:Name="EEarningGrid"  BorderBrush="{x:Null}" HeadersVisibility="Column" IsReadOnly="False"
                            Background="Transparent"
                            RowBackground="White"
                            AlternatingRowBackground="#f0f0f0"
                            SnapsToDevicePixels="True"
-                           Height="500"
+                       
                            AutoGenerateColumns="False"
                            CanUserResizeColumns="False"
                            CellStyle="{StaticResource DataGridCellStyle}"
@@ -529,7 +541,7 @@ RowStyle="{StaticResource DataGridRowStyle}">
                     <TextBlock Text="Register EPF Employee" Margin="10,20,0,10" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource Forground}"/> 
 
 
-                    <Button Style="{DynamicResource ActionButton}" Width="100" Click="AddEPF" Content="Add ETF" Margin="10,10,0,10"/>
+                    <Button HorizontalAlignment="Left" Style="{DynamicResource ActionButton}" Width="100" Click="AddEPF" Content="Add ETF" Margin="10,10,0,10"/>
                     <DataGrid x:Name="EPFGrid"  BorderBrush="{x:Null}" HeadersVisibility="Column" IsReadOnly="False"
          Background="Transparent"
          RowBackground="White"
@@ -558,8 +570,7 @@ RowStyle="{StaticResource DataGridRowStyle}">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Content="Delete"
-          Background="Red"
-          Foreground="White"
+         Style="{DynamicResource DeleteActionButton}"
           Padding="5,2"
           Click="DeleteEPF_Click"/>
                                     </DataTemplate>

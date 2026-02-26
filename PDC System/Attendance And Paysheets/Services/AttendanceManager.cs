@@ -237,22 +237,52 @@ namespace PDC_System.Services
                     if (!emp.Saturday)
                     {
                         var totalWorked = last - first;
-                        var doubleOt = TimeSpan.FromMinutes(totalWorked.TotalMinutes * 1);
+                        var doubleOt = TimeSpan.FromMinutes(totalWorked.TotalMinutes);
                         doubleOtStr = $"{(int)doubleOt.TotalHours}h {doubleOt.Minutes}m";
                         status = "Saturday (Double OT)";
                     }
                     else
                     {
                         TimeSpan ot = TimeSpan.Zero;
-                        if (first.TimeOfDay < workStart) ot += workStart - first.TimeOfDay;
+
+                        // 🔹 Early check-in OT
+                        if (first.TimeOfDay < workStart)
+                            ot += workStart - first.TimeOfDay;
+
+                        // 🔹 Late check-out OT
                         if (last.TimeOfDay > workEnd)
                         {
                             var extra = last.TimeOfDay - workEnd;
-                            if (extra.TotalMinutes >= 14) extra = RoundToSettingMinutes(extra);
+                            if (extra.TotalMinutes >= 14)
+                                extra = RoundToSettingMinutes(extra);
+
                             ot += extra;
                         }
+
                         ot = RoundToSettingMinutes(ot);
                         overtime = $"{(int)ot.TotalHours}h {ot.Minutes}m";
+
+                        // 🔹 Early Leave
+                        if (last.TimeOfDay < workEnd)
+                        {
+                            var early = workEnd - last.TimeOfDay;
+                            earlyLeave = $"{(int)early.TotalHours}h {early.Minutes}m";
+                        }
+
+                        // 🔹 Late Hours
+                        int allowedLate = Properties.Settings.Default.Late_Allow_Minutes;
+
+                        if (first.TimeOfDay > workStart)
+                        {
+                            var late = first.TimeOfDay - workStart;
+
+                            if (late.TotalMinutes > allowedLate)
+                            {
+                                var actualLate = late - TimeSpan.FromMinutes(allowedLate);
+                                lateHours = $"{(int)actualLate.TotalHours}h {actualLate.Minutes}m";
+                            }
+                        }
+
                         status = "Saturday OK";
                     }
                 }

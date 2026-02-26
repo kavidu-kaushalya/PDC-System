@@ -3,32 +3,68 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         FontFamily="{StaticResource CustomFont}"
        Background="{DynamicResource Background}"
-        Title="Add Customer" Height="auto" Width="400">
-    
-    
-    
-    <StackPanel VerticalAlignment="Top" Margin="10">
-        <Label  Foreground="{DynamicResource Forground}" Content="Company or Person:" FontSize="14"/>
-        <StackPanel>
-            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                <RadioButton  Style="{DynamicResource SelectableRadioButtonStyle}" Width="100" x:Name="CP" FontSize="16" Content="Company" GroupName="CustomerType" Checked="RadioButton_Checked" Unchecked="RadioButton_Unchecked"/>
-                <RadioButton Style="{DynamicResource SelectableRadioButtonStyle}" Width="100" x:Name="PersonRB" FontSize="16" Content="Person" GroupName="CustomerType" IsChecked="True" Checked="RadioButton_Checked" Unchecked="RadioButton_Unchecked"/>
+        WindowStyle="None"
+        AllowsTransparency="True"
+        WindowStartupLocation="CenterScreen"
+                xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+        Title="Add Customer"  MinHeight="550" MaxWidth="550" MinWidth="400" MaxHeight="400" Width="400">
 
-            </StackPanel>
+    <shell:WindowChrome.WindowChrome>
+        <shell:WindowChrome CaptionHeight="32"
+                    CornerRadius="10"
+                    ResizeBorderThickness="6"
+                    GlassFrameThickness="0"
+                    NonClientFrameEdges="None"/>
+    </shell:WindowChrome.WindowChrome>
+
+    <Grid>
+        <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="2" CornerRadius="6">
+            <Grid>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
 
-        </StackPanel>
+                <!-- ❌ Close button - Fixed (Not inside ScrollViewer) -->
+                <StackPanel VerticalAlignment="Top" Margin="20" Orientation="Horizontal" HorizontalAlignment="Right">
+                   
+                    <Button x:Name="Colose" Content="🗙" Width="25" Height="25" Click="Close_Click" shell:WindowChrome.IsHitTestVisibleInChrome="True" Margin="5" Background="Transparent" Style="{DynamicResource NavigationButtonStyle}" BorderBrush="{x:Null}" />
+                </StackPanel>
 
-        <Label  Foreground="{DynamicResource Forground}" x:Name="CompanyLabel" Content="Company Name:" FontSize="14" Visibility="Collapsed"/>
-        <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="CompanyTextBox"  FontSize="16" Visibility="Collapsed"/>
-        <Label  Foreground="{DynamicResource Forground}" Content="Person Name:" FontSize="14"/>
-        <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="NameTextBox"  FontSize="16" />
-        <Label  Foreground="{DynamicResource Forground}" Content="Address:" FontSize="14"/>
-        <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="AddressTextBox" FontSize="16"/>
-        <Label  Foreground="{DynamicResource Forground}"  Content="Contact No:" FontSize="14"/>
-        <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="ContactNoTextBox"  FontSize="16" PreviewTextInput="ContactNoTextBox_PreviewTextInput" TextChanged="ContactNoTextBox_TextChanged"/>
-        <Label  Foreground="{DynamicResource Forground}" Content="Email:" FontSize="14"/>
-        <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="EmailTextBox" FontSize="16"/>
-        <Button Content="Save" Click="Save_Click" Margin="10" Height="34" Width="272" Style="{DynamicResource ActionButton}"/>
-    </StackPanel>
+
+                <StackPanel Grid.Row="1" VerticalAlignment="Top" Margin="10">
+                    <Label  Foreground="{DynamicResource Forground}" Content="Company or Person:" FontSize="14"/>
+                    <StackPanel>
+                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                            <RadioButton  Style="{DynamicResource SelectableRadioButtonStyle}" Width="100" x:Name="CP" FontSize="16" Content="Company" GroupName="CustomerType" Checked="RadioButton_Checked" Unchecked="RadioButton_Unchecked"/>
+                            <RadioButton Style="{DynamicResource SelectableRadioButtonStyle}" Width="100" x:Name="PersonRB" FontSize="16" Content="Person" GroupName="CustomerType" IsChecked="True" Checked="RadioButton_Checked" Unchecked="RadioButton_Unchecked"/>
+
+                        </StackPanel>
+
+
+                    </StackPanel>
+
+                    <Label  Foreground="{DynamicResource Forground}" x:Name="CompanyLabel" Content="Company Name:" FontSize="14" Visibility="Collapsed"/>
+                    <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="CompanyTextBox"  FontSize="16" Visibility="Collapsed"/>
+                    <Label  Foreground="{DynamicResource Forground}" Content="Person Name:" FontSize="14"/>
+                    <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="NameTextBox"  FontSize="16" />
+                    <Label  Foreground="{DynamicResource Forground}" Content="Address:" FontSize="14"/>
+                    <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="AddressTextBox" FontSize="16"/>
+                    <Label  Foreground="{DynamicResource Forground}"  Content="Contact No:" FontSize="14"/>
+                    <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="ContactNoTextBox"  FontSize="16" PreviewTextInput="ContactNoTextBox_PreviewTextInput" TextChanged="ContactNoTextBox_TextChanged"/>
+                    <Label  Foreground="{DynamicResource Forground}" Content="Email:" FontSize="14"/>
+                    <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="EmailTextBox" FontSize="16"/>
+                    <Button Content="Save" Click="Save_Click" Margin="10" Height="34" Width="272" Style="{DynamicResource ActionButton}"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+        
+    </Grid>
+
+   
+
+
+   
 </Window>

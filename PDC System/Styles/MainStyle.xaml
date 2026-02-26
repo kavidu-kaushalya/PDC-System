@@ -676,18 +676,23 @@
             <Setter.Value>
                 <ControlTemplate TargetType="TabControl">
                     <Grid>
-                        <StackPanel >
-                            <!-- Tabs -->
-                            <TabPanel DockPanel.Dock="Top"
-                                  Background="Transparent"
-                                  IsItemsHost="True"
-                                  Margin="0"
-                                  HorizontalAlignment="Left"/>
-                            <!-- Content -->
-                            <ContentPresenter x:Name="PART_SelectedContentHost"
-                                          Margin="0"
-                                          ContentSource="SelectedContent"/>
-                        </StackPanel>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto"  VerticalScrollBarVisibility="Hidden" >
+                            <TabPanel x:Name="HeaderPanel"
+                          Panel.ZIndex ="1" 
+                          KeyboardNavigation.TabIndex="1"
+                          Grid.Column="0"
+                          Grid.Row="0"
+                          Margin="2,2,2,0"
+                          IsItemsHost="true"/>
+                        </ScrollViewer>
+                        <ContentPresenter x:Name="PART_SelectedContentHost"
+                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                      Margin="{TemplateBinding Padding}"
+                                      ContentSource="SelectedContent" Grid.Row="1"/>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>

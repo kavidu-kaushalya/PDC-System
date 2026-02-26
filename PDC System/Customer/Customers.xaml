@@ -43,32 +43,91 @@
         </StackPanel>
         
         <StackPanel Grid.Row="1">
-            <Button Style="{StaticResource ActionButton}" 
-                    Content="+ Add Customer" 
-                    Click="AddCustomer_Click" 
-                    Width="250"
-                    
-                    Margin="30"/>
+        
 
 
+
+            <Grid Margin="0,0,0,10">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Total Customers -->
+                <Border Background="{DynamicResource Background}"
+                         BorderBrush="{DynamicResource BorderBrush}"
+                        BorderThickness="2"
+            CornerRadius="15"
+            Padding="20"
+            Margin="0,0,10,0">
+
+                    <StackPanel>
+
+                        <TextBlock Text="TOTAL CUSTOMERS"
+                       Foreground="#9CA3AF"
+                       FontSize="13"/>
+
+                        <TextBlock x:Name="TotalCustomersTxt"
+                       Text="0"
+                       Foreground="#35d499"
+                       FontSize="28"
+                       FontWeight="Bold"/>
+
+                    </StackPanel>
+
+                </Border>
+
+
+                <!-- Total Companies -->
+                <Border Grid.Column="1"
+           Background="{DynamicResource Background}"
+                         BorderBrush="{DynamicResource BorderBrush}"
+                        BorderThickness="2"
+            CornerRadius="15"
+            Padding="20">
+
+                    <StackPanel>
+
+                        <TextBlock Text="TOTAL COMPANIES"
+                       Foreground="#9CA3AF"
+                       FontSize="13"/>
+
+                        <TextBlock x:Name="TotalCompaniesTxt"
+                       Text="0"
+                       Foreground="#5b9ced"
+                       FontSize="28"
+                       FontWeight="Bold"/>
+
+                    </StackPanel>
+
+                </Border>
+
+            </Grid>
+
+
+
+
+            <Grid HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Top">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+
+
+
+                <Button Grid.Row="0" HorizontalAlignment="Right" Style="{StaticResource ActionButton}" 
+            Content="+ Add Customer" 
+            Click="AddCustomer_Click" 
+            Width="250"
             
-
-
-
-           
-
-
-                <StackPanel HorizontalAlignment="Center" Margin="10" VerticalAlignment="Top">
+            Margin="30"/>
 
 
 
 
-
-
-                    
-
-
-                <DataGrid x:Name="CustomerDataGrid" BorderBrush="{x:Null}" HeadersVisibility="Column" IsReadOnly="False"
+                <DataGrid Grid.Row="1" x:Name="CustomerDataGrid" BorderBrush="{x:Null}" HeadersVisibility="Column" IsReadOnly="False"
                Background="Transparent"
                RowBackground="White"
                AlternatingRowBackground="#f0f0f0"
@@ -82,20 +141,18 @@
                RowStyle="{StaticResource DataGridRowStyle}">
 
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" ElementStyle="{StaticResource NameColumnStyle}"/>
-                            <DataGridTextColumn Header="Address" Binding="{Binding Address}" Width="2*" ElementStyle="{StaticResource EmailColumnStyle}"/>
-                            <DataGridTextColumn Header="Email:" Binding="{Binding Email}" Width="2*" ElementStyle="{StaticResource ContactColumnStyle}"/>
-                            <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="2*" ElementStyle="{StaticResource TypeColumnStyle}"/>
+                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" ElementStyle="{StaticResource DataGridColumnsStyle}"/>
+                        <DataGridTextColumn Header="Address" Binding="{Binding Address}" Width="2*" ElementStyle="{StaticResource DataGridColumnsStyle}"/>
+                        <DataGridTextColumn Header="Email:" Binding="{Binding Email}" Width="2*" ElementStyle="{StaticResource DataGridColumnsStyle}"/>
+                        <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="2*" ElementStyle="{StaticResource DataGridColumnsStyle}"/>
                             <DataGridTemplateColumn Header="Action" Width="*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal"  HorizontalAlignment="Center">
-                                            <Button Click="DeleteCustomer_Click"  Background="Transparent" Width="20" Height="20" Margin="10,0,0,0">
-                                                <StackPanel>
-                                                    <Image RenderOptions.BitmapScalingMode="HighQuality" SnapsToDevicePixels="True" Source="/Assets/Delete.png" Width="14"/>
-                                                </StackPanel>
-                                            </Button>
-                                        </StackPanel>
+                                        <Button Click="DeleteCustomer_Click" Content="Delete" Style="{DynamicResource DeleteActionButton}" />
+
+
+                                    </StackPanel>
                                         <!-- Pass the row data through Tag -->
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -109,7 +166,7 @@
 
 
 
-                </StackPanel>
+                </Grid>
 
      
 
