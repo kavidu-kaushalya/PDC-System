@@ -467,15 +467,24 @@ namespace PDC_System
             }
             else if (!isWorkingDay && !isHoliday)
             {
-                // ✅ Any other non-working day → double OT
+                // ✅ Non-working day (NOT holiday, NOT Sunday)
+                // 👉 Total worked hours = NORMAL OT
+
                 var totalWorked = checkOut - checkIn;
+
                 if (totalWorked.TotalMinutes >= 14)
                 {
                     totalWorked = RoundToSettingMinutes(totalWorked);
-                    record.DoubleOT = $"{(int)totalWorked.TotalHours}h {totalWorked.Minutes}m";
+                    record.OverTime = $"{(int)totalWorked.TotalHours}h {totalWorked.Minutes}m";
                 }
-                record.Status = "Non-Working Day (Double OT)";
+
+                record.DoubleOT = "0h 0m";
+                record.EarlyLeave = "0h 0m";
+                record.LateHours = "0h 0m";
+
+                record.Status = "Worked on Off Day (Normal OT)";
             }
+
             else
             {
                 // ✅ Regular working day or Saturday that is working

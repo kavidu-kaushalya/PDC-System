@@ -1,68 +1,55 @@
-﻿using Microsoft.Win32;
-using System.Reflection;
+﻿using System;
 using System.IO;
-using System.Diagnostics;
-using System;
 
 namespace PDC_System.Helpers
 {
     public static class StartupManager
     {
-        // Automatic app name එක set කරනවා
-        private static readonly string appName = Path.GetFileNameWithoutExtension(GetExecutablePath());
+        private static readonly string appName =
+            Path.GetFileNameWithoutExtension(Environment.ProcessPath!);
 
         private static string GetExecutablePath()
         {
-            // Use Process.GetCurrentProcess().MainModule.FileName for reliable executable path
-            try
-            {
-                using (var process = Process.GetCurrentProcess())
-                {
-                    return process.MainModule?.FileName ?? Assembly.GetExecutingAssembly().Location;
-                }
-            }
-            catch
-            {
-                // Fallback to assembly location
-                return Assembly.GetExecutingAssembly().Location;
-            }
+            return Environment.ProcessPath!;
         }
 
         public static void AddToStartup()
         {
-            string exePath = GetExecutablePath();
+            string startupFolder = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
+            string shortcutPath = Path.Combine(startupFolder, appName + ".lnk");
 
-            if (string.IsNullOrEmpty(exePath))
+            if (!File.Exists(shortcutPath))
             {
-                throw new InvalidOperationException("Could not determine executable path");
-            }
+                string exePath = GetExecutablePath();
 
-            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true))
-            {
-                if (key != null)
-                {
-                    key.SetValue(appName, $"\"{exePath}\""); // Wrap in quotes to handle spaces in path
-                }
+                Type shellType = Type.GetTypeFromProgID("WScript.Shell")!;
+                dynamic shell = Activator.CreateInstance(shellType)!;
+                dynamic shortcut = shell.CreateShortcut(shortcutPath);
+
+                shortcut.Description = appName;
+                shortcut.TargetPath = exePath;
+                shortcut.WorkingDirectory = Path.GetDirectoryName(exePath);
+                shortcut.Save();
             }
         }
 
         public static void RemoveFromStartup()
         {
-            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true))
+            string startupFolder = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
+            string shortcutPath = Path.Combine(startupFolder, appName + ".lnk");
+
+            if (File.Exists(shortcutPath))
             {
-                if (key != null)
-                {
-                    key.DeleteValue(appName, false);
-                }
+                File.Delete(shortcutPath);
             }
         }
 
         public static bool IsInStartup()
         {
-            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", false))
-            {
-                return key?.GetValue(appName) != null;
-            }
+            string startupFolder = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
+            string shortcutPath = Path.Combine(startupFolder, appName + ".lnk");
+
+            return File.Exists(shortcutPath);
         }
     }
 }

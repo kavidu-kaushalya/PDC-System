@@ -189,25 +189,35 @@ namespace PDC_System.Services
                 {
                     var first = times.First();
                     var last = times.Last();
+
                     checkInStr = first.ToString("HH:mm");
                     checkOutStr = last.ToString("HH:mm");
 
+                    // 🔹 Total worked hours = OT
                     var totalWorked = last - first;
-                    var doubleOt = TimeSpan.FromMinutes(totalWorked.TotalMinutes * 1);
-                    doubleOtStr = $"{(int)doubleOt.TotalHours}h {doubleOt.Minutes}m";
+                    totalWorked = RoundToSettingMinutes(totalWorked);
 
-                    status = "Non-Working Day (Double OT)";
+                    overtime = $"{(int)totalWorked.TotalHours}h {totalWorked.Minutes}m";
+
+                    // 🔹 No late / no early leave / no double OT
+                    lateHours = "0h 0m";
+                    earlyLeave = "0h 0m";
+                    doubleOtStr = "0h 0m";
+
+                    status = "Worked on Off Day (Normal OT)";
                 }
                 else if (times != null && times.Count == 1)
                 {
                     checkInStr = times.First().ToString("HH:mm");
-                    status = "Non-Working Day (Missing Out/In)";
+                    status = "Off Day (Missing Out)";
                 }
                 else
                 {
                     status = "Non-Working Day";
                 }
             }
+
+
             else if (times == null || times.Count == 0)
             {
                 // This creates temporary absence records without saving to database
