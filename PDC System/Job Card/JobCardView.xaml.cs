@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media.Imaging;
-using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace PDC_System.Job_Card
 {
@@ -95,6 +96,63 @@ namespace PDC_System.Job_Card
                     "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
+
+        #region Window Control
+
+        private void TitleBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ButtonState == MouseButtonState.Pressed)
+                DragMove();
+        }
+
+        private void Minimize_Click(object sender, RoutedEventArgs e) => this.WindowState = WindowState.Minimized;
+
+        private bool _isMaximized = false;
+        private double _previousLeft;
+        private double _previousTop;
+        private double _previousWidth;
+        private double _previousHeight;
+
+        private void Maximize_Click(object sender, RoutedEventArgs e)
+        {
+            if (_isMaximized)
+            {
+                // Restore to previous size and position
+                this.Left = _previousLeft;
+                this.Top = _previousTop;
+                this.Width = _previousWidth;
+                this.Height = _previousHeight;
+                _isMaximized = false;
+            }
+            else
+            {
+                // get before maximizing
+                _previousLeft = this.Left;
+                _previousTop = this.Top;
+                _previousWidth = this.Width;
+                _previousHeight = this.Height;
+
+                // Get the working area (screen minus taskbar)
+                var workingArea = SystemParameters.WorkArea;
+
+                // Set window position and size to working area
+                this.Left = workingArea.Left;
+                this.Top = workingArea.Top;
+                this.Width = workingArea.Width;
+                this.Height = workingArea.Height;
+
+                _isMaximized = true;
+            }
+        }
+
+        private void Close_Click(object sender, RoutedEventArgs e)
+        {
+
+            Hide();
+        }
+
+        #endregion
 
         private void LoadScreenshotImage()
         {

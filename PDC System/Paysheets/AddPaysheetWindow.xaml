@@ -553,16 +553,20 @@ Style="{StaticResource DataGridStyle}"
 ColumnHeaderStyle="{StaticResource DataGridHeaderStyle}"
 RowStyle="{StaticResource DataGridRowStyle}">
                                     <DataGrid.Columns>
-                                        <DataGridTextColumn Header="ID" Binding="{Binding EmployeeId}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+                                        <DataGridTextColumn Header="Employee ID" Binding="{Binding EmployeeId}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
                                         <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
-                                        <DataGridTextColumn Header="Date" Binding="{Binding Date, StringFormat=d}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+                                        <DataGridTextColumn Header="Date"
+Binding="{Binding Date, StringFormat={}{0:yyyy MMMM dd dddd}}"
+Width="*"
+ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
                                         <DataGridTextColumn Header="Check In" Binding="{Binding CheckIn}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
                                         <DataGridTextColumn Header="Check Out" Binding="{Binding CheckOut}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
                                         <DataGridTextColumn Header="Over Time" Binding="{Binding OverTime}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
                                         <DataGridTextColumn Header="Double OT" Binding="{Binding DoubleOT}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
-                                        <DataGridTextColumn Header="Early Leave" Binding="{Binding EarlyLeave}" Width="100" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+                                        <DataGridTextColumn Header="Early Leave" Binding="{Binding EarlyLeave}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
                                         <DataGridTextColumn Header="Late" Binding="{Binding LateHours}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
-                                        <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="*">
+
+                                        <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="150">
                                             <DataGridTextColumn.CellStyle>
                                                 <Style TargetType="DataGridCell">
                                                     <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -572,26 +576,27 @@ RowStyle="{StaticResource DataGridRowStyle}">
                                                     <Setter Property="BorderThickness" Value="2"/>
                                                     <Setter Property="BorderBrush" Value="Transparent"/>
                                                     <Setter Property="Background" Value="Transparent"/>
-
+                                                    <Setter Property="Foreground" Value="{DynamicResource Forground}"/>
                                                     <Setter Property="Template">
                                                         <Setter.Value>
                                                             <ControlTemplate TargetType="DataGridCell">
                                                                 <Border x:Name="CellBorder"
-                               BorderBrush="{TemplateBinding BorderBrush}" 
-                               BorderThickness="{TemplateBinding BorderThickness}" 
-                               CornerRadius="8"
-                               Background="{DynamicResource BorderBrush}"
-                               Width="120"
-                               Height="Auto"
-                               SnapsToDevicePixels="True"
-                               Padding="4">
+            BorderBrush="{TemplateBinding BorderBrush}" 
+            BorderThickness="{TemplateBinding BorderThickness}" 
+            CornerRadius="8"
+            Background="{DynamicResource BorderBrush}"
+                                            
+            Width="120"
+            Height="Auto"
+            SnapsToDevicePixels="True"
+            Padding="4">
                                                                     <TextBlock Text="{Binding Status}"
-                                      TextWrapping="WrapWithOverflow"
-                                                                      
-                                      TextAlignment="Center"
-                                      VerticalAlignment="Center"
-                                      HorizontalAlignment="Center"
-                                      FontSize="11.5"/>
+                   TextWrapping="Wrap"
+                                            
+                   TextAlignment="Center"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"
+                   FontSize="11.5"/>
                                                                 </Border>
                                                             </ControlTemplate>
                                                         </Setter.Value>
@@ -599,6 +604,7 @@ RowStyle="{StaticResource DataGridRowStyle}">
 
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding Status}" Value="Missing Finger Print">
+
                                                             <Setter Property="Foreground" Value="Red"/>
 
                                                         </DataTrigger>
@@ -618,6 +624,10 @@ RowStyle="{StaticResource DataGridRowStyle}">
                                                 </Style>
                                             </DataGridTextColumn.CellStyle>
                                         </DataGridTextColumn>
+
+
+                            
+                                   
 
                                     </DataGrid.Columns>
 

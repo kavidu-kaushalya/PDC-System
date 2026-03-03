@@ -2,9 +2,22 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Job Card Details" Height="750" Width="950"
+        xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
         WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        AllowsTransparency="True"
         Background="{DynamicResource Background}" Foreground="{DynamicResource Forground}"
         KeyDown="Window_KeyDown">
+
+    <shell:WindowChrome.WindowChrome>
+        <shell:WindowChrome CaptionHeight="32"
+               CornerRadius="10"
+                         
+               ResizeBorderThickness="6"
+               GlassFrameThickness="0"
+               NonClientFrameEdges="None"/>
+    </shell:WindowChrome.WindowChrome>
+    
 
     <Window.Resources>
         <Style TargetType="TextBlock" x:Key="LabelStyle">
@@ -52,299 +65,348 @@
         </Style>
     </Window.Resources>
 
-    <Grid Margin="20" x:Name="MainContent">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
 
-        <!-- Header -->
-        <Border Grid.Row="0" Background="#FF1469FF" Padding="20,15" CornerRadius="5" Margin="0,0,0,20">
+
+    <Grid>
+        <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="2" CornerRadius="6" >
             <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Border Margin="5" x:Name="TitleBar" Grid.Row="0"
+Background="{DynamicResource Background}" 
+>
+                    <DockPanel>
+                        <!-- App Logo -->
+                        <Image Source="/Assets/MainLogo.png"  Height="20" Width="20" Margin="8,0"/>
+                        <!-- App Title -->
+                        <TextBlock x:Name="PDCtitel" Text="Paysheet" Foreground="{DynamicResource Forground}"  VerticalAlignment="Center" Margin="8,0"/>
+                        <!-- Control Panel -->
 
-                <!-- Type Icon -->
-                <Image x:Name="TypeImage" Width="32" Height="32" Margin="0,0,15,0" 
-                       VerticalAlignment="Center" Stretch="Uniform"/>
 
-                <TextBlock Grid.Column="1" Text="Job Card Details" 
-                           FontSize="22" FontWeight="Bold" 
-                           Foreground="White" VerticalAlignment="Center"/>
 
-                <TextBlock Grid.Column="2" x:Name="JobNoText" Text="Job #10004" 
-                           FontSize="18" FontWeight="SemiBold" 
-                           Foreground="White" VerticalAlignment="Center"/>
-            </Grid>
-        </Border>
+                        <!-- Title bar buttons -->
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button x:Name="Minimize" Content="—" Width="25" Height="25" Click="Minimize_Click" shell:WindowChrome.IsHitTestVisibleInChrome="True" Margin="5" Background="Transparent" Style="{DynamicResource NavigationButtonStyle}" BorderBrush="{x:Null}"/>
+                            <Button x:Name="Maximize" Content="🗖" Width="25" Height="25" Click="Maximize_Click" shell:WindowChrome.IsHitTestVisibleInChrome="True" Margin="5" Background="Transparent" Style="{DynamicResource NavigationButtonStyle}" BorderBrush="{x:Null}" />
+                            <Button x:Name="Colose" Content="🗙" Width="25" Height="25" Click="Close_Click" shell:WindowChrome.IsHitTestVisibleInChrome="True" Margin="5" Background="Transparent" Style="{DynamicResource NavigationButtonStyle}" BorderBrush="{x:Null}" />
+                        </StackPanel>
 
-        <!-- Content -->
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-            <StackPanel>
-                <!-- Screenshot Section (if available) -->
-                <Border x:Name="ScreenshotBorder" Style="{StaticResource SectionBorder}" Visibility="Collapsed">
-                    <StackPanel>
-                        <TextBlock Text="Screenshot Preview" 
-                                   FontSize="16" FontWeight="Bold" 
-                                   Foreground="#2196F3" Margin="0,0,0,15"/>
-                        <Border BorderBrush="#DDDDDD" BorderThickness="1" 
-                                CornerRadius="3" Background="#FAFAFA">
-                            <Image x:Name="ScreenshotImage" 
-                                   MaxHeight="300" 
-                                   Stretch="Uniform"
-                                   Margin="10"/>
-                        </Border>
-                    </StackPanel>
+
+
+                    </DockPanel>
                 </Border>
 
-                <!-- Customer Information -->
-                <Border x:Name="CustomerInfoSection" Style="{StaticResource SectionBorder}">
-                    <StackPanel>
-                        <TextBlock Text="Customer Information" 
-                                   FontSize="16" FontWeight="Bold" 
-                                   Foreground="#FF1469FF" Margin="0,0,0,15"/>
 
-                        <Grid Margin="0,0,0,10">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="150"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="Customer Name:" Style="{StaticResource LabelStyle}"/>
-                            <TextBlock Grid.Column="1" x:Name="CustomerNameText" 
-                                       Text="Temp" Style="{StaticResource ValueStyle}"/>
-                        </Grid>
+                <Grid Grid.Row="1" Margin="20" x:Name="MainContent">
+                    <Grid.RowDefinitions>
 
-                        <Grid Margin="0,0,0,10" x:Name="DateRow">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="150"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="Date:" Style="{StaticResource LabelStyle}"/>
-                            <TextBlock Grid.Column="1" x:Name="DateText" 
-                                       Text="2025-11-14 14:01:11" Style="{StaticResource ValueStyle}"/>
-                        </Grid>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
 
-                        <Grid Margin="0,0,0,10" x:Name="DescriptionRow">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="150"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="Description:" Style="{StaticResource LabelStyle}"/>
-                            <TextBlock Grid.Column="1" x:Name="DescriptionText" 
-                                       Text="NoteBook" Style="{StaticResource ValueStyle}"/>
-                        </Grid>
 
-                        <Grid Margin="0,0,0,0" x:Name="QuantityRowSimple">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="150"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
 
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
-                            
-                            <TextBlock Grid.Row="0" Text="Quantity:" Style="{StaticResource LabelStyle}"/>
-                            <TextBlock Grid.Row="0" Grid.Column="1" x:Name="QuantityTextSimple" 
-                                       Text="1,500" Style="{StaticResource ValueStyle}"/>
-                            <TextBlock Grid.Row="1" Text="Plate Quantity:" Style="{StaticResource LabelStyle}" Margin="0,10,10,0"/>
-                            <TextBlock  Grid.Row="1" Grid.Column="1" x:Name="PlateQuantityTextSimple" 
-                                       Text="1,500" Style="{StaticResource ValueStyle}" Margin="0,10,0,0"/>
-                        </Grid>
-                    </StackPanel>
-                </Border>
 
-                <!-- Job Details -->
-                <Border x:Name="JobDetailsSection" Style="{StaticResource SectionBorder}">
-                    <StackPanel>
-                        <TextBlock Text="Job Details" 
-                                   FontSize="16" FontWeight="Bold" 
-                                   Foreground="#FF1469FF" Margin="0,0,0,15"/>
 
-                        <Grid Margin="0,0,0,10">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="150"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="Type:" Style="{StaticResource LabelStyle}"/>
-                            <TextBlock Grid.Column="1" x:Name="TypeText" 
-                                       Text="Digital" Style="{StaticResource ValueStyle}"/>
-                        </Grid>
-
-                        <Grid Margin="0,0,0,10">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="150"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="Company:" Style="{StaticResource LabelStyle}"/>
-                            <TextBlock Grid.Column="1" x:Name="CompanyText" 
-                                       Text="Tom" Style="{StaticResource ValueStyle}"/>
-                        </Grid>
-                    </StackPanel>
-                </Border>
-
-                <!-- Paper Specifications -->
-                <Border x:Name="PaperSpecSection" Style="{StaticResource SectionBorder}">
-                    <StackPanel>
-                        <TextBlock Text="Paper Specifications" 
-                                   FontSize="16" FontWeight="Bold" 
-                                   Foreground="#FF1469FF" Margin="0,0,0,15"/>
-
-                        <Grid Margin="0,0,0,10">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="150"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="Paper Size:" Style="{StaticResource LabelStyle}"/>
-                            <TextBlock Grid.Column="1" x:Name="PaperSizeText" 
-                                       Text="A3" Style="{StaticResource ValueStyle}"/>
-                        </Grid>
-
-                        <Grid Margin="0,0,0,10">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="150"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="GSM:" Style="{StaticResource LabelStyle}"/>
-                            <TextBlock Grid.Column="1" x:Name="GSMText" 
-                                       Text="80" Style="{StaticResource ValueStyle}"/>
-                        </Grid>
-
-                        <Grid Margin="0,0,0,10">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="150"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="Paper Type:" Style="{StaticResource LabelStyle}"/>
-                            <TextBlock Grid.Column="1" x:Name="PaperTypeText" 
-                                       Text="Blank Paper" Style="{StaticResource ValueStyle}"/>
-                        </Grid>
-                    </StackPanel>
-                </Border>
-
-                <!-- Printing Details -->
-                <Border x:Name="PrintingDetailsSection" Style="{StaticResource SectionBorder}">
-                    <StackPanel>
-                        <TextBlock Text="Printing Details" 
-                                   FontSize="16" FontWeight="Bold" 
-                                   Foreground="#FF1469FF" Margin="0,0,0,15"/>
-
-                        <Grid Margin="0,0,0,10">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="150"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="Order Quantity:" Style="{StaticResource LabelStyle}"/>
-                            <TextBlock Grid.Column="1" x:Name="QuantityText" 
-                                       Text="1,500" Style="{StaticResource ValueStyle}"/>
-                        </Grid>
-
-                        <Grid Margin="0,0,0,10">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="150"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="Paper Quantity:" Style="{StaticResource LabelStyle}"/>
-                            <TextBlock Grid.Column="1" x:Name="PrintedText" 
-                                       Text="15,000" Style="{StaticResource ValueStyle}"/>
-                        </Grid>
-
-                        <Grid Margin="0,0,0,10">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="150"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="Duplex:" Style="{StaticResource LabelStyle}"/>
-                            <TextBlock Grid.Column="1" x:Name="DuplexText" 
-                                       Text="Single Side" Style="{StaticResource ValueStyle}"/>
-                        </Grid>
-
-                        <Grid Margin="0,0,0,10">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="150"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="Laminate:" Style="{StaticResource LabelStyle}"/>
-                            <TextBlock Grid.Column="1" x:Name="LaminateText" 
-                                       Text="Matte Double Side" Style="{StaticResource ValueStyle}"/>
-                        </Grid>
-                    </StackPanel>
-                </Border>
-
-                <!-- Additional Information -->
-                <Border x:Name="AdditionalInfoSection" Style="{StaticResource SectionBorder}">
-                    <StackPanel>
-                        <TextBlock Text="Additional Information" 
-                                   FontSize="16" FontWeight="Bold" 
-                                   Foreground="#FF1469FF" Margin="0,0,0,15"/>
-
+                    <!-- Header -->
+                    <Border Grid.Row="0" Background="#FF1469FF" Padding="20,15" CornerRadius="5" Margin="0,0,0,20">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="150"/>
+                                <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="Special Notes:" 
-                                       Style="{StaticResource LabelStyle}" 
-                                       VerticalAlignment="Top"/>
-                            <TextBlock Grid.Column="1" x:Name="SpecialNoteText" 
-                                       Text="-" 
-                                       Style="{StaticResource ValueStyle}"
-                                       TextWrapping="Wrap"/>
+
+                            <!-- Type Icon -->
+                            <Image x:Name="TypeImage" Width="32" Height="32" Margin="0,0,15,0" 
+                   VerticalAlignment="Center" Stretch="Uniform"/>
+
+                            <TextBlock Grid.Column="1" Text="Job Card Details" 
+                       FontSize="22" FontWeight="Bold" 
+                       Foreground="White" VerticalAlignment="Center"/>
+
+                            <TextBlock Grid.Column="2" x:Name="JobNoText" Text="Job #10004" 
+                       FontSize="18" FontWeight="SemiBold" 
+                       Foreground="White" VerticalAlignment="Center"/>
                         </Grid>
-                    </StackPanel>
-                </Border>
-            </StackPanel>
-        </ScrollViewer>
+                    </Border>
 
-        <!-- Footer Buttons -->
-        <Border Grid.Row="2" Padding="0,20,0,0">
-            <!-- Add these buttons near your PrintButton and CloseButton -->
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,0">
-                <Button Name="CreateQuotationButton" 
-            Content="📝 Create Quotation" 
-            Click="CreateQuotationButton_Click"
-            Width="150" 
-            Height="40" 
-            Margin="5"
-            Style="{DynamicResource ActionButton}"
-            FontSize="12"
-            FontWeight="Bold"
-            Cursor="Hand"/>
+                    <!-- Content -->
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                        <StackPanel>
+                            <!-- Screenshot Section (if available) -->
+                            <Border x:Name="ScreenshotBorder" Style="{StaticResource SectionBorder}" Visibility="Collapsed">
+                                <StackPanel>
+                                    <TextBlock Text="Screenshot Preview" 
+                               FontSize="16" FontWeight="Bold" 
+                               Foreground="#2196F3" Margin="0,0,0,15"/>
+                                    <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="2" 
+                            CornerRadius="3" Background="Transparent">
+                                        <Image x:Name="ScreenshotImage" 
+                               MaxHeight="300" 
+                               Stretch="Uniform"
+                               Margin="10"/>
+                                    </Border>
+                                </StackPanel>
+                            </Border>
 
-                <Button Name="CreateInvoiceButton" 
-            Content="📝 Create Invoice" 
-            Click="CreateInvoiceButton_Click"
-            Width="150" 
-            Height="40" 
-            Margin="5"
-            Style="{DynamicResource ActionButton}"
-            FontSize="12"
-            FontWeight="Bold"
-            Cursor="Hand"/>
+                            <!-- Customer Information -->
+                            <Border x:Name="CustomerInfoSection" Style="{StaticResource SectionBorder}">
+                                <StackPanel>
+                                    <TextBlock Text="Customer Information" 
+                               FontSize="16" FontWeight="Bold" 
+                               Foreground="#FF1469FF" Margin="0,0,0,15"/>
 
-                <Button Name="PrintButton" 
-            Content="🖨 Print" 
-            Click="PrintButton_Click"
-            Width="120" 
-                         FontSize="12"
-            Style="{DynamicResource ActionButton}"
-            Height="40" 
-            Margin="5"/>
+                                    <Grid Margin="0,0,0,10">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="150"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="Customer Name:" Style="{StaticResource LabelStyle}"/>
+                                        <TextBlock Grid.Column="1" x:Name="CustomerNameText" 
+                                   Text="Temp" Style="{StaticResource ValueStyle}"/>
+                                    </Grid>
 
-                <Button Name="CloseButton" 
-            Content="Close" 
-                        Style="{DynamicResource NavigationButtonStyle}"
-            Click="CloseButton_Click"
-                        FontSize="12"
-            Width="120" 
-            Height="40" 
-            Margin="5"/>
-            </StackPanel>
+                                    <Grid Margin="0,0,0,10" x:Name="DateRow">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="150"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="Date:" Style="{StaticResource LabelStyle}"/>
+                                        <TextBlock Grid.Column="1" x:Name="DateText" 
+                                   Text="2025-11-14 14:01:11" Style="{StaticResource ValueStyle}"/>
+                                    </Grid>
+
+                                    <Grid Margin="0,0,0,10" x:Name="DescriptionRow">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="150"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="Description:" Style="{StaticResource LabelStyle}"/>
+                                        <TextBlock Grid.Column="1" x:Name="DescriptionText" 
+                                   Text="NoteBook" Style="{StaticResource ValueStyle}"/>
+                                    </Grid>
+
+                                    <Grid Margin="0,0,0,0" x:Name="QuantityRowSimple">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="150"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+
+                                        <TextBlock Grid.Row="0" Text="Quantity:" Style="{StaticResource LabelStyle}"/>
+                                        <TextBlock Grid.Row="0" Grid.Column="1" x:Name="QuantityTextSimple" 
+                                   Text="1,500" Style="{StaticResource ValueStyle}"/>
+                                        <TextBlock Grid.Row="1" Text="Plate Quantity:" Style="{StaticResource LabelStyle}" Margin="0,10,10,0"/>
+                                        <TextBlock  Grid.Row="1" Grid.Column="1" x:Name="PlateQuantityTextSimple" 
+                                   Text="1,500" Style="{StaticResource ValueStyle}" Margin="0,10,0,0"/>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Job Details -->
+                            <Border x:Name="JobDetailsSection" Style="{StaticResource SectionBorder}">
+                                <StackPanel>
+                                    <TextBlock Text="Job Details" 
+                               FontSize="16" FontWeight="Bold" 
+                               Foreground="#FF1469FF" Margin="0,0,0,15"/>
+
+                                    <Grid Margin="0,0,0,10">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="150"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="Type:" Style="{StaticResource LabelStyle}"/>
+                                        <TextBlock Grid.Column="1" x:Name="TypeText" 
+                                   Text="Digital" Style="{StaticResource ValueStyle}"/>
+                                    </Grid>
+
+                                    <Grid Margin="0,0,0,10">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="150"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="Company:" Style="{StaticResource LabelStyle}"/>
+                                        <TextBlock Grid.Column="1" x:Name="CompanyText" 
+                                   Text="Tom" Style="{StaticResource ValueStyle}"/>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Paper Specifications -->
+                            <Border x:Name="PaperSpecSection" Style="{StaticResource SectionBorder}">
+                                <StackPanel>
+                                    <TextBlock Text="Paper Specifications" 
+                               FontSize="16" FontWeight="Bold" 
+                               Foreground="#FF1469FF" Margin="0,0,0,15"/>
+
+                                    <Grid Margin="0,0,0,10">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="150"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="Paper Size:" Style="{StaticResource LabelStyle}"/>
+                                        <TextBlock Grid.Column="1" x:Name="PaperSizeText" 
+                                   Text="A3" Style="{StaticResource ValueStyle}"/>
+                                    </Grid>
+
+                                    <Grid Margin="0,0,0,10">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="150"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="GSM:" Style="{StaticResource LabelStyle}"/>
+                                        <TextBlock Grid.Column="1" x:Name="GSMText" 
+                                   Text="80" Style="{StaticResource ValueStyle}"/>
+                                    </Grid>
+
+                                    <Grid Margin="0,0,0,10">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="150"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="Paper Type:" Style="{StaticResource LabelStyle}"/>
+                                        <TextBlock Grid.Column="1" x:Name="PaperTypeText" 
+                                   Text="Blank Paper" Style="{StaticResource ValueStyle}"/>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Printing Details -->
+                            <Border x:Name="PrintingDetailsSection" Style="{StaticResource SectionBorder}">
+                                <StackPanel>
+                                    <TextBlock Text="Printing Details" 
+                               FontSize="16" FontWeight="Bold" 
+                               Foreground="#FF1469FF" Margin="0,0,0,15"/>
+
+                                    <Grid Margin="0,0,0,10">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="150"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="Order Quantity:" Style="{StaticResource LabelStyle}"/>
+                                        <TextBlock Grid.Column="1" x:Name="QuantityText" 
+                                   Text="1,500" Style="{StaticResource ValueStyle}"/>
+                                    </Grid>
+
+                                    <Grid Margin="0,0,0,10">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="150"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="Paper Quantity:" Style="{StaticResource LabelStyle}"/>
+                                        <TextBlock Grid.Column="1" x:Name="PrintedText" 
+                                   Text="15,000" Style="{StaticResource ValueStyle}"/>
+                                    </Grid>
+
+                                    <Grid Margin="0,0,0,10">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="150"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="Duplex:" Style="{StaticResource LabelStyle}"/>
+                                        <TextBlock Grid.Column="1" x:Name="DuplexText" 
+                                   Text="Single Side" Style="{StaticResource ValueStyle}"/>
+                                    </Grid>
+
+                                    <Grid Margin="0,0,0,10">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="150"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="Laminate:" Style="{StaticResource LabelStyle}"/>
+                                        <TextBlock Grid.Column="1" x:Name="LaminateText" 
+                                   Text="Matte Double Side" Style="{StaticResource ValueStyle}"/>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Additional Information -->
+                            <Border x:Name="AdditionalInfoSection" Style="{StaticResource SectionBorder}">
+                                <StackPanel>
+                                    <TextBlock Text="Additional Information" 
+                               FontSize="16" FontWeight="Bold" 
+                               Foreground="#FF1469FF" Margin="0,0,0,15"/>
+
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="150"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="Special Notes:" 
+                                   Style="{StaticResource LabelStyle}" 
+                                   VerticalAlignment="Top"/>
+                                        <TextBlock Grid.Column="1" x:Name="SpecialNoteText" 
+                                   Text="-" 
+                                   Style="{StaticResource ValueStyle}"
+                                   TextWrapping="Wrap"/>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </ScrollViewer>
+
+                    <!-- Footer Buttons -->
+                    <Border Grid.Row="2" Padding="0,20,0,0">
+                        <!-- Add these buttons near your PrintButton and CloseButton -->
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,0">
+                            <Button Name="CreateQuotationButton" 
+        Content="📝 Create Quotation" 
+        Click="CreateQuotationButton_Click"
+        Width="150" 
+        Height="40" 
+        Margin="5"
+        Style="{DynamicResource ActionButton}"
+        FontSize="12"
+        FontWeight="Bold"
+        Cursor="Hand"/>
+
+                            <Button Name="CreateInvoiceButton" 
+        Content="📝 Create Invoice" 
+        Click="CreateInvoiceButton_Click"
+        Width="150" 
+        Height="40" 
+        Margin="5"
+        Style="{DynamicResource ActionButton}"
+        FontSize="12"
+        FontWeight="Bold"
+        Cursor="Hand"/>
+
+                            <Button Name="PrintButton" 
+        Content="🖨 Print" 
+        Click="PrintButton_Click"
+        Width="120" 
+                     FontSize="12"
+        Style="{DynamicResource ActionButton}"
+        Height="40" 
+        Margin="5"/>
+
+                            <Button Name="CloseButton" 
+        Content="Close" 
+                    Style="{DynamicResource NavigationButtonStyle}"
+        Click="CloseButton_Click"
+                    FontSize="12"
+        Width="120" 
+        Height="40" 
+        Margin="5"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+
+            </Grid>
         </Border>
     </Grid>
+
+  
+    
+
+    
 </Window>

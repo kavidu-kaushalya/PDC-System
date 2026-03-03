@@ -224,7 +224,7 @@
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 		<Content Include="Assets\Main.ico">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 		<Content Include="Assets\MainLogo.png">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>

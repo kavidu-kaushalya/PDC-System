@@ -122,15 +122,21 @@ namespace PDC_System
                                         $"Edited Successfully"
                                     );
 
-                    var mailService = new MailService();
-
-                    string email = Properties.Settings.Default.UserEmail;
-                    string recipientEmail = email;
 
 
-                    var ccList = new List<string> { $"{employeeemail}" };
-                    string subject = $"Edited Attendance {name}";
-                    string body = $@"
+                    if (Properties.Settings.Default.SendEmployeeAttendanceEditEmails)
+                    {
+
+
+                        var mailService = new MailService();
+
+                        string email = Properties.Settings.Default.UserEmail;
+                        string recipientEmail = email;
+
+
+                        var ccList = new List<string> { $"{employeeemail}" };
+                        string subject = $"Edited Attendance {name}";
+                        string body = $@"
 <html>
 <head>
 <style>
@@ -315,18 +321,19 @@ namespace PDC_System
 </html>";
 
 
-                    await mailService.SendEmailAsync(recipientEmail, ccList, subject, body)
-                                    .ContinueWith(task =>
-                                    {
-                                        Application.Current.Dispatcher.Invoke(() =>
+                        await mailService.SendEmailAsync(recipientEmail, ccList, subject, body)
+                                        .ContinueWith(task =>
                                         {
-                                            if (task.Result)
-                                                NotificationHelper.ShowNotification("PDC System!","✅ Email sent successfully!");
-                                            else
-                                                NotificationHelper.ShowNotification("PDC System!","❌ Failed to send email!");
-                                        });
-                                    }).ConfigureAwait(false);
+                                            Application.Current.Dispatcher.Invoke(() =>
+                                            {
+                                                if (task.Result)
+                                                    NotificationHelper.ShowNotification("PDC System!", "✅ Email sent successfully!");
+                                                else
+                                                    NotificationHelper.ShowNotification("PDC System!", "❌ Failed to send email!");
+                                            });
+                                        }).ConfigureAwait(false);
 
+                    }
                 }
                 else
                 {

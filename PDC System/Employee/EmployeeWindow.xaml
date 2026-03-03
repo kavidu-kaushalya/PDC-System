@@ -120,17 +120,20 @@
                             <StackPanel Orientation="Horizontal"
                                         HorizontalAlignment="Center">
 
+                                <Button Content="Edit"
+          Click="EditEmployee_Click"
+          Tag="{Binding}"
+          Style="{DynamicResource EditActionButton}"
+          Padding="5"/>
+
                                 <Button Content="Delete"
                                         Click="DeleteEmployee_Click"
                                         Height="30"
+                                        Style="{DynamicResource DeleteActionButton}"
                                         Width="60"
-                                        Style="{StaticResource NavigationButtonStyle}"/>
+                                        Margin="8,0,0,0"/>
 
-                                <Button Content="Edit"
-                                        Click="EditEmployee_Click"
-                                        Tag="{Binding}"
-                                        Style="{DynamicResource ActionButton}"
-                                        Padding="5"/>
+                              
 
                             </StackPanel>
 

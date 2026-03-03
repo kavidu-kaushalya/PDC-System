@@ -178,6 +178,13 @@ namespace PDC_System
         {
             if (sender is Button button && button.DataContext is User user)
             {
+                // Block editing admin users
+                if (user.Isadmin)
+                {
+                    CustomMessageBox.Show("⚠️ Admin users cannot be edited.", "Access Denied", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
                 editingUser = user;
                 isEditMode = true;
 
@@ -210,6 +217,13 @@ namespace PDC_System
         {
             if (sender is Button button && button.DataContext is User user)
             {
+                // Block deleting admin users
+                if (user.Isadmin)
+                {
+                    CustomMessageBox.Show("⚠️ Admin users cannot be deleted.", "Access Denied", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
                 var result = CustomMessageBox.Show(
                     $"⚠️ Are you sure you want to delete user '{user.Username}'?\n\nThis action cannot be undone.",
                     "Confirm Delete",

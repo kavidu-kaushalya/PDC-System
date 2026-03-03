@@ -334,5 +334,29 @@ namespace PDC_System.Properties {
                 this["SavedPassword"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SendEmployeeEditEmails {
+            get {
+                return ((bool)(this["SendEmployeeEditEmails"]));
+            }
+            set {
+                this["SendEmployeeEditEmails"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SendEmployeeAttendanceEditEmails {
+            get {
+                return ((bool)(this["SendEmployeeAttendanceEditEmails"]));
+            }
+            set {
+                this["SendEmployeeAttendanceEditEmails"] = value;
+            }
+        }
     }
 }

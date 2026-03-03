@@ -8,6 +8,7 @@ using QuestPDF.Infrastructure;
 using System.Text;
 using System.Windows;
 using System.Windows.Threading; // add this for DispatcherTimer
+using System.Diagnostics;
 
 namespace PDC_System
 {
@@ -17,6 +18,8 @@ namespace PDC_System
 
 
         private DispatcherTimer appTimer; // Timer variable
+        private static readonly string CrashLogPath =
+            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "crash_log.txt");
 
         protected override async void OnStartup(StartupEventArgs e)
         {
@@ -25,14 +28,17 @@ namespace PDC_System
 
             QuestPDF.Settings.License = LicenseType.Community; // ✅ Add this line
 
-
+            // 🛡️ Global exception handlers for auto-restart
+            DispatcherUnhandledException += App_DispatcherUnhandledException;
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+            TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
 
             // 🔧 FIX: enable legacy encodings (windows-1252, cp1252, etc.)
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
             ThemeManager.UpdateAllWindows();
             CleanupOldHistory();
-            
+
 
             // 🕒 Get interval from Settings.settings
             int intervalSeconds = PDC_System.Properties.Settings.Default.TimerIntervalMinutes;
@@ -48,6 +54,85 @@ namespace PDC_System
             Console.WriteLine($"✅ Timer started with {intervalSeconds} second interval");
         }
 
+        /// <summary>
+        /// UI thread exceptions
+        /// </summary>
+        private void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        {
+            LogCrash("DispatcherUnhandledException", e.Exception);
+            e.Handled = true;
+            RestartApplication();
+        }
+
+        /// <summary>
+        /// Non-UI thread exceptions
+        /// </summary>
+        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            if (e.ExceptionObject is Exception ex)
+            {
+                LogCrash("UnhandledException", ex);
+            }
+            RestartApplication();
+        }
+
+        /// <summary>
+        /// Unobserved Task exceptions
+        /// </summary>
+        private void TaskScheduler_UnobservedTaskException(object? sender, UnobservedTaskExceptionEventArgs e)
+        {
+            LogCrash("UnobservedTaskException", e.Exception);
+            e.SetObserved();
+            RestartApplication();
+        }
+
+        /// <summary>
+        /// Crash log file එකට error details save කරයි
+        /// </summary>
+        private static void LogCrash(string source, Exception ex)
+        {
+            try
+            {
+                string logEntry = $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] [{source}]\n" +
+                                  $"Message: {ex.Message}\n" +
+                                  $"StackTrace: {ex.StackTrace}\n" +
+                                  $"{"".PadRight(80, '-')}\n";
+
+                File.AppendAllText(CrashLogPath, logEntry);
+            }
+            catch
+            {
+                // Logging itself failed — ignore to prevent infinite loop
+            }
+        }
+
+        /// <summary>
+        /// App එක close කරලා නැවත start කරයි
+        /// </summary>
+        private static void RestartApplication()
+        {
+            try
+            {
+                string? exePath = Environment.ProcessPath;
+                if (!string.IsNullOrEmpty(exePath))
+                {
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = exePath,
+                        UseShellExecute = true
+                    });
+                }
+            }
+            catch
+            {
+                // Restart failed — app will just close
+            }
+            finally
+            {
+                Environment.Exit(1);
+            }
+        }
+
         private void AppTimer_Tick(object? sender, EventArgs e)
         {
             try
@@ -60,7 +145,7 @@ namespace PDC_System
                 {
                     settingsWindow.BtnLoad_Click();
                     NotificationHelper.ShowNotification("PDC System!", "IVMS Calclulate Complte!");
-                    
+
                 }
                 else
                 {
@@ -70,7 +155,7 @@ namespace PDC_System
                     backgroundSettings.BtnLoad_Click();
                     backgroundSettings.Close();
                     NotificationHelper.ShowNotification("PDC System!", "IVMS Calclulate Complte!");
-                    
+
                 }
             }
             catch (Exception ex)
@@ -95,7 +180,7 @@ namespace PDC_System
                 manager.SaveAllAttendanceRecords(records);
                 NotificationHelper.ShowNotification("PDC System!", "Attendance Calclulate Complte!");
                 // 💬 Optional on-screen message
-               
+
             }
             catch (Exception ex)
             {
@@ -107,7 +192,7 @@ namespace PDC_System
         }
 
 
-       
+
 
 
 

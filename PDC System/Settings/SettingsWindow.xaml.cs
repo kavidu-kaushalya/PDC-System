@@ -60,6 +60,7 @@ namespace PDC_System.Settings
             isEnableStatus();
             LoadETF();
             LoadAttendance();
+            LoadSystemSettings();
             isLoaded = true;
             // Apply theme when window loads
             ThemeManager.ApplyTheme(this);
@@ -831,7 +832,48 @@ namespace PDC_System.Settings
         }
         #endregion
 
+        #region System Settings
 
+        private void LoadSystemSettings()
+        {
+            SendEmployeeEditEmails.IsChecked = Properties.Settings.Default.SendEmployeeEditEmails;
+            SendEmployeeAttendanceEditEmails.IsChecked = Properties.Settings.Default.SendEmployeeAttendanceEditEmails;
+
+            SystemSettingsbtnSave.Visibility = Visibility.Collapsed;
+
+            SendEmployeeEditEmails.Checked += SystemSettingsCheckBoxChanged;
+            SendEmployeeEditEmails.Unchecked += SystemSettingsCheckBoxChanged;
+            SendEmployeeAttendanceEditEmails.Checked += SystemSettingsCheckBoxChanged;
+            SendEmployeeAttendanceEditEmails.Unchecked += SystemSettingsCheckBoxChanged;
+        }
+
+        private void SystemSettingsCheckBoxChanged(object sender, RoutedEventArgs e)
+        {
+            if (!isLoaded) return;
+
+            if ((SendEmployeeEditEmails.IsChecked != Properties.Settings.Default.SendEmployeeEditEmails) ||
+                (SendEmployeeAttendanceEditEmails.IsChecked != Properties.Settings.Default.SendEmployeeAttendanceEditEmails))
+            {
+                SystemSettingsbtnSave.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                SystemSettingsbtnSave.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private void SystemSettingsbtnSave_Click(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.SendEmployeeEditEmails = SendEmployeeEditEmails.IsChecked == true;
+            Properties.Settings.Default.SendEmployeeAttendanceEditEmails = SendEmployeeAttendanceEditEmails.IsChecked == true;
+            Properties.Settings.Default.Save();
+
+            SystemSettingsbtnSave.Visibility = Visibility.Collapsed;
+
+            CustomMessageBox.Show("System settings saved successfully ✅", "Saved", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        #endregion
 
 
     }

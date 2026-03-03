@@ -56,6 +56,7 @@ namespace PDC_System.Paysheets
         public object Employeename { get; private set; }
         public object Employeeid { get; private set; }
 
+        public object jobrole { get; private set; }
         public object EmployeeEmail { get; private set; }
 
         public object filteredEarnings { get; private set; }
@@ -308,12 +309,12 @@ namespace PDC_System.Paysheets
 
             Datepickers.IsEnabled = true;
 
-            // 🟦 Filter attendance within the SELECTED date range
-            var filteredAttendance = attendanceRecords?
-                .Where(a => a.EmployeeId == selectedId &&
-                            a.Date.Date >= start.Date &&
-                            a.Date.Date <= end.Date)
-                .ToList() ?? new List<AttendanceRecord>();
+            // 🟦 FIX: Load attendance FOR the selected date range instead of filtering pre-loaded 30-day data
+            var allAttendanceInRange = _attendanceManager.LoadAttendanceWithDateRange(start, end);
+
+            var filteredAttendance = allAttendanceInRange
+                .Where(a => a.EmployeeId == selectedId)
+                .ToList();
 
             // 🟩 Initialize filtered lists
             var filteredEarnings = new List<Earning>();
@@ -353,6 +354,7 @@ namespace PDC_System.Paysheets
             // Employee info
             Employeename = (EmployeeCombo.SelectedItem as Employee)?.Name ?? string.Empty;
             Employeeid = (EmployeeCombo.SelectedItem as Employee)?.EmployeeId ?? string.Empty;
+            jobrole = (EmployeeCombo.SelectedItem as Employee)?.jobrole ?? string.Empty;
 
 
             // EPF CHECKBOX ACTIVATE ONLY IF EMPLOYEE HAS EPF RECORD
@@ -1077,7 +1079,7 @@ absentDayAmount = Math.Max(0, calculatedAbsentAmount);
                                         left.Item().Container().Height(1).Background(Colors.Grey.Lighten2);
                                         left.Item().PaddingTop(3).Text($"Employee Name: {Employeename}");
                                         left.Item().Text($"Employee ID: {Employeeid}");
-                                        left.Item().Text("Designation: Software Engineer");
+                                        left.Item().Text($"Designation: {jobrole}");
 
                                     });
 

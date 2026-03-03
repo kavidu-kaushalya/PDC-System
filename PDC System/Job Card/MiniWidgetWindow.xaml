@@ -9,15 +9,18 @@
         ShowInTaskbar="False">
 
     <Border CornerRadius="5"
-            Background="Transparent"
+            Background="{DynamicResource Background}"
              Width="40" Height="40"
+            BorderBrush="{DynamicResource BorderBrush}"
+             BorderThickness="2"
             MouseLeftButtonDown="Border_MouseLeftButtonDown"
             MouseLeftButtonUp="Border_MouseLeftButtonUp"
             MouseMove="Border_MouseMove"
             Cursor="Hand">
 
-        <Image Source="/Assets/Main.ico"
-               Width="40" Height="40"
+        <Image Source="/Assets/MainLogo.png"
+               Width="30" Height="30"
+               
                HorizontalAlignment="Center"
                VerticalAlignment="Center"/>
     </Border>

@@ -24,6 +24,7 @@ namespace PDC_System
     public partial class Loading : Window
     {
         private GoogleServiceManager googleManager;
+        private bool _isLoggingIn = false; // 🔒 rapid login guard
 
         public Loading()
         {
@@ -193,7 +194,7 @@ namespace PDC_System
                 users.Add(new Models.User
                 {
                     Username = "admin",
-                    PasswordHash = UserService.Hash("admin"),
+                    PasswordHash = UserService.Hash("PDC@Admin"),
                     Dashbord = true,
                     OderCheck = true,
                     Jobcard = true,
@@ -205,7 +206,8 @@ namespace PDC_System
                     Payroll = true,
                     Paysheet = true,
                     UserManager = true,
-                   
+                    Isadmin = true
+
                 });
                 UserService.Save(users);
             }
@@ -213,60 +215,69 @@ namespace PDC_System
 
         private async void Login_Click(object sender, RoutedEventArgs e)
         {
-            var users = UserService.Load();
+            // 🔒 Rapid Enter / double-click block
+            if (_isLoggingIn) return;
+            _isLoggingIn = true;
 
-            var user = users.FirstOrDefault(u =>
-                u.Username == UserName.Text &&
-                u.PasswordHash == UserService.Hash(Password.Password));
-
-            if (user == null)
+            try
             {
-                CustomMessageBox.Show("Invalid login");
-                Logininfo.IsEnabled = true;
-                return;
-            }
+                var users = UserService.Load();
 
-            SaveCredentials();
+                var user = users.FirstOrDefault(u =>
+                    u.Username == UserName.Text &&
+                    u.PasswordHash == UserService.Hash(Password.Password));
 
-            ((Button)sender).IsEnabled = false;
-            Logininfo.IsEnabled = false;
-
-            bool needStartupCheck =
-                Properties.Settings.Default.SendDailyReport ||
-                Properties.Settings.Default.SendAttendanceEmails;
-
-            if (needStartupCheck)
-            {
-               
-                bool passed = await RunStartupChecksAsync();
-                IvmsVisibility.Visibility = Visibility.Visible;
-
-                if (!passed)
+                if (user == null)
                 {
-                    CustomMessageBox.Show(
-                        "System check failed.\nFix the issues and click Recheck.",
-                        "Startup Blocked",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Warning);
-
-                    ((Button)sender).IsEnabled = true;
-                    return; // ⛔ DO NOT open Home
+                    CustomMessageBox.Show("Invalid login");
+                    Logininfo.IsEnabled = true;
+                    return;
                 }
+
+                SaveCredentials();
+
+                ((Button)sender).IsEnabled = false;
+                Logininfo.IsEnabled = false;
+
+                bool needStartupCheck =
+                    Properties.Settings.Default.SendDailyReport ||
+                    Properties.Settings.Default.SendAttendanceEmails;
+
+                if (needStartupCheck)
+                {
+                    bool passed = await RunStartupChecksAsync();
+                    IvmsVisibility.Visibility = Visibility.Visible;
+
+                    if (!passed)
+                    {
+                        CustomMessageBox.Show(
+                            "System check failed.\nFix the issues and click Recheck.",
+                            "Startup Blocked",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Warning);
+
+                        ((Button)sender).IsEnabled = true;
+                        Logininfo.IsEnabled = true;
+                        return; // ⛔ DO NOT open Home
+                    }
+                }
+
+                // ✅ ONLY HERE Home opens
+                new Home(user).Show();
+
+                // ✅ Open MiniWidgetWindow only if setting is enabled
+                if (Properties.Settings.Default.MiniWidgetCheckBoxState)
+                {
+                    MiniWidgetWindow widget = new MiniWidgetWindow();
+                    widget.Show();
+                }
+
+                Close();
             }
-
-           
-
-            // ✅ ONLY HERE Home opens
-            new Home(user).Show();
-
-            // ✅ Open MiniWidgetWindow only if setting is enabled
-            if (Properties.Settings.Default.MiniWidgetCheckBoxState)
+            finally
             {
-                MiniWidgetWindow widget = new MiniWidgetWindow();
-                widget.Show();
+                _isLoggingIn = false; // 🔓 Reset guard
             }
-
-            Close();
         }
 
 

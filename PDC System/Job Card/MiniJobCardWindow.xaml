@@ -3,108 +3,175 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Background="{DynamicResource Background}"
         FontFamily="{StaticResource CustomFont}"
+                 xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
         Title="Add Job Card (Digital Printing)" 
         Height="900" 
         Width="500"
+        WindowStyle="None"
+        AllowsTransparency="True"
         WindowStartupLocation="CenterScreen">
 
-    <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled">
-        <Grid Margin="20">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*" MinWidth="400"/>
-              
-            </Grid.ColumnDefinitions>
 
-            <!-- Left Panel - Form Fields -->
-            <StackPanel Grid.Column="0">
 
-                <!-- Header Section -->
-                <Border Background="{DynamicResource Background}" 
+    <shell:WindowChrome.WindowChrome>
+        <shell:WindowChrome CaptionHeight="32"
+               CornerRadius="10"
+                         
+               ResizeBorderThickness="6"
+               GlassFrameThickness="0"
+               NonClientFrameEdges="None"/>
+    </shell:WindowChrome.WindowChrome>
+
+
+    <Grid>
+        <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="2" CornerRadius="6" >
+
+            <Grid>
+
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+
+
+                <Border Margin="5"  x:Name="TitleBar" Grid.Row="0"
+Background="{DynamicResource Background}" 
+>
+                    <DockPanel>
+                        <!-- App Logo -->
+                        <Image Source="/Assets/MainLogo.png"  Height="20" Width="20" Margin="8,0"/>
+                        <!-- App Title -->
+                        <TextBlock x:Name="PDCtitel" Text="Job Card" Foreground="{DynamicResource Forground}"  VerticalAlignment="Center" Margin="8,0"/>
+                        <!-- Control Panel -->
+
+
+
+                        <!-- Title bar buttons -->
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button x:Name="Minimize" Content="—" Width="25" Height="25" Click="Minimize_Click" shell:WindowChrome.IsHitTestVisibleInChrome="True" Margin="5" Background="Transparent" Style="{DynamicResource NavigationButtonStyle}" BorderBrush="{x:Null}"/>
+                            <Button x:Name="Maximize" Content="🗖" Width="25" Height="25" Click="Maximize_Click" shell:WindowChrome.IsHitTestVisibleInChrome="True" Margin="5" Background="Transparent" Style="{DynamicResource NavigationButtonStyle}" BorderBrush="{x:Null}" />
+                            <Button x:Name="Colose" Content="🗙" Width="25" Height="25" Click="Close_Click" shell:WindowChrome.IsHitTestVisibleInChrome="True" Margin="5" Background="Transparent" Style="{DynamicResource NavigationButtonStyle}" BorderBrush="{x:Null}" />
+                        </StackPanel>
+
+
+
+                    </DockPanel>
+                </Border>
+
+
+
+                <ScrollViewer Grid.Row="1" 
+                              VerticalScrollBarVisibility="Auto" 
+                              HorizontalScrollBarVisibility="Disabled"
+
+                              >
+                    <Grid Margin="20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*" MinWidth="400"/>
+
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Left Panel - Form Fields -->
+                        <StackPanel Grid.Column="0">
+
+                            <!-- Header Section -->
+                            <Border Background="{DynamicResource Background}" 
                         CornerRadius="5" 
                         Padding="15" 
                          BorderBrush="{DynamicResource BorderBrush}"
                         BorderThickness="2"
                         Margin="0,0,0,15">
-                    <StackPanel>
-                        <TextBlock  x:Name="typebox" 
+                                <StackPanel>
+                                    <TextBlock  x:Name="typebox" 
                                    FontSize="20" 
                                    FontWeight="Bold" 
                                     Foreground="{DynamicResource Forground}"/>
-                        <TextBlock x:Name="companyname" 
+                                    <TextBlock x:Name="companyname" 
                                    FontSize="16" 
                                    Foreground="{DynamicResource Forground}"
                                    Margin="0,5,0,0"/>
-                        <TextBlock x:Name="JobNumberTextBox" 
+                                    <TextBlock x:Name="JobNumberTextBox" 
                                    FontSize="16" 
                                    Foreground="{DynamicResource Forground}"
                                    Margin="0,5,0,0"/>
-                    </StackPanel>
-                </Border>
+                                </StackPanel>
+                            </Border>
 
-                <!-- Customer Information Section -->
-                <GroupBox Header="Customer Information" 
-                          FontSize="16" 
-                          FontWeight="Bold" 
-                          
-                          Foreground="{DynamicResource Forground}"
-                          Margin="0,0,0,15"
-                          Padding="10">
-                    <StackPanel>
-                        <Label  Foreground="{DynamicResource Forground}" Content="Customer Name:" FontSize="14" Padding="0,5"/>
-                        <ComboBox Style="{DynamicResource ComboBoxFlatStyle}" 
+                            <!-- Customer Information Section -->
+                            <StackPanel Margin="0,0,0,15">
+                                <TextBlock Text="Customer Information" 
+                                           FontSize="16" 
+                                           FontWeight="Bold" 
+                                           Foreground="{DynamicResource Forground}" 
+                                           Margin="0,0,0,5"/>
+                                <Border BorderBrush="{DynamicResource BorderBrush}" 
+                                        BorderThickness="2" 
+                                        CornerRadius="5" 
+                                        Padding="10">
+                                    <StackPanel>
+                                        <Label  Foreground="{DynamicResource Forground}" Content="Customer Name:" FontSize="14" Padding="0,5"/>
+                                        <ComboBox Style="{DynamicResource ComboBoxFlatStyle}" 
                                   x:Name="CustomerComboBox" 
                                   IsEditable="True" 
                                   DisplayMemberPath="Name" 
                                   FontSize="14" 
-                                  Height="32"
+                                  
                                   SelectedItem="{Binding SelectedCustomer, Mode=TwoWay}" 
                                   Text="{Binding ManualCustomerName, Mode=TwoWay}"/>
 
-                        <Label  Foreground="{DynamicResource Forground}" Content="Description:" FontSize="14" Padding="0,10,0,5"/>
-                        <ComboBox Style="{DynamicResource ComboBoxFlatStyle}" 
+                                        <Label  Foreground="{DynamicResource Forground}" Content="Description:" FontSize="14" Padding="0,10,0,5"/>
+                                        <ComboBox Style="{DynamicResource ComboBoxFlatStyle}" 
                                   x:Name="DescriptionTextBox" 
                                   IsEditable="True" 
                                   FontSize="14"
-                                  Height="32">
-                            <ComboBoxItem Content="NoteBook"/>
-                            <ComboBoxItem Content="Flyers"/>
-                            <ComboBoxItem Content="Letterheads"/>
-                            <ComboBoxItem Content="Calendars"/>
-                            <ComboBoxItem Content="Stickers"/>
-                            <ComboBoxItem Content="Invitations"/>
-                            <ComboBoxItem Content="Menus"/>
-                            <ComboBoxItem Content="Labels"/>
-                            <ComboBoxItem Content="Posters"/>
-                            <ComboBoxItem Content="Business cards"/>
-                            <ComboBoxItem Content="Brochures"/>
-                            <ComboBoxItem Content="Annual Reports"/>
-                            <ComboBoxItem Content="Magazines"/>
-                            <ComboBoxItem Content="Envelopes"/>
-                            <ComboBoxItem Content="Packaging"/>
-                            <ComboBoxItem Content="Newsletters"/>
-                            <ComboBoxItem Content="Pamphlets"/>
-                        </ComboBox>
+                                 >
+                                            <ComboBoxItem Content="NoteBook"/>
+                                            <ComboBoxItem Content="Flyers"/>
+                                            <ComboBoxItem Content="Letterheads"/>
+                                            <ComboBoxItem Content="Calendars"/>
+                                            <ComboBoxItem Content="Stickers"/>
+                                            <ComboBoxItem Content="Invitations"/>
+                                            <ComboBoxItem Content="Menus"/>
+                                            <ComboBoxItem Content="Labels"/>
+                                            <ComboBoxItem Content="Posters"/>
+                                            <ComboBoxItem Content="Business cards"/>
+                                            <ComboBoxItem Content="Brochures"/>
+                                            <ComboBoxItem Content="Annual Reports"/>
+                                            <ComboBoxItem Content="Magazines"/>
+                                            <ComboBoxItem Content="Envelopes"/>
+                                            <ComboBoxItem Content="Packaging"/>
+                                            <ComboBoxItem Content="Newsletters"/>
+                                            <ComboBoxItem Content="Pamphlets"/>
+                                        </ComboBox>
 
-                        <Label  Foreground="{DynamicResource Forground}" Content="Quantity:" FontSize="14" Padding="0,10,0,5"/>
-                        <TextBox Style="{DynamicResource TextBoxStyle}" 
+                                        <Label  Foreground="{DynamicResource Forground}" Content="Quantity:" FontSize="14" Padding="0,10,0,5"/>
+                                        <TextBox Style="{DynamicResource TextBoxStyle}" 
                                  x:Name="QuantityTextBox" 
                                  FontSize="14" 
-                                 Height="32"
+                                
                                  PreviewTextInput="QuantityTextBox_PreviewTextInput"/>
-                    </StackPanel>
-                </GroupBox>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
 
-                <!-- Printing Type Section -->
-                <GroupBox Header="Printing Type" 
-                          FontSize="16" 
-                          FontWeight="Bold"  Foreground="{DynamicResource Forground}"
-                          Margin="0,0,0,15"
-                          Padding="10">
-                    <StackPanel>
-                        <StackPanel Orientation="Horizontal" 
+                            <!-- Printing Type Section -->
+                            <StackPanel Margin="0,0,0,15">
+                                <TextBlock Text="Printing Type" 
+                                           FontSize="16" 
+                                           FontWeight="Bold" 
+                                           Foreground="{DynamicResource Forground}" 
+                                           Margin="0,0,0,5"/>
+                                <Border BorderBrush="{DynamicResource BorderBrush}" 
+                                        BorderThickness="2" 
+                                        CornerRadius="5" 
+                                        Padding="10">
+                                    <StackPanel>
+                                        <StackPanel Orientation="Horizontal" 
                                     HorizontalAlignment="Center" 
                                     Margin="0,5,0,15">
-                            <RadioButton Style="{DynamicResource SelectableRadioButtonStyle}" 
+                                            <RadioButton Style="{DynamicResource SelectableRadioButtonStyle}" 
                                          x:Name="Digital_Checked" 
                                          Content="Digital Printing" 
                                          IsChecked="True"
@@ -114,7 +181,7 @@
                                          Margin="5"
                                          Checked="Digital_Clicked"/>
 
-                            <RadioButton Style="{DynamicResource SelectableRadioButtonStyle}" 
+                                            <RadioButton Style="{DynamicResource SelectableRadioButtonStyle}" 
                                          x:Name="Offset_Checked" 
                                          Content="Offset Printing"
                                          Height="35" 
@@ -122,233 +189,262 @@
                                          FontSize="14"
                                          Margin="5"
                                          Checked="Offset_Clicked"/>
-                        </StackPanel>
+                                        </StackPanel>
 
-                        <!-- Offset Printing Section -->
-                        <StackPanel x:Name="Offset" Visibility="Collapsed">
-                            <Separator Margin="0,10"/>
+                                        <!-- Offset Printing Section -->
+                                        <StackPanel x:Name="Offset" Visibility="Collapsed">
+                                           
 
-                            <Label  Foreground="{DynamicResource Forground}" Content="Plate Company Name:" FontSize="14" Padding="0,5"/>
-                            <ComboBox Style="{DynamicResource ComboBoxFlatStyle}" 
+                                            <Label  Foreground="{DynamicResource Forground}" Content="Plate Company Name:" FontSize="14" Padding="0,5"/>
+                                            <ComboBox Style="{DynamicResource ComboBoxFlatStyle}" 
                                       x:Name="PlateCompanyTextBox" 
                                       SelectionChanged="Outstanding_PrintingCompanyName_SelectionChanged2" 
-                                      Height="32"
+                                    
                                       FontSize="14"/>
 
-                            <Label  Foreground="{DynamicResource Forground}" Content="Plate Quantity:" FontSize="14" Padding="0,10,0,5"/>
-                            <TextBox Style="{DynamicResource TextBoxStyle}" 
+                                            <Label  Foreground="{DynamicResource Forground}" Content="Plate Quantity:" FontSize="14" Padding="0,10,0,5"/>
+                                            <TextBox Style="{DynamicResource TextBoxStyle}" 
                                      x:Name="PlateQuantityTextBox" 
-                                     Height="32"
+                                    
                                      FontSize="14"/>
-                        </StackPanel>
+                                        </StackPanel>
 
-                        <!-- Digital Printing Section -->
-                        <StackPanel x:Name="Digital" Visibility="Collapsed">
-                            <Separator Margin="0,10"/>
+                                        <!-- Digital Printing Section -->
+                                        <StackPanel x:Name="Digital" Visibility="Collapsed">
+                                      
+                                            <!-- Outside Printing Option -->
 
-                            <!-- Outside Printing Option -->
-                            <CheckBox x:Name="OutstandingCheckBox" 
-                                      Content="Outside Printing" 
-                                      FontSize="14"
-                                      FontWeight="SemiBold"
-                                      Margin="0,10,0,10"
-                                      Checked="Outstanding_Checked" 
-                                      Unchecked="Outstanding_Unchecked"/>
+                                            <StackPanel  Margin="0,10,0,10" Orientation="Horizontal" >
 
-                            <StackPanel x:Name="Oustanding_Printing" 
+                                                <TextBlock Foreground="{DynamicResource Forground}" VerticalAlignment="Center" Text="Is this an outside printing job?" Margin="0,0,10,0" />
+
+                                                <CheckBox x:Name="OutstandingCheckBox" 
+Content="Outside Printing" 
+FontSize="14"
+FontWeight="SemiBold"
+Checked="Outstanding_Checked" 
+Unchecked="Outstanding_Unchecked"/>
+
+                                            </StackPanel>
+                                            
+
+                                            <StackPanel x:Name="Oustanding_Printing" 
                                         Visibility="Collapsed"
                                         Margin="20,0,0,15">
-                                <Label Content="Digital Printing Company:" FontSize="14" Padding="0,5"/>
-                                <ComboBox Style="{DynamicResource ComboBoxFlatStyle}" 
+                                                <Label Foreground="{DynamicResource Forground}"  Content="Digital Printing Company:" FontSize="14" Padding="0,5"/>
+                                                <ComboBox Style="{DynamicResource ComboBoxFlatStyle}" 
                                           SelectionChanged="Outstanding_PrintingCompanyName_SelectionChanged" 
                                           x:Name="Outstanding_PrintingCompanyName"
-                                          Height="32"
+                                         
                                           FontSize="14"/>
-                            </StackPanel>
+                                            </StackPanel>
 
-                            <!-- Paper Specifications -->
-                            <Grid Margin="0,10,0,0">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="10"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="10"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="10"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
+                                            <!-- Paper Specifications -->
+                                            <Grid Margin="0,10,0,0">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="10"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="10"/>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="10"/>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="Auto"/>
+                                                </Grid.RowDefinitions>
 
-                                <!-- Paper Size -->
-                                <Label Content="Paper Size:" 
+                                                <!-- Paper Size -->
+                                                <Label Foreground="{DynamicResource Forground}"  Content="Paper Size:" 
                                        Grid.Row="0" Grid.Column="0"
                                        FontSize="14" Padding="0,5"/>
-                                <ComboBox Style="{DynamicResource ComboBoxFlatStyle}" 
+                                                <ComboBox Style="{DynamicResource ComboBoxFlatStyle}" 
                                           x:Name="PaperSizeTextBox" 
                                           Grid.Row="1" Grid.Column="0"
                                           IsEditable="True" 
                                           FontSize="14"
-                                          Height="32">
-                                    <ComboBoxItem Content="A3"/>
-                                    <ComboBoxItem Content="A4"/>
-                                    <ComboBoxItem Content="A5"/>
-                                    <ComboBoxItem Content="A6"/>
-                                    <ComboBoxItem Content="B3"/>
-                                    <ComboBoxItem Content="B4"/>
-                                    <ComboBoxItem Content="B5"/>
-                                    <ComboBoxItem Content="B6"/>
-                                    <ComboBoxItem Content="12x18 inch"/>
-                                    <ComboBoxItem Content="12.5x19 inch"/>
-                                    <ComboBoxItem Content="13x19 inch"/>
-                                    <ComboBoxItem Content="10.5x15 inch"/>
-                                </ComboBox>
+                                          >
+                                                    <ComboBoxItem Content="A3"/>
+                                                    <ComboBoxItem Content="A4"/>
+                                                    <ComboBoxItem Content="A5"/>
+                                                    <ComboBoxItem Content="A6"/>
+                                                    <ComboBoxItem Content="B3"/>
+                                                    <ComboBoxItem Content="B4"/>
+                                                    <ComboBoxItem Content="B5"/>
+                                                    <ComboBoxItem Content="B6"/>
+                                                    <ComboBoxItem Content="12x18 inch"/>
+                                                    <ComboBoxItem Content="12.5x19 inch"/>
+                                                    <ComboBoxItem Content="13x19 inch"/>
+                                                    <ComboBoxItem Content="10.5x15 inch"/>
+                                                </ComboBox>
 
-                                <!-- GSM -->
-                                <Label  Foreground="{DynamicResource Forground}" Content="GSM:" 
+                                                <!-- GSM -->
+                                                <Label  Foreground="{DynamicResource Forground}" Content="GSM:" 
                                        Grid.Row="0" Grid.Column="2"
                                        FontSize="14" Padding="0,5"/>
-                                <ComboBox Style="{DynamicResource ComboBoxFlatStyle}" 
+                                                <ComboBox Style="{DynamicResource ComboBoxFlatStyle}" 
                                           x:Name="GSMTextBox" 
                                           Grid.Row="1" Grid.Column="2"
                                           IsEditable="True" 
                                           FontSize="14"
-                                          Height="32">
-                                    <ComboBoxItem Content="70"/>
-                                    <ComboBoxItem Content="80"/>
-                                    <ComboBoxItem Content="100"/>
-                                    <ComboBoxItem Content="120"/>
-                                    <ComboBoxItem Content="150"/>
-                                    <ComboBoxItem Content="180"/>
-                                    <ComboBoxItem Content="210"/>
-                                    <ComboBoxItem Content="260"/>
-                                    <ComboBoxItem Content="310"/>
-                                </ComboBox>
+                                         >
+                                                    <ComboBoxItem Content="70"/>
+                                                    <ComboBoxItem Content="80"/>
+                                                    <ComboBoxItem Content="100"/>
+                                                    <ComboBoxItem Content="120"/>
+                                                    <ComboBoxItem Content="150"/>
+                                                    <ComboBoxItem Content="180"/>
+                                                    <ComboBoxItem Content="210"/>
+                                                    <ComboBoxItem Content="260"/>
+                                                    <ComboBoxItem Content="310"/>
+                                                </ComboBox>
 
-                                <!-- Paper Type -->
-                                <Label  Foreground="{DynamicResource Forground}" Content="Paper Type:" 
+                                                <!-- Paper Type -->
+                                                <Label  Foreground="{DynamicResource Forground}" Content="Paper Type:" 
                                        Grid.Row="3" Grid.Column="0"
                                        FontSize="14" Padding="0,5"/>
-                                <ComboBox Style="{DynamicResource ComboBoxFlatStyle}" 
+                                                <ComboBox Style="{DynamicResource ComboBoxFlatStyle}" 
                                           x:Name="PaperTypeTextBox" 
                                           Grid.Row="4" Grid.Column="0"
                                           IsEditable="True" 
                                           FontSize="14"
-                                          Height="32">
-                                    <ComboBoxItem Content="Gloss-Art Paper"/>
-                                    <ComboBoxItem Content="Matte-Art Paper"/>
-                                    <ComboBoxItem Content="Gloss-Art Bord"/>
-                                    <ComboBoxItem Content="Matte-Art Bord"/>
-                                    <ComboBoxItem Content="Ivory"/>
-                                    <ComboBoxItem Content="OGI"/>
-                                    <ComboBoxItem Content="Ice Gold"/>
-                                    <ComboBoxItem Content="Ice Silver"/>
-                                    <ComboBoxItem Content="Blank Paper"/>
-                                    <ComboBoxItem Content="Special Paper"/>
-                                </ComboBox>
+                                        >
+                                                    <ComboBoxItem Content="Gloss-Art Paper"/>
+                                                    <ComboBoxItem Content="Matte-Art Paper"/>
+                                                    <ComboBoxItem Content="Gloss-Art Bord"/>
+                                                    <ComboBoxItem Content="Matte-Art Bord"/>
+                                                    <ComboBoxItem Content="Ivory"/>
+                                                    <ComboBoxItem Content="OGI"/>
+                                                    <ComboBoxItem Content="Ice Gold"/>
+                                                    <ComboBoxItem Content="Ice Silver"/>
+                                                    <ComboBoxItem Content="Blank Paper"/>
+                                                    <ComboBoxItem Content="Special Paper"/>
+                                                </ComboBox>
 
-                                <!-- D/S -->
-                                <Label  Foreground="{DynamicResource Forground}" Content="D/S (Sides):" 
+                                                <!-- D/S -->
+                                                <Label  Foreground="{DynamicResource Forground}" Content="D/S (Sides):" 
                                        Grid.Row="3" Grid.Column="2"
                                        FontSize="14" Padding="0,5"/>
-                                <ComboBox Style="{DynamicResource ComboBoxFlatStyle}" 
+                                                <ComboBox Style="{DynamicResource ComboBoxFlatStyle}" 
                                           x:Name="DsTextBox" 
                                           Grid.Row="4" Grid.Column="2"
                                           FontSize="14"
-                                          Height="32">
-                                    <ComboBoxItem Content="Single Side"/>
-                                    <ComboBoxItem Content="Double Side"/>
-                                </ComboBox>
+                                          >
+                                                    <ComboBoxItem Content="Single Side"/>
+                                                    <ComboBoxItem Content="Double Side"/>
+                                                </ComboBox>
 
-                                <!-- Laminate -->
-                                <Label  Foreground="{DynamicResource Forground}" Content="Laminate:" 
+                                                <!-- Laminate -->
+                                                <Label  Foreground="{DynamicResource Forground}" Content="Laminate:" 
                                        Grid.Row="6" Grid.Column="0"
                                        FontSize="14" Padding="0,5"/>
-                                <ComboBox Style="{DynamicResource ComboBoxFlatStyle}" 
+                                                <ComboBox Style="{DynamicResource ComboBoxFlatStyle}" 
                                           x:Name="LaminateTextBox" 
                                           Grid.Row="7" Grid.Column="0"
                                           FontSize="14"
-                                          Height="32">
-                                    <ComboBoxItem Content="No"/>
-                                    <ComboBoxItem Content="Matte Single Side"/>
-                                    <ComboBoxItem Content="Gloss Single Side"/>
-                                    <ComboBoxItem Content="Matte Double Side"/>
-                                    <ComboBoxItem Content="Gloss Double Side"/>
-                                </ComboBox>
+                                          >
+                                                    <ComboBoxItem Content="No"/>
+                                                    <ComboBoxItem Content="Matte Single Side"/>
+                                                    <ComboBoxItem Content="Gloss Single Side"/>
+                                                    <ComboBoxItem Content="Matte Double Side"/>
+                                                    <ComboBoxItem Content="Gloss Double Side"/>
+                                                </ComboBox>
 
-                                <!-- Printed Qty -->
-                                <Label  Foreground="{DynamicResource Forground}" Content="Printed Qty:" 
+                                                <!-- Printed Qty -->
+                                                <Label  Foreground="{DynamicResource Forground}" Content="Printed Qty:" 
                                        Grid.Row="6" Grid.Column="2"
                                        FontSize="14" Padding="0,5"/>
-                                <TextBox Style="{DynamicResource TextBoxStyle}" 
+                                                <TextBox Style="{DynamicResource TextBoxStyle}" 
                                          x:Name="PrintedTextBox" 
                                          Grid.Row="7" Grid.Column="2"
                                          FontSize="14"
-                                         Height="32"
+                                        
                                          PreviewTextInput="QuantityTextBox_PreviewTextInput"/>
-                            </Grid>
-                        </StackPanel>
-                    </StackPanel>
-                </GroupBox>
+                                            </Grid>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
 
-                <!-- Special Notes Section -->
-                <GroupBox  Foreground="{DynamicResource Forground}" Header="Special Notes" 
-                          FontSize="16" 
-                          FontWeight="Bold" 
-                          Padding="10">
-                    <TextBox Style="{DynamicResource TextBoxStyle}" 
+                            <!-- Special Notes Section -->
+                            <StackPanel Margin="0,0,0,15">
+                                <TextBlock Text="Special Notes" 
+                                           FontSize="16" 
+                                           FontWeight="Bold" 
+                                           Foreground="{DynamicResource Forground}" 
+                                           Margin="0,0,0,5"/>
+                                <Border BorderBrush="{DynamicResource BorderBrush}" 
+                                        BorderThickness="2" 
+                                        CornerRadius="5" 
+                                        Padding="10">
+                                    <TextBox Style="{DynamicResource TextBoxStyle}" 
                              TextWrapping="Wrap" 
                              x:Name="SpecialTextBox" 
                              Height="100" 
                              AcceptsReturn="True" 
                              FontSize="14"
                              VerticalScrollBarVisibility="Auto"/>
-                </GroupBox>
+                                </Border>
+                            </StackPanel>
 
 
-                <StackPanel>
-                    <GroupBox Foreground="{DynamicResource Forground}" Header="Image Preview" 
-                 FontSize="16" 
-                 FontWeight="Bold" 
-                 Padding="10">
-                        <StackPanel>
-                            <Button Style="{DynamicResource ActionButton}" 
+                            <StackPanel>
+                                <StackPanel Margin="0,0,0,15">
+                                    <TextBlock Text="Image Preview" 
+                                               FontSize="16" 
+                                               FontWeight="Bold" 
+                                               Foreground="{DynamicResource Forground}" 
+                                               Margin="0,0,0,5"/>
+                                    <Border BorderBrush="{DynamicResource BorderBrush}" 
+                                            BorderThickness="2" 
+                                            CornerRadius="5" 
+                                            Padding="10">
+                                        <StackPanel>
+                                            <Button Style="{DynamicResource NavigationButtonStyle}" 
                        Content="📷 Capture Screen" 
                        Click="CaptureButton_Click"
                        Width="150"
-                                    Height="40"
-                       FontSize="14"
+                                    
+                       
                        Margin="0,0,0,15"/>
 
-                            <Border CornerRadius="8" 
+                                            <Border CornerRadius="8" 
                        BorderBrush="{DynamicResource BorderBrush}" 
                        BorderThickness="2" 
-                       Background="#F5F5F5"
+                       Background="Transparent"
                        MinHeight="300">
-                                <Image x:Name="PreviewImage" 
+                                                <Image x:Name="PreviewImage" 
                           Stretch="Uniform" 
                           Margin="5"/>
-                            </Border>
+                                            </Border>
 
-                            <Button Content="💾 Save Job Card" 
+                                            <Button Content="Save Job Card" 
                        Click="Save_Click" 
                        Margin="0,15,0,0" 
                         Width="200"
-                Height="40"
-                       FontSize="16"
-                       FontWeight="Bold"
+              
+                     
                        Style="{StaticResource ActionButton}" 
-                       Foreground="White"/>
+                      />
+                                        </StackPanel>
+                                    </Border>
+                                </StackPanel>
+                            </StackPanel>
+
                         </StackPanel>
-                    </GroupBox>
-                </StackPanel>
 
-            </StackPanel>
+                    </Grid>
+                </ScrollViewer>
+            </Grid>
 
-        </Grid>
-    </ScrollViewer>
+
+        </Border>
+    </Grid>
+
+
+
+
 </Window>

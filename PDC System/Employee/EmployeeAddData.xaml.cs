@@ -23,6 +23,7 @@ namespace PDC_System
         {
             InitializeComponent();
             LoadCities();
+            LoadTimeDropdowns();
 
             Employee = new Employee();   // empty employee
 
@@ -47,6 +48,7 @@ namespace PDC_System
         {
             InitializeComponent();
             LoadCities();
+            LoadTimeDropdowns();
 
             // 👉 Use the existing employee data
             Employee = existingEmployee;
@@ -84,17 +86,17 @@ namespace PDC_System
             NoPayTextBox.Text = Employee.Nopay.ToString("F2");
 
             // Times
-            TxtCheckIn_Hour.Text = Employee.CheckIn.Hours.ToString("00");
-            TxtCheckIn_Minute.Text = Employee.CheckIn.Minutes.ToString("00");
+            CbCheckIn_Hour.SelectedItem = Employee.CheckIn.Hours.ToString("00");
+            CbCheckIn_Minute.SelectedItem = Employee.CheckIn.Minutes.ToString("00");
 
-            TxtCheckOut_Hour.Text = Employee.CheckOut.Hours.ToString("00");
-            TxtCheckOut_Minute.Text = Employee.CheckOut.Minutes.ToString("00");
+            CbCheckOut_Hour.SelectedItem = Employee.CheckOut.Hours.ToString("00");
+            CbCheckOut_Minute.SelectedItem = Employee.CheckOut.Minutes.ToString("00");
 
-            TxtSatCheckIn_Hour.Text = Employee.SaturdayCheckIn.Hours.ToString("00");
-            TxtSatCheckIn_Minute.Text = Employee.SaturdayCheckIn.Minutes.ToString("00");
+            CbSatCheckIn_Hour.SelectedItem = Employee.SaturdayCheckIn.Hours.ToString("00");
+            CbSatCheckIn_Minute.SelectedItem = Employee.SaturdayCheckIn.Minutes.ToString("00");
 
-            TxtSatCheckOut_Hour.Text = Employee.SaturdayCheckOut.Hours.ToString("00");
-            TxtSatCheckOut_Minute.Text = Employee.SaturdayCheckOut.Minutes.ToString("00");
+            CbSatCheckOut_Hour.SelectedItem = Employee.SaturdayCheckOut.Hours.ToString("00");
+            CbSatCheckOut_Minute.SelectedItem = Employee.SaturdayCheckOut.Minutes.ToString("00");
 
 
 
@@ -271,31 +273,61 @@ namespace PDC_System
                 return;
             }
 
-            TimeSpan WeekDaysCheckin;
-            if (!TimeSpan.TryParse($"{TxtCheckIn_Hour.Text}:{TxtCheckIn_Minute.Text}", out WeekDaysCheckin))
+            // Week Days Check-in
+            if (CbCheckIn_Hour.SelectedItem == null || CbCheckIn_Minute.SelectedItem == null)
             {
-                CustomMessageBox.Show("Please enter a valid check-in time (HH:mm).", "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-            TimeSpan WeekDaysCheckout;
-            if (!TimeSpan.TryParse($"{TxtCheckOut_Hour.Text}:{TxtCheckOut_Minute.Text}", out WeekDaysCheckout))
-            {
-                CustomMessageBox.Show("Please enter a valid check-in time (HH:mm).", "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Error);
+                CustomMessageBox.Show("Please select Weekday check-in time.",
+                    "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            TimeSpan SatCheckin;
-            if (!TimeSpan.TryParse($"{TxtSatCheckIn_Hour.Text}:{TxtSatCheckIn_Minute.Text}", out SatCheckin))
+            TimeSpan WeekDaysCheckin = new TimeSpan(
+                int.Parse(CbCheckIn_Hour.SelectedItem.ToString()),
+                int.Parse(CbCheckIn_Minute.SelectedItem.ToString()),
+                0);
+
+
+            // Week Days Check-out
+            if (CbCheckOut_Hour.SelectedItem == null || CbCheckOut_Minute.SelectedItem == null)
             {
-                CustomMessageBox.Show("Please enter a valid check-in time (HH:mm).", "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Error);
+                CustomMessageBox.Show("Please select Weekday check-out time.",
+                    "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-            TimeSpan SatCheckOut;
-            if (!TimeSpan.TryParse($"{TxtSatCheckOut_Hour.Text}:{TxtSatCheckOut_Minute.Text}", out SatCheckOut))
+
+            TimeSpan WeekDaysCheckout = new TimeSpan(
+                int.Parse(CbCheckOut_Hour.SelectedItem.ToString()),
+                int.Parse(CbCheckOut_Minute.SelectedItem.ToString()),
+                0);
+
+
+            // Saturday Check-in
+            if (CbSatCheckIn_Hour.SelectedItem == null || CbSatCheckIn_Minute.SelectedItem == null)
             {
-                CustomMessageBox.Show("Please enter a valid check-in time (HH:mm).", "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Error);
+                CustomMessageBox.Show("Please select Saturday check-in time.",
+                    "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
+
+            TimeSpan SatCheckin = new TimeSpan(
+                int.Parse(CbSatCheckIn_Hour.SelectedItem.ToString()),
+                int.Parse(CbSatCheckIn_Minute.SelectedItem.ToString()),
+                0);
+
+
+            // Saturday Check-out
+            if (CbSatCheckOut_Hour.SelectedItem == null || CbSatCheckOut_Minute.SelectedItem == null)
+            {
+                CustomMessageBox.Show("Please select Saturday check-out time.",
+                    "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            TimeSpan SatCheckOut = new TimeSpan(
+                int.Parse(CbSatCheckOut_Hour.SelectedItem.ToString()),
+                int.Parse(CbSatCheckOut_Minute.SelectedItem.ToString()),
+                0);
+
 
             // ✅ Validate Email (allow empty, but validate format if provided)
             string email = EmployeeEmailTextBox.Text.Trim();
@@ -495,65 +527,6 @@ namespace PDC_System
             e.Handled = !Regex.IsMatch(e.Text, "^[0-9]+$");
         }
 
-        // Validate hour range (0–23)
-        private void TxtHour_LostFocus(object sender, RoutedEventArgs e)
-        {
-            var box = sender as TextBox;
-            if (box == null) return;
-
-            if (int.TryParse(box.Text, out int value))
-            {
-                if (value < 0) value = 0;
-                else if (value > 23) value = 23;
-
-                box.Text = value.ToString("00");
-            }
-            else
-            {
-                box.Text = "00";
-            }
-        }
-
-        // Validate minute range (0–59)
-        private void TxtMinute_LostFocus(object sender, RoutedEventArgs e)
-        {
-            var box = sender as TextBox;
-            if (box == null) return;
-
-            if (int.TryParse(box.Text, out int value))
-            {
-                if (value < 0) value = 0;
-                else if (value > 59) value = 59;
-
-                box.Text = value.ToString("00");
-            }
-            else
-            {
-                box.Text = "00";
-            }
-        }
-
-        private void TxtHour_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                TextBox targetBox = null;
-
-                if (sender == TxtCheckIn_Hour)
-                    targetBox = TxtCheckIn_Minute;
-                else if (sender == TxtCheckOut_Hour)
-                    targetBox = TxtCheckOut_Minute;
-
-                if (targetBox != null)
-                {
-                    targetBox.Focus();
-                    targetBox.SelectAll(); // ✅ highlight the minute text
-                }
-
-                e.Handled = true; // prevent the default "ding" sound
-            }
-        }
-
 
         private void TextBox_LostFocus(object sender, RoutedEventArgs e)
         {
@@ -640,7 +613,40 @@ namespace PDC_System
             }
         }
 
+        private void LoadTimeDropdowns()
+        {
+            // Hours 00–23
+            for (int i = 0; i < 24; i++)
+            {
+                string hour = i.ToString("00");
 
+                CbCheckIn_Hour.Items.Add(hour);
+                CbCheckOut_Hour.Items.Add(hour);
+                CbSatCheckIn_Hour.Items.Add(hour);
+                CbSatCheckOut_Hour.Items.Add(hour);
+            }
+
+            // Minutes 00–59
+            for (int i = 0; i < 60; i++)
+            {
+                string minute = i.ToString("00");
+
+                CbCheckIn_Minute.Items.Add(minute);
+                CbCheckOut_Minute.Items.Add(minute);
+                CbSatCheckIn_Minute.Items.Add(minute);
+                CbSatCheckOut_Minute.Items.Add(minute);
+            }
+
+            // Default values
+            CbCheckIn_Hour.SelectedIndex = 0;
+            CbCheckIn_Minute.SelectedIndex = 0;
+            CbCheckOut_Hour.SelectedIndex = 0;
+            CbCheckOut_Minute.SelectedIndex = 0;
+            CbSatCheckIn_Hour.SelectedIndex = 0;
+            CbSatCheckIn_Minute.SelectedIndex = 0;
+            CbSatCheckOut_Hour.SelectedIndex = 0;
+            CbSatCheckOut_Minute.SelectedIndex = 0;
+        }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {

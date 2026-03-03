@@ -17,6 +17,7 @@
         MinWidth="1450"
         MinHeight="780"
         Width="1450"
+        Icon="/Assets/Main.ico"
         Height="780">
 
     <!-- WindowChrome for custom window border and rounded corners -->

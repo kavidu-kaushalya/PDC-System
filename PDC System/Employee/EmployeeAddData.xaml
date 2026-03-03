@@ -178,37 +178,80 @@
 
                             </StackPanel>
 
-                           
 
-                         
+
+
                             <StackPanel Margin="5" Grid.Row="2" Grid.ColumnSpan="2" VerticalAlignment="Center">
                                 <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1.5" CornerRadius="10">
                                     <StackPanel Margin="5">
+
+                                        <!-- Week Days -->
                                         <TextBlock Text="Week Days" Margin="10" FontSize="14"/>
-                                        <StackPanel  Margin="10" Orientation="Horizontal">
-                                            <TextBlock Text="Check  In:" Margin="10" FontSize="14"/>
-                                            <TextBox x:Name="TxtCheckIn_Hour" PreviewTextInput="TimeBox_PreviewTextInput" KeyDown="TxtHour_KeyDown" MaxLength="2" LostFocus="TxtHour_LostFocus"  Height="40" Width="40" Style="{DynamicResource TextBoxStyle}"/>
-                                            <TextBlock Text=":" FontSize="15" FontWeight="Bold" VerticalAlignment="Center" Margin="6,0,6,0"/>
-                                            <TextBox x:Name="TxtCheckIn_Minute" PreviewTextInput="TimeBox_PreviewTextInput" LostFocus="TxtMinute_LostFocus" MaxLength="2"  Height="40" Width="40" Style="{DynamicResource TextBoxStyle}"/>
 
-                                            <TextBlock Text="Check  Out:" Margin="10" FontSize="14"/>
-                                            <TextBox x:Name="TxtCheckOut_Hour" PreviewTextInput="TimeBox_PreviewTextInput" KeyDown="TxtHour_KeyDown" MaxLength="2" LostFocus="TxtHour_LostFocus" Height="40" Width="40" Style="{DynamicResource TextBoxStyle}"/>
-                                            <TextBlock Text=":" FontSize="15" FontWeight="Bold" VerticalAlignment="Center" Margin="6,0,6,0"/>
-                                            <TextBox x:Name="TxtCheckOut_Minute" PreviewTextInput="TimeBox_PreviewTextInput" LostFocus="TxtMinute_LostFocus" MaxLength="2"  Height="40" Width="40" Style="{DynamicResource TextBoxStyle}"/>
+                                        <StackPanel Margin="10" Orientation="Horizontal">
+
+                                            <TextBlock Text="Check In:" Margin="10" FontSize="14"/>
+
+                                            <ComboBox x:Name="CbCheckIn_Hour"
+                          Width="60" Height="40"
+                          Style="{DynamicResource ComboBoxFlatStyle}"/>
+
+                                            <TextBlock Text=":" FontSize="15" FontWeight="Bold"
+                           VerticalAlignment="Center" Margin="6,0"/>
+
+                                            <ComboBox x:Name="CbCheckIn_Minute"
+                          Width="60" Height="40"
+                          Style="{DynamicResource ComboBoxFlatStyle}"/>
+
+
+                                            <TextBlock Text="Check Out:" Margin="20,10,10,10" FontSize="14"/>
+
+                                            <ComboBox x:Name="CbCheckOut_Hour"
+                          Width="60" Height="40"
+                          Style="{DynamicResource ComboBoxFlatStyle}"/>
+
+                                            <TextBlock Text=":" FontSize="15" FontWeight="Bold"
+                           VerticalAlignment="Center" Margin="6,0"/>
+
+                                            <ComboBox x:Name="CbCheckOut_Minute"
+                          Width="60" Height="40"
+                          Style="{DynamicResource ComboBoxFlatStyle}"/>
                                         </StackPanel>
 
-                                        <TextBlock Text="Satarday" Margin="10" FontSize="14"/>
-                                        <StackPanel  Margin="10" Orientation="Horizontal">
-                                            <TextBlock Text="Check  In:" Margin="10" FontSize="14"/>
-                                            <TextBox x:Name="TxtSatCheckIn_Hour" PreviewTextInput="TimeBox_PreviewTextInput" KeyDown="TxtHour_KeyDown" MaxLength="2" LostFocus="TxtHour_LostFocus"  Height="40" Width="40"  Style="{DynamicResource TextBoxStyle}"/>
-                                            <TextBlock Text=":" FontSize="15" FontWeight="Bold" VerticalAlignment="Center" Margin="6,0,6,0"/>
-                                            <TextBox x:Name="TxtSatCheckIn_Minute" MaxLength="2"  PreviewTextInput="TimeBox_PreviewTextInput" LostFocus="TxtMinute_LostFocus" Height="40" Width="40" Style="{DynamicResource TextBoxStyle}"/>
 
-                                            <TextBlock Text="Check  Out:" Margin="10" FontSize="14"/>
-                                            <TextBox x:Name="TxtSatCheckOut_Hour" Height="40" Width="40" PreviewTextInput="TimeBox_PreviewTextInput" KeyDown="TxtHour_KeyDown" MaxLength="2" LostFocus="TxtHour_LostFocus" Style="{DynamicResource TextBoxStyle}"/>
-                                            <TextBlock Text=":" FontSize="15" FontWeight="Bold" VerticalAlignment="Center" Margin="6,0,6,0"/>
-                                            <TextBox x:Name="TxtSatCheckOut_Minute" MaxLength="2" PreviewTextInput="TimeBox_PreviewTextInput" LostFocus="TxtMinute_LostFocus"  Height="40" Width="40" Style="{DynamicResource TextBoxStyle}"/>
+                                        <!-- Saturday -->
+                                        <TextBlock Text="Saturday" Margin="10" FontSize="14"/>
+
+                                        <StackPanel Margin="10" Orientation="Horizontal">
+
+                                            <TextBlock Text="Check In:" Margin="10" FontSize="14"/>
+
+                                            <ComboBox x:Name="CbSatCheckIn_Hour"
+                          Width="60" Height="40"
+                          Style="{DynamicResource ComboBoxFlatStyle}"/>
+
+                                            <TextBlock Text=":" FontSize="15" FontWeight="Bold"
+                           VerticalAlignment="Center" Margin="6,0"/>
+
+                                            <ComboBox x:Name="CbSatCheckIn_Minute"
+                          Width="60" Height="40"
+                          Style="{DynamicResource ComboBoxFlatStyle}"/>
+
+
+                                            <TextBlock Text="Check Out:" Margin="20,10,10,10" FontSize="14"/>
+
+                                            <ComboBox x:Name="CbSatCheckOut_Hour"
+                          Width="60" Height="40"
+                          Style="{DynamicResource ComboBoxFlatStyle}"/>
+
+                                            <TextBlock Text=":" FontSize="15" FontWeight="Bold"
+                           VerticalAlignment="Center" Margin="6,0"/>
+
+                                            <ComboBox x:Name="CbSatCheckOut_Minute"
+                          Width="60" Height="40"
+                          Style="{DynamicResource ComboBoxFlatStyle}"/>
                                         </StackPanel>
+
                                     </StackPanel>
                                 </Border>
                             </StackPanel>

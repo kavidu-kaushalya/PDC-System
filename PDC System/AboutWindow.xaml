@@ -11,11 +11,9 @@
         >
 
     <Grid  >
-        <Border CornerRadius="15" Margin="15" Background="{DynamicResource Background}" Padding="25">
-            <Border.Effect>
-                <DropShadowEffect ShadowDepth="0" Opacity="0.505" BlurRadius="8"/>
-            </Border.Effect>
-            <ScrollViewer VerticalScrollBarVisibility="Hidden">
+        <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="2" CornerRadius="15"  Background="{DynamicResource Background}" Padding="25,25,0,25">
+          
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <StackPanel>
                     <TextBlock Text="About PDC System" 
                                FontSize="20" 
@@ -37,19 +35,19 @@
                         <LineBreak/><LineBreak/>
                         <Run Text="License Agreement:" FontWeight="Bold"/>
                         <LineBreak/>
-                        <Run Text="This software, PDC System, is licensed exclusively to [Company Name]. The license grants the company full permission to use the software for internal purposes only. Redistribution, resale, modification, or sublicensing of this software is strictly prohibited without the prior written consent of the developer."/>
+                        <Run Text="This software, PDC System, is licensed exclusively to PRIYANTHA DIE CUTTING. The license grants the company full permission to use the software for internal purposes only. Redistribution, resale, modification, or sublicensing of this software is strictly prohibited without the prior written consent of the developer."/>
                         <LineBreak/><LineBreak/>
                         <Run Text="Developer retains all ownership and intellectual property rights to the PDC System software and its source code. This system is classified as Freeware — developed and distributed freely without financial charge to the licensed company. However, this freeware status does not remove or alter the licensing restrictions or intellectual property protections held by the developer."/>
                         <LineBreak/><LineBreak/>
                         <Run Text="License Type: Freeware (Exclusive Use)"/>
                         <LineBreak/>
-                        <Run Text="Developer: Kavindu Kaushalya"/>
+                        <Run Text="Developer: Nactro.inc"/>
                         <LineBreak/>
                         <Run Text="License Holder: PRIYANTHA DIE CUTTING"/>
                         <LineBreak/>
                         <Run Text="Usage Rights: Internal use only (Non-transferable, Non-distributable)"/>
                         <LineBreak/>
-                        <Run Text="© 2025 All Rights Reserved"/>
+                        <Run Text="© 2026 All Rights Reserved"/>
                     </TextBlock>
 
                     <Button Content="Close" 

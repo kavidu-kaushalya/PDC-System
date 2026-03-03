@@ -439,10 +439,14 @@ namespace PDC_System
 
 
 
-        private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        // Ensure this method exists in your code-behind file with the correct signature:
+        private void BtnFilterAttendanceID_Click(object sender, RoutedEventArgs e)
         {
             ApplyFilters();
         }
+
+        
+       
 
         private void BtnClearSearch_Click(object sender, RoutedEventArgs e)
         {
