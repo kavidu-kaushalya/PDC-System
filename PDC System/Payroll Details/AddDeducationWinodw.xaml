@@ -7,14 +7,68 @@
         xmlns:cal="clr-namespace:ModernCalendarLib;assembly=ModernCalendarLib"
         mc:Ignorable="d"
         Title="Add Deduction"
+            xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+        WindowStyle="None"
+        AllowsTransparency="True"
+       
         Foreground="{DynamicResource Forground}"
         Height="450" Width="600"
         WindowStartupLocation="CenterScreen"
         Background="{DynamicResource Background}">
 
+
+    <shell:WindowChrome.WindowChrome>
+        <shell:WindowChrome CaptionHeight="32"
+               CornerRadius="10"
+                         
+               ResizeBorderThickness="6"
+               GlassFrameThickness="0"
+               NonClientFrameEdges="None"/>
+    </shell:WindowChrome.WindowChrome>
+
     <Grid>
-        <!-- Centered Card -->
-        <Border Background="{DynamicResource Background}"
+
+
+        <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="2" CornerRadius="6" >
+
+            <Grid>
+
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+
+
+                <Border Margin="5"  x:Name="TitleBar" Grid.Row="0"
+Background="{DynamicResource Background}" 
+>
+                    <DockPanel>
+                        <!-- App Logo -->
+                        <Image Source="/Assets/MainLogo.png"  Height="20" Width="20" Margin="8,0"/>
+                        <!-- App Title -->
+                        <TextBlock x:Name="PDCtitel" Text="Job Card" Foreground="{DynamicResource Forground}"  VerticalAlignment="Center" Margin="8,0"/>
+                        <!-- Control Panel -->
+
+
+
+                        <!-- Title bar buttons -->
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button x:Name="Minimize" Content="—" Width="25" Height="25" Click="Minimize_Click" shell:WindowChrome.IsHitTestVisibleInChrome="True" Margin="5" Background="Transparent" Style="{DynamicResource NavigationButtonStyle}" BorderBrush="{x:Null}"/>
+                            <Button x:Name="Maximize" Content="🗖" Width="25" Height="25" Click="Maximize_Click" shell:WindowChrome.IsHitTestVisibleInChrome="True" Margin="5" Background="Transparent" Style="{DynamicResource NavigationButtonStyle}" BorderBrush="{x:Null}" />
+                            <Button x:Name="Colose" Content="🗙" Width="25" Height="25" Click="Close_Click" shell:WindowChrome.IsHitTestVisibleInChrome="True" Margin="5" Background="Transparent" Style="{DynamicResource NavigationButtonStyle}" BorderBrush="{x:Null}" />
+                        </StackPanel>
+
+
+
+                    </DockPanel>
+                </Border>
+
+
+                <Grid Grid.Row="1">
+                    <!-- Centered Card -->
+                    <Border Background="{DynamicResource Background}"
                 Padding="25"
                 CornerRadius="10"
                 Width="auto"
@@ -23,70 +77,70 @@
                 BorderBrush="{DynamicResource BorderBrush}"
                 BorderThickness="1">
 
-            <Grid Margin="10">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
+                        <Grid Margin="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="140"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="140"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
 
-                <!-- Employee -->
-                <TextBlock Text="Employee:" 
+                            <!-- Employee -->
+                            <TextBlock Text="Employee:" 
                            Grid.Row="0" Grid.Column="0"
                            VerticalAlignment="Center"/>
-                <ComboBox x:Name="EmployeeCombo"
+                            <ComboBox x:Name="EmployeeCombo"
                           Grid.Row="0" Grid.Column="1"
                           Width="220"
                           Style="{DynamicResource ComboBoxFlatStyle}"
                           DisplayMemberPath="Name"
                           SelectedValuePath="EmployeeId"/>
 
-                <!-- Description -->
-                <TextBlock Text="Description:" 
+                            <!-- Description -->
+                            <TextBlock Text="Description:" 
                            Grid.Row="1" Grid.Column="0"
                            Margin="0,12,0,0"
                            VerticalAlignment="Center"/>
-                <TextBox x:Name="DeducationDescription"
+                            <TextBox x:Name="DeducationDescription"
                          Grid.Row="1" Grid.Column="1"
                          Width="220"
                          Style="{DynamicResource TextBoxStyle}"
                          
                          Margin="0,12,0,0"/>
 
-                <!-- Amount -->
-                <TextBlock Text="Amount:" 
+                            <!-- Amount -->
+                            <TextBlock Text="Amount:" 
                            Grid.Row="2" Grid.Column="0"
                            Margin="0,12,0,0"
                            VerticalAlignment="Center"/>
-                <TextBox x:Name="DeducationAmount"
+                            <TextBox x:Name="DeducationAmount"
                          Grid.Row="2" Grid.Column="1"
                          Width="220"
                           Style="{DynamicResource TextBoxStyle}"
                          Margin="0,12,0,0"/>
 
-                <!-- Date -->
-                <TextBlock Text="Date:" 
+                            <!-- Date -->
+                            <TextBlock Text="Date:" 
                            Grid.Row="3" Grid.Column="0"
                            Margin="0,12,0,0"
                            VerticalAlignment="Center"/>
-                <Border Grid.Row="3" Grid.Column="1"
+                            <Border Grid.Row="3" Grid.Column="1"
                         Margin="0,12,0,0"
                         BorderBrush="{DynamicResource BorderBrush}"
                         BorderThickness="1"
                         CornerRadius="4">
-                    <cal:CustomDatePicker x:Name="DeducationPicker"
+                                <cal:CustomDatePicker x:Name="DeducationPicker"
                                           Width="220"/>
-                </Border>
+                            </Border>
 
-                <!-- Save Button -->
-                <Button Content="Save"
+                            <!-- Save Button -->
+                            <Button Content="Save"
                         Grid.Row="4" Grid.ColumnSpan="2"
                         Width="120"
                         Height="35"
@@ -95,8 +149,18 @@
                        
                         Style="{DynamicResource ActionButton}"
                         Click="Save_Click"/>
-            </Grid>
+                        </Grid>
 
+                    </Border>
+                </Grid>
+
+
+            </Grid>
         </Border>
+
     </Grid>
+    
+
+
+
 </Window>

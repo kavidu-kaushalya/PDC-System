@@ -23,8 +23,14 @@ namespace PDC_System
 {
     public partial class Loading : Window
     {
+        #region Fields
+
         private GoogleServiceManager googleManager;
         private bool _isLoggingIn = false; // 🔒 rapid login guard
+
+        #endregion
+
+        #region Constructor
 
         public Loading()
         {
@@ -36,6 +42,9 @@ namespace PDC_System
 
         }
 
+        #endregion
+
+        #region Credentials
 
         private void LoadSavedCredentials()
         {
@@ -69,10 +78,9 @@ namespace PDC_System
             Properties.Settings.Default.Save();
         }
 
+        #endregion
 
-
-
-
+        #region Window Events
 
         private async void LoadingWindow_Loaded(object sender, RoutedEventArgs e)
         {
@@ -101,6 +109,9 @@ namespace PDC_System
             Application.Current.Shutdown();
         }
 
+        #endregion
+
+        #region Startup Checks
 
         private void UpdateStatus(TextBlock icon, TextBlock text, bool ok)
         {
@@ -180,11 +191,9 @@ namespace PDC_System
             }
         }
 
+        #endregion
 
-
-
-
-
+        #region Seed Admin
 
         void SeedAdmin()
         {
@@ -212,6 +221,10 @@ namespace PDC_System
                 UserService.Save(users);
             }
         }
+
+        #endregion
+
+        #region Login
 
         private async void Login_Click(object sender, RoutedEventArgs e)
         {
@@ -280,6 +293,6 @@ namespace PDC_System
             }
         }
 
-
+        #endregion
     }
 }

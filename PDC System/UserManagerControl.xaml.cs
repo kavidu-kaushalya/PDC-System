@@ -9,9 +9,15 @@ namespace PDC_System
 {
     public partial class UserManagerControl : UserControl
     {
+        #region Fields
+
         private List<User> users;
         private User editingUser;
         private bool isEditMode = false;
+
+        #endregion
+
+        #region Constructor
 
         public UserManagerControl()
         {
@@ -20,6 +26,10 @@ namespace PDC_System
             LoadUsers();
             UpdateUserCountDisplay();
         }
+
+        #endregion
+
+        #region Data Loading
 
         private void LoadUsers()
         {
@@ -36,6 +46,10 @@ namespace PDC_System
             }
         }
 
+        #endregion
+
+        #region Button Click Events
+
         private void BtnCreateUser_Click(object sender, RoutedEventArgs e)
         {
             ShowCreateUserPanel();
@@ -46,39 +60,6 @@ namespace PDC_System
         private void BtnManageUsers_Click(object sender, RoutedEventArgs e)
         {
             ShowManageUsersPanel();
-        }
-
-        private void ShowCreateUserPanel()
-        {
-            CreateUserPanel.Visibility = Visibility.Visible;
-            ManageUsersPanel.Opacity = 0.5;
-            ManageUsersPanel.IsEnabled = false;
-            ClearForm();
-        }
-
-        private void ShowManageUsersPanel()
-        {
-            CreateUserPanel.Visibility = Visibility.Collapsed;
-            ManageUsersPanel.Opacity = 1.0;
-            ManageUsersPanel.IsEnabled = true;
-            LoadUsers();
-        }
-
-        private void UpdatePanelHeader(string title, string description)
-        {
-            // Find the header TextBlocks in the CreateUserPanel
-            var headerBorder = CreateUserPanel.Child as ScrollViewer;
-            if (headerBorder?.Content is StackPanel stackPanel)
-            {
-                var border = stackPanel.Children[0] as Border;
-                if (border?.Child is StackPanel headerStack)
-                {
-                    if (headerStack.Children[0] is TextBlock titleBlock)
-                        titleBlock.Text = title;
-                    if (headerStack.Children[1] is TextBlock descBlock)
-                        descBlock.Text = description;
-                }
-            }
         }
 
         private void CreateSave_Click(object sender, RoutedEventArgs e)
@@ -134,44 +115,10 @@ namespace PDC_System
             ShowManageUsersPanel();
         }
 
-        private void UpdateUserPermissions(User user)
-        {
-            user.Dashbord = Dashbord.IsChecked == true;
-            user.OderCheck = ChkOderCheck.IsChecked == true;
-            user.Jobcard = ChkJobcard.IsChecked == true;
-            user.Customer = ChkCustomer.IsChecked == true;
-            user.Outsourcing = ChkOutsourcing.IsChecked == true;
-            user.Quotation = ChkQuotation.IsChecked == true;
-            user.Employee = ChkEmployee.IsChecked == true;
-            user.Attendance = ChkAttendance.IsChecked == true;
-            user.Payroll = ChkPayroll.IsChecked == true;
-            user.Paysheet = ChkPaysheet.IsChecked == true;
-            user.Isadmin = ChkIsAdmin.IsChecked == true;
-        }
-
         private void Clear_Click(object sender, RoutedEventArgs e)
         {
             ClearForm();
             ShowManageUsersPanel();
-        }
-
-        private void ClearForm()
-        {
-            TxtUser.Text = "";
-            TxtPass.Password = "";
-
-            // Reset checkboxes (keep Dashboard checked and disabled)
-            Dashbord.IsChecked = true;
-            ChkOderCheck.IsChecked = false;
-            ChkJobcard.IsChecked = false;
-            ChkCustomer.IsChecked = false;
-            ChkOutsourcing.IsChecked = false;
-            ChkQuotation.IsChecked = false;
-            ChkEmployee.IsChecked = false;
-            ChkAttendance.IsChecked = false;
-            ChkPayroll.IsChecked = false;
-            ChkPaysheet.IsChecked = false;
-            ChkIsAdmin.IsChecked = false;
         }
 
         private void EditUser_Click(object sender, RoutedEventArgs e)
@@ -240,6 +187,87 @@ namespace PDC_System
             }
         }
 
+        // Keep the original Create_Click for backward compatibility
+        private void Create_Click(object sender, RoutedEventArgs e)
+        {
+            CreateSave_Click(sender, e);
+        }
+
+        #endregion
+
+        #region UI Panel Management
+
+        private void ShowCreateUserPanel()
+        {
+            CreateUserPanel.Visibility = Visibility.Visible;
+            ManageUsersPanel.Opacity = 0.5;
+            ManageUsersPanel.IsEnabled = false;
+            ClearForm();
+        }
+
+        private void ShowManageUsersPanel()
+        {
+            CreateUserPanel.Visibility = Visibility.Collapsed;
+            ManageUsersPanel.Opacity = 1.0;
+            ManageUsersPanel.IsEnabled = true;
+            LoadUsers();
+        }
+
+        private void UpdatePanelHeader(string title, string description)
+        {
+            // Find the header TextBlocks in the CreateUserPanel
+            var headerBorder = CreateUserPanel.Child as ScrollViewer;
+            if (headerBorder?.Content is StackPanel stackPanel)
+            {
+                var border = stackPanel.Children[0] as Border;
+                if (border?.Child is StackPanel headerStack)
+                {
+                    if (headerStack.Children[0] is TextBlock titleBlock)
+                        titleBlock.Text = title;
+                    if (headerStack.Children[1] is TextBlock descBlock)
+                        descBlock.Text = description;
+                }
+            }
+        }
+
+        #endregion
+
+        #region Form Helpers
+
+        private void UpdateUserPermissions(User user)
+        {
+            user.Dashbord = Dashbord.IsChecked == true;
+            user.OderCheck = ChkOderCheck.IsChecked == true;
+            user.Jobcard = ChkJobcard.IsChecked == true;
+            user.Customer = ChkCustomer.IsChecked == true;
+            user.Outsourcing = ChkOutsourcing.IsChecked == true;
+            user.Quotation = ChkQuotation.IsChecked == true;
+            user.Employee = ChkEmployee.IsChecked == true;
+            user.Attendance = ChkAttendance.IsChecked == true;
+            user.Payroll = ChkPayroll.IsChecked == true;
+            user.Paysheet = ChkPaysheet.IsChecked == true;
+            user.Isadmin = ChkIsAdmin.IsChecked == true;
+        }
+
+        private void ClearForm()
+        {
+            TxtUser.Text = "";
+            TxtPass.Password = "";
+
+            // Reset checkboxes (keep Dashboard checked and disabled)
+            Dashbord.IsChecked = true;
+            ChkOderCheck.IsChecked = false;
+            ChkJobcard.IsChecked = false;
+            ChkCustomer.IsChecked = false;
+            ChkOutsourcing.IsChecked = false;
+            ChkQuotation.IsChecked = false;
+            ChkEmployee.IsChecked = false;
+            ChkAttendance.IsChecked = false;
+            ChkPayroll.IsChecked = false;
+            ChkPaysheet.IsChecked = false;
+            ChkIsAdmin.IsChecked = false;
+        }
+
         private void ResetToCreateMode()
         {
             isEditMode = false;
@@ -247,10 +275,6 @@ namespace PDC_System
             BtnCreateSave.Content = "✅ Create User";
         }
 
-        // Keep the original Create_Click for backward compatibility
-        private void Create_Click(object sender, RoutedEventArgs e)
-        {
-            CreateSave_Click(sender, e);
-        }
+        #endregion
     }
 }

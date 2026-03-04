@@ -79,7 +79,7 @@
 
                                 <TextBlock x:Name="Total_Jobs"
                            Text="0"
-                           Foreground="White"
+                           Foreground="{DynamicResource Forground}"
                            FontSize="30"
                            FontWeight="Bold"/>
 
@@ -126,7 +126,7 @@
 
                                 <TextBlock x:Name="Present_Employee"
                            Text="0"
-                           Foreground="White"
+                            Foreground="{DynamicResource Forground}"
                            FontSize="30"
                            FontWeight="Bold"/>
 
@@ -173,7 +173,7 @@
 
                                 <TextBlock x:Name="Total_Customers"
                            Text="0"
-                           Foreground="White"
+                           Foreground="{DynamicResource Forground}"
                            FontSize="30"
                            FontWeight="Bold"/>
 

@@ -6,97 +6,158 @@
         xmlns:local="clr-namespace:PDC_System"
         xmlns:cal="clr-namespace:ModernCalendarLib;assembly=ModernCalendarLib"
         mc:Ignorable="d"
+        WindowStyle="None"
+        AllowsTransparency="True"
         Foreground="{DynamicResource Forground}"
         Title="Add Loan"
         Height="450" Width="550"
         Background="{DynamicResource Background}"
+   xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
         WindowStartupLocation="CenterScreen">
+
+
+
+    <shell:WindowChrome.WindowChrome>
+        <shell:WindowChrome CaptionHeight="32"
+               CornerRadius="10"
+                         
+               ResizeBorderThickness="6"
+               GlassFrameThickness="0"
+               NonClientFrameEdges="None"/>
+    </shell:WindowChrome.WindowChrome>
+
 
     <Grid>
 
-        <!-- Center Card Layout -->
-        <Border Background="{DynamicResource Background}"
+        <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="2" CornerRadius="6" >
+
+            <Grid>
+
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+
+
+                <Border Margin="5"  x:Name="TitleBar" Grid.Row="0"
+Background="{DynamicResource Background}" 
+>
+                    <DockPanel>
+                        <!-- App Logo -->
+                        <Image Source="/Assets/MainLogo.png"  Height="20" Width="20" Margin="8,0"/>
+                        <!-- App Title -->
+                        <TextBlock x:Name="PDCtitel" Text="Enter Loan" Foreground="{DynamicResource Forground}"  VerticalAlignment="Center" Margin="8,0"/>
+                        <!-- Control Panel -->
+
+
+
+                        <!-- Title bar buttons -->
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button x:Name="Minimize" Content="—" Width="25" Height="25" Click="Minimize_Click" shell:WindowChrome.IsHitTestVisibleInChrome="True" Margin="5" Background="Transparent" Style="{DynamicResource NavigationButtonStyle}" BorderBrush="{x:Null}"/>
+                            <Button x:Name="Maximize" Content="🗖" Width="25" Height="25" Click="Maximize_Click" shell:WindowChrome.IsHitTestVisibleInChrome="True" Margin="5" Background="Transparent" Style="{DynamicResource NavigationButtonStyle}" BorderBrush="{x:Null}" />
+                            <Button x:Name="Colose" Content="🗙" Width="25" Height="25" Click="Close_Click" shell:WindowChrome.IsHitTestVisibleInChrome="True" Margin="5" Background="Transparent" Style="{DynamicResource NavigationButtonStyle}" BorderBrush="{x:Null}" />
+                        </StackPanel>
+
+
+
+                    </DockPanel>
+                </Border>
+
+                <Grid Grid.Row="1">
+
+                    <!-- Center Card Layout -->
+                    <Border Background="{DynamicResource Background}"
                 Padding="25"
                 CornerRadius="10"
                 Width="auto"
                 VerticalAlignment="Center"
                 HorizontalAlignment="Center"
                 BorderBrush="{DynamicResource BorderBrush}"
-                BorderThickness="1">
+                BorderThickness="2">
 
-            <Grid Margin="10">
+                        <Grid Margin="10">
 
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="150"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="150"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
 
-                <!-- Employee -->
-                <TextBlock Text="Employee:"
+                            <!-- Employee -->
+                            <TextBlock Text="Employee:"
                            Grid.Row="0" Grid.Column="0"
                            VerticalAlignment="Center"/>
-                <ComboBox Style="{DynamicResource ComboBoxFlatStyle}"
+                            <ComboBox Style="{DynamicResource ComboBoxFlatStyle}"
                           x:Name="EmployeeCombo"
                           Grid.Row="0" Grid.Column="1"
                           Width="220"
                           DisplayMemberPath="Name"
                           SelectedValuePath="EmployeeId"/>
 
-                <!-- Loan Amount -->
-                <TextBlock Text="Loan Amount:"
+                            <!-- Loan Amount -->
+                            <TextBlock Text="Loan Amount:"
                            Grid.Row="1" Grid.Column="0"
                            Margin="0,12,0,0"
                            VerticalAlignment="Center"/>
-                <TextBox Style="{DynamicResource TextBoxStyle}"
+                            <TextBox Style="{DynamicResource TextBoxStyle}"
                          x:Name="LoanAmountBox"
                          Grid.Row="1" Grid.Column="1"
                          Width="220"
                          Margin="0,12,0,0"/>
 
-                <!-- Monthly Pay -->
-                <TextBlock Text="Monthly Pay:"
+                            <!-- Monthly Pay -->
+                            <TextBlock Text="Monthly Pay:"
                            Grid.Row="2" Grid.Column="0"
                            Margin="0,12,0,0"
                            VerticalAlignment="Center"/>
-                <TextBox Style="{DynamicResource TextBoxStyle}"
+                            <TextBox Style="{DynamicResource TextBoxStyle}"
                          x:Name="MonthlyPayBox"
                          Grid.Row="2" Grid.Column="1"
                          Width="220"
                          Margin="0,12,0,0"/>
 
-                <!-- Date -->
-                <TextBlock Text="Date:"
+                            <!-- Date -->
+                            <TextBlock Text="Date:"
                            Grid.Row="3" Grid.Column="0"
                            Margin="0,12,0,0"
                            VerticalAlignment="Center"/>
-                <Border Grid.Row="3" Grid.Column="1"
+                            <Border Grid.Row="3" Grid.Column="1"
                         Margin="0,12,0,0"
                         BorderBrush="{DynamicResource BorderBrush}"
                         BorderThickness="2"
                         CornerRadius="5">
-                    <cal:CustomDatePicker x:Name="LoanDatePicker"
+                                <cal:CustomDatePicker x:Name="LoanDatePicker"
                                           Width="220"/>
-                </Border>
+                            </Border>
 
-                <!-- Save Button -->
-                <Button Style="{DynamicResource ActionButton}"
+                            <!-- Save Button -->
+                            <Button Style="{DynamicResource ActionButton}"
                         Content="Save"
                         Grid.Row="4" Grid.ColumnSpan="2"
-                        Width="120" Height="35"
+                        Width="120"
                         Margin="0,20,0,0"
                         HorizontalAlignment="Center"
                         Click="Save_Click"/>
-            </Grid>
+                        </Grid>
 
+                    </Border>
+                </Grid>
+
+            </Grid>
         </Border>
+
     </Grid>
+    
+    
+    
 
 </Window>

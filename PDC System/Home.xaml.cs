@@ -382,17 +382,22 @@ namespace PDC_System
 
         #endregion
 
+
+        #region About Window
+
         private void AboutButton_Click(object sender, RoutedEventArgs e)
         {
             AboutWindow about = new AboutWindow();
             about.ShowDialog();
         }
 
+        #endregion
 
 
+        #region Database and Attendance Calculation
         private void LoadCalculateSettings()
         {
-           
+
             // 🔍 Try to find existing SettingsWindow
             var settingsWindow = Application.Current.Windows
                 .OfType<SettingsWindow>()
@@ -401,8 +406,8 @@ namespace PDC_System
             if (settingsWindow != null)
             {
                 settingsWindow.BtnLoad_Click();
-               
-               
+
+
             }
             else
             {
@@ -413,8 +418,8 @@ namespace PDC_System
                 {
                     backgroundSettings.BtnLoad_Click();
                     backgroundSettings.Close();
-                    
-                   
+
+
                 }
                 else
                 {
@@ -447,6 +452,10 @@ namespace PDC_System
                                 "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
+        #endregion
+
+
 
 
     }

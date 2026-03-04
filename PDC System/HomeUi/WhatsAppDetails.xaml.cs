@@ -69,7 +69,21 @@ namespace PDC_System
             });
         }
 
+        #region Window Control
 
+        private void TitleBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ButtonState == MouseButtonState.Pressed)
+                DragMove();
+        }
+
+        private void Close_Click(object sender, RoutedEventArgs e)
+        {
+
+            Hide();
+        }
+
+        #endregion
         private void ContactNumberTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             // Check if the entered text is a number and if the current length is less than 10
