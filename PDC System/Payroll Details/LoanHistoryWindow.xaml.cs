@@ -41,31 +41,54 @@ namespace PDC_System.Payroll_Details
         {
             var history = LoanHistoryService.Load()
                 .Where(h => h.EmployeeId == _employeeId)
-                .OrderByDescending(h => h.Date)
+                .OrderBy(h => h.Date) // Sort by date ascending first for calculation
                 .ToList();
-
-            HistoryGrid.ItemsSource = history;
 
             if (history.Count == 0)
             {
+                HistoryGrid.ItemsSource = history;
                 SummaryText.Text = "No loan history available.";
                 return;
             }
 
-            var latest = history.First();
+            // ✅ GET ORIGINAL LOAN AMOUNT FROM loan.json (NOT from loan history)
+            decimal originalLoan = GetOriginalLoanAmountFromLoanJson(_employeeId);
 
+            if (originalLoan == 0)
+            {
+                CustomMessageBox.Show("Loan record not found in loan.json!", "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            decimal cumulativePaid = 0;
+
+            foreach (var entry in history)
+            {
+                cumulativePaid += entry.PaidAmount;
+                // ✅ Calculate remaining after each payment
+                entry.RemainingAmount = Math.Max(0, originalLoan - cumulativePaid);
+            }
+
+            // Now reverse the order for display (newest first)
+            var displayHistory = history.OrderByDescending(h => h.Date).ToList();
+            HistoryGrid.ItemsSource = displayHistory;
+
+            var latest = displayHistory.First();
+            decimal calculatedRemaining = originalLoan - cumulativePaid;
+
+            // ✅ Fixed: Use originalLoan and cumulativePaid directly
             SummaryText.Text =
-                $"Original Loan: {latest.OriginalLoanAmount:N2} | " +
-                $"Paid: {history.Sum(h => h.PaidAmount):N2} | " +
-                $"Remaining: {latest.RemainingAmount:N2}";
-
-
-
+                $"Original Loan: {originalLoan:N2} | " +
+                $"Paid: {cumulativePaid:N2} | " +
+                $"Remaining: {calculatedRemaining:N2}";
 
             decimal monthlyInstallment = latest.MonthlyInstallment;
-            decimal remaining = latest.RemainingAmount;
+            decimal remaining = calculatedRemaining;
 
-            int remainingMonths = (int)Math.Ceiling(remaining / monthlyInstallment);
+            int remainingMonths = remaining > 0 && monthlyInstallment > 0
+                ? (int)Math.Ceiling(remaining / monthlyInstallment)
+                : 0;
 
             // --- Calculate End Date ---
             DateTime startMonth = latest.Date;   // loan record date
@@ -75,37 +98,166 @@ namespace PDC_System.Payroll_Details
             EndDateTextBox.Text =
                 $"Ends In: {remainingMonths} months ( {endDate:MMMM yyyy} )";
 
+            // ✅ NEW: Auto-update loan status based on remaining
+            UpdateLoanStatus(calculatedRemaining);
 
-            // 🔥 Add this
-            LoadPieChart(history);
+            // Load Pie Chart
+            LoadPieChart(displayHistory, originalLoan, cumulativePaid, calculatedRemaining);
+        }
+
+        /// <summary>
+        /// ✅ ALWAYS retrieve the original loan amount from loan.json (NOT from loan history)
+        /// </summary>
+        private decimal GetOriginalLoanAmountFromLoanJson(string employeeId)
+        {
+            try
+            {
+                if (!File.Exists("Savers/loan.json"))
+                    return 0;
+
+                string json = File.ReadAllText("Savers/loan.json");
+                var loans = JsonConvert.DeserializeObject<List<Loan>>(json) ?? new List<Loan>();
+
+                var loan = loans.FirstOrDefault(l => l.EmployeeId == employeeId);
+
+                return loan?.LoanAmount ?? 0;
+            }
+            catch
+            {
+                return 0;
+            }
         }
 
 
-        private void LoadPieChart(List<LoanHistoryService.LoanHistoryEntry> history)
+
+        #region Window Control
+
+        private void TitleBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            decimal totalLoan = history.First().OriginalLoanAmount;
-            decimal totalPaid = history.Sum(h => h.PaidAmount);
-            decimal remaining = history.First().RemainingAmount;
+            if (e.ButtonState == MouseButtonState.Pressed)
+                DragMove();
+        }
+
+        private void Minimize_Click(object sender, RoutedEventArgs e) => this.WindowState = WindowState.Minimized;
+
+        private bool _isMaximized = false;
+        private double _previousLeft;
+        private double _previousTop;
+        private double _previousWidth;
+        private double _previousHeight;
+
+        private void Maximize_Click(object sender, RoutedEventArgs e)
+        {
+            if (_isMaximized)
+            {
+                // Restore to previous size and position
+                this.Left = _previousLeft;
+                this.Top = _previousTop;
+                this.Width = _previousWidth;
+                this.Height = _previousHeight;
+                _isMaximized = false;
+            }
+            else
+            {
+                // get before maximizing
+                _previousLeft = this.Left;
+                _previousTop = this.Top;
+                _previousWidth = this.Width;
+                _previousHeight = this.Height;
+
+                // Get the working area (screen minus taskbar)
+                var workingArea = SystemParameters.WorkArea;
+
+                // Set window position and size to working area
+                this.Left = workingArea.Left;
+                this.Top = workingArea.Top;
+                this.Width = workingArea.Width;
+                this.Height = workingArea.Height;
+
+                _isMaximized = true;
+            }
+        }
+
+        private void Close_Click(object sender, RoutedEventArgs e)
+        {
+
+            Close();
+        }
+
+        #endregion
+
+
+
+        /// <summary>
+        /// ✅ NEW: Update loan status based on remaining balance
+        /// </summary>
+        private void UpdateLoanStatus(decimal remaining)
+        {
+            try
+            {
+                string path = "Savers/loan.json";
+                if (!File.Exists(path)) return;
+
+                string json = File.ReadAllText(path);
+                var loans = JsonConvert.DeserializeObject<List<Loan>>(json) ?? new List<Loan>();
+
+                var loan = loans.FirstOrDefault(l => l.EmployeeId == _employeeId);
+                if (loan == null) return;
+
+                // ✅ Set status based on remaining
+                if (remaining <= 0)
+                {
+                    if (loan.Status != "Finished")
+                    {
+                        loan.Status = "Finished";
+                        File.WriteAllText(path, JsonConvert.SerializeObject(loans, Formatting.Indented));
+                    }
+                }
+                else
+                {
+                    if (loan.Status != "Active")
+                    {
+                        loan.Status = "Active";
+                        File.WriteAllText(path, JsonConvert.SerializeObject(loans, Formatting.Indented));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                CustomMessageBox.Show($"Error updating loan status: {ex.Message}", "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+
+        private void LoadPieChart(List<LoanHistoryService.LoanHistoryEntry> history,
+    decimal totalLoan, decimal totalPaid, decimal remaining)
+        {
+            var borderBrush = (Brush)Application.Current.Resources["BorderBrush"];
 
             LoanPieChart.Series = new SeriesCollection
+{
+    new PieSeries
     {
-        new PieSeries
-        {
-            Title = $"Paid ({totalPaid:N2})",
-            Values = new ChartValues<decimal>{ totalPaid },
-            DataLabels = true,
-            Fill = (SolidColorBrush)new BrushConverter().ConvertFrom("#3FA7D6"),
-            LabelPoint = cp => $"{cp.Participation:P0}"
-        },
-        new PieSeries
-        {
-            Title = $"Remaining ({remaining:N2})",
-            Values = new ChartValues<decimal>{ remaining },
-            DataLabels = true,
-            Fill = (SolidColorBrush)new BrushConverter().ConvertFrom("#F24E1E"),
-            LabelPoint = cp => $"{cp.Participation:P0}"
-        }
-    };
+        Title = $"Paid ({totalPaid:N2})",
+        Values = new ChartValues<decimal>{ totalPaid },
+        DataLabels = true,
+        Fill = (SolidColorBrush)new BrushConverter().ConvertFrom("#3FA7D6"),
+        Stroke = borderBrush,
+        StrokeThickness = 2,
+        LabelPoint = cp => $"{cp.Participation:P0}"
+    },
+    new PieSeries
+    {
+        Title = $"Remaining ({remaining:N2})",
+        Values = new ChartValues<decimal>{ remaining },
+        DataLabels = true,
+        Fill = (SolidColorBrush)new BrushConverter().ConvertFrom("#F24E1E"),
+        Stroke = borderBrush,
+        StrokeThickness = 2,
+        LabelPoint = cp => $"{cp.Participation:P0}"
+    }
+};
         }
 
 
@@ -152,10 +304,7 @@ namespace PDC_System.Payroll_Details
             // Save updated file
             LoanHistoryService.Save(all);
 
-            // 🟢 UPDATE loan.json remaining (add back paid amount)
-            RestoreLoanRemaining(entry);
-
-            // Refresh UI
+            // Refresh UI (this will auto-update status via UpdateLoanStatus)
             LoadHistory();
         }
 
@@ -168,27 +317,7 @@ namespace PDC_System.Payroll_Details
             var loan = loans.FirstOrDefault(l =>
                 l.EmployeeId == entry.EmployeeId);
 
-            if (loan != null)
-            {
-                // Add back the deleted manual payment
-                loan.Remeining += entry.PaidAmount;
 
-                // If remaining > 0 → loan should become Active again
-                if (loan.Remeining > 0)
-                {
-                    loan.Status = "Active";
-                }
-                else
-                {
-                    // If 0 or below, force finish state
-                    loan.Remeining = 0;
-                    loan.Status = "Finished";
-                }
-
-                // Save
-                File.WriteAllText("Savers/loan.json",
-                    JsonConvert.SerializeObject(loans, Formatting.Indented));
-            }
         }
 
 
@@ -207,17 +336,13 @@ namespace PDC_System.Payroll_Details
 
             string empName = history.First().EmployeeName;
 
-            // Convert chart to image
-            var chartImage = LoanHistoryPdfService.ConvertChartToImage(LoanPieChart);
-
             string filePath = $"LoanHistory_{_employeeId}.pdf";
 
             LoanHistoryPdfService.ExportLoanHistory(
                 _employeeId,
                 empName,
                 history,
-                filePath,
-                chartImage
+                filePath
             );
 
             CustomMessageBox.Show("PDF Exported Successfully!", "Success",
@@ -228,11 +353,6 @@ namespace PDC_System.Payroll_Details
                 FileName = filePath,
                 UseShellExecute = true
             });
-
-
-
-
-
         }
 
         private string GetEmployeeEmail(string employeeId)
@@ -272,17 +392,14 @@ namespace PDC_System.Payroll_Details
 
             string name = history.First().EmployeeName;
 
-            // 🔥 1. Export PDF safely (chart is optional)
+            // 🔥 1. Export PDF
             string pdfPath = $"LoanHistory_{_employeeId}.pdf";
-
-            var chartImage = LoanHistoryPdfService.ConvertChartToImage(LoanPieChart);
 
             LoanHistoryPdfService.ExportLoanHistory(
                 _employeeId,
                 name,
                 history,
-                pdfPath,
-                chartImage // chart included safely
+                pdfPath
             );
 
             // 🔥 2. Load employee email

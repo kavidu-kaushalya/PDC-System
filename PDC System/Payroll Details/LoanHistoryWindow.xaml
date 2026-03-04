@@ -6,72 +6,127 @@
         xmlns:local="clr-namespace:PDC_System.Payroll_Details"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         mc:Ignorable="d"
+        WindowStyle="None"
+        AllowsTransparency="False"
+                         xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
          Foreground="{DynamicResource Forground}"
-        Title="Loan History" MinHeight="800" Width="900"
+        Title="Loan History" MinHeight="900" Width="900"
         WindowStartupLocation="CenterScreen"
         Background="{DynamicResource Background}">
 
-    <Grid Margin="15">
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
 
-        <!-- ===== SUMMARY ===== -->
-        <Border Grid.Row="0" 
+    <shell:WindowChrome.WindowChrome>
+        <shell:WindowChrome CaptionHeight="32"
+               CornerRadius="10"
+                         
+               ResizeBorderThickness="6"
+               GlassFrameThickness="0"
+               NonClientFrameEdges="None"/>
+    </shell:WindowChrome.WindowChrome>
+
+
+    <Grid>
+
+        <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="2" CornerRadius="6" >
+
+            <Grid>
+
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+
+
+                <Border Margin="5"  x:Name="TitleBar" Grid.Row="0"
+Background="{DynamicResource Background}" 
+>
+                    <DockPanel>
+                        <!-- App Logo -->
+                        <Image Source="/Assets/MainLogo.png"  Height="20" Width="20" Margin="8,0"/>
+                        <!-- App Title -->
+                        <TextBlock x:Name="PDCtitel" Text="Job Card" Foreground="{DynamicResource Forground}"  VerticalAlignment="Center" Margin="8,0"/>
+                        <!-- Control Panel -->
+
+
+
+                        <!-- Title bar buttons -->
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button x:Name="Minimize" Content="—" Width="25" Height="25" Click="Minimize_Click" shell:WindowChrome.IsHitTestVisibleInChrome="True" Margin="5" Background="Transparent" Style="{DynamicResource NavigationButtonStyle}" BorderBrush="{x:Null}"/>
+                            <Button x:Name="Maximize" Content="🗖" Width="25" Height="25" Click="Maximize_Click" shell:WindowChrome.IsHitTestVisibleInChrome="True" Margin="5" Background="Transparent" Style="{DynamicResource NavigationButtonStyle}" BorderBrush="{x:Null}" />
+                            <Button x:Name="Colose" Content="🗙" Width="25" Height="25" Click="Close_Click" shell:WindowChrome.IsHitTestVisibleInChrome="True" Margin="5" Background="Transparent" Style="{DynamicResource NavigationButtonStyle}" BorderBrush="{x:Null}" />
+                        </StackPanel>
+
+
+
+                    </DockPanel>
+                </Border>
+
+
+
+                <Grid Grid.Row="1" Margin="15">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- ===== SUMMARY ===== -->
+                    <Border Grid.Row="0" 
                 Background="{DynamicResource Background}" 
                 Padding="12" 
                 CornerRadius="6" 
                 Margin="0 0 0 15"
-                BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1">
+                BorderBrush="{DynamicResource BorderBrush}" BorderThickness="2">
 
-            <StackPanel>
-                <TextBlock x:Name="SummaryText"
+                        <StackPanel>
+                            <TextBlock x:Name="SummaryText"
                       FontSize="18"
                        Foreground="{DynamicResource Forground}"
                       FontWeight="Bold"/>
 
-                <TextBlock x:Name="EmployeeNameText"
+                            <TextBlock x:Name="EmployeeNameText"
                        FontSize="18"
  Foreground="{DynamicResource Forground}"
 FontWeight="Bold"/>
 
-            </StackPanel>
-
-           
-            
-            
-        </Border>
+                        </StackPanel>
 
 
-        <!-- ===== HISTORY TABLE ===== -->
-        <Border Grid.Row="2" 
+
+
+                    </Border>
+
+
+                    <!-- ===== HISTORY TABLE ===== -->
+                    <Border Grid.Row="2" 
                 Background="{DynamicResource Background}" 
                 Padding="10" 
                 CornerRadius="6"
-                Margin="0 0 0 15"
-                BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1">
+                Margin="0,20,0,15"
+                BorderBrush="{DynamicResource BorderBrush}" BorderThickness="2">
 
-            <StackPanel>
-                <TextBlock Text="Loan Payment History"
+                        <StackPanel>
+                            <TextBlock Text="Loan Payment History"
                            FontSize="16"
                             Foreground="{DynamicResource Forground}"
                            FontWeight="SemiBold"
                           
                            Margin="5"/>
 
-                <Grid>
-                    <Button Content="➕ Add Manual Entry"
+                            <Grid>
+                                <Button Content="➕ Add Manual Entry"
 Width="170"
                 Style="{DynamicResource ActionButton}"
 Margin="0 10 0 10"
 Padding="5"
 HorizontalAlignment="Left"
 Click="AddManualEntry_Click"/>
-                    <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-                        <Button Content="📄 Export PDF"
+                                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                                    <Button Content="📄 Export PDF"
 Width="100"
                 Style="{DynamicResource ActionButton}"
 Margin="0 10 0 10"
@@ -80,27 +135,27 @@ HorizontalAlignment="Left"
 Click="ExportPdf_Click"/>
 
 
-                        <Button Content="✉ Send Email"
+                                    <Button Content="✉ Send Email"
 Width="100"
                 Style="{DynamicResource ActionButton}"
 Margin="10,10,0,10"
 Padding="5"
 HorizontalAlignment="Left"
 Click="SendEmail_Click"/>
-                    </StackPanel>
-                </Grid>
-
-               
-
-               
-               
-                
-                
+                                </StackPanel>
+                            </Grid>
 
 
-                <Separator Background="{DynamicResource BorderBrush}" Margin="0 0 0 10"/>
 
-                <DataGrid x:Name="HistoryGrid"
+
+
+
+
+
+
+                            <Separator Background="{DynamicResource BorderBrush}" Margin="0 0 0 10"/>
+
+                            <DataGrid x:Name="HistoryGrid"
                           BorderBrush="{x:Null}" HeadersVisibility="Column" IsReadOnly="False"
                            Background="Transparent"
                            RowBackground="White"
@@ -114,65 +169,74 @@ Click="SendEmail_Click"/>
                            ColumnHeaderStyle="{StaticResource DataGridHeaderStyle}"
                            RowStyle="{StaticResource DataGridRowStyle}">
 
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Paysheet ID" Binding="{Binding PaysheetId}" ElementStyle="{DynamicResource DataGridColumnsStyle}" Width="120"/>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Paysheet ID" Binding="{Binding PaysheetId}" ElementStyle="{DynamicResource DataGridColumnsStyle}" Width="120"/>
 
-                        <DataGridTextColumn Header="Month" Binding="{Binding Month}" Width="120"/>
+                                    <DataGridTextColumn Header="Month" Binding="{Binding Month}" Width="120"/>
 
-                        <DataGridTextColumn Header="Installment" Binding="{Binding MonthlyInstallment, StringFormat=N2}" ElementStyle="{DynamicResource DataGridColumnsStyle}" Width="120"/>
+                                    <DataGridTextColumn Header="Installment" Binding="{Binding MonthlyInstallment, StringFormat=N2}" ElementStyle="{DynamicResource DataGridColumnsStyle}" Width="120"/>
 
-                        <DataGridTextColumn Header="Paid" Binding="{Binding PaidAmount, StringFormat=N2}" ElementStyle="{DynamicResource DataGridColumnsStyle}" Width="120"/>
+                                    <DataGridTextColumn Header="Paid" Binding="{Binding PaidAmount, StringFormat=N2}" ElementStyle="{DynamicResource DataGridColumnsStyle}" Width="120"/>
 
-                        <DataGridTextColumn Header="Remaining" Binding="{Binding RemainingAmount, StringFormat=N2}" ElementStyle="{DynamicResource DataGridColumnsStyle}" Width="120"/>
+                                    <DataGridTextColumn Header="Remaining" Binding="{Binding RemainingAmount, StringFormat=N2}" ElementStyle="{DynamicResource DataGridColumnsStyle}" Width="120"/>
 
-                        <DataGridTextColumn Header="Date" Width="160" ElementStyle="{DynamicResource DataGridColumnsStyle}">
-                            <DataGridTextColumn.Binding>
-                                <Binding Path="Date" StringFormat="yyyy-MM-dd HH:mm"/>
-                            </DataGridTextColumn.Binding>
-                        </DataGridTextColumn>
+                                    <DataGridTextColumn Header="Date" Width="160" ElementStyle="{DynamicResource DataGridColumnsStyle}">
+                                        <DataGridTextColumn.Binding>
+                                            <Binding Path="Date" StringFormat="yyyy-MM-dd HH:mm"/>
+                                        </DataGridTextColumn.Binding>
+                                    </DataGridTextColumn>
 
-                        <DataGridTemplateColumn Header="Delete" Width="80">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Button Content="🚫 Delete"
+                                    <DataGridTemplateColumn Header="Delete" Width="80">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Content="🚫 Delete"
                     Style="{DynamicResource DeleteActionButton}"
                     Padding="3"
                     Click="DeleteManual_Click"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
 
 
 
-                    </DataGrid.Columns>
+                                </DataGrid.Columns>
 
-                </DataGrid>
-            </StackPanel>
+                            </DataGrid>
+                        </StackPanel>
 
-        </Border>
+                    </Border>
 
 
-        <!-- ===== PIE CHART ===== -->
-        <Border Grid.Row="1" 
+                    <!-- ===== PIE CHART ===== -->
+                    <Border Grid.Row="1" 
                 Background="{DynamicResource Background}" 
                 Padding="15" 
                 CornerRadius="6"
-                 BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1">
+                 BorderBrush="{DynamicResource BorderBrush}" BorderThickness="2">
 
-            <StackPanel Orientation="Vertical">
-                <TextBlock Text="Loan Summary Chart"
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="Loan Summary Chart"
                            FontSize="16"
                            FontWeight="SemiBold"
                             Foreground="{DynamicResource Forground}"
                            Margin="0 0 0 10"/>
 
-                <lvc:PieChart x:Name="LoanPieChart"
-                              LegendLocation="Right"
-                              InnerRadius="60"
-                              HoverPushOut="12"
-                              Height="230"/>
+                            <lvc:PieChart x:Name="LoanPieChart"
+              LegendLocation="Right"
+              InnerRadius="60"
+              HoverPushOut="12"
+              Height="230">
 
-                <TextBlock x:Name="EndDateTextBox"
+                                <lvc:PieChart.DataTooltip>
+                                    <lvc:DefaultTooltip Background="{DynamicResource Background}"
+                            Foreground="{DynamicResource Forground}"
+                            BorderBrush="{DynamicResource BorderBrush}"
+                            BorderThickness="2"/>
+                                </lvc:PieChart.DataTooltip>
+
+                            </lvc:PieChart>
+
+                            <TextBlock x:Name="EndDateTextBox"
          FontSize="16"
          Margin="0 10 0 10"
          
@@ -182,16 +246,28 @@ Click="SendEmail_Click"/>
          Padding="5"/>
 
 
-                <StackPanel Margin="10">
-                    <TextBlock x:Name="LoanStartText" FontSize="14" Margin="0 0 0 5"/>
-                    <TextBlock x:Name="LoanEndText" FontSize="14" Margin="0 0 0 5"/>
-                    <TextBlock x:Name="TotalMonthsText" FontSize="14" Margin="0 0 0 5"/>
-                </StackPanel>
+                            <StackPanel Margin="10">
+                                <TextBlock x:Name="LoanStartText" FontSize="14" Margin="0 0 0 5"/>
+                                <TextBlock x:Name="LoanEndText" FontSize="14" Margin="0 0 0 5"/>
+                                <TextBlock x:Name="TotalMonthsText" FontSize="14" Margin="0 0 0 5"/>
+                            </StackPanel>
 
 
-            </StackPanel>
+                        </StackPanel>
 
+                    </Border>
+
+                </Grid>
+
+
+            </Grid>
         </Border>
 
+
     </Grid>
+    
+    
+    
+    
+
 </Window>

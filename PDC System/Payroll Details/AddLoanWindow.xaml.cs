@@ -78,7 +78,7 @@ namespace PDC_System
                         Name = emp.Name,
                         LoanAmount = loanAmt,
                         MonthlyPay = monthly,
-                        Remeining = loanAmt,
+                        
                         LoanDate = selectedDate,
                         Status = "Active"
                     };

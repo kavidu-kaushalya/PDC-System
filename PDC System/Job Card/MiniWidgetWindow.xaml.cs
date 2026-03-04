@@ -1,5 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Input;
+using System.Runtime.InteropServices;
+using System.Windows.Interop;
 
 namespace PDC_System
 {
@@ -8,9 +10,27 @@ namespace PDC_System
         private Point _dragStartPoint;
         private bool _isDragging = false;
 
+        [DllImport("user32.dll")]
+        private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+
+        [DllImport("user32.dll")]
+        private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
+
+        private const int GWL_STYLE = -16;
+        private const int WS_MAXIMIZEBOX = 0x10000;
+
         public MiniWidgetWindow()
         {
             InitializeComponent();
+            this.SourceInitialized += MiniWidgetWindow_SourceInitialized;
+        }
+
+        private void MiniWidgetWindow_SourceInitialized(object sender, EventArgs e)
+        {
+            // Disable the maximize box to prevent Snap Layout feature
+            var hwnd = new WindowInteropHelper(this).Handle;
+            var currentStyle = GetWindowLong(hwnd, GWL_STYLE);
+            SetWindowLong(hwnd, GWL_STYLE, currentStyle & ~WS_MAXIMIZEBOX);
         }
 
         private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

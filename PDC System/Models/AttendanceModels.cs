@@ -18,13 +18,31 @@ namespace PDC_System.Models
         public string LoanId { get; set; }
         public string EmployeeId { get; set; }
         public string Name { get; set; }
-        public decimal Remeining { get; set; }
+       
         public decimal LoanAmount { get; set; }
         public decimal MonthlyPay { get; set; }
         public string Status { get; set; } = "Active";
         public DateTime Date { get; set; }
 
         public DateTime LoanDate { get; set; }
+        
+        // ✅ ADD: Property to calculate remaining dynamically
+        public decimal Remeining
+        {
+            get
+            {
+                // Calculate remaining from loan history
+                var history = LoanHistoryService.Load()
+                    .Where(h => h.EmployeeId == EmployeeId)
+                    .ToList();
+
+                decimal totalPaid = history.Sum(h => h.PaidAmount);
+                decimal remaining = LoanAmount - totalPaid;
+                
+                return Math.Max(0, remaining); // Don't allow negative
+            }
+        }
+        
         public Loan()
         {
             LoanId = Guid.NewGuid().ToString("N").Substring(0, 8);

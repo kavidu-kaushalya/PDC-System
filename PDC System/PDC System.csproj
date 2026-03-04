@@ -343,6 +343,10 @@
 	  </Reference>
 	</ItemGroup>
 
+	<Target Name="KillRunningProcess" BeforeTargets="BeforeBuild">
+	  <Exec Command="taskkill /F /IM &quot;PDC System.exe&quot; 2&gt;nul" IgnoreExitCode="true" />
+	</Target>
+
 
 
 

@@ -4,9 +4,11 @@ using Newtonsoft.Json;
 using PDC_System.Attendance_And_Paysheets;
 using PDC_System.Models;
 using PDC_System.Services;
+using PDC_System.Settings;
 using PdfSharp.Charting;
 using PdfSharp.UniversalAccessibility;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Data;
 
 using System.Globalization;
@@ -655,6 +657,80 @@ namespace PDC_System
             MissingTodayTxt.Text = missingToday.ToString();
             TotalMissingTxt.Text = missing.Count.ToString();
         }
+
+
+
+
+
+
+
+
+        private void BtnRefreshIvms_Click(object sender, RoutedEventArgs e)
+        {
+
+            // 🔍 Try to find existing SettingsWindow
+            var settingsWindow = Application.Current.Windows
+                .OfType<SettingsWindow>()
+                .FirstOrDefault();
+
+            if (settingsWindow != null)
+            {
+                settingsWindow.BtnLoad_Click();
+
+
+            }
+            else
+            {
+                var backgroundSettings = new SettingsWindow();
+                backgroundSettings.Visibility = Visibility.Hidden;
+
+                if (backgroundSettings != null)
+                {
+                    backgroundSettings.BtnLoad_Click();
+                    backgroundSettings.Close();
+
+
+                }
+                else
+                {
+                    CustomMessageBox.Show("⚠️ Settings window could not be created.",
+                                    "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+            }
+
+            // 🧾 Attendance Manager section
+            var manager = new PDC_System.Services.AttendanceManager();
+
+            if (manager != null)
+            {
+                var records = manager.LoadAttendance();
+
+                if (records != null && records.Any())
+                {
+                    manager.SaveAllAttendanceRecords(records);
+                    NotificationHelper.ShowNotification("PDC System!", "Attendance Calculate Complete!");
+                }
+                else
+                {
+                    CustomMessageBox.Show("⚠️ No attendance records found to process.",
+                                    "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+            else
+            {
+                CustomMessageBox.Show("⚠️ Attendance Manager not initialized.",
+                                "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+
+            LoadAttendanceData();
+            LoadData();
+
+            // With this line:
+            (DataGridMain.ItemsSource as ICollectionView)?.Refresh();
+        }
+
+
 
     }
 }

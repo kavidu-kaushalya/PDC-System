@@ -345,7 +345,7 @@ namespace PDC_System.Paysheets
         }
 
 
-   
+
 
         private void FilterChanged(object sender, EventArgs e)
         {
@@ -401,33 +401,8 @@ namespace PDC_System.Paysheets
                 // SHOW checkbox
                 Loan_Checked.Visibility = Visibility.Visible;
 
-                // IF UNTICKED IN EDIT MODE → REVERSE OLD LOAN
-                if (existingPaysheet != null && Loan_Checked.IsChecked == false)
+                if (Loan_Checked.IsChecked == true)
                 {
-                    var oldHistory = LoanHistoryService.GetByPaysheetId(existingPaysheet.PaysheetId);
-
-                    if (oldHistory != null)
-                    {
-                        // Reverse
-                        activeLoan.Remeining += oldHistory.PaidAmount;
-
-                        if (activeLoan.Remeining > 0)
-                            activeLoan.Status = "Active";
-
-                        // Delete history
-                        LoanHistoryService.DeleteByPaysheetId(existingPaysheet.PaysheetId);
-
-                        // Save loan.json
-                        File.WriteAllText("Savers/loan.json",
-                            JsonConvert.SerializeObject(loan, Formatting.Indented));
-                    }
-
-                    LoanAmount.Visibility = Visibility.Collapsed;
-                    LoanAmount.Text = "";
-                }
-                else if (Loan_Checked.IsChecked == true)
-                {
-                    // When ticked → show loan
                     LoanAmount.Visibility = Visibility.Visible;
 
                     if (string.IsNullOrWhiteSpace(LoanAmount.Text))
@@ -435,7 +410,6 @@ namespace PDC_System.Paysheets
                 }
                 else
                 {
-                    // Default
                     LoanAmount.Visibility = Visibility.Collapsed;
                     LoanAmount.Text = "";
                 }
@@ -534,8 +508,8 @@ namespace PDC_System.Paysheets
             int actabsentdate = (absentDays - ACNopay);
             decimal calculatedAbsentAmount = (actabsentdate - NopayDays) * absentDayAmount;
 
-// Prevent negative absent day deductions
-absentDayAmount = Math.Max(0, calculatedAbsentAmount);
+            // Prevent negative absent day deductions
+            absentDayAmount = Math.Max(0, calculatedAbsentAmount);
             decimal totalDeducations = filteredDeducations.Sum(d => d.DeducationAmount);
             decimal totalofDeducations = absentDayAmount + totalDeducations + EPFAmount + Loanamount;
 
@@ -631,7 +605,7 @@ absentDayAmount = Math.Max(0, calculatedAbsentAmount);
             // Validate input number
             if (!int.TryParse(Nopays.Text, out int customNopay))
             {
-               
+
                 Nopays.Text = "";
                 return;
             }
@@ -639,7 +613,7 @@ absentDayAmount = Math.Max(0, calculatedAbsentAmount);
             // Check max limit
             if (customNopay > absentDays)
             {
-                
+
                 // Reset to maximum allowed
                 Nopays.Text = absentDays.ToString();
             }
@@ -696,7 +670,7 @@ absentDayAmount = Math.Max(0, calculatedAbsentAmount);
             LoanAmount.Text = string.Empty;
             TotalsTextBlock.Text = string.Empty;
 
-           
+
 
             // Hide loan box
             LoanAmount.Visibility = Visibility.Collapsed;
@@ -854,66 +828,30 @@ absentDayAmount = Math.Max(0, calculatedAbsentAmount);
 
             CustomMessageBox.Show("Paysheet saved successfully ✅");
 
-
-
-
-            // ... inside ApplyPaysheet()
-
-            // Only add loan history for NEW paysheet
-            // LOAN PROCESS ==============================
+            // ✅ Save Loan History (without updating loan remaining)
             if (Loan_Checked.IsChecked == true && loanAmount > 0)
             {
-                var activeLoan = loan?.FirstOrDefault(l =>
-                    l.EmployeeId == Employeeid?.ToString() && l.Status == "Active");
-
-                if (activeLoan != null)
+                // If edit mode → delete old loan history for this paysheet
+                if (existingPaysheet != null)
                 {
-                    decimal previousRemaining = activeLoan.Remeining;
-
-                    // EDIT MODE ===============================
-                    if (isEditMode)
-                    {
-                        // Get previous loan history entry
-                        var oldHistory = LoanHistoryService.GetByPaysheetId(existingPaysheet.PaysheetId);
-
-                        if (oldHistory != null)
-                        {
-                            // REVERSE OLD LOAN AMOUNT
-                            activeLoan.Remeining += oldHistory.PaidAmount;
-
-                            // Remove old history row
-                            LoanHistoryService.DeleteByPaysheetId(existingPaysheet.PaysheetId);
-                        }
-                    }
-
-                    // NEW REMAINING CALCULATION
-                    activeLoan.Remeining -= loanAmount;
-
-                    if (activeLoan.Remeining <= 0)
-                    {
-                        activeLoan.Remeining = 0;
-                        activeLoan.Status = "Finished";
-                    }
-
-                    // SAVE HISTORY — works for BOTH new & edit
-                    LoanHistoryService.AddEntry(new LoanHistoryService.LoanHistoryEntry
-                    {
-                        PaysheetId = newPaysheet.PaysheetId,
-                        EmployeeId = Employeeid?.ToString(),
-                        EmployeeName = Employeename?.ToString(),
-                        OriginalLoanAmount = previousRemaining,
-                        MonthlyInstallment = loanAmount,
-                        PaidAmount = loanAmount,
-                        RemainingAmount = activeLoan.Remeining,
-                        Month = Month.Text + " " + StartDatePicker.SelectedDate?.Year,
-                        Date = DateTime.Now
-                    });
-
-                    // Save loan file
-                    File.WriteAllText("Savers/loan.json", JsonConvert.SerializeObject(loan, Formatting.Indented));
+                    LoanHistoryService.DeleteByPaysheetId(existingPaysheet.PaysheetId);
                 }
-            }
 
+                // Add new loan history entry
+                LoanHistoryService.AddEntry(new LoanHistoryService.LoanHistoryEntry
+                {
+                    PaysheetId = newPaysheet.PaysheetId,
+                    EmployeeId = Employeeid?.ToString(),
+                    EmployeeName = Employeename?.ToString(),
+                    MonthlyInstallment = loanAmount,
+                    PaidAmount = loanAmount,
+                    Month = Month.Text + " " + StartDatePicker.SelectedDate?.Year,
+                    Date = DateTime.Now
+                });
+
+                // ✅ NEW: Auto-update loan status after saving loan history
+                UpdateLoanStatusAfterPayment(Employeeid?.ToString());
+            }
 
             // ===================== EPF HISTORY SAVE =====================
             if (EPF_Checked.IsChecked == true)
@@ -956,7 +894,6 @@ absentDayAmount = Math.Max(0, calculatedAbsentAmount);
             }
 
 
-
             if (existingPaysheet != null &&
     existingPaysheet.IncludeETF == true &&
     EPF_Checked.IsChecked == false)
@@ -968,6 +905,57 @@ absentDayAmount = Math.Max(0, calculatedAbsentAmount);
 
 
             this.Close();
+        }
+
+        /// <summary>
+        /// ✅ NEW: Update loan status after paysheet saves loan payment
+        /// </summary>
+        private void UpdateLoanStatusAfterPayment(string employeeId)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(employeeId)) return;
+
+                string loanPath = "Savers/loan.json";
+                if (!File.Exists(loanPath)) return;
+
+                string json = File.ReadAllText(loanPath);
+                var loans = JsonConvert.DeserializeObject<List<Loan>>(json) ?? new List<Loan>();
+
+                var loan = loans.FirstOrDefault(l => l.EmployeeId == employeeId);
+                if (loan == null) return;
+
+                // Get total paid from loan history
+                var history = LoanHistoryService.Load()
+                    .Where(h => h.EmployeeId == employeeId)
+                    .ToList();
+
+                decimal totalPaid = history.Sum(h => h.PaidAmount);
+                decimal remaining = loan.LoanAmount - totalPaid;
+
+                // ✅ Update status based on remaining
+                if (remaining <= 0)
+                {
+                    if (loan.Status != "Finished")
+                    {
+                        loan.Status = "Finished";
+                        File.WriteAllText(loanPath, JsonConvert.SerializeObject(loans, Formatting.Indented));
+                    }
+                }
+                else
+                {
+                    if (loan.Status != "Active")
+                    {
+                        loan.Status = "Active";
+                        File.WriteAllText(loanPath, JsonConvert.SerializeObject(loans, Formatting.Indented));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Silent fail - don't interrupt paysheet save
+                System.Diagnostics.Debug.WriteLine($"Error updating loan status: {ex.Message}");
+            }
         }
 
 
@@ -1177,10 +1165,10 @@ absentDayAmount = Math.Max(0, calculatedAbsentAmount);
                                 column.Item().PaddingVertical(8);
 
                                 // Summary Section
-                                column.Item().BorderTop(1).BorderColor(Colors.Blue.Medium).PaddingTop(5).Row(row =>
+                                column.Item().BorderTop(1).BorderColor(Colors.Blue.Medium).PaddingTop(5).Row(r =>
                                 {
-                                    row.RelativeItem().Text("");
-                                    row.ConstantItem(250).Column(summary =>
+                                    r.RelativeItem().Text("");
+                                    r.ConstantItem(250).Column(summary =>
                                     {
                                         summary.Item().Row(r =>
                                         {
@@ -1383,60 +1371,33 @@ absentDayAmount = Math.Max(0, calculatedAbsentAmount);
             }
 
 
-            // LOAN PROCESS ==============================
+            // LOAN PROCESS - Removed loan remaining update logic
+            // Only tracking loan amount in paysheet, not updating loan records
+
+            // ✅ Save Loan History (without updating loan remaining)
             if (Loan_Checked.IsChecked == true && loanAmount > 0)
             {
-                var activeLoan = loan?.FirstOrDefault(l =>
-                    l.EmployeeId == Employeeid?.ToString() && l.Status == "Active");
-
-                if (activeLoan != null)
+                // If edit mode → delete old loan history for this paysheet
+                if (existingPaysheet != null)
                 {
-                    decimal previousRemaining = activeLoan.Remeining;
-
-                    // EDIT MODE ===============================
-                    if (isEditMode)
-                    {
-                        // Get previous loan history entry
-                        var oldHistory = LoanHistoryService.GetByPaysheetId(existingPaysheet.PaysheetId);
-
-                        if (oldHistory != null)
-                        {
-                            // REVERSE OLD LOAN AMOUNT
-                            activeLoan.Remeining += oldHistory.PaidAmount;
-
-                            // Remove old history row
-                            LoanHistoryService.DeleteByPaysheetId(existingPaysheet.PaysheetId);
-                        }
-                    }
-
-                    // NEW REMAINING CALCULATION
-                    activeLoan.Remeining -= loanAmount;
-
-                    if (activeLoan.Remeining <= 0)
-                    {
-                        activeLoan.Remeining = 0;
-                        activeLoan.Status = "Finished";
-                    }
-
-                    // SAVE HISTORY — works for BOTH new & edit
-                    LoanHistoryService.AddEntry(new LoanHistoryService.LoanHistoryEntry
-                    {
-                        PaysheetId = newPaysheet.PaysheetId,
-                        EmployeeId = Employeeid?.ToString(),
-                        EmployeeName = Employeename?.ToString(),
-                        OriginalLoanAmount = previousRemaining,
-                        MonthlyInstallment = loanAmount,
-                        PaidAmount = loanAmount,
-                        RemainingAmount = activeLoan.Remeining,
-                        Month = Month.Text + " " + StartDatePicker.SelectedDate?.Year,
-                        Date = DateTime.Now
-                    });
-
-                    // Save loan file
-                    File.WriteAllText("Savers/loan.json", JsonConvert.SerializeObject(loan, Formatting.Indented));
+                    LoanHistoryService.DeleteByPaysheetId(existingPaysheet.PaysheetId);
                 }
-            }
 
+                // Add new loan history entry
+                LoanHistoryService.AddEntry(new LoanHistoryService.LoanHistoryEntry
+                {
+                    PaysheetId = newPaysheet.PaysheetId,
+                    EmployeeId = Employeeid?.ToString(),
+                    EmployeeName = Employeename?.ToString(),
+                    MonthlyInstallment = loanAmount,
+                    PaidAmount = loanAmount,
+                    Month = Month.Text + " " + StartDatePicker.SelectedDate?.Year,
+                    Date = DateTime.Now
+                });
+
+                // ✅ NEW: Auto-update loan status after PDF save
+                UpdateLoanStatusAfterPayment(Employeeid?.ToString());
+            }
 
             if (Month.SelectedIndex == -1)
             {
@@ -1502,7 +1463,6 @@ absentDayAmount = Math.Max(0, calculatedAbsentAmount);
             File.WriteAllText("Savers/Paysheets.json", JsonConvert.SerializeObject(paysheets, Formatting.Indented));
 
             CustomMessageBox.Show("Paysheet saved successfully ✅");
-
 
 
 
@@ -1629,7 +1589,7 @@ absentDayAmount = Math.Max(0, calculatedAbsentAmount);
 
 
 
-      
+
     }
 
     public class Paysheet

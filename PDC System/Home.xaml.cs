@@ -189,7 +189,7 @@ namespace PDC_System
             _trayIcon = new TaskbarIcon();
             string iconPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "Main.ico");
             _trayIcon.Icon = new Icon(iconPath);
-            _trayIcon.ToolTipText = "My WPF App";
+            _trayIcon.ToolTipText = "PDC System";
 
             _trayIcon.TrayLeftMouseUp += (s, e) =>
             {
@@ -206,6 +206,9 @@ namespace PDC_System
             var menuSettings = new MenuItem { Header = "Backups" };
             menuSettings.Click += (s, e) => new BackupWindow().Show();
 
+            var Settings = new MenuItem { Header = "Settings" };
+            Settings.Click += (s, e) => new SettingsWindow().Show();
+
             var menuExit = new MenuItem { Header = "Exit" };
             menuExit.Click += (s, e) =>
             {
@@ -215,6 +218,7 @@ namespace PDC_System
 
             contextMenu.Items.Add(menuOpen);
             contextMenu.Items.Add(menuSettings);
+            contextMenu.Items.Add(Settings);
             contextMenu.Items.Add(new Separator());
             contextMenu.Items.Add(menuExit);
 

@@ -216,7 +216,7 @@
 
 
             <!-- Upcoming Birthdays -->
-            <StackPanel Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" Margin="5,20,5,20">
+            <Grid Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" Margin="5,20,5,20">
 
                 <Border Background="{DynamicResource Background}" 
             BorderThickness="3" 
@@ -270,7 +270,7 @@
                                         <DataTemplate>
 
 
-                                            <StackPanel HorizontalAlignment="Center">
+                                            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                                                 <TextBlock TextAlignment="Center"
          VerticalAlignment="Center"
          HorizontalAlignment="Center">
@@ -314,7 +314,7 @@
              
                 </Border>
 
-            </StackPanel>
+            </Grid>
 
             <Border Grid.Row="2" Grid.ColumnSpan="3" Grid.Column="0"
 Background="{DynamicResource Background}"

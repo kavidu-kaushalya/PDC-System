@@ -12,10 +12,12 @@ public static class LoanHistoryService
         public string EmployeeName { get; set; }
         public decimal MonthlyInstallment { get; set; }
         public decimal PaidAmount { get; set; }
-        public decimal RemainingAmount { get; set; }
-        public decimal OriginalLoanAmount { get; set; }
         public DateTime Date { get; set; }
         public string Month { get; set; }
+
+        // ✅ NEW: Remaining amount after this payment (not saved to JSON, calculated at runtime)
+        [JsonIgnore]
+        public decimal RemainingAmount { get; set; }
     }
 
     public static List<LoanHistoryEntry> Load()

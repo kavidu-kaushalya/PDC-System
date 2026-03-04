@@ -7,142 +7,240 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Windows.Media.Imaging;
 
 public static class LoanHistoryPdfService
 {
+    /// <summary>
+    /// Reads the original loan amount from loan.json for the given employee.
+    /// </summary>
+    private static decimal GetOriginalLoanAmountFromJson(string employeeId)
+    {
+        try
+        {
+            string path = "Savers/loan.json";
+            if (!File.Exists(path)) return 0;
+
+            string json = File.ReadAllText(path);
+            var loans = JsonConvert.DeserializeObject<List<Loan>>(json) ?? new List<Loan>();
+            var loan = loans.FirstOrDefault(l => l.EmployeeId == employeeId);
+            return loan?.LoanAmount ?? 0;
+        }
+        catch
+        {
+            return 0;
+        }
+    }
+
     public static void ExportLoanHistory(
         string employeeId,
         string employeeName,
         List<LoanHistoryService.LoanHistoryEntry> history,
-        string outputPath,
-        BitmapSource pieChartImage)
+        string outputPath)
     {
         var latest = history.OrderByDescending(h => h.Date).First();
 
         decimal totalPaid = history.Sum(h => h.PaidAmount);
-        decimal remaining = latest.RemainingAmount;
-        decimal totalLoan = latest.OriginalLoanAmount;
 
-        int remainingMonths = (int)Math.Ceiling(remaining / latest.MonthlyInstallment);
-        DateTime endDate = latest.Date.AddMonths(remainingMonths);
+        decimal originalLoan = GetOriginalLoanAmountFromJson(employeeId);
+        decimal remaining = Math.Max(0, originalLoan - totalPaid);
+
+        var orderedHistory = history.OrderBy(h => h.Date).ToList();
+        decimal cumulativePaid = 0;
+        foreach (var entry in orderedHistory)
+        {
+            cumulativePaid += entry.PaidAmount;
+            entry.RemainingAmount = Math.Max(0, originalLoan - cumulativePaid);
+        }
+
+        var displayHistory = orderedHistory.OrderByDescending(h => h.Date).ToList();
+
+        var headerColor = Colors.Blue.Darken2;
+        var tableHeaderBg = Colors.Blue.Darken2;
+        var tableHeaderText = Colors.White;
+        var altRowBg = Colors.Grey.Lighten4;
+        var borderColor = Colors.Grey.Lighten1;
 
         var document = Document.Create(container =>
         {
             container.Page(page =>
             {
-                page.Margin(25);
+                page.Margin(30);
                 page.Size(PageSizes.A4);
                 page.PageColor(Colors.White);
 
-                page.Header().Text($"Loan History Report - {employeeName}")
-                    .FontSize(20).Bold().FontColor(Colors.Blue.Darken2);
-
-                page.Content().PaddingVertical(10).Column(col =>
+                // ── HEADER ──
+                page.Header().Column(headerCol =>
                 {
-                    // Summary Section
-                    col.Item().Text($@"
-Employee ID: {employeeId}
-Employee Name: {employeeName}
-
-Original Loan Amount: {totalLoan:N2}
-Total Paid: {totalPaid:N2}
-Remaining Amount: {remaining:N2}
-
-Monthly Installment: {latest.MonthlyInstallment:N2}
-Ends In: {remainingMonths} months ({endDate:MMMM yyyy})
-").FontSize(12);
-
-                    // Pie Chart Image
-                    if (pieChartImage != null)
+                    headerCol.Item().BorderBottom(2).BorderColor(headerColor).PaddingBottom(8).Row(row =>
                     {
-                        // Convert BitmapSource to PNG byte array for QuestPDF
-                        var encoder = new PngBitmapEncoder();
-                        encoder.Frames.Add(BitmapFrame.Create(pieChartImage));
-                        using (var ms = new MemoryStream())
-                        {
-                            encoder.Save(ms);
-                            col.Item()
-                                .PaddingVertical(10)
-                                .AlignCenter()
-                                .Image(ms.ToArray());
-                        }
-                    }
+                        row.RelativeItem().Text("Loan History Report")
+                            .FontSize(22).Bold().FontColor(headerColor);
+                        row.ConstantItem(150).AlignRight().AlignMiddle()
+                            .Text(DateTime.Now.ToString("yyyy-MM-dd"))
+                            .FontSize(10).FontColor(Colors.Grey.Darken1);
+                    });
+                });
 
-                    // Table of History
-                    col.Item().PaddingTop(15).Table(table =>
+                // ── CONTENT ──
+                page.Content().PaddingVertical(15).Column(col =>
+                {
+                    // ── Employee Info Card ──
+                    col.Item().Background(Colors.Grey.Lighten4).Border(1).BorderColor(borderColor)
+                        .Padding(12).Column(infoCol =>
+                        {
+                            infoCol.Item().Text("Employee Information")
+                                .FontSize(13).Bold().FontColor(headerColor);
+                            infoCol.Item().PaddingTop(6).Row(row =>
+                            {
+                                row.RelativeItem().Column(left =>
+                                {
+                                    left.Item().Text(t =>
+                                    {
+                                        t.Span("Employee ID: ").Bold().FontSize(11);
+                                        t.Span(employeeId).FontSize(11);
+                                    });
+                                    left.Item().PaddingTop(3).Text(t =>
+                                    {
+                                        t.Span("Employee Name: ").Bold().FontSize(11);
+                                        t.Span(employeeName).FontSize(11);
+                                    });
+                                });
+                                row.RelativeItem().AlignRight().Column(right =>
+                                {
+                                    right.Item().Text(t =>
+                                    {
+                                        t.Span("Monthly Installment: ").Bold().FontSize(11);
+                                        t.Span($"{latest.MonthlyInstallment:N2}").FontSize(11);
+                                    });
+                                });
+                            });
+                        });
+
+                    col.Item().PaddingTop(12);
+
+                    // ── Loan Summary Card ──
+                    col.Item().Row(summaryRow =>
+                    {
+                        // Original Loan
+                        summaryRow.RelativeItem().Border(1).BorderColor(borderColor)
+                            .Background(Colors.White).Padding(10).Column(c =>
+                            {
+                                c.Item().AlignCenter().Text("Original Loan").FontSize(10).FontColor(Colors.Grey.Darken1);
+                                c.Item().AlignCenter().PaddingTop(4).Text($"{originalLoan:N2}")
+                                    .FontSize(16).Bold().FontColor(Colors.Blue.Darken1);
+                            });
+
+                        summaryRow.ConstantItem(10); // spacer
+
+                        // Total Paid
+                        summaryRow.RelativeItem().Border(1).BorderColor(borderColor)
+                            .Background(Colors.White).Padding(10).Column(c =>
+                            {
+                                c.Item().AlignCenter().Text("Total Paid").FontSize(10).FontColor(Colors.Grey.Darken1);
+                                c.Item().AlignCenter().PaddingTop(4).Text($"{totalPaid:N2}")
+                                    .FontSize(16).Bold().FontColor(Colors.Green.Darken2);
+                            });
+
+                        summaryRow.ConstantItem(10); // spacer
+
+                        // Remaining
+                        summaryRow.RelativeItem().Border(1).BorderColor(borderColor)
+                            .Background(Colors.White).Padding(10).Column(c =>
+                            {
+                                c.Item().AlignCenter().Text("Remaining").FontSize(10).FontColor(Colors.Grey.Darken1);
+                                c.Item().AlignCenter().PaddingTop(4).Text($"{remaining:N2}")
+                                    .FontSize(16).Bold().FontColor(remaining > 0 ? Colors.Red.Darken1 : Colors.Green.Darken2);
+                            });
+                    });
+
+                    col.Item().PaddingTop(10);
+
+                    // ── Payment History Title ──
+                    col.Item().PaddingBottom(6).Text("Payment History")
+                        .FontSize(14).Bold().FontColor(headerColor);
+
+                    // ── Table of History ──
+                    col.Item().Table(table =>
                     {
                         table.ColumnsDefinition(cols =>
                         {
-                            cols.ConstantColumn(90);   // Date
-                            cols.ConstantColumn(80);   // Month
-                            cols.RelativeColumn(1);    // Paid
-                            cols.RelativeColumn(1);    // Remaining
-                            cols.RelativeColumn(1);    // Type
+                            cols.ConstantColumn(40);   // #
+                            cols.RelativeColumn(2);    // Date
+                            cols.RelativeColumn(2);    // Month
+                            cols.RelativeColumn(2);    // Paid
+                            cols.RelativeColumn(2);    // Remaining
+                            cols.RelativeColumn(1.5f); // Type
                         });
 
                         // TABLE HEADER
                         table.Header(header =>
                         {
-                            header.Cell().Text("Date").Bold();
-                            header.Cell().Text("Month").Bold();
-                            header.Cell().Text("Paid").Bold();
-                            header.Cell().Text("Remaining").Bold();
-                            header.Cell().Text("Entry Type").Bold();
+                            foreach (var headerText in new[] { "#", "Date", "Month", "Paid", "Remaining", "Type" })
+                            {
+                                header.Cell()
+                                    .Background(tableHeaderBg)
+                                    .Padding(6)
+                                    .AlignCenter()
+                                    .Text(headerText)
+                                    .Bold()
+                                    .FontSize(10)
+                                    .FontColor(tableHeaderText);
+                            }
                         });
 
-                        foreach (var h in history)
+                        int rowIndex = 0;
+                        foreach (var h in displayHistory)
                         {
-                            table.Cell().Text(h.Date.ToString("yyyy-MM-dd"));
-                            table.Cell().Text(h.Month);
-                            table.Cell().Text($"{h.PaidAmount:N2}");
-                            table.Cell().Text($"{h.RemainingAmount:N2}");
-
+                            var bgColor = rowIndex % 2 == 0 ? Colors.White : altRowBg;
                             string type = h.PaysheetId.StartsWith("PS-") ? "Auto" : "Manual";
-                            table.Cell().Text(type);
+
+                            // # column
+                            table.Cell().Background(bgColor).BorderBottom(1).BorderColor(borderColor)
+                                .Padding(5).AlignCenter()
+                                .Text($"{rowIndex + 1}").FontSize(10);
+
+                            // Date
+                            table.Cell().Background(bgColor).BorderBottom(1).BorderColor(borderColor)
+                                .Padding(5).AlignCenter()
+                                .Text(h.Date.ToString("yyyy-MM-dd")).FontSize(10);
+
+                            // Month
+                            table.Cell().Background(bgColor).BorderBottom(1).BorderColor(borderColor)
+                                .Padding(5).AlignCenter()
+                                .Text(h.Month).FontSize(10);
+
+                            // Paid
+                            table.Cell().Background(bgColor).BorderBottom(1).BorderColor(borderColor)
+                                .Padding(5).AlignRight()
+                                .Text($"{h.PaidAmount:N2}").FontSize(10).FontColor(Colors.Green.Darken2);
+
+                            // Remaining
+                            table.Cell().Background(bgColor).BorderBottom(1).BorderColor(borderColor)
+                                .Padding(5).AlignRight()
+                                .Text($"{h.RemainingAmount:N2}").FontSize(10)
+                                .FontColor(h.RemainingAmount > 0 ? Colors.Red.Darken1 : Colors.Green.Darken2);
+
+                            // Type
+                            table.Cell().Background(bgColor).BorderBottom(1).BorderColor(borderColor)
+                                .Padding(5).AlignCenter()
+                                .Text(type).FontSize(10);
+
+                            rowIndex++;
                         }
                     });
+                });
+
+                // ── FOOTER ──
+                page.Footer().AlignCenter().Text(t =>
+                {
+                    t.Span("Page ").FontSize(9).FontColor(Colors.Grey.Darken1);
+                    t.CurrentPageNumber().FontSize(9).FontColor(Colors.Grey.Darken1);
+                    t.Span(" of ").FontSize(9).FontColor(Colors.Grey.Darken1);
+                    t.TotalPages().FontSize(9).FontColor(Colors.Grey.Darken1);
                 });
             });
         });
 
         document.GeneratePdf(outputPath);
     }
-
-    public static BitmapSource ConvertChartToImage(System.Windows.Controls.UserControl chart)
-    {
-        // 🔥 FIX 1 — chart is null
-        if (chart == null)
-            return null;
-
-        // 🔥 FIX 2 — force layout update
-        chart.UpdateLayout();
-
-        // 🔥 FIX 3 — check size BEFORE rendering
-        if (chart.ActualWidth <= 0 || chart.ActualHeight <= 0)
-            return null;
-
-        var size = new System.Windows.Size(chart.ActualWidth, chart.ActualHeight);
-
-        chart.Measure(size);
-        chart.Arrange(new System.Windows.Rect(size));
-
-        int pxWidth = (int)size.Width;
-        int pxHeight = (int)size.Height;
-
-        // 🔥 FIX 4 — if size still invalid return null
-        if (pxWidth <= 0 || pxHeight <= 0)
-            return null;
-
-        var bmp = new RenderTargetBitmap(
-            pxWidth,
-            pxHeight,
-            96,
-            96,
-            System.Windows.Media.PixelFormats.Pbgra32);
-
-        bmp.Render(chart);
-        return bmp;
-    }
-
 }

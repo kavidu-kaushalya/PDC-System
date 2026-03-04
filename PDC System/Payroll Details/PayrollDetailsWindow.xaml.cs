@@ -211,8 +211,13 @@ namespace PDC_System.Payroll_Details
         {
             if (LoanGrid.SelectedItem is Loan ln)
             {
-                // Pass both EmployeeId and Name to match the required constructor
-                new LoanHistoryWindow(ln.EmployeeId, ln.Name).ShowDialog();
+                var historyWindow = new LoanHistoryWindow(ln.EmployeeId, ln.Name);
+                historyWindow.Closed += (s, args) =>
+                {
+                    // ✅ Refresh the loan grid after history window closes
+                    LoadLoans(); // This will recalculate Remeining property
+                };
+                historyWindow.ShowDialog();
             }
             else
             {
@@ -414,7 +419,7 @@ namespace PDC_System.Payroll_Details
             double totalRemaining = loans.Sum(x => (double)x.Remeining);
 
             TotalLoanAmountTxt.Text = $"LKR {totalLoan:N2}";
-            TotalRemainingLoanTxt.Text = $"LKR {totalRemaining:N2}";
+            TotalRemainingLoanTxt.Text = $"LKR {totalRemaining:N2}"; // ✅ ADD THIS LINE
         }
 
 

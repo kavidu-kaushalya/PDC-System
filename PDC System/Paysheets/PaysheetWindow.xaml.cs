@@ -198,16 +198,7 @@ namespace PDC_System.Paysheets
 
                 var loan = loans.FirstOrDefault(l => l.EmployeeId == paysheet.EmployeeId);
 
-                if (loan != null)
-                {
-                    loan.Remeining += history.PaidAmount;
-
-                    if (loan.Remeining > 0)
-                        loan.Status = "Active";
-
-                    File.WriteAllText("Savers/loan.json",
-                        JsonConvert.SerializeObject(loans, Formatting.Indented));
-                }
+              
 
                 LoanHistoryService.DeleteByPaysheetId(paysheet.PaysheetId);
             }

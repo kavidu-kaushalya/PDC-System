@@ -40,8 +40,7 @@ namespace PDC_System.Payroll_Details
 
             if (loan != null)
             {
-                _currentRemaining = loan.Remeining;
-                CurrentRemainingBox.Text = $"Remaining: {_currentRemaining:N2}";
+               
 
                 // 🔥 AUTO SET INSTALLMENT FROM LOAN.JSON
                 MonthlyInstallmentBox.Text = loan.MonthlyPay.ToString("N2");
@@ -74,9 +73,8 @@ namespace PDC_System.Payroll_Details
                 EmployeeId = _employeeId,
                 EmployeeName = _employeeName,
                 PaidAmount = paid,
-                MonthlyInstallment = monthlyPay,   // 🔥 AUTO INSTALLMENT
-                OriginalLoanAmount = _currentRemaining,
-                RemainingAmount = newRemaining,
+                MonthlyInstallment = monthlyPay,
+               
                 Month = (DatePicker.SelectedDate?.ToString("MMMM yyyy")) ?? "",
                 Date = DatePicker.SelectedDate ?? DateTime.Now
             });
@@ -104,20 +102,7 @@ namespace PDC_System.Payroll_Details
                 l.Status == "Active"
             );
 
-            if (loan != null)
-            {
-                // New remaining set karanawa
-                loan.Remeining = newRemaining;
-
-                if (newRemaining <= 0)
-                {
-                    loan.Remeining = 0;
-                    loan.Status = "Finished";
-                }
-
-                // write json back
-                File.WriteAllText(path, JsonConvert.SerializeObject(loans, Formatting.Indented));
-            }
+          
         }
 
 
