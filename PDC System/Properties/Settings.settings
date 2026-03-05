@@ -72,16 +72,16 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="PDCEmail" Type="System.String" Scope="User">
-      <Value Profile="(Default)">kavindukaushalya566@gmail.com</Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="PDCAppPassword" Type="System.String" Scope="User">
-      <Value Profile="(Default)">trvonxgjpentgbby</Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="SystemAppEmail" Type="System.String" Scope="User">
-      <Value Profile="(Default)">pdc.system.app@gmail.com</Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="SystemAppPassword" Type="System.String" Scope="User">
-      <Value Profile="(Default)">xfqdchnfsrrbyvyi</Value>
+      <Value Profile="(Default)" />
     </Setting>
   </Settings>
 </SettingsFile>

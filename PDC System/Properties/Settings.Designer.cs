@@ -301,7 +301,7 @@ namespace PDC_System.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("kavindukaushalya566@gmail.com")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string PDCEmail {
             get {
                 return ((string)(this["PDCEmail"]));
@@ -313,7 +313,7 @@ namespace PDC_System.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("trvonxgjpentgbby")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string PDCAppPassword {
             get {
                 return ((string)(this["PDCAppPassword"]));
@@ -325,7 +325,7 @@ namespace PDC_System.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("pdc.system.app@gmail.com")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string SystemAppEmail {
             get {
                 return ((string)(this["SystemAppEmail"]));
@@ -337,7 +337,7 @@ namespace PDC_System.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("xfqdchnfsrrbyvyi")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string SystemAppPassword {
             get {
                 return ((string)(this["SystemAppPassword"]));

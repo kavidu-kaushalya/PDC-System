@@ -534,7 +534,7 @@ Background="{DynamicResource TitleBarBackground}"
                         </Border>
 
                         <StackPanel Grid.Row="1" Grid.ColumnSpan="2">
-                            <TextBlock x:Name="TotalsTextBlock" Foreground="{DynamicResource Forground}" />
+                            <TextBlock TextAlignment="Center" x:Name="TotalsTextBlock" Foreground="{DynamicResource Forground}" Margin="0,10,0,10" />
 
                             <Border Background="{DynamicResource Background}"  BorderThickness="1" BorderBrush="{DynamicResource BorderBrush}" CornerRadius="10">
                                 <DataGrid  x:Name="AttendanceDataGrid" AutoGenerateColumns="False" Height="auto" VerticalScrollBarVisibility="Auto" MinHeight="200"  Margin="20"
