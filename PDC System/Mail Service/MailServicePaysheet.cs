@@ -8,8 +8,9 @@ namespace PDC_System
 {
     public class MailServicePaysheet
     {
-        private const string senderEmail = "pdc.system.app@gmail.com";
-        private const string senderAppPassword = "xfqdchnfsrrbyvyi";
+        string senderEmail = Properties.Settings.Default.SystemAppEmail;
+        string senderAppPassword = Properties.Settings.Default.SystemAppPassword;
+
 
         public async Task<bool> SendEmailAsync(string toEmail, List<string> ccEmails, string subject, string body, string attachmentPath = null)
         {

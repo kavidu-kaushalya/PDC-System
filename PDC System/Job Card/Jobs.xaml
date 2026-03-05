@@ -26,19 +26,33 @@
 
 
 
+        <!-- TITLE -->
+        <!-- TITLE -->
         <StackPanel Grid.Row="0">
 
-            <TextBlock Text="Job Card" 
-FontSize="20" 
-FontWeight="SemiBold" 
-Foreground="{DynamicResource Forground}"                        
-TextAlignment="Left" />
+            <TextBlock Text="Job Cards" 
+                   FontSize="20" 
+                   FontWeight="SemiBold" 
+                   Foreground="{DynamicResource Forground}"                        
+                   TextAlignment="Left" Margin="0,0,0,5" />
 
-            <TextBlock Text="Add job card and show job history." 
-FontSize="12" 
-FontWeight="Normal" 
-Foreground="#FF7D7D7D"
-TextAlignment="Left" Padding="0,0,0,18"/>
+            <TextBlock Text="• View and manage all job cards." 
+                   FontSize="12" 
+                   FontWeight="Normal" 
+                   Foreground="#FF7D7D7D"
+                   TextAlignment="Left" />
+
+            <TextBlock Text="• Add new job cards using the 'Add Job' button." 
+                   FontSize="12" 
+                   FontWeight="Normal" 
+                   Foreground="#FF7D7D7D"
+                   TextAlignment="Left" />
+
+            <TextBlock Text="• View or delete existing job cards from the action column." 
+                   FontSize="12" 
+                   FontWeight="Normal" 
+                   Foreground="#FF7D7D7D"
+                   TextAlignment="Left" Padding="0,0,0,18"/>
 
         </StackPanel>
 
@@ -109,11 +123,12 @@ Height="500"
 CellStyle="{StaticResource DataGridCellStyle}"
 Style="{StaticResource DataGridStyle}"
 ColumnHeaderStyle="{StaticResource DataGridHeaderStyle}"
-RowStyle="{StaticResource DataGridRowStyle}">
+RowStyle="{StaticResource DataGridRowStyle}"
+PreviewMouseLeftButtonDown="JobCardDataGrid_PreviewMouseLeftButtonDown">
 
                         <DataGrid.Columns>
                             <!-- Action/Edit button -->
-                            <DataGridTemplateColumn Header="Select" Width="80">
+                            <DataGridTemplateColumn Header="Seen" Width="80">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <CheckBox  IsChecked="{Binding IsSeen, UpdateSourceTrigger=PropertyChanged}"

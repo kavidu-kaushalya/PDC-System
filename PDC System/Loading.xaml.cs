@@ -25,7 +25,7 @@ namespace PDC_System
     {
         #region Fields
 
-        private GoogleServiceManager googleManager;
+       
         private bool _isLoggingIn = false; // 🔒 rapid login guard
 
         #endregion

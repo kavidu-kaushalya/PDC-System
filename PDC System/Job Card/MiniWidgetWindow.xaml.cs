@@ -2,6 +2,8 @@
 using System.Windows.Input;
 using System.Runtime.InteropServices;
 using System.Windows.Interop;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace PDC_System
 {
@@ -18,6 +20,9 @@ namespace PDC_System
 
         private const int GWL_STYLE = -16;
         private const int WS_MAXIMIZEBOX = 0x10000;
+
+        private readonly string saversFolder = Path.Combine(
+            Directory.GetCurrentDirectory(), "Savers");
 
         public MiniWidgetWindow()
         {
@@ -80,16 +85,34 @@ namespace PDC_System
                 var customers = LoadCustomers();
 
                 // Create and show the Add Job Card window
-                var addJobCardWindow = new MiniJobCardWindow(customers);
-                addJobCardWindow.Owner = this; // Set the mini widget as owner
-                bool? result = addJobCardWindow.ShowDialog();
+                var miniWindow = new MiniJobCardWindow(customers);
+                miniWindow.Owner = this; // Set the mini widget as owner
+                bool? result = miniWindow.ShowDialog();
+
+                if (result == true)
+                {
+                    // You need to save miniWindow.JobCard to JSON here!
+                    JobCard jobCard = miniWindow.JobCard;
+
+                    string jobCardFile = Path.Combine(saversFolder, "JobCards.json");
+
+                    List<JobCard> jobCards = new List<JobCard>();
+                    if (File.Exists(jobCardFile))
+                    {
+                        string json = File.ReadAllText(jobCardFile);
+                        jobCards = JsonConvert.DeserializeObject<List<JobCard>>(json) ?? new List<JobCard>();
+                    }
+
+                    jobCards.Add(jobCard);
+                    File.WriteAllText(jobCardFile, JsonConvert.SerializeObject(jobCards, Formatting.Indented));
+                }
 
                 // After closing, the widget remains visible and active
                 this.Activate();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error opening Job Card window: {ex.Message}",
+                CustomMessageBox.Show($"Error opening Job Card window: {ex.Message}",
                     "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }

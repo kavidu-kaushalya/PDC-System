@@ -28,7 +28,7 @@ namespace PDC_System
     {
         #region Fields
 
-        private GoogleServiceManager googleManager;
+       
         private PeopleServiceService peopleService;
         private TaskbarIcon _trayIcon;
         private User _user;
@@ -50,8 +50,7 @@ namespace PDC_System
 
             LoadCalculateSettings();
 
-            // Load Google account info
-            RefreshGoogleAccountInfo();
+         
         }
 
 
@@ -78,109 +77,7 @@ namespace PDC_System
 
         #endregion
 
-        #region Google Account
-
-        /// <summary>
-        /// Refresh all Google account related information
-        /// </summary>
-        public void RefreshGoogleAccountInfo()
-        {
-            GoogleAccountTokenCheck();
-            GoogleAcoountinfo();
-        }
-
-        /// <summary>
-        /// Check if a Google token exists in AppData
-        /// </summary>
-        public void GoogleAccountTokenCheck()
-        {
-            string credPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                                           "PDCBackupDemo", "token.json");
-            string tokenFile = Path.Combine(credPath, "Google.Apis.Auth.OAuth2.Responses.TokenResponse-user");
-
-            if (File.Exists(tokenFile))
-            {
-                GoogleAccountInfo.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                GoogleAccountInfo.Visibility = Visibility.Hidden;
-
-                // Clear previous user info when signed out
-                Properties.Settings.Default.UserName = "";
-                Properties.Settings.Default.UserEmail = "";
-                Properties.Settings.Default.UserPicturePath = "";
-                Properties.Settings.Default.Save();
-            }
-        }
-
-        /// <summary>
-        /// Load saved Google account info into UI
-        /// </summary>
-        public void GoogleAcoountinfo()
-        {
-            Dispatcher.Invoke(() =>
-            {
-                string name = Properties.Settings.Default.UserName;
-                string email = Properties.Settings.Default.UserEmail;
-                string savedPath = Properties.Settings.Default.UserPicturePath;
-
-                lblUserName.Text = string.IsNullOrEmpty(name) ? "Unknown User" : name;
-                lblEmail.Text = string.IsNullOrEmpty(email) ? "No Email" : email;
-
-                try
-                {
-                    if (!string.IsNullOrEmpty(savedPath) && File.Exists(savedPath))
-                    {
-                        LoadProfileImage(savedPath);
-                    }
-                    else
-                    {
-                        // Clear profile image if no valid path or signed out
-                        imgProfileEllipse.Fill = null;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    CustomMessageBox.Show("Failed to load profile image: " + ex.Message);
-                }
-            });
-        }
-
-        private void LoadProfileImage(string path)
-        {
-            try
-            {
-                // Clear any existing image first
-                imgProfileEllipse.Fill = null;
-                
-                if (string.IsNullOrEmpty(path) || !File.Exists(path))
-                {
-                    return;
-                }
-
-                // Load image into memory → file lock avoid karanna
-                var bitmap = new BitmapImage();
-                bitmap.BeginInit();
-                bitmap.CacheOption = BitmapCacheOption.OnLoad; // 🟢 important
-                bitmap.CreateOptions = BitmapCreateOptions.IgnoreImageCache; // Force reload from file
-                bitmap.UriSource = new Uri(path, UriKind.Absolute);
-                bitmap.EndInit();
-                bitmap.Freeze(); // 🟢 cross-thread safe + release file lock
-
-                imgProfileEllipse.Fill = new ImageBrush(bitmap)
-                {
-                    Stretch = Stretch.UniformToFill
-                };
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Failed to load profile image: " + ex.Message);
-                imgProfileEllipse.Fill = null;
-            }
-        }
-
-        #endregion
+    
 
         #region Tray Icon
 
@@ -373,7 +270,7 @@ namespace PDC_System
                 settingsWindow.GoogleAccountChanged += () =>
                 {
                     // Refresh Home UI when Google account changes
-                    RefreshGoogleAccountInfo();
+                    
                 };
                 settingsWindow.Show();
             }

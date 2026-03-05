@@ -11,37 +11,39 @@
 
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-
+            <RowDefinition Height="*"/>
+       
         </Grid.RowDefinitions>
-        
-        
+
 
         <StackPanel Grid.Row="0">
-           
-     
-    
 
-                <StackPanel Orientation="Vertical" Height="100" HorizontalAlignment="Left" VerticalAlignment="Center">
-                <TextBlock Text="Customer" 
-       FontSize="20" 
-       FontWeight="SemiBold" 
-       Foreground="{DynamicResource Forground}"                        
-       TextAlignment="Left" />
+            <TextBlock Text="Customers" 
+                       FontSize="20" 
+                       FontWeight="SemiBold" 
+                       Foreground="{DynamicResource Forground}"                        
+                       TextAlignment="Left" Margin="0,0,0,5" />
 
-                <TextBlock Text="Show all Customers  and Company" 
-       FontSize="12" 
-       FontWeight="Normal" 
-       Foreground="#FF7D7D7D"
-       TextAlignment="Left" Padding="0,0,0,18"/>
+            <TextBlock Text="• View and manage all registered customers and companies." 
+                       FontSize="12" 
+                       FontWeight="Normal" 
+                       Foreground="#FF7D7D7D"
+                       TextAlignment="Left" />
 
-            </StackPanel>
+            <TextBlock Text="• Add new customers using the '+ Add Customer' button." 
+                       FontSize="12" 
+                       FontWeight="Normal" 
+                       Foreground="#FF7D7D7D"
+                       TextAlignment="Left" />
 
+            <TextBlock Text="• Delete existing customers from the action column." 
+                       FontSize="12" 
+                       FontWeight="Normal" 
+                       Foreground="#FF7D7D7D"
+                       TextAlignment="Left" Padding="0,0,0,18"/>
 
-
-  
         </StackPanel>
-        
+
         <StackPanel Grid.Row="1">
         
 

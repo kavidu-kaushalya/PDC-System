@@ -5,18 +5,6 @@
     <Setting Name="AppTheme" Type="System.String" Scope="User">
       <Value Profile="(Default)">SystemDefalt</Value>
     </Setting>
-    <Setting Name="UserName" Type="System.String" Scope="User">
-      <Value Profile="(Default)">(empty)</Value>
-    </Setting>
-    <Setting Name="UserEmail" Type="System.String" Scope="User">
-      <Value Profile="(Default)">(empty)</Value>
-    </Setting>
-    <Setting Name="UserPictureUrl" Type="System.String" Scope="User">
-      <Value Profile="(Default)">(empty)</Value>
-    </Setting>
-    <Setting Name="UserPicturePath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">(empty)</Value>
-    </Setting>
     <Setting Name="StartHidden" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
@@ -62,9 +50,6 @@
     <Setting Name="SendAttendanceEmails" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="SenderPassword" Type="System.String" Scope="User">
-      <Value Profile="(Default)">trvonxgjpentgbby</Value>
-    </Setting>
     <Setting Name="Late_Allow_Minutes" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">15</Value>
     </Setting>
@@ -85,6 +70,18 @@
     </Setting>
     <Setting Name="SendEmployeeAttendanceEditEmails" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="PDCEmail" Type="System.String" Scope="User">
+      <Value Profile="(Default)">kavindukaushalya566@gmail.com</Value>
+    </Setting>
+    <Setting Name="PDCAppPassword" Type="System.String" Scope="User">
+      <Value Profile="(Default)">trvonxgjpentgbby</Value>
+    </Setting>
+    <Setting Name="SystemAppEmail" Type="System.String" Scope="User">
+      <Value Profile="(Default)">pdc.system.app@gmail.com</Value>
+    </Setting>
+    <Setting Name="SystemAppPassword" Type="System.String" Scope="User">
+      <Value Profile="(Default)">xfqdchnfsrrbyvyi</Value>
     </Setting>
   </Settings>
 </SettingsFile>

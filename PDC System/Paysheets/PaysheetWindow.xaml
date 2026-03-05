@@ -14,8 +14,11 @@
     </UserControl.Resources>
 
     <!-- CHANGE StackPanel to Grid -->
+    
+    
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <!-- CARDS -->
             <RowDefinition Height="Auto"/>
@@ -24,8 +27,42 @@
             <!-- DATAGRID -->
         </Grid.RowDefinitions>
 
+
+
+
+        <StackPanel Grid.Row="0">
+
+            <TextBlock Text="Paysheets" 
+FontSize="20" 
+FontWeight="SemiBold" 
+Foreground="{DynamicResource Forground}"                        
+TextAlignment="Left" Margin="0,0,0,5" />
+
+            <TextBlock Text="• View and manage all paysheets." 
+FontSize="12" 
+FontWeight="Normal" 
+Foreground="#FF7D7D7D"
+TextAlignment="Left" />
+
+            <TextBlock Text="• Create new paysheets using the 'Create Paysheet' button." 
+FontSize="12" 
+FontWeight="Normal" 
+Foreground="#FF7D7D7D"
+TextAlignment="Left" />
+
+            <TextBlock Text="• Edit, view or delete existing paysheets from the actions column." 
+FontSize="12" 
+FontWeight="Normal" 
+Foreground="#FF7D7D7D"
+TextAlignment="Left" Padding="0,0,0,18"/>
+
+        </StackPanel>
+        
+
+
+
         <!-- FILTER PANEL -->
-        <Grid Grid.Row="0" Margin="0,50,0,10">
+        <Grid Grid.Row="1" Margin="0,50,0,10">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>
@@ -99,7 +136,7 @@
 
 
         <!-- SALARY SUMMARY CARDS -->
-        <Grid Grid.Row="1" Margin="0,0,0,10">
+        <Grid Grid.Row="2" Margin="0,0,0,10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
@@ -184,7 +221,7 @@ BorderBrush="{DynamicResource BorderBrush}"
 
         <!-- DataGrid -->
         <DataGrid x:Name="PaysheetGrid"
-                  Grid.Row="2"
+                  Grid.Row="3"
                   AlternatingRowBackground="#f0f0f0"
                   SnapsToDevicePixels="True"
                   AutoGenerateColumns="False"

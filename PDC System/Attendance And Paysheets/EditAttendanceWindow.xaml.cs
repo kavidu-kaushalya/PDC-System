@@ -130,7 +130,7 @@ namespace PDC_System
 
                         var mailService = new MailService();
 
-                        string email = Properties.Settings.Default.UserEmail;
+                        string email = Properties.Settings.Default.SystemAppEmail;
                         string recipientEmail = email;
 
 

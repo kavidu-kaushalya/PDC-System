@@ -37,54 +37,6 @@ namespace PDC_System.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("(empty)")]
-        public string UserName {
-            get {
-                return ((string)(this["UserName"]));
-            }
-            set {
-                this["UserName"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("(empty)")]
-        public string UserEmail {
-            get {
-                return ((string)(this["UserEmail"]));
-            }
-            set {
-                this["UserEmail"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("(empty)")]
-        public string UserPictureUrl {
-            get {
-                return ((string)(this["UserPictureUrl"]));
-            }
-            set {
-                this["UserPictureUrl"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("(empty)")]
-        public string UserPicturePath {
-            get {
-                return ((string)(this["UserPicturePath"]));
-            }
-            set {
-                this["UserPicturePath"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool StartHidden {
             get {
@@ -265,18 +217,6 @@ namespace PDC_System.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("trvonxgjpentgbby")]
-        public string SenderPassword {
-            get {
-                return ((string)(this["SenderPassword"]));
-            }
-            set {
-                this["SenderPassword"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("15")]
         public int Late_Allow_Minutes {
             get {
@@ -356,6 +296,54 @@ namespace PDC_System.Properties {
             }
             set {
                 this["SendEmployeeAttendanceEditEmails"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("kavindukaushalya566@gmail.com")]
+        public string PDCEmail {
+            get {
+                return ((string)(this["PDCEmail"]));
+            }
+            set {
+                this["PDCEmail"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("trvonxgjpentgbby")]
+        public string PDCAppPassword {
+            get {
+                return ((string)(this["PDCAppPassword"]));
+            }
+            set {
+                this["PDCAppPassword"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("pdc.system.app@gmail.com")]
+        public string SystemAppEmail {
+            get {
+                return ((string)(this["SystemAppEmail"]));
+            }
+            set {
+                this["SystemAppEmail"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("xfqdchnfsrrbyvyi")]
+        public string SystemAppPassword {
+            get {
+                return ((string)(this["SystemAppPassword"]));
+            }
+            set {
+                this["SystemAppPassword"] = value;
             }
         }
     }

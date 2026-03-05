@@ -1,230 +1,285 @@
 ﻿<Window x:Class="PDC_System.AddQuotationWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        AllowsTransparency="True" WindowStyle="None"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+           xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
          xmlns:cal="clr-namespace:ModernCalendarLib;assembly=ModernCalendarLib"
         Title="Add Quotation" Background="{DynamicResource Background}" Height="850" Width="1450">
-    <Grid Margin="10">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="1*" />
-        </Grid.ColumnDefinitions>
-
-        <!-- Left: Items List -->
-        <StackPanel Grid.Column="0">
-
-            <StackPanel>
-                <ComboBox x:Name="CustomerComboBox" Style="{DynamicResource ComboBoxFlatStyle}" SelectionChanged="CustomerComboBox_SelectionChanged" Width="200"/>
-
-                <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="2" Margin="10" Height="35" Width="255" CornerRadius="5">
-                    <cal:CustomDatePicker x:Name="Issue_Date" SelectedDateChanged = "FilterChanged"  Width="250"/>
-                </Border>
-
-                <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="2" Margin="10" Height="35" Width="255" CornerRadius="5">
-                    <cal:CustomDatePicker x:Name="Valid_Date" Width="250" SelectedDateChanged = "FilterChanged"/>
-                </Border>
-
-                
-                <TextBox x:Name="NameTextBox" Style="{DynamicResource TextBoxStyle}" Margin="10" />
-                <TextBox x:Name="AddressTextBox" Style="{DynamicResource TextBoxStyle}"  Margin="10" />
-                <TextBox x:Name="ContactNoTextBox" Style="{DynamicResource TextBoxStyle}"  Margin="10" />
-                <TextBox x:Name="CompanyTextBox" Style="{DynamicResource TextBoxStyle}"  Margin="10" />
-                <TextBox x:Name="EmailTextBox" Style="{DynamicResource TextBoxStyle}"   Margin="10"/>
-                <TextBox x:Name="TypeTextBox" Style="{DynamicResource TextBoxStyle}"  Margin="10" />
-               
-               
-            </StackPanel>
-            
-            <ItemsControl x:Name="ItemsControlList">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal" Margin="0,5">
 
 
-                            <!-- Description -->
-                            <TextBlock Text="Description: " VerticalAlignment="Center" Foreground="{DynamicResource Forground}"/>
-                            
-                            <TextBox Width="200" Margin="5,0,0,0"  Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}">
-                                <TextBox.Style>
-                                    <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxStyle}">
-                                        <Setter Property="FontWeight" Value="Normal"/>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsTitle}" Value="True">
-                                                <Setter Property="FontWeight" Value="Bold"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBox.Style>
-                            </TextBox>
-
-                            <!-- Qty -->
-                            <TextBlock Text="Qty.: " VerticalAlignment="Center" Foreground="{DynamicResource Forground}" Margin="5,0,0,0">
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="Visibility" Value="Visible"/>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsTitle}" Value="True">
-                                                <Setter Property="Visibility" Value="Collapsed"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
+    <shell:WindowChrome.WindowChrome>
+        <shell:WindowChrome CaptionHeight="32"
+           CornerRadius="10"
+                     
+           ResizeBorderThickness="6"
+           GlassFrameThickness="0"
+           NonClientFrameEdges="None"/>
+    </shell:WindowChrome.WindowChrome>
 
 
-                            <TextBox Width="50" Text="{Binding Qty, UpdateSourceTrigger=PropertyChanged}">
-                                <TextBox.Style>
-                                    <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxStyle}">
-                                        <Setter Property="Visibility" Value="Visible"/>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsTitle}" Value="True">
-                                                <Setter Property="Visibility" Value="Collapsed"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBox.Style>
-                            </TextBox>
 
-                            <!-- UnitAmount -->
-                            <TextBlock Text="Unit Price: " VerticalAlignment="Center" Foreground="{DynamicResource Forground}" Margin="8,0,0,0">
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="Visibility" Value="Visible"/>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsTitle}" Value="True">
-                                                <Setter Property="Visibility" Value="Collapsed"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
-                            <TextBox Width="80" Margin="5,0,0,0" Text="{Binding UnitAmount, UpdateSourceTrigger=PropertyChanged}">
-                                <TextBox.Style>
-                                    <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxStyle}">
-                                        <Setter Property="Visibility" Value="Visible"/>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsTitle}" Value="True">
-                                                <Setter Property="Visibility" Value="Collapsed"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBox.Style>
-                            </TextBox>
+    <Grid>
 
-                            <!-- TotalAmount -->
-                            <TextBlock Text="Total: " VerticalAlignment="Center" Foreground="{DynamicResource Forground}" Margin="4,0,0,0">
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="Visibility" Value="Visible"/>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsTitle}" Value="True">
-                                                <Setter Property="Visibility" Value="Collapsed"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
-                            <TextBox Width="80" Margin="5,0,0,0" Text="{Binding TotalAmount, UpdateSourceTrigger=PropertyChanged}">
-                                <TextBox.Style>
-                                    <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxStyle}">
-                                        <Setter Property="Visibility" Value="Visible"/>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsTitle}" Value="True">
-                                                <Setter Property="Visibility" Value="Collapsed"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBox.Style>
-                            </TextBox>
+        <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="2" CornerRadius="6" >
 
-                            <!-- Delete button -->
-                            <Button Content="X" Style="{DynamicResource NavigationButtonStyle}" Margin="5,0,0,0" Click="DeleteItem_Click"/>
+            <Grid>
+
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+
+
+                <Border Margin="5"  x:Name="TitleBar" Grid.Row="0"
+Background="{DynamicResource Background}" 
+>
+                    <DockPanel>
+                        <!-- App Logo -->
+                        <Image Source="/Assets/MainLogo.png"  Height="20" Width="20" Margin="8,0"/>
+                        <!-- App Title -->
+                        <TextBlock x:Name="PDCtitel" Text="Job Card" Foreground="{DynamicResource Forground}"  VerticalAlignment="Center" Margin="8,0"/>
+                        <!-- Control Panel -->
+
+
+
+                        <!-- Title bar buttons -->
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button x:Name="Minimize" Content="—" Width="25" Height="25" Click="Minimize_Click" shell:WindowChrome.IsHitTestVisibleInChrome="True" Margin="5" Background="Transparent" Style="{DynamicResource NavigationButtonStyle}" BorderBrush="{x:Null}"/>
+                            <Button x:Name="Maximize" Content="🗖" Width="25" Height="25" Click="Maximize_Click" shell:WindowChrome.IsHitTestVisibleInChrome="True" Margin="5" Background="Transparent" Style="{DynamicResource NavigationButtonStyle}" BorderBrush="{x:Null}" />
+                            <Button x:Name="Colose" Content="🗙" Width="25" Height="25" Click="Close_Click" shell:WindowChrome.IsHitTestVisibleInChrome="True" Margin="5" Background="Transparent" Style="{DynamicResource NavigationButtonStyle}" BorderBrush="{x:Null}" />
                         </StackPanel>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
 
 
-            <StackPanel Orientation="Horizontal" Margin="0,10,0,0" >
 
-                <Button Content="☰ Add Title" Width="100" Click="AddTitle_Click" Style="{DynamicResource ActionButton}" Margin="5,0,5,0"/>
-                <Button Content="☳ Add Item" Width="100" Click="AddItem_Click" Style="{DynamicResource NavigationButtonStyle}" Margin="5,0,5,0"/>
-            </StackPanel>
+                    </DockPanel>
+                </Border>
 
 
-        </StackPanel>
 
-        <StackPanel Background="White" Grid.Column="1">
-
-            <StackPanel Margin="15">
-                <Grid Width="auto">
+                <Grid Grid.Row="1" Margin="10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="1*" />
                     </Grid.ColumnDefinitions>
 
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-
-
-
+                    <!-- Left: Items List -->
                     <StackPanel Grid.Column="0">
-                        <TextBlock Text="Quatation" FontSize="16" FontWeight="Bold" />
-                        <TextBlock x:Name="QuoNumberTextBox" />
-                        <TextBlock x:Name="IssueDateText" />
-                        <TextBlock x:Name="ValidDateText" />
+
+                        <StackPanel>
+                            <ComboBox x:Name="CustomerComboBox" Style="{DynamicResource ComboBoxFlatStyle}" SelectionChanged="CustomerComboBox_SelectionChanged" Width="200"/>
+
+                            <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="2" Margin="10" Height="35" Width="255" CornerRadius="5">
+                                <cal:CustomDatePicker x:Name="Issue_Date" SelectedDateChanged = "FilterChanged"  Width="250"/>
+                            </Border>
+
+                            <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="2" Margin="10" Height="35" Width="255" CornerRadius="5">
+                                <cal:CustomDatePicker x:Name="Valid_Date" Width="250" SelectedDateChanged = "FilterChanged"/>
+                            </Border>
 
 
-
-
-
-
-
-                    </StackPanel>
-
-                    <StackPanel Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top" Orientation="Horizontal">
-                        <Image HorizontalAlignment="Left" Grid.Column="0" Source="/Assets/MainLogo.png" Width="30"/>
-                        <StackPanel Margin="8,0,0,0" Grid.Column="1" Height="50" Grid.Row="1" Orientation="Vertical">
-                            <TextBlock  Text="PRIYANTHA" FontSize="18" TextAlignment="Left" FontWeight="Bold" Padding="0,2,0,0" />
-                            <TextBlock  Text="DIE CUTTING" FontSize="11" Height="13" TextAlignment="Left" FontWeight="Bold" Padding="0,0,0,0" />
+                            <TextBox x:Name="NameTextBox" Style="{DynamicResource TextBoxStyle}" Margin="10" />
+                            <TextBox x:Name="AddressTextBox" Style="{DynamicResource TextBoxStyle}"  Margin="10" />
+                            <TextBox x:Name="ContactNoTextBox" Style="{DynamicResource TextBoxStyle}"  Margin="10" />
+                            <TextBox x:Name="CompanyTextBox" Style="{DynamicResource TextBoxStyle}"  Margin="10" />
+                            <TextBox x:Name="EmailTextBox" Style="{DynamicResource TextBoxStyle}"   Margin="10"/>
+                            <TextBox x:Name="TypeTextBox" Style="{DynamicResource TextBoxStyle}"  Margin="10" />
 
 
                         </StackPanel>
+
+                        <ItemsControl x:Name="ItemsControlList">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" Margin="0,5">
+
+
+                                        <!-- Description -->
+                                        <TextBlock Text="Description: " VerticalAlignment="Center" Foreground="{DynamicResource Forground}"/>
+
+                                        <TextBox Width="200" Margin="5,0,0,0"  Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}">
+                                            <TextBox.Style>
+                                                <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxStyle}">
+                                                    <Setter Property="FontWeight" Value="Normal"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsTitle}" Value="True">
+                                                            <Setter Property="FontWeight" Value="Bold"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBox.Style>
+                                        </TextBox>
+
+                                        <!-- Qty -->
+                                        <TextBlock Text="Qty.: " VerticalAlignment="Center" Foreground="{DynamicResource Forground}" Margin="5,0,0,0">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsTitle}" Value="True">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+
+
+                                        <TextBox Width="50" Text="{Binding Qty, UpdateSourceTrigger=PropertyChanged}">
+                                            <TextBox.Style>
+                                                <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxStyle}">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsTitle}" Value="True">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBox.Style>
+                                        </TextBox>
+
+                                        <!-- UnitAmount -->
+                                        <TextBlock Text="Unit Price: " VerticalAlignment="Center" Foreground="{DynamicResource Forground}" Margin="8,0,0,0">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsTitle}" Value="True">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                        <TextBox Width="80" Margin="5,0,0,0" Text="{Binding UnitAmount, UpdateSourceTrigger=PropertyChanged}">
+                                            <TextBox.Style>
+                                                <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxStyle}">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsTitle}" Value="True">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBox.Style>
+                                        </TextBox>
+
+                                        <!-- TotalAmount -->
+                                        <TextBlock Text="Total: " VerticalAlignment="Center" Foreground="{DynamicResource Forground}" Margin="4,0,0,0">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsTitle}" Value="True">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                        <TextBox Width="80" Margin="5,0,0,0" Text="{Binding TotalAmount, UpdateSourceTrigger=PropertyChanged}">
+                                            <TextBox.Style>
+                                                <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxStyle}">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsTitle}" Value="True">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBox.Style>
+                                        </TextBox>
+
+                                        <!-- Delete button -->
+                                        <Button Content="X" Style="{DynamicResource NavigationButtonStyle}" Margin="5,0,0,0" Click="DeleteItem_Click"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+
+                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0" >
+
+                            <Button Content="☰ Add Title" Width="100" Click="AddTitle_Click" Style="{DynamicResource ActionButton}" Margin="5,0,5,0"/>
+                            <Button Content="☳ Add Item" Width="100" Click="AddItem_Click" Style="{DynamicResource NavigationButtonStyle}" Margin="5,0,5,0"/>
+                        </StackPanel>
+
+
                     </StackPanel>
 
+                    <StackPanel Background="White" Grid.Column="1">
 
+                        <StackPanel Margin="15">
+                            <Grid Width="auto">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
 
-                    <StackPanel HorizontalAlignment="Left" Grid.Row="1">
-                        <TextBlock Text="Customer Details" FontSize="13" FontWeight="Bold"/>
-
-                        <Line X1="0" Y1="0" X2="300" Y2="0" Stroke="Gray" StrokeThickness="1" Margin="0,5"/>
-
-                        <TextBlock x:Name="CustomerNameText" />
-                        <TextBlock x:Name="CustomerAddress"/>
-                        <TextBlock x:Name="CustomerContact" />
-                    </StackPanel>
-                    <StackPanel HorizontalAlignment="Right" Grid.Row="1" Grid.Column="1">
-                        <TextBlock Text="Our Details" FontSize="13" FontWeight="Bold"/>
-
-                        <Line X1="0" Y1="0" X2="300" Y2="0" Stroke="Gray" StrokeThickness="1" Margin="0,5"/>
-
-                        <TextBlock Text="Priyantha Die Cutting"/>
-                        <TextBlock Text="No. 25, Industrial Estate, Colombo 15"/>
-                        <TextBlock Text="011-2589432"/>
-                    </StackPanel>
-
-
-                </Grid>
-
-       
-
-      
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
 
 
 
-            <Border BorderBrush="Gray" BorderThickness="1" Margin="0,20,0,20">
-                <DataGrid x:Name="TempGrid" AutoGenerateColumns="False" MinHeight="300"
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="Quatation" FontSize="16" FontWeight="Bold" />
+                                    <TextBlock x:Name="QuoNumberTextBox" />
+                                    <TextBlock x:Name="IssueDateText" />
+                                    <TextBlock x:Name="ValidDateText" />
+
+
+
+
+
+
+
+                                </StackPanel>
+
+                                <StackPanel Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top" Orientation="Horizontal">
+                                    <Image HorizontalAlignment="Left" Grid.Column="0" Source="/Assets/MainLogo.png" Width="30"/>
+                                    <StackPanel Margin="8,0,0,0" Grid.Column="1" Height="50" Grid.Row="1" Orientation="Vertical">
+                                        <TextBlock  Text="PRIYANTHA" FontSize="18" TextAlignment="Left" FontWeight="Bold" Padding="0,2,0,0" />
+                                        <TextBlock  Text="DIE CUTTING" FontSize="11" Height="13" TextAlignment="Left" FontWeight="Bold" Padding="0,0,0,0" />
+
+
+                                    </StackPanel>
+                                </StackPanel>
+
+
+
+                                <StackPanel HorizontalAlignment="Left" Grid.Row="1">
+                                    <TextBlock Text="Customer Details" FontSize="13" FontWeight="Bold"/>
+
+                                    <Line X1="0" Y1="0" X2="300" Y2="0" Stroke="Gray" StrokeThickness="1" Margin="0,5"/>
+
+                                    <TextBlock x:Name="CustomerNameText" />
+                                    <TextBlock x:Name="CustomerAddress"/>
+                                    <TextBlock x:Name="CustomerContact" />
+                                </StackPanel>
+                                <StackPanel HorizontalAlignment="Right" Grid.Row="1" Grid.Column="1">
+                                    <TextBlock Text="Our Details" FontSize="13" FontWeight="Bold"/>
+
+                                    <Line X1="0" Y1="0" X2="300" Y2="0" Stroke="Gray" StrokeThickness="1" Margin="0,5"/>
+
+                                    <TextBlock Text="Priyantha Die Cutting"/>
+                                    <TextBlock Text="No. 25, Industrial Estate, Colombo 15"/>
+                                    <TextBlock Text="011-2589432"/>
+                                </StackPanel>
+
+
+                            </Grid>
+
+
+
+
+
+
+
+                            <Border BorderBrush="Gray" BorderThickness="1" Margin="0,20,0,20">
+                                <DataGrid x:Name="TempGrid" AutoGenerateColumns="False" MinHeight="300"
 AlternatingRowBackground="#f0f0f0"
 SnapsToDevicePixels="True"
 
@@ -235,34 +290,52 @@ Style="{StaticResource MyDataGridStyle}"
 ColumnHeaderStyle="{StaticResource MyColumnHeaderStyle}"
 RowStyle="{StaticResource MyDataGridRowStyle}">
 
-                  
-
-                    <DataGrid.Columns>
-
-                        <DataGridTextColumn Header="Description" Binding="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Width="3*" ElementStyle="{DynamicResource DataGridColumnsStyle}" />
-                        <DataGridTextColumn Header="Qty" Binding="{Binding Qty, UpdateSourceTrigger=PropertyChanged}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}" />
-                        <DataGridTextColumn Header="Unit Price" Binding="{Binding UnitAmount, UpdateSourceTrigger=PropertyChanged}" Width="*"  ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
-                        <DataGridTextColumn Header="Total" Binding="{Binding TotalAmount, UpdateSourceTrigger=PropertyChanged}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}" />
-                    </DataGrid.Columns>
-                </DataGrid>
-
-            </Border>
-
-           
 
 
-            <StackPanel>
-                <TextBlock x:Name="TotalAmount" FontSize="17"  TextAlignment="Right" FontWeight="Bold" />
-                <TextBlock x:Name="ValidDaysText" />
-                <TextBlock Text="NOTE: ** Cheque should be drawn in favor of “PRIYANTHA DIE CUTTING” "/>
-                <TextBlock Text="Prepared by Priyantha De Costa "/>
+                                    <DataGrid.Columns>
 
-            </StackPanel>
-        </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <Button Click="Preview_Click" Content="📄 Save PDF" Style="{DynamicResource ActionButton}" Width="150" Margin="5,0,5,0"/>
-                <Button Click="SendEmail_Click" Content="✉ Send Email" Style="{DynamicResource ActionButton}" Margin="5,0,5,0" Width="150"/>
-            </StackPanel>
-        </StackPanel>
+                                        <DataGridTextColumn Header="Description" Binding="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Width="3*" ElementStyle="{DynamicResource DataGridColumnsStyle}" />
+                                        <DataGridTextColumn Header="Qty" Binding="{Binding Qty, UpdateSourceTrigger=PropertyChanged}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}" />
+                                        <DataGridTextColumn Header="Unit Price" Binding="{Binding UnitAmount, UpdateSourceTrigger=PropertyChanged}" Width="*"  ElementStyle="{DynamicResource DataGridColumnsStyle}"/>
+                                        <DataGridTextColumn Header="Total" Binding="{Binding TotalAmount, UpdateSourceTrigger=PropertyChanged}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}" />
+                                    </DataGrid.Columns>
+                                </DataGrid>
+
+                            </Border>
+
+
+
+
+                            <StackPanel>
+                                <TextBlock x:Name="TotalAmount" FontSize="17"  TextAlignment="Right" FontWeight="Bold" />
+                                <TextBlock x:Name="ValidDaysText" />
+                                <TextBlock Text="NOTE: ** Cheque should be drawn in favor of “PRIYANTHA DIE CUTTING” "/>
+                                <TextBlock Text="Prepared by Priyantha De Costa "/>
+
+                            </StackPanel>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Button Click="Preview_Click" Content="📄 Save PDF" Style="{DynamicResource ActionButton}" Width="150" Margin="5,0,5,0"/>
+                            <Button Click="SendEmail_Click" Content="✉ Send Email" Style="{DynamicResource ActionButton}" Margin="5,0,5,0" Width="150"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+
+
+            </Grid>
+        </Border>
+
+
+
     </Grid>
+
+
+
+
+
+
+
+
+
+    
 </Window>

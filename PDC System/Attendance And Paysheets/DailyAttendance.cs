@@ -107,7 +107,7 @@ namespace PDC_System
             htmlBody.AppendLine("</html>");
 
             var mailService = new MailService();
-            string email = Properties.Settings.Default.UserEmail;
+            string email = Properties.Settings.Default.SystemAppEmail;
             string recipientEmail = email;
             List<string> ccList = new List<string>();
             string subject = $"Daily Attendance Report - {today:yyyy-MM-dd}";

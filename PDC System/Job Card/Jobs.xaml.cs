@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Newtonsoft.Json;
+
 using PDC_System.Job_Card;
 using static PDC_System.QuotationWindow;
 
@@ -132,16 +133,24 @@ namespace PDC_System
             var selectedJob = JobCardDataGrid.SelectedItem as JobCard;
             if (selectedJob != null)
             {
-                var confirmationDialog = new ConfirmationDialogJobs();
-                confirmationDialog.Owner = Application.Current.MainWindow;
-                confirmationDialog.ShowDialog();
+                var result = CustomMessageBox.Show(
+                    "Are you sure you want to delete this job card?",
+                    "Delete Job Card",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question,
+                    Application.Current.MainWindow);
 
-                if (confirmationDialog.IsConfirmed)
+                if (result == MessageBoxResult.Yes)
                 {
                     jobCards.Remove(selectedJob);
                     JobCardDataGrid.Items.Refresh();
                     File.WriteAllText(jobCardsFile, JsonConvert.SerializeObject(jobCards));
+                    NotificationHelper.ShowNotification("Success", "Job card deleted successfully.");
                 }
+            }
+            else
+            {
+                NotificationHelper.ShowNotification("Error", "Please select a job card to delete.");
             }
         }
 
@@ -237,6 +246,26 @@ namespace PDC_System
 
             JobCardDataGrid.ItemsSource = null;
             JobCardDataGrid.ItemsSource = finalList;
+        }
+
+        private void JobCardDataGrid_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            var originalSource = e.OriginalSource as DependencyObject;
+            while (originalSource != null && !(originalSource is CheckBox))
+            {
+                originalSource = System.Windows.Media.VisualTreeHelper.GetParent(originalSource);
+            }
+
+            if (originalSource is CheckBox checkBox)
+            {
+                checkBox.IsChecked = !checkBox.IsChecked;
+
+                var bindingExpression = checkBox.GetBindingExpression(CheckBox.IsCheckedProperty);
+                bindingExpression?.UpdateSource();
+
+                SaveJobCardsToJson();
+                e.Handled = true;
+            }
         }
     }
 }

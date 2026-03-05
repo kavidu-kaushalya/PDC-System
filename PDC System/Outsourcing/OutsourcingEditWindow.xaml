@@ -5,41 +5,120 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PDC_System.Outsourcing"
         mc:Ignorable="d"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        
+         xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+        
         Background="{StaticResource Background}"
         Foreground="{StaticResource Forground}"
         Title="OutsourcingEditWindow" Height="450" Width="800">
+
+
+
+    <shell:WindowChrome.WindowChrome>
+        <shell:WindowChrome CaptionHeight="32"
+            CornerRadius="10"
+                      
+            ResizeBorderThickness="6"
+            GlassFrameThickness="0"
+            NonClientFrameEdges="None"/>
+    </shell:WindowChrome.WindowChrome>
+
+
+
     <Grid>
-        <StackPanel Margin="10" Width="300">
-            <TextBlock Text="Type" FontWeight="Bold"/>
-            <TextBox x:Name="TypeTextBox"  Style="{DynamicResource TextBoxStyle}" Margin="0,0,0,10" TextChanged="TypeTextBox_TextChanged"/>
 
-            <!-- Plate Info -->
-            <StackPanel x:Name="PlatePanel" Margin="0,0,0,10">
-                <TextBlock Text="Plate Info" FontWeight="Bold"/>
-                <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="PlateNameTextBox"  Margin="0,0,0,5"/>
-                <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="PlateEmailTextBox" Margin="0,0,0,5"/>
-                <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="PlateContactTextBox"  Margin="0,0,0,5"/>
-            </StackPanel>
+        <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="2" CornerRadius="6" >
 
-            <!-- Digital Info -->
-            <StackPanel x:Name="DigitalPanel" Margin="0,0,0,10">
-                <TextBlock Text="Digital Info" FontWeight="Bold"/>
-                <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="DigitalNameTextBox"  Margin="0,0,0,5"/>
-                <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="DigitalEmailTextBox" Margin="0,0,0,5"/>
-                <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="DigitalContactTextBox"  Margin="0,0,0,5"/>
-            </StackPanel>
+            <Grid>
 
-            <!-- Any Info -->
-            <StackPanel x:Name="AnyPanel" Margin="0,0,0,10">
-                <TextBlock Text="Any Info" FontWeight="Bold"/>
-                <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="AnyNameTextBox"  Margin="0,0,0,5"/>
-                <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="AnyEmailTextBox" Margin="0,0,0,5"/>
-                <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="AnyContactTextBox"  Margin="0,0,0,5"/>
-            </StackPanel>
 
-            <Button Style="{DynamicResource ActionButton}" Content="Save" Click="SaveButton_Click" Width="80" HorizontalAlignment="Right"/>
-        </StackPanel>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+
+
+                <Border Margin="5"  x:Name="TitleBar" Grid.Row="0"
+Background="{DynamicResource Background}" 
+>
+                    <DockPanel>
+                        <!-- App Logo -->
+                        <Image Source="/Assets/MainLogo.png"  Height="20" Width="20" Margin="8,0"/>
+                        <!-- App Title -->
+                        <TextBlock x:Name="PDCtitel" Text="Job Card" Foreground="{DynamicResource Forground}"  VerticalAlignment="Center" Margin="8,0"/>
+                        <!-- Control Panel -->
+
+
+
+                        <!-- Title bar buttons -->
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button x:Name="Minimize" Content="—" Width="25" Height="25" Click="Minimize_Click" shell:WindowChrome.IsHitTestVisibleInChrome="True" Margin="5" Background="Transparent" Style="{DynamicResource NavigationButtonStyle}" BorderBrush="{x:Null}"/>
+                            <Button x:Name="Maximize" Content="🗖" Width="25" Height="25" Click="Maximize_Click" shell:WindowChrome.IsHitTestVisibleInChrome="True" Margin="5" Background="Transparent" Style="{DynamicResource NavigationButtonStyle}" BorderBrush="{x:Null}" />
+                            <Button x:Name="Colose" Content="🗙" Width="25" Height="25" Click="Close_Click" shell:WindowChrome.IsHitTestVisibleInChrome="True" Margin="5" Background="Transparent" Style="{DynamicResource NavigationButtonStyle}" BorderBrush="{x:Null}" />
+                        </StackPanel>
+
+
+
+                    </DockPanel>
+                </Border>
+
+
+                <ScrollViewer Grid.Row="1" >
+                    <Grid>
+                        <StackPanel Margin="10" Width="300">
+                            <TextBlock Text="Type" FontWeight="Bold"/>
+                            <TextBox x:Name="TypeTextBox"  Style="{DynamicResource TextBoxStyle}" Margin="0,0,0,10" TextChanged="TypeTextBox_TextChanged"/>
+
+                            <!-- Plate Info -->
+                            <StackPanel x:Name="PlatePanel" Margin="0,0,0,10">
+                                <TextBlock Text="Plate Info" FontWeight="Bold"/>
+                                <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="PlateNameTextBox"  Margin="0,0,0,5"/>
+                                <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="PlateEmailTextBox" Margin="0,0,0,5"/>
+                                <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="PlateContactTextBox"  Margin="0,0,0,5"/>
+                            </StackPanel>
+
+                            <!-- Digital Info -->
+                            <StackPanel x:Name="DigitalPanel" Margin="0,0,0,10">
+                                <TextBlock Text="Digital Info" FontWeight="Bold"/>
+                                <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="DigitalNameTextBox"  Margin="0,0,0,5"/>
+                                <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="DigitalEmailTextBox" Margin="0,0,0,5"/>
+                                <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="DigitalContactTextBox"  Margin="0,0,0,5"/>
+                            </StackPanel>
+
+                            <!-- Any Info -->
+                            <StackPanel x:Name="AnyPanel" Margin="0,0,0,10">
+                                <TextBlock Text="Any Info" FontWeight="Bold"/>
+                                <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="AnyNameTextBox"  Margin="0,0,0,5"/>
+                                <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="AnyEmailTextBox" Margin="0,0,0,5"/>
+                                <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="AnyContactTextBox"  Margin="0,0,0,5"/>
+                            </StackPanel>
+
+                            <Button Style="{DynamicResource ActionButton}" Content="Save" Click="SaveButton_Click" Width="80" HorizontalAlignment="Right"/>
+                        </StackPanel>
+
+
+                    </Grid>
+
+                </ScrollViewer>
+
+
+            </Grid>
+        </Border>
+        
+
 
 
     </Grid>
+    
+    
+    
+    
+
+
+   
+    
+   
 </Window>

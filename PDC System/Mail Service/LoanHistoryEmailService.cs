@@ -12,8 +12,11 @@ public static class LoanHistoryEmailService
     {
         try
         {
+            string senderEmail = PDC_System.Properties.Settings.Default.SystemAppEmail;
+            string senderPassword = PDC_System.Properties.Settings.Default.SystemAppPassword;
+
             var message = new MimeMessage();
-            message.From.Add(new MailboxAddress("PDC System", "pdc.system.app@gmail.com"));
+            message.From.Add(new MailboxAddress("PDC System", senderEmail));
             message.To.Add(new MailboxAddress(employeeName, toEmail));
 
             message.Subject = $"Loan History Report - {employeeName}";
@@ -33,8 +36,8 @@ public static class LoanHistoryEmailService
             {
                 client.Connect("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
 
-                // Login to email account
-                client.Authenticate("pdc.system.app@gmail.com", "xfqdchnfsrrbyvyi");
+                // Login using Settings values
+                client.Authenticate(senderEmail, senderPassword);
 
                 client.Send(message);
                 client.Disconnect(true);

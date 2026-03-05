@@ -15,8 +15,14 @@ namespace PDC_System.Job_Card
     /// </summary>
     public partial class JobCardView : Window
     {
+        #region Fields
+
         private JobCard _jobCardData;
         private readonly string saversFolder = Path.Combine(Directory.GetCurrentDirectory(), "Savers");
+
+        #endregion
+
+        #region Constructor
 
         public JobCardView(JobCard data)
         {
@@ -24,6 +30,10 @@ namespace PDC_System.Job_Card
             _jobCardData = data;
             LoadJobCardData();
         }
+
+        #endregion
+
+        #region Data Loading
 
         private void LoadJobCardData()
         {
@@ -63,7 +73,7 @@ namespace PDC_System.Job_Card
                     PaperSpecSection.Visibility = Visibility.Visible;
                     PrintingDetailsSection.Visibility = Visibility.Visible;
                     AdditionalInfoSection.Visibility = Visibility.Visible;
-                    PlateQuantityTextSimple.Visibility = Visibility.Collapsed;
+                    QuantityRowSimple.Visibility = Visibility.Collapsed;
                     // Bind all data
                     JobNoText.Text = $"Job #{_jobCardData.JobNo}";
                     CustomerNameText.Text = _jobCardData.Customer_Name;
@@ -97,6 +107,7 @@ namespace PDC_System.Job_Card
             }
         }
 
+        #endregion
 
         #region Window Control
 
@@ -153,6 +164,8 @@ namespace PDC_System.Job_Card
         }
 
         #endregion
+
+        #region Image Loading
 
         private void LoadScreenshotImage()
         {
@@ -233,6 +246,10 @@ namespace PDC_System.Job_Card
                 Console.WriteLine($"Type image load error: {ex.Message}");
             }
         }
+
+        #endregion
+
+        #region Quotation and Invoice
 
         private void CreateQuotationButton_Click(object sender, RoutedEventArgs e)
         {
@@ -340,6 +357,10 @@ namespace PDC_System.Job_Card
             }
         }
 
+        #endregion
+
+        #region Customer Data
+
         private Customerinfo GetCustomerFromJobCard()
         {
             try
@@ -382,6 +403,10 @@ namespace PDC_System.Job_Card
             }
         }
 
+        #endregion
+
+        #region Button Events
+
         private void PrintButton_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -405,6 +430,10 @@ namespace PDC_System.Job_Card
             this.Close();
         }
 
+        #endregion
+
+        #region Keyboard Shortcuts
+
         private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             // Close window with Escape key
@@ -413,5 +442,7 @@ namespace PDC_System.Job_Card
                 this.Close();
             }
         }
+
+        #endregion
     }
 }

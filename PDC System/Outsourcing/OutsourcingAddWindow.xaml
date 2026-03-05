@@ -5,49 +5,128 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PDC_System.Customer"
         mc:Ignorable="d"
+        
+         xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+        WindowStyle="None" 
+        AllowsTransparency="True"
+        Background="{DynamicResource Background}"
+        
         Title="OutsourcingWindow" Height="450" Width="800">
-    <StackPanel Margin="10">
+    
+    <shell:WindowChrome.WindowChrome>
+        <shell:WindowChrome CaptionHeight="32"
+            CornerRadius="10"
+                      
+            ResizeBorderThickness="6"
+            GlassFrameThickness="0"
+            NonClientFrameEdges="None"/>
+    </shell:WindowChrome.WindowChrome>
 
-        <!-- Radio Buttons -->
-        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-            <RadioButton Checked="OutsourcingType_Checked" x:Name="Plate_Checked" Content="Plate(Offset)" IsChecked="True" Margin="0,0,10,0"/>
-            <RadioButton Checked="OutsourcingType_Checked" x:Name="Digital_Checked" Content="Digital" Margin="0,0,10,0"/>
-            <RadioButton Checked="OutsourcingType_Checked" x:Name="Any_Checked" Content="Any"/>
-        </StackPanel>
 
-        <!-- Plate Panel -->
-        <StackPanel x:Name="PlateStackPanel" Visibility="Visible" Margin="0,0,0,10">
-            <Label Content="Plate Name:" FontSize="14"/>
-            <TextBox x:Name="PlateNameTextBox" Height="25" FontSize="16"/>
-            <Label Content="Email Address" FontSize="14"/>
-            <TextBox x:Name="PlateCompanyEmailTextBox" Height="25" FontSize="16"/>
-            <Label Content="Contact No:" FontSize="14"/>
-            <TextBox x:Name="PlateCompanyContactTextBox" Height="25" FontSize="16"/>
-            <Label Content="Plate Cost:" FontSize="14"/>
-            <TextBox x:Name="PlateCostTextBox" Height="25" FontSize="16"/>
-        </StackPanel>
 
-        <!-- Digital Panel -->
-        <StackPanel x:Name="DigitalStackPanel" Visibility="Collapsed" Margin="0,0,0,10">
-            <Label Content="Digital Company Name:" FontSize="14"/>
-            <TextBox x:Name="DigitalCompanyNameTextBox" Height="25" FontSize="16"/>
-            <Label Content="Email Address" FontSize="14"/>
-            <TextBox x:Name="DigitalCompanyEmailTextBox" Height="25" FontSize="16"/>
-            <Label Content="Contact No:" FontSize="14"/>
-            <TextBox x:Name="DigitalCompanyContactTextBox" Height="25" FontSize="16"/>
-        </StackPanel>
+    <Grid>
 
-        <!-- Any Panel -->
-        <StackPanel x:Name="AnyStackPanel" Visibility="Collapsed" Margin="0,0,0,10">
-            <Label Content="Any Company Name:" FontSize="14"/>
-            <TextBox x:Name="AnyCompanyNameTextBox" Height="25" FontSize="16"/>
-            <Label Content="Email Address" FontSize="14"/>
-            <TextBox x:Name="AnyCompanyEmailTextBox" Height="25" FontSize="16"/>
-            <Label Content="Contact No:" FontSize="14"/>
-            <TextBox x:Name="AnyCompanyContactTextBox" Height="25" FontSize="16"/>
-        </StackPanel>
 
-        <!-- Save Button -->
-        <Button Content="Save" Click="Save_Click" Height="34" Width="272" Background="Black" Foreground="White"/>
-    </StackPanel>
+        <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="2" CornerRadius="6" >
+
+            <Grid>
+
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+
+
+                <Border Margin="5"  x:Name="TitleBar" Grid.Row="0"
+Background="{DynamicResource Background}" 
+>
+                    <DockPanel>
+                        <!-- App Logo -->
+                        <Image Source="/Assets/MainLogo.png"  Height="20" Width="20" Margin="8,0"/>
+                        <!-- App Title -->
+                        <TextBlock x:Name="PDCtitel" Text="Job Card" Foreground="{DynamicResource Forground}"  VerticalAlignment="Center" Margin="8,0"/>
+                        <!-- Control Panel -->
+
+
+
+                        <!-- Title bar buttons -->
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button x:Name="Minimize" Content="—" Width="25" Height="25" Click="Minimize_Click" shell:WindowChrome.IsHitTestVisibleInChrome="True" Margin="5" Background="Transparent" Style="{DynamicResource NavigationButtonStyle}" BorderBrush="{x:Null}"/>
+                            <Button x:Name="Maximize" Content="🗖" Width="25" Height="25" Click="Maximize_Click" shell:WindowChrome.IsHitTestVisibleInChrome="True" Margin="5" Background="Transparent" Style="{DynamicResource NavigationButtonStyle}" BorderBrush="{x:Null}" />
+                            <Button x:Name="Colose" Content="🗙" Width="25" Height="25" Click="Close_Click" shell:WindowChrome.IsHitTestVisibleInChrome="True" Margin="5" Background="Transparent" Style="{DynamicResource NavigationButtonStyle}" BorderBrush="{x:Null}" />
+                        </StackPanel>
+
+
+
+                    </DockPanel>
+                </Border>
+
+
+
+                <StackPanel Grid.Row="1" Margin="10">
+
+                    <!-- Radio Buttons -->
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                        <RadioButton Style="{DynamicResource SelectableRadioButtonStyle}" Checked="OutsourcingType_Checked" x:Name="Plate_Checked" Content="Plate(Offset)"  IsChecked="True" Margin="0,0,10,0" Width="125"/>
+                        <RadioButton Style="{DynamicResource SelectableRadioButtonStyle}" Checked="OutsourcingType_Checked" x:Name="Digital_Checked" Content="Digital" Margin="0,0,10,0" Width="121"/>
+                        <RadioButton Style="{DynamicResource SelectableRadioButtonStyle}" Checked="OutsourcingType_Checked" x:Name="Any_Checked" Content="Any" Width="123"/>
+                    </StackPanel>
+
+                    <!-- Plate Panel -->
+                    <StackPanel x:Name="PlateStackPanel" Visibility="Visible" Margin="0,0,0,10">
+                        <Label Foreground="{DynamicResource Forground}" Content="Plate Name:" FontSize="14"/>
+                        <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="PlateNameTextBox"  FontSize="16"/>
+                        <Label Foreground="{DynamicResource Forground}" Content="Email Address" FontSize="14"/>
+                        <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="PlateCompanyEmailTextBox" FontSize="16"/>
+                        <Label Foreground="{DynamicResource Forground}" Content="Contact No:" FontSize="14"/>
+                        <TextBox Style="{DynamicResource TextBoxStyle}"  x:Name="PlateCompanyContactTextBox" FontSize="16"/>
+                        <Label Foreground="{DynamicResource Forground}" Content="Plate Cost:" FontSize="14"/>
+                        <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="PlateCostTextBox"  FontSize="16"/>
+                    </StackPanel>
+
+                    <!-- Digital Panel -->
+                    <StackPanel x:Name="DigitalStackPanel" Visibility="Collapsed" Margin="0,0,0,10">
+                        <Label Foreground="{DynamicResource Forground}" Content="Digital Company Name:" FontSize="14"/>
+                        <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="DigitalCompanyNameTextBox"  FontSize="16"/>
+                        <Label Foreground="{DynamicResource Forground}" Content="Email Address" FontSize="14"/>
+                        <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="DigitalCompanyEmailTextBox"  FontSize="16"/>
+                        <Label Foreground="{DynamicResource Forground}" Content="Contact No:" FontSize="14"/>
+                        <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="DigitalCompanyContactTextBox" FontSize="16"/>
+                    </StackPanel>
+
+                    <!-- Any Panel -->
+                    <StackPanel x:Name="AnyStackPanel" Visibility="Collapsed" Margin="0,0,0,10">
+                        <Label Foreground="{DynamicResource Forground}" Content="Any Company Name:" FontSize="14"/>
+                        <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="AnyCompanyNameTextBox"  FontSize="16"/>
+                        <Label Foreground="{DynamicResource Forground}" Content="Email Address" FontSize="14"/>
+                        <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="AnyCompanyEmailTextBox" FontSize="16"/>
+                        <Label Foreground="{DynamicResource Forground}" Content="Contact No:" FontSize="14"/>
+                        <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="AnyCompanyContactTextBox" FontSize="16"/>
+                    </StackPanel>
+
+                    <!-- Save Button -->
+                    <Button Content="Save" Click="Save_Click"  Width="272" Style="{DynamicResource ActionButton}" />
+                </StackPanel>
+
+
+            </Grid>
+        </Border>
+
+
+    </Grid>
+    
+    
+            
+            
+            
+            
+            
+            
+    
+    
+    
+    
+
 </Window>

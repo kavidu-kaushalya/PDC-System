@@ -109,22 +109,17 @@ namespace PDC_System
 
         private void DeleteOrders_Click(object sender, RoutedEventArgs e)
         {
-            var selectedOrder = OrdersDataGrid.SelectedItem as Order; // Ensure correct type
+            var selectedOrder = OrdersDataGrid.SelectedItem as Order;
             if (selectedOrder != null)
             {
-                // Show a confirmation dialog
-                var confirmationDialog = new ConfirmationDialogOders(); // Assuming this dialog exists
-                confirmationDialog.Owner = Application.Current.MainWindow; // Set the main window as the owner
-                confirmationDialog.ShowDialog();
-
-                // If user confirms deletion
-                if (confirmationDialog.IsConfirmed)
+                var result = CustomMessageBox.Show("Are you sure you want to delete this order?", "Confirm", MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.Yes)
                 {
                     orders.Remove(selectedOrder);
                     OrdersDataGrid.Items.Refresh();
-                    SaveOrders(); // Save to correct file in Savers folder
+                    SaveOrders();
                 }
             }
         }
     }
-}
+    }

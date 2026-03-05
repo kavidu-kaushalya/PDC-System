@@ -9,8 +9,8 @@ namespace PDC_System
 {
     public class MailServiceFinance
     {
-        private readonly string senderEmail = Properties.Settings.Default.UserEmail;
-        private readonly string senderAppPassword = Properties.Settings.Default.SenderPassword;
+        private readonly string senderEmail = Properties.Settings.Default.PDCEmail;
+        private readonly string senderAppPassword = Properties.Settings.Default.PDCAppPassword;
 
         public async Task<bool> SendEmailWithAttachmentAsync(
      string toEmail,

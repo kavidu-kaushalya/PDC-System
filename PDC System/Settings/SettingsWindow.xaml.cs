@@ -26,7 +26,7 @@ namespace PDC_System.Settings
         #region Fields
 
 
-        private GoogleServiceManager googleManager;
+      
         private PeopleServiceService peopleService;
         // No JSON used anymore – kept only to avoid errors
         private string jsonFile = "";
@@ -46,16 +46,7 @@ namespace PDC_System.Settings
             // Startup checkbox
             chkStartup.IsChecked = StartupManager.IsInStartup();
 
-            // Check existing Google auth
-            GoogleAuthCheckSaveFile();
 
-            // Initialize Google manager
-            googleManager = new GoogleServiceManager();
-            // Fix: Subscribe to the event with the method that has parameters
-            googleManager.UserInfoLoaded += GoogleManager_UserInfoLoaded;
-
-            // Load saved user info immediately
-            GoogleManager_UserInfoLoaded();
             LoadSettings();
             isEnableStatus();
             LoadETF();
@@ -68,66 +59,6 @@ namespace PDC_System.Settings
 
         #endregion
 
-        #region Google Sign-In & Sign-Out
-
-        private async void GoogleSingin_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                if (googleManager == null)
-                {
-                    CustomMessageBox.Show("GoogleServiceManager not initialized!");
-                    return;
-                }
-
-                await googleManager.InitializeAsync();
-
-                // Update UI visibility GoogleSignButton & GoogleAccount
-
-
-                // Refresh UI after successful sign-in
-                RefreshUI();
-
-                // Notify other windows that Google account status changed
-                GoogleAccountChanged?.Invoke();
-
-
-            }
-            catch (Exception ex)
-            {
-                CustomMessageBox.Show("Error during sign-in: " + ex.Message);
-            }
-        }
-
-        private async void BtnSignOut_Click(object sender, RoutedEventArgs e)
-        {
-            if (googleManager != null)
-            {
-                // Clear UI first → release ImageBrush reference
-                imgProfileEllipse.Fill = null;
-
-                // Small delay for file lock release
-                await Task.Delay(100); // 100 ms
-
-                // Sign out from Google services
-                await googleManager.SignOutAsync();
-
-                // Clear UI elements
-                lblUserName.Text = "User Name";
-                lblEmail.Text = "No Email";
-
-                // Update UI visibility
-                RefreshUI();
-
-                // Show sign-in button again  
-
-
-                // Notify other windows that Google account status changed
-                GoogleAccountChanged?.Invoke();
-            }
-        }
-
-        #endregion
 
         #region UI Management
 
@@ -136,197 +67,8 @@ namespace PDC_System.Settings
             // Small delay to ensure Settings are saved
             await Task.Delay(100);
 
-            // Check Google token status
-            GoogleAuthCheckSaveFile();
-
-            // Load user info
-            GoogleManager_UserInfoLoaded();
+         
         }
-
-        #endregion
-
-        #region Load Google User Info
-
-        /// <summary>
-        /// Load saved user info from Settings (offline fallback)
-        /// </summary>
-        public void GoogleManager_UserInfoLoaded()
-        {
-            Dispatcher.Invoke(() =>
-            {
-                string name = Properties.Settings.Default.UserName;
-                string savedPath = Properties.Settings.Default.UserPicturePath;
-                string email = Properties.Settings.Default.UserEmail;
-
-                lblUserName.Text = string.IsNullOrEmpty(name) ? "Unknown User" : name;
-                lblEmail.Text = string.IsNullOrEmpty(email) ? "No Email" : email;
-
-                try
-                {
-                    if (!string.IsNullOrEmpty(savedPath) && File.Exists(savedPath))
-                    {
-                        LoadProfileImage(savedPath);
-                    }
-                    else
-                    {
-                        // Clear profile image if no valid path
-                        imgProfileEllipse.Fill = null;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    CustomMessageBox.Show("Failed to load profile image: " + ex.Message);
-                }
-            });
-        }
-
-        /// <summary>
-        /// Update user info after GoogleServiceManager loads data online
-        /// </summary>
-        private async void GoogleManager_UserInfoLoaded(string name, string pictureUrl, string email)
-        {
-            // Small delay to ensure file operations are complete
-            await Task.Delay(200);
-
-            Dispatcher.Invoke(() =>
-            {
-                lblUserName.Text = name;
-                lblEmail.Text = email;
-
-                // Clear existing image first
-                imgProfileEllipse.Fill = null;
-
-                // Force UI refresh
-                this.UpdateLayout();
-
-                // Small delay before loading new image
-                Task.Delay(100).ContinueWith(_ =>
-                {
-                    Dispatcher.Invoke(() =>
-                    {
-                        // Try to load from saved path first (already downloaded)
-                        string savedPath = Properties.Settings.Default.UserPicturePath;
-                        if (!string.IsNullOrEmpty(savedPath) && File.Exists(savedPath))
-                        {
-                            LoadProfileImage(savedPath);
-                        }
-                        else if (!string.IsNullOrEmpty(pictureUrl))
-                        {
-                            // Fallback to URL if saved path doesn't exist
-                            LoadProfileImageFromUrl(pictureUrl);
-                        }
-
-                        // Refresh UI visibility
-                        GoogleAuthCheckSaveFile();
-                    });
-                });
-            });
-        }
-
-        private void LoadProfileImage(string path)
-        {
-            try
-            {
-                // Clear any existing image first
-                imgProfileEllipse.Fill = null;
-
-                if (string.IsNullOrEmpty(path) || !File.Exists(path))
-                {
-                    return;
-                }
-
-                var bitmap = new BitmapImage();
-                bitmap.BeginInit();
-                bitmap.CacheOption = BitmapCacheOption.OnLoad; // avoid file lock
-                bitmap.CreateOptions = BitmapCreateOptions.IgnoreImageCache; // Force reload from file
-                bitmap.UriSource = new Uri(path, UriKind.Absolute);
-                bitmap.EndInit();
-                bitmap.Freeze(); // thread-safe
-
-                imgProfileEllipse.Fill = new ImageBrush(bitmap) { Stretch = Stretch.UniformToFill };
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Failed to load profile image from path: {ex.Message}");
-                imgProfileEllipse.Fill = null;
-            }
-        }
-
-        private void LoadProfileImageFromUrl(string url)
-        {
-            try
-            {
-                // Clear any existing image first
-                imgProfileEllipse.Fill = null;
-
-                if (string.IsNullOrEmpty(url))
-                {
-                    return;
-                }
-
-                var bitmap = new BitmapImage();
-                bitmap.BeginInit();
-                bitmap.CacheOption = BitmapCacheOption.OnLoad; // avoid file lock
-                bitmap.CreateOptions = BitmapCreateOptions.IgnoreImageCache; // Force download from URL
-                bitmap.UriSource = new Uri(url, UriKind.Absolute);
-                bitmap.EndInit();
-                bitmap.Freeze(); // thread-safe
-
-                imgProfileEllipse.Fill = new ImageBrush(bitmap) { Stretch = Stretch.UniformToFill };
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Failed to load profile image from URL: {ex.Message}");
-                imgProfileEllipse.Fill = null;
-            }
-        }
-
-        #endregion
-
-        #region Google Token Check
-
-        /// <summary>
-        /// Check if Google token exists in AppData
-        /// </summary>
-        /// 
-        private void GoogleAuthCheckSaveFile()
-        {
-
-
-            // Folder where FileDataStore saves
-            string credPath = System.IO.Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                "PDCBackupDemo",
-                "token.json"
-            );
-
-            // Token file inside that folder
-            string tokenFile = System.IO.Path.Combine(
-                credPath,
-                "Google.Apis.Auth.OAuth2.Responses.TokenResponse-user"
-            );
-
-            if (File.Exists(tokenFile))
-            {
-
-                GoogleSignButton.Visibility = Visibility.Collapsed;
-                GoogleAccount.Visibility = Visibility.Visible;
-
-
-            }
-
-            else
-            {
-                // Token not found → open SignInWindow
-                GoogleSignButton.Visibility = Visibility.Visible;
-                GoogleAccount.Visibility = Visibility.Collapsed;
-
-
-
-
-            }
-        }
-
 
         #endregion
 
@@ -839,12 +581,28 @@ namespace PDC_System.Settings
             SendEmployeeEditEmails.IsChecked = Properties.Settings.Default.SendEmployeeEditEmails;
             SendEmployeeAttendanceEditEmails.IsChecked = Properties.Settings.Default.SendEmployeeAttendanceEditEmails;
 
+            // Load System Email and Password from settings
+            SystemEmail.Text = Properties.Settings.Default.SystemAppEmail;
+            SystemEmailPassword.Password = Properties.Settings.Default.SystemAppPassword;
+
+            // Load PDC Email and Password from settings
+            PDCEmail.Text = Properties.Settings.Default.PDCEmail;
+            PDCEmailPassword.Password = Properties.Settings.Default.PDCAppPassword;
+
             SystemSettingsbtnSave.Visibility = Visibility.Collapsed;
 
             SendEmployeeEditEmails.Checked += SystemSettingsCheckBoxChanged;
             SendEmployeeEditEmails.Unchecked += SystemSettingsCheckBoxChanged;
             SendEmployeeAttendanceEditEmails.Checked += SystemSettingsCheckBoxChanged;
             SendEmployeeAttendanceEditEmails.Unchecked += SystemSettingsCheckBoxChanged;
+
+            // Detect changes in email and password fields
+            SystemEmail.TextChanged += SystemSettingsTextChanged;
+            SystemEmailPassword.PasswordChanged += SystemSettingsPasswordChanged;
+
+            // Detect changes in PDC email and password fields
+            PDCEmail.TextChanged += SystemSettingsTextChanged;
+            PDCEmailPassword.PasswordChanged += SystemSettingsPasswordChanged;
         }
 
         private void SystemSettingsCheckBoxChanged(object sender, RoutedEventArgs e)
@@ -866,6 +624,15 @@ namespace PDC_System.Settings
         {
             Properties.Settings.Default.SendEmployeeEditEmails = SendEmployeeEditEmails.IsChecked == true;
             Properties.Settings.Default.SendEmployeeAttendanceEditEmails = SendEmployeeAttendanceEditEmails.IsChecked == true;
+
+            // Save System Email and Password
+            Properties.Settings.Default.SystemAppEmail = SystemEmail.Text;
+            Properties.Settings.Default.SystemAppPassword = SystemEmailPassword.Password;
+
+            // Save PDC Email and Password
+            Properties.Settings.Default.PDCEmail = PDCEmail.Text;
+            Properties.Settings.Default.PDCAppPassword = PDCEmailPassword.Password;
+
             Properties.Settings.Default.Save();
 
             SystemSettingsbtnSave.Visibility = Visibility.Collapsed;
@@ -873,6 +640,17 @@ namespace PDC_System.Settings
             CustomMessageBox.Show("System settings saved successfully ✅", "Saved", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
+        private void SystemSettingsTextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (!isLoaded) return;
+            SystemSettingsbtnSave.Visibility = Visibility.Visible;
+        }
+
+        private void SystemSettingsPasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if (!isLoaded) return;
+            SystemSettingsbtnSave.Visibility = Visibility.Visible;
+        }
         #endregion
 
 

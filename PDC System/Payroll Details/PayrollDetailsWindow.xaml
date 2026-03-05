@@ -8,7 +8,55 @@
         mc:Ignorable="d"
         MinWidth="1004" MinHeight="660">
     <Grid>
-        <TabControl Style="{StaticResource TabControl}">
+
+
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+
+        </Grid.RowDefinitions>
+
+
+        <StackPanel Grid.Row="0">
+
+            <TextBlock Text="Payroll Details" 
+                  FontSize="20" 
+                  FontWeight="SemiBold" 
+                  Foreground="{DynamicResource Forground}"                        
+                  TextAlignment="Left" Margin="0,0,0,5" />
+
+            <TextBlock Text="• View and manage employee loans, deductions, and earnings." 
+                  FontSize="12" 
+                  FontWeight="Normal" 
+                  Foreground="#FF7D7D7D"
+                  TextAlignment="Left" />
+
+            <TextBlock Text="• Add new loans, deductions, or earnings using the respective buttons." 
+                  FontSize="12" 
+                  FontWeight="Normal" 
+                  Foreground="#FF7D7D7D"
+                  TextAlignment="Left" />
+
+            <TextBlock Text="• Track EPF contributions and manage employee payroll records." 
+                  FontSize="12" 
+                  FontWeight="Normal" 
+                  Foreground="#FF7D7D7D"
+                  TextAlignment="Left" />
+
+            <TextBlock Text="• View loan history and end active loans from the action column." 
+                  FontSize="12" 
+                  FontWeight="Normal" 
+                  Foreground="#FF7D7D7D"
+                  TextAlignment="Left" Padding="0,0,0,18"/>
+
+        </StackPanel>
+
+
+
+
+
+        <TabControl Grid.Row="1" Style="{StaticResource TabControl}">
 
             <TabItem Header="Loans" IsSelected="True" Style="{StaticResource TabItem}">
                 <StackPanel Margin="10">

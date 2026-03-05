@@ -3,9 +3,10 @@ using PDC_System;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Windows.Input;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media.Imaging;
 
 namespace PDC_System
@@ -255,9 +256,6 @@ namespace PDC_System
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
-
-
-
             List<JobNo> jobs = new List<JobNo>();
 
             if (File.Exists(jsonFile))
@@ -324,11 +322,20 @@ namespace PDC_System
                 PlateQuantitiy = PlateQuantityTextBox.Text,
                 ScreenshotPath = finalScreenshotPath,
                 Type = selectedPrintingType,
-
             };
 
-            this.DialogResult = true;
+            // ✅ Save the JobCard data to JSON
+            string jobCardFile = Path.Combine(saversFolder, "JobCards.json");
+            List<JobCard> jobCards = new List<JobCard>();
+            if (File.Exists(jobCardFile))
+            {
+                string existingJson = File.ReadAllText(jobCardFile);
+                jobCards = JsonConvert.DeserializeObject<List<JobCard>>(existingJson) ?? new List<JobCard>();
+            }
+            jobCards.Add(JobCard);
+            File.WriteAllText(jobCardFile, JsonConvert.SerializeObject(jobCards, Formatting.Indented));
 
+            this.DialogResult = true;
         }
 
         private void QuantityTextBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)

@@ -103,30 +103,7 @@
 
 
 
-                                <StackPanel Orientation="Horizontal" >
-                                    <!-- Google Account Display -->
-                                    <Grid x:Name="GoogleAccountInfo" Visibility="Visible">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="*"/>
-                                        </Grid.ColumnDefinitions>
-                                        <!-- Profile Image -->
-                                        <Grid Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right">
-                                            <Ellipse x:Name="imgProfileEllipse" Width="30" Height="30" Stroke="Gray" StrokeThickness="1"/>
-                                            <!-- Online/Status Indicator -->
-                                            <Ellipse x:Name="statusIndicator" Width="10" Height="10" Fill="Gray" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,0,5" />
-                                        </Grid>
-                                        <!-- Username and Email -->
-                                        <StackPanel Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Center" Orientation="Vertical">
-                                            <TextBlock x:Name="lblUserName" Foreground="{DynamicResource Forground}"  Text="User Name" FontWeight="Bold" FontSize="10" VerticalAlignment="Stretch"/>
-                                            <TextBlock x:Name="lblEmail"  Text="Email" Foreground="{DynamicResource Forground}" VerticalAlignment="Stretch" FontSize="8"/>
-                                        </StackPanel>
-                                    </Grid>
-
-
-
-                                </StackPanel>
-
+                              
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
 
                                     <Button HorizontalAlignment="Left" Click="Setting_Click" Background="Transparent">
@@ -253,8 +230,8 @@
                                     <StackPanel Orientation="Horizontal" Width="200" VerticalAlignment="Center" HorizontalAlignment="Left">
                                         <Image RenderOptions.BitmapScalingMode="HighQuality" SnapsToDevicePixels="True" Source="/Assets/Asset_34.png" Width="16" Margin="0,0,0,3"/>
                                         <StackPanel Margin="10,0,0,0">
-                                            <TextBlock Text="Quotation" FontWeight="SemiBold" FontFamily="Poppins" FontSize="13"/>
-                                            <TextBlock Text="Create Quotation and Job details." FontSize="9" FontFamily="Poppins" FontWeight="Regular"/>
+                                            <TextBlock Text="Finance" FontWeight="SemiBold" FontFamily="Poppins" FontSize="13"/>
+                                            <TextBlock Text="Create Quotation and Invoice." FontSize="9" FontFamily="Poppins" FontWeight="Regular"/>
                                         </StackPanel>
                                     </StackPanel>
                                 </RadioButton>

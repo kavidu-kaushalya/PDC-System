@@ -9,14 +9,67 @@
              FontFamily="{StaticResource CustomFont}"  
              
              >
-    <TabControl Style="{DynamicResource TabControl}">
-        <TabItem Style="{DynamicResource TabItem}" Width="130" Header="Quotation">
 
 
-            <StackPanel HorizontalAlignment="Center">
-                <Button Click="AddQuotation_Click" Content="Add Quotation" Width="120" Style="{DynamicResource ActionButton}"/>
+    <Grid>
 
-                <DataGrid x:Name="QuotationGrid"
+
+
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+  
+        </Grid.RowDefinitions>
+
+
+        <!-- TITLE -->
+        <!-- TITLE -->
+        <StackPanel Grid.Row="0">
+
+            <Grid>
+                <TextBlock Text="Finance" 
+ FontSize="20" 
+ FontWeight="SemiBold" 
+ Foreground="{DynamicResource Forground}"                        
+ TextAlignment="Left" Margin="0,0,0,5" />
+
+             
+            </Grid>
+
+            <TextBlock Text="• View and manage quotations and invoices." 
+ FontSize="12" 
+ FontWeight="Normal" 
+ Foreground="#FF7D7D7D"
+ TextAlignment="Left" />
+
+            <TextBlock Text="• Create new quotations using the 'Add Quotation' button." 
+ FontSize="12" 
+ FontWeight="Normal" 
+ Foreground="#FF7D7D7D"
+ TextAlignment="Left" />
+
+            <TextBlock Text="• Convert quotations to invoices or manage existing invoices from the action column." 
+ FontSize="12" 
+ FontWeight="Normal" 
+ Foreground="#FF7D7D7D"
+ TextAlignment="Left" Padding="0,0,0,18"/>
+
+        </StackPanel>
+
+
+
+
+
+
+        <TabControl Grid.Row="1" Style="{DynamicResource TabControl}">
+            <TabItem Style="{DynamicResource TabItem}" Width="130" Header="Quotation">
+
+
+                <StackPanel HorizontalAlignment="Center">
+                    <Button Click="AddQuotation_Click" Content="Add Quotation" Width="120" Style="{DynamicResource ActionButton}"/>
+
+                    <DataGrid x:Name="QuotationGrid"
           BorderBrush="{x:Null}" HeadersVisibility="Column" IsReadOnly="False"
                            Background="Transparent"
                            RowBackground="White"
@@ -31,44 +84,44 @@
                            ColumnHeaderStyle="{StaticResource DataGridHeaderStyle}"
                            RowStyle="{StaticResource DataGridRowStyle}"
           ItemsSource="{Binding SavedQuotations}">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Quotation No" Binding="{Binding QuotationNumber}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}" />
-                        <DataGridTextColumn Header="Customer" Binding="{Binding Customer.Name}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}" />
-                        <DataGridTextColumn Header="Total (LKR)" Binding="{Binding Total}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}" />
-                        <DataGridTextColumn Header="Issue Date" Binding="{Binding IssueDate}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}" />
-                        <DataGridTextColumn Header="Valid Date" Binding="{Binding ValidDate}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}" />
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Quotation No" Binding="{Binding QuotationNumber}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}" />
+                            <DataGridTextColumn Header="Customer" Binding="{Binding Customer.Name}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}" />
+                            <DataGridTextColumn Header="Total (LKR)" Binding="{Binding Total}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}" />
+                            <DataGridTextColumn Header="Issue Date" Binding="{Binding IssueDate}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}" />
+                            <DataGridTextColumn Header="Valid Date" Binding="{Binding ValidDate}" Width="*" ElementStyle="{DynamicResource DataGridColumnsStyle}" />
 
-                        <DataGridTemplateColumn Header="Actions">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <Button Content="✎ Edit"  Style="{DynamicResource ActionButton}" Click="EditQuotation_Click"/>
+                            <DataGridTemplateColumn Header="Actions">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button Content="✎ Edit"  Style="{DynamicResource ActionButton}" Click="EditQuotation_Click"/>
 
-                                        <Button Content=" 🗋 Invoice" Style="{DynamicResource ActionButton}" Click="Invoice_Click"/>
-                                        <Button Content=" ☒ Delete" Style="{DynamicResource NavigationButtonStyle}" Click="DeleteQuotation_Click"/>
-                                    </StackPanel>
+                                            <Button Content=" 🗋 Invoice" Style="{DynamicResource ActionButton}" Click="Invoice_Click"/>
+                                            <Button Content=" ☒ Delete" Style="{DynamicResource NavigationButtonStyle}" Click="DeleteQuotation_Click"/>
+                                        </StackPanel>
 
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
 
-                    </DataGrid.Columns>
-                </DataGrid>
+                        </DataGrid.Columns>
+                    </DataGrid>
 
-            </StackPanel>
-        </TabItem>
-        <TabItem Style="{DynamicResource TabItem}" Width="130" Header="Invoice">
+                </StackPanel>
+            </TabItem>
+            <TabItem Style="{DynamicResource TabItem}" Width="130" Header="Invoice">
 
-            <StackPanel>
+                <StackPanel>
 
-                <Button Content="Print Invoice"
+                    <Button Content="Print Invoice"
         HorizontalAlignment="Center"
         Width="120" 
                     
                     Style="{DynamicResource ActionButton}"
         Click="OpenManualInvoice_Click"/>
 
-                <DataGrid x:Name="InvoiceGrid"  BorderBrush="{x:Null}" HeadersVisibility="Column" IsReadOnly="False"
+                    <DataGrid x:Name="InvoiceGrid"  BorderBrush="{x:Null}" HeadersVisibility="Column" IsReadOnly="False"
                   Background="Transparent"
                   RowBackground="White"
                   AlternatingRowBackground="#f0f0f0"
@@ -82,40 +135,44 @@
                   ColumnHeaderStyle="{StaticResource DataGridHeaderStyle}"
                   RowStyle="{StaticResource DataGridRowStyle}" Margin="10">
 
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Invoice No" Binding="{Binding InvoiceNo}" Width="100"/>
-                        <DataGridTextColumn Header="Customer" Binding="{Binding CustomerDetails}" Width="250"/>
-                        <DataGridTextColumn Header="Total" Binding="{Binding TotalAmount}" Width="120"/>
-                        <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="120"/>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Invoice No" Binding="{Binding InvoiceNo}" Width="100"/>
+                            <DataGridTextColumn Header="Customer" Binding="{Binding CustomerDetails}" Width="250"/>
+                            <DataGridTextColumn Header="Total" Binding="{Binding TotalAmount}" Width="120"/>
+                            <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="120"/>
 
-                        <DataGridTemplateColumn Header="Actions" Width="200">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <Button Style="{DynamicResource ActionButton}" Content="✎ View/Edit" Click="EditInvoice_Click"/>
-                                        <Button Style="{DynamicResource NavigationButtonStyle}" Content="☒ Delete" Click="DeleteInvoice_Click"/>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Actions" Width="200">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button Style="{DynamicResource ActionButton}" Content="✎ View/Edit" Click="EditInvoice_Click"/>
+                                            <Button Style="{DynamicResource NavigationButtonStyle}" Content="☒ Delete" Click="DeleteInvoice_Click"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
 
-                    </DataGrid.Columns>
+                        </DataGrid.Columns>
 
-                </DataGrid>
-
-
-
-            </StackPanel>
+                    </DataGrid>
 
 
+
+                </StackPanel>
 
 
 
 
 
-        </TabItem>
 
-    </TabControl>
+
+            </TabItem>
+
+        </TabControl>
+    </Grid>
+    
+    
+  
 
 
 

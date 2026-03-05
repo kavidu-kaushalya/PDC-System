@@ -65,36 +65,7 @@
                                     <TextBlock Margin="0,20,0,0" Text="Settings" FontSize="24" FontWeight="Bold" />
                                 </StackPanel>
 
-                                <!-- Account Section -->
-                                <StackPanel Grid.Row="1">
-                                    <TextBlock Margin="0,20,0,20"  Text="Account" FontSize="18" FontWeight="SemiBold" />
-                                    <Border CornerRadius="20" BorderThickness="1" VerticalAlignment="Center" HorizontalAlignment="Center" BorderBrush="{DynamicResource BorderBrush}" Width="542">
-                                        <StackPanel>
-                                            <StackPanel Margin="20" x:Name="GoogleAccount" Visibility="Collapsed" >
-                                                <Ellipse x:Name="imgProfileEllipse" Width="50" Height="50" Stroke="Gray" StrokeThickness="1"/>
-                                                <TextBlock TextAlignment="Center" x:Name="lblUserName"  Text="User Name" FontWeight="Bold" FontSize="13" Margin="0,5,0,0" VerticalAlignment="Stretch"/>
-                                                <TextBlock TextAlignment="Center" x:Name="lblEmail"  Text="Email" VerticalAlignment="Stretch" FontSize="10"/>
-                                                <Button x:Name="BtnSignOut" Width="60" Click="BtnSignOut_Click" Style="{StaticResource CloSignInStyle}">
-                                                    <StackPanel Orientation="Horizontal">
-                                                        <Image x:Name="SingOutButtonImage" Width="8" HorizontalAlignment="Center"/>
-                                                        <TextBlock Margin="5,0,0,0" Text="Log Out" VerticalAlignment="Center" FontSize="8" HorizontalAlignment="Center"/>
-                                                    </StackPanel>
-                                                </Button>
-                                            </StackPanel>
 
-                                            <StackPanel x:Name="GoogleSignButton" Visibility="Collapsed">
-                                                <Button Style="{StaticResource BtnSignLoading}" Name="btnOpenMain" Width="220" Height="40"
-                                                        HorizontalAlignment="Center" VerticalAlignment="Center"
-                                                        Click="GoogleSingin_Click">
-                                                    <StackPanel Orientation="Horizontal">
-                                                        <Image Margin="0,0,8,0" Source="/Assets/search.png" RenderOptions.BitmapScalingMode="HighQuality" SnapsToDevicePixels="True" Width="24" Height="24" HorizontalAlignment="Center"/>
-                                                        <TextBlock Text="Sign In with Google" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                                    </StackPanel>
-                                                </Button>
-                                            </StackPanel>
-                                        </StackPanel>
-                                    </Border>
-                                </StackPanel>
 
                                 <!-- General Settings Section -->
                                 <StackPanel Grid.Row="2">
@@ -260,10 +231,37 @@ Visibility="Visible" Width="150" Height="30" HorizontalAlignment="Center" Margin
                                     </StackPanel>
 
 
+                                    <StackPanel>
+                                        <TextBlock VerticalAlignment="Center" Text="System Email" FontSize="12" Foreground="{DynamicResource Forground}"/>
+                                        <TextBox x:Name="SystemEmail" Style="{DynamicResource TextBoxStyle}" Margin="0,10,0,10" />
+                                    </StackPanel>
+
+
+                                    <StackPanel>
+                                        <TextBlock VerticalAlignment="Center" Text="System Email Password" FontSize="12" Foreground="{DynamicResource Forground}"/>
+                                        <PasswordBox x:Name="SystemEmailPassword" Margin="0,10,0,10" />
+                                    </StackPanel>
+
+
                                     <StackPanel Orientation="Horizontal">
                                         <CheckBox x:Name="SendEmployeeEditEmails" Content="Employee Edit Email Sent"></CheckBox>
                                         <TextBlock VerticalAlignment="Center" Text="Send Edit Employee Data to employees via email." FontSize="12" Foreground="{DynamicResource Forground}" Margin="20,0,0,0"/>
                                     </StackPanel>
+
+
+
+                                    <StackPanel Margin="0,20,0,0">
+                                        <TextBlock VerticalAlignment="Center" Text="PDC Email" FontSize="12" Foreground="{DynamicResource Forground}"/>
+                                        <TextBox x:Name="PDCEmail" Style="{DynamicResource TextBoxStyle}" Margin="0,10,0,10" />
+                                    </StackPanel>
+
+
+                                    <StackPanel>
+                                        <TextBlock VerticalAlignment="Center" Text="PDC Email Password" FontSize="12" Foreground="{DynamicResource Forground}"/>
+                                        <PasswordBox x:Name="PDCEmailPassword" Margin="0,10,0,10" />
+                                    </StackPanel>
+
+
 
                                     <StackPanel Orientation="Horizontal">
                                         <CheckBox x:Name="SendEmployeeAttendanceEditEmails" Content="Employee Edit Email Sent"></CheckBox>
