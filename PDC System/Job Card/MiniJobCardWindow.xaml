@@ -174,7 +174,7 @@ Background="{DynamicResource Background}"
                                             <RadioButton Style="{DynamicResource SelectableRadioButtonStyle}" 
                                          x:Name="Digital_Checked" 
                                          Content="Digital Printing" 
-                                         IsChecked="True"
+                                         
                                          Height="35" 
                                          Width="160"
                                          FontSize="14"

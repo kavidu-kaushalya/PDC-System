@@ -242,7 +242,7 @@ Background="{DynamicResource TitleBarBackground}"
 
                                                 <TextBlock  Text="No Pay Days:" Foreground="{DynamicResource Forground}" Margin="0,0,0,5"/>
 
-                                                <TextBox TextChanged="Nopay_Custom" x:Name="Nopays" Style="{DynamicResource TextBoxStyle}"/>
+                                                <ComboBox SelectionChanged="Nopay_SelectionChanged" x:Name="Nopays" Style="{DynamicResource ComboBoxFlatStyle}" Height="35"/>
 
                                             </StackPanel>
 

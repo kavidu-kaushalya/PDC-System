@@ -50,6 +50,16 @@ namespace PDC_System.Paysheets
                 paysheets = JsonConvert.DeserializeObject<List<Paysheet>>(json) ?? new List<Paysheet>();
             }
 
+            // Sort by Month descending (latest month first)
+            paysheets = paysheets
+                .OrderByDescending(p =>
+                {
+                    if (DateTime.TryParse(p.Month, out DateTime d))
+                        return d;
+                    return DateTime.MinValue;
+                })
+                .ToList();
+
             PaysheetGrid.ItemsSource = paysheets;
 
             CalculateSalaryTotals();
@@ -63,24 +73,22 @@ namespace PDC_System.Paysheets
         {
             var today = DateTime.Today;
 
-            // One day total - sum paysheets where the date matches today
-            // In CalculateSalaryTotals
+            // One day total - sum paysheets where the date matches today, excluding negative salaries
             decimal oneDayTotal = paysheets
-                .Where(p =>
-                {
-                    // FIX: Use p.Date directly, since it's already a DateTime
-                    return p.Date.Date == today;
-                })
+                .Where(p => p.Date.Date == today && p.Salary >= 0)
                 .Sum(p => p.Salary);
 
-            // In CalculateSalaryTotals
+            // Month total - sum all paysheets, excluding negative salaries
             decimal monthTotal = paysheets
-                     .Sum(p => p.Salary);
-
+                .Where(p => p.Salary >= 0)
+                .Sum(p => p.Salary);
 
             OneDaySalaryText.Text = $"LKR {oneDayTotal:N2}";
             MonthSalaryText.Text = $"LKR {monthTotal:N2}";
         }
+
+
+
 
 
         private void LoadYears()

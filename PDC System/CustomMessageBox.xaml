@@ -9,7 +9,8 @@
         SizeToContent="Height"
         Foreground="{DynamicResource Forground}"
         WindowStartupLocation="CenterOwner"
-        ShowInTaskbar="False">
+        ShowInTaskbar="False"
+        Topmost="True">
 
     <Window.Effect>
         <DropShadowEffect ShadowDepth="0"

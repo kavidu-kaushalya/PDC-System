@@ -34,6 +34,31 @@ namespace PDC_System
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
+            // Validate required fields (Notes is optional)
+            if (DueDatePicker.SelectedDate == null)
+            {
+                CustomMessageBox.Show("Please select a Due Date.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (DueTimeHourComboBox.SelectedItem == null || DueTimeMinuteComboBox.SelectedItem == null)
+            {
+                CustomMessageBox.Show("Please select a valid Due Time.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(CustomerNameTextBox.Text))
+            {
+                CustomMessageBox.Show("Please enter a Customer Name.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(DescriptionTextBox.Text))
+            {
+                CustomMessageBox.Show("Please enter a Description.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
             // Parse the date from the DatePicker
             DateTime dueDate = DueDatePicker.SelectedDate ?? DateTime.Now;
 
@@ -52,7 +77,7 @@ namespace PDC_System
                     DueDate = dueDateTime,
                     CustomerName = CustomerNameTextBox.Text,
                     Description = DescriptionTextBox.Text,
-                    Notes = NotesTextBox.Text
+                    Notes = NotesTextBox.Text // Notes is optional, can be empty
                 };
 
                 DialogResult = true;

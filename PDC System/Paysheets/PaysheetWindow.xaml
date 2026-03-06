@@ -11,6 +11,7 @@
 
     <UserControl.Resources>
         <conv:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+        <conv:MonthShortNameConverter x:Key="MonthShortNameConverter"/>
     </UserControl.Resources>
 
     <!-- CHANGE StackPanel to Grid -->
@@ -121,7 +122,7 @@ TextAlignment="Left" Padding="0,0,0,18"/>
                 Width="150"
                         
                 Click="CreatePaysheet_Click"
-                Content="➕ Create Paysheet"/>
+                Content="➕ Create Paysheet" Margin="10,0,0,0"/>
             </StackPanel>
 
 
@@ -239,7 +240,7 @@ BorderBrush="{DynamicResource BorderBrush}"
                                     ElementStyle="{DynamicResource DataGridColumnsStyle}" />
 
                 <DataGridTextColumn Header="Month"
-                                    Binding="{Binding Month}"
+                                    Binding="{Binding Month, Converter={StaticResource MonthShortNameConverter}}"
                                      Width="*"
                                     ElementStyle="{DynamicResource DataGridColumnsStyle}" />
 

@@ -94,6 +94,10 @@ namespace PDC_System.Paysheets
             LoadMonths();
             EnsureFiles();
             LoadETF();
+
+            // ✅ Subscribe to SelectionChanged here so it works from the FIRST selection
+            EmployeeCombo.SelectionChanged += EmployeeCombo_SelectionChanged;
+
             Contorls.IsEnabled = false;
             Datepickers.IsEnabled = false;
             Infomations.IsEnabled = false;
@@ -199,7 +203,7 @@ namespace PDC_System.Paysheets
             StartDatePicker.SelectedDate = paysheet.StartDate;
             EndDatePicker.SelectedDate = paysheet.EndDate;
 
-            Nopays.Text = paysheet.NopayDays.ToString();
+            Nopays.SelectedItem = paysheet.NopayDays;
 
             // Set Checkboxes
             Earning_Checked.IsChecked = paysheet.IncludeEarnings;
@@ -468,6 +472,10 @@ namespace PDC_System.Paysheets
                 (a.CheckIn == "-" && a.CheckOut == "-") &&
                 !(a.Status.Contains("Holiday") || a.Status.Contains("Poya Day") || a.Status.Contains("Non-Working Day"))
             );
+
+            // Populate No Pay Days ComboBox based on absent days
+            PopulateNopayCombo(absentDays);
+
             double AOT = Math.Round(filtered.Sum(a => ParseHours(a.OverTime)), 2);
             double totalLate = Math.Round(filtered.Sum(a => ParseHours(a.LateHours)), 2);
             double totalDoubleOT = Math.Round(filtered.Sum(a => ParseHours(a.DoubleOT)), 2);
@@ -503,7 +511,7 @@ namespace PDC_System.Paysheets
             decimal Loanamount = 0;
             decimal.TryParse(LoanAmount.Text, out Loanamount);
 
-            int ACNopay = Nopays.Text != "" ? int.Parse(Nopays.Text) : 0;
+            int ACNopay = Nopays.SelectedItem != null ? (int)Nopays.SelectedItem : 0;
 
             int actabsentdate = (absentDays - ACNopay);
             decimal calculatedAbsentAmount = (actabsentdate - NopayDays) * absentDayAmount;
@@ -590,40 +598,6 @@ namespace PDC_System.Paysheets
             }
         }
 
-        private void Nopay_Custom(object sender, TextChangedEventArgs e)
-        {
-            // Get total absent days (already calculated in FilterChanged)
-            int absentDays = PDFAbsentdays;
-
-            // If textbox empty → skip
-            if (string.IsNullOrWhiteSpace(Nopays.Text))
-            {
-                FilterChanged(sender, e);
-                return;
-            }
-
-            // Validate input number
-            if (!int.TryParse(Nopays.Text, out int customNopay))
-            {
-
-                Nopays.Text = "";
-                return;
-            }
-
-            // Check max limit
-            if (customNopay > absentDays)
-            {
-
-                // Reset to maximum allowed
-                Nopays.Text = absentDays.ToString();
-            }
-
-            // Recalculate everything
-            FilterChanged(sender, e);
-        }
-
-
-
         private void EmployeeCombo_LostFocus(object sender, RoutedEventArgs e)
         {
             var combo = sender as ComboBox;
@@ -647,8 +621,8 @@ namespace PDC_System.Paysheets
         private void EmployeeCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ResetAllFields();
+            LoadMonths(); // Reload months based on selected employee's last paysheet
         }
-
 
         private void ResetAllFields()
         {
@@ -670,7 +644,9 @@ namespace PDC_System.Paysheets
             LoanAmount.Text = string.Empty;
             TotalsTextBlock.Text = string.Empty;
 
-
+            // Reset No Pay Days ComboBox
+            Nopays.Items.Clear();
+            Nopays.SelectedIndex = -1;
 
             // Hide loan box
             LoanAmount.Visibility = Visibility.Collapsed;
@@ -849,7 +825,7 @@ namespace PDC_System.Paysheets
                     Date = DateTime.Now
                 });
 
-                // ✅ NEW: Auto-update loan status after saving loan history
+                // ✅ NEW: Auto-update loan status after saving loan payment
                 UpdateLoanStatusAfterPayment(Employeeid?.ToString());
             }
 
@@ -1571,20 +1547,88 @@ namespace PDC_System.Paysheets
 
         private void LoadMonths()
         {
+            Month.Items.Clear();
+
             string[] months = new string[]
             {
-        "January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
+                "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
             };
 
-            foreach (string month in months)
+            // Get the selected employee's existing paysheet months
+            string selectedEmployeeId = EmployeeCombo.SelectedValue as string;
+            var existingMonthNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+            if (!string.IsNullOrEmpty(selectedEmployeeId) && File.Exists("Savers/Paysheets.json"))
+            {
+                string json = File.ReadAllText("Savers/Paysheets.json");
+                var paysheets = JsonConvert.DeserializeObject<List<Paysheet>>(json) ?? new List<Paysheet>();
+
+                // Collect all "MonthName|Year" keys for this employee
+                foreach (var p in paysheets.Where(p => p.EmployeeId == selectedEmployeeId))
+                {
+                    if (DateTime.TryParse(p.Month, out DateTime d))
+                    {
+                        existingMonthNames.Add($"{d.ToString("MMMM")}|{d.Year}");
+                    }
+                }
+            }
+
+            int currentYear = DateTime.Now.Year;
+
+            for (int i = 0; i < months.Length; i++)
             {
                 ComboBoxItem item = new ComboBoxItem();
-                item.Content = month;
+                item.Content = months[i];
+
+                // Disable only months that already have a paysheet
+                string keyCurrentYear = $"{months[i]}|{currentYear}";
+                string keyPrevYear = $"{months[i]}|{currentYear - 1}";
+
+                if (existingMonthNames.Contains(keyCurrentYear) || existingMonthNames.Contains(keyPrevYear))
+                {
+                    item.IsEnabled = false;
+                    item.Foreground = new SolidColorBrush(System.Windows.Media.Colors.Gray);
+                }
+
                 Month.Items.Add(item);
             }
         }
 
+
+        private void Nopay_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!IsLoaded) return;
+            FilterChanged(sender, e);
+        }
+
+        /// <summary>
+        /// Populates the No Pay Days ComboBox with values 0 to maxDays
+        /// </summary>
+        private void PopulateNopayCombo(int absentDays)
+        {
+            // Get the employee's existing No Pay days allowance
+            var existingNopay = (EmployeeCombo.SelectedItem as Employee)?.Nopay ?? 0m;
+
+            // Calculate the actual max No Pay days by subtracting the existing allowance
+            int maxDays = Math.Max(0, absentDays - (int)existingNopay);
+
+            int currentSelection = Nopays.SelectedItem != null ? (int)Nopays.SelectedItem : 0;
+
+            Nopays.SelectionChanged -= Nopay_SelectionChanged;
+            Nopays.Items.Clear();
+            for (int i = 0; i <= maxDays; i++)
+            {
+                Nopays.Items.Add(i);
+            }
+
+            // Restore previous selection if still valid
+            if (currentSelection <= maxDays)
+                Nopays.SelectedItem = currentSelection;
+            else
+                Nopays.SelectedIndex = 0;
+            Nopays.SelectionChanged += Nopay_SelectionChanged;
+        }
 
 
 

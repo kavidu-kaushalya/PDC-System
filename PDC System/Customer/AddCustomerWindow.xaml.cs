@@ -15,6 +15,37 @@ namespace PDC_System
         }
         private void Save_Click(object sender, RoutedEventArgs e)
         {
+            // ✅ Validate Name field
+            if (string.IsNullOrWhiteSpace(NameTextBox.Text))
+            {
+                CustomMessageBox.Show("Please enter a Customer Name.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                NameTextBox.Focus();
+                return;
+            }
+
+            // ✅ Validate Contact Number
+            if (string.IsNullOrWhiteSpace(ContactNoTextBox.Text))
+            {
+                CustomMessageBox.Show("Please enter a Contact Number.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                ContactNoTextBox.Focus();
+                return;
+            }
+
+            // ✅ Validate Type selection (Company or Person)
+            if (CP.IsChecked != true && PersonRB.IsChecked != true)
+            {
+                CustomMessageBox.Show("Please select Customer Type (Company or Person).", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            // ✅ Validate Company Name if Company is selected
+            if (CP.IsChecked == true && string.IsNullOrWhiteSpace(CompanyTextBox.Text))
+            {
+                CustomMessageBox.Show("Please enter a Company Name.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                CompanyTextBox.Focus();
+                return;
+            }
+
             Customer = new Customerinfo
             {
                 Name = NameTextBox.Text,

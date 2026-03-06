@@ -47,7 +47,7 @@ namespace PDC_System
             jsonFile = Path.Combine(saversFolder, "jobData.json");
 
             GenerateJobNumber();
-        
+            Digital_Checked.IsChecked = true; // Default to Digital
 
         }
 
@@ -251,10 +251,102 @@ namespace PDC_System
             }
         }
 
+        private bool ValidateFields()
+        {
+            // Common required fields
+            string customerName = (CustomerComboBox.SelectedItem as Customerinfo)?.Name ?? CustomerComboBox.Text;
+            if (string.IsNullOrWhiteSpace(customerName))
+            {
+                CustomMessageBox.Show("Please enter a Customer Name.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(DescriptionTextBox.Text))
+            {
+                CustomMessageBox.Show("Please enter a Description.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(QuantityTextBox.Text))
+            {
+                CustomMessageBox.Show("Please enter the Quantity.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
+            // Check if a printing type is selected
+            if (string.IsNullOrWhiteSpace(selectedPrintingType))
+            {
+                CustomMessageBox.Show("Please select a Printing Type (Digital or Offset).", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
+            // Offset-specific validation
+            if (selectedPrintingType == "Offset")
+            {
+                if (PlateCompanyTextBox.SelectedItem == null && string.IsNullOrWhiteSpace(PlateCompanyTextBox.Text))
+                {
+                    CustomMessageBox.Show("Please select a Plate Company.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return false;
+                }
+
+                if (string.IsNullOrWhiteSpace(PlateQuantityTextBox.Text))
+                {
+                    CustomMessageBox.Show("Please enter the Plate Quantity.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return false;
+                }
+            }
+
+            // Digital-specific validation
+            if (selectedPrintingType == "Digital")
+            {
+                if (string.IsNullOrWhiteSpace(PaperSizeTextBox.Text))
+                {
+                    CustomMessageBox.Show("Please select a Paper Size.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return false;
+                }
+
+                if (string.IsNullOrWhiteSpace(GSMTextBox.Text))
+                {
+                    CustomMessageBox.Show("Please enter the GSM.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return false;
+                }
+
+                if (string.IsNullOrWhiteSpace(PaperTypeTextBox.Text))
+                {
+                    CustomMessageBox.Show("Please select a Paper Type.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return false;
+                }
+
+                if (DsTextBox.SelectedItem == null)
+                {
+                    CustomMessageBox.Show("Please select D/S (Single Side or Double Side).", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return false;
+                }
+
+                if (LaminateTextBox.SelectedItem == null)
+                {
+                    CustomMessageBox.Show("Please select a Laminate option.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return false;
+                }
+
+                // If Outside Printing is checked, company must be selected
+                if (OutstandingCheckBox.IsChecked == true && Outstanding_PrintingCompanyName.SelectedItem == null)
+                {
+                    CustomMessageBox.Show("Please select a Digital Printing Company.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return false;
+                }
+            }
+
+            // Special Note is OPTIONAL - no validation needed
+
+            return true;
+        }
+
         private void Save_Click(object sender, RoutedEventArgs e)
         {
-
-
+            // Validate required fields first (Special Note is optional)
+            if (!ValidateFields())
+                return;
 
             List<JobNo> jobs = new List<JobNo>();
 
@@ -276,15 +368,15 @@ namespace PDC_System
             // Generate next job number automatically
             GenerateJobNumber();
 
-// Set default 0 if empty
-GSMTextBox.Text = string.IsNullOrWhiteSpace(GSMTextBox.Text) ? "0" : GSMTextBox.Text;
-QuantityTextBox.Text = string.IsNullOrWhiteSpace(QuantityTextBox.Text) ? "0" : QuantityTextBox.Text;
-PrintedTextBox.Text = string.IsNullOrWhiteSpace(PrintedTextBox.Text) ? "0" : PrintedTextBox.Text;
+            // Set default 0 if empty
+            GSMTextBox.Text = string.IsNullOrWhiteSpace(GSMTextBox.Text) ? "0" : GSMTextBox.Text;
+            QuantityTextBox.Text = string.IsNullOrWhiteSpace(QuantityTextBox.Text) ? "0" : QuantityTextBox.Text;
+            PrintedTextBox.Text = string.IsNullOrWhiteSpace(PrintedTextBox.Text) ? "0" : PrintedTextBox.Text;
 
-// Parse the values
-int gsm = int.Parse(GSMTextBox.Text);
-int quantity = int.Parse(QuantityTextBox.Text);
-int printed = int.Parse(PrintedTextBox.Text);
+            // Parse the values
+            int gsm = int.Parse(GSMTextBox.Text);
+            int quantity = int.Parse(QuantityTextBox.Text);
+            int printed = int.Parse(PrintedTextBox.Text);
 
             string customerName = (CustomerComboBox.SelectedItem as Customerinfo)?.Name ?? CustomerComboBox.Text;
 
@@ -315,18 +407,18 @@ int printed = int.Parse(PrintedTextBox.Text);
                 GSM = gsm,
                 Duplex = DsTextBox.Text,
                 Laminate = LaminateTextBox.Text,
-                Special_Note = SpecialTextBox.Text,
+                Special_Note = SpecialTextBox.Text, // Optional - can be empty
                 Paper_Type = PaperTypeTextBox.Text,
                 Quantity = quantity,
                 Printed = printed,
                 PlateQuantitiy = PlateQuantityTextBox.Text,
                 ScreenshotPath = finalScreenshotPath,
-                Type= selectedPrintingType,
+                Type = selectedPrintingType,
 
             };
 
             this.DialogResult = true;
-         
+
         }
 
         private void QuantityTextBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
@@ -343,7 +435,7 @@ int printed = int.Parse(PrintedTextBox.Text);
             selectedPrintingType = "Digital";
             ResetOffsetFields();
             LoadComboBox();
-           
+
         }
 
         private void Offset_Clicked(object sender, RoutedEventArgs e)
@@ -379,7 +471,7 @@ int printed = int.Parse(PrintedTextBox.Text);
             // Clear all TextBoxes
             Outstanding_PrintingCompanyName.Text = "";
             PrintedTextBox.Text = "";
-            QuantityTextBox.Text = "";
+          
 
             // Clear all ComboBoxes (both selected item and editable text)
             PaperSizeTextBox.SelectedIndex = -1;
@@ -397,8 +489,7 @@ int printed = int.Parse(PrintedTextBox.Text);
             LaminateTextBox.SelectedIndex = -1;
             LaminateTextBox.Text = "";
 
-            DescriptionTextBox.SelectedIndex = -1;
-            DescriptionTextBox.Text = "";
+           
         }
 
 
